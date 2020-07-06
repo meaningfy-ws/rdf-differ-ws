@@ -27,9 +27,6 @@ make install
 * Docker
 
 ```bash
-echo "--------------------------------------------------------------"
-echo "Installing Docker"
-echo "--------------------------------------------------------------"
 sudo apt -y install docker.io docker-compose
 
 sudo groupadd docker
