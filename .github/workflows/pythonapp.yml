@@ -1,4 +1,4 @@
-name: RDF differ with GitHub Actions
+name: RDF differ test and lint
 
 on:
   push:
