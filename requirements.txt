@@ -1,0 +1,11 @@
+Click
+pathlib
+rdflib
+sparqlwrapper
+
+pytest
+coverage
+pytest-cov
+
+pylint
+flake8
