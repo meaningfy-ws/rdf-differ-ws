@@ -1,19 +1,22 @@
 .PHONY: test
 
 install:
-	@echo "installing the necessary stuff"
+	@echo "Installing teh requirements"
 	pip install --upgrade pip
 	pip install -r requirements.txt
 
 test:
-	@echo "running the tests"
-	pytest
+	@echo "Running the tests"
+	pytest || true
 
 #format:
 #	black rdf_differ
 
-#lint:
-#	pylint --disable=R,C hello.py
+lint:
+	# stop the build if there are Python syntax errors or undefined names
+	flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+	# exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+	flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
 all:
 	install test
