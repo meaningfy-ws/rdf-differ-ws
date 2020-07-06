@@ -13,3 +13,27 @@ A service for calculating the difference between versions of a given RDF dataset
 
 ## running the tests
     make test
+
+
+
+## Install
+
+* Required libs
+
+```
+make install
+```
+
+* Docker
+
+```bash
+echo "--------------------------------------------------------------"
+echo "Installing Docker"
+echo "--------------------------------------------------------------"
+sudo apt -y install docker.io docker-compose
+
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
