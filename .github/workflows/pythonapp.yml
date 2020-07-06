@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: [ubuntu-latest]
+      matrix: ubuntu-latest
     env:
       OS: ${{ matrix.os }}
       PYTHON: '3.8'
