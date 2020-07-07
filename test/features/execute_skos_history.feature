@@ -13,19 +13,17 @@ Feature: Generate the diff of two dataset versions
     And a correct configuration file
     When the user runs the diff calculator
     Then the dataset versions are loaded into the triplestore
-    And the dsv description is generated
+    And the DSV description is generated
     And the insertions and deletions graphs are created
 
-    Scenario: Incorrect config scenario
-      Given a correct dataset folder structure
-      And an incorrect configuration file
-      When the user runs the diff calculator
-      Then an error message is generated indicating the config problem
+  Scenario: Incorrect config scenario
+    Given a correct dataset folder structure
+    And an incorrect configuration file
+    When the user runs the diff calculator
+    Then an error message is generated indicating the config problem
 
-
-    Scenario: Incorrect folder structure scenario
-      Given an incorrect dataset folder structure
-      And a correct configuration file
-      When the user runs the diff calculator
-      Then an error message is generated indicating the folder structure problem
-
+  Scenario: Incorrect folder structure scenario
+    Given an incorrect dataset folder structure
+    And a correct configuration file
+    When the user runs the diff calculator
+    Then an error message is generated indicating the folder structure problem
