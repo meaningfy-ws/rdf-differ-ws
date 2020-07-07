@@ -131,3 +131,6 @@ dmypy.json
 
 # projest related
 /data-dev
+
+# editor specific
+.idea/
