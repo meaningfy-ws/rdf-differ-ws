@@ -127,10 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
+.idea/
 
 # projest related
 /data-dev
-
-# editor specific
-.idea/
+cucumber_report.json
+junit_report.xml

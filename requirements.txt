@@ -6,5 +6,6 @@ sparqlwrapper
 pytest
 coverage
 pytest-cov
+pytest-bdd
 
 flake8
