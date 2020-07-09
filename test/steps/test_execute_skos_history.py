@@ -1,10 +1,5 @@
 # coding=utf-8
-"""
-Generate the diff of two dataset versions feature tests.
-Date:  07/07/2020
-Author: Eugeniu Costetchi
-Email: costezki.eugen@gmail.com
-"""
+"""Running the skos-history diff of two dataset versions feature tests."""
 
 from pytest_bdd import (
     given,
@@ -13,63 +8,50 @@ from pytest_bdd import (
     when,
 )
 
-import test
+
+@scenario('../features/execute_skos_history.feature', 'Controlling the skos-history inputs')
+def test_controlling_the_skoshistory_inputs():
+    """Controlling the skos-history inputs."""
 
 
-@scenario('../features/execute_skos_history.feature', 'Incorrect config scenario')
-def test_incorrect_config_scenario():
-    """Incorrect config scenario."""
+@scenario('../features/execute_skos_history.feature', 'Running the skos-history')
+def test_running_the_skoshistory():
+    """Running the skos-history."""
 
 
-@scenario('../features/execute_skos_history.feature', 'Incorrect folder structure scenario')
-def test_incorrect_folder_structure_scenario():
-    """Incorrect folder structure scenario."""
+@given('a <configuration file>')
+def a_configuration_file():
+    """a <configuration file>."""
+    raise NotImplementedError
 
 
-@scenario('../features/execute_skos_history.feature', 'Main success scenario')
-def test_main_success_scenario():
-    """Main success scenario."""
+@given('a <folder structure>')
+def a_folder_structure():
+    """a <folder structure>."""
+    raise NotImplementedError
 
 
 @given('a correct configuration file')
 def a_correct_configuration_file():
     """a correct configuration file."""
-    return test.SUBDIVISIONS_CONFIG
+    raise NotImplementedError
 
 
 @given('a correct dataset folder structure')
 def a_correct_dataset_folder_structure():
     """a correct dataset folder structure."""
-    return test.SUBDIVISIONS_DATA_FOLDER
-
-
-@given('an incorrect configuration file')
-def an_incorrect_configuration_file():
-    """an incorrect configuration file."""
     raise NotImplementedError
 
 
-@given('an incorrect dataset folder structure')
-def an_incorrect_dataset_folder_structure():
-    """an incorrect dataset folder structure."""
+@when('the user runs the skos-history calculator')
+def the_user_runs_the_skoshistory_calculator():
+    """the user runs the skos-history calculator."""
     raise NotImplementedError
 
 
-@when('the user runs the diff calculator')
-def the_user_runs_the_diff_calculator():
-    """the user runs the diff calculator."""
-    raise NotImplementedError
-
-
-@then('an error message is generated indicating the config problem')
-def an_error_message_is_generated_indicating_the_config_problem():
-    """an error message is generated indicating the config problem."""
-    raise NotImplementedError
-
-
-@then('an error message is generated indicating the folder structure problem')
-def an_error_message_is_generated_indicating_the_folder_structure_problem():
-    """an error message is generated indicating the folder structure problem."""
+@then('an error message is generated indicating the <problem>')
+def an_error_message_is_generated_indicating_the_problem():
+    """an error message is generated indicating the <problem>."""
     raise NotImplementedError
 
 
@@ -89,3 +71,4 @@ def the_dataset_versions_are_loaded_into_the_triplestore():
 def the_insertions_and_deletions_graphs_are_created():
     """the insertions and deletions graphs are created."""
     raise NotImplementedError
+
