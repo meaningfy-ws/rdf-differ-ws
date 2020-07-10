@@ -1,0 +1,159 @@
+openapi: 3.0.1
+
+info:
+  title: RDF Diffing Service
+  description: |
+    This API provides the possibility to calculate the difference between two versions of the same dataset.
+
+    Current implementation is based on the [skos-history tool](https://github.com/eu-vocabularies/skos-history).
+
+    See the [Wiki page of the original repository](https://github.com/jneubert/skos-history/wiki/Tutorial) for more details.
+  contact:
+    name: Eugeniu Costetchi
+    url: http://costezki.ro
+    email: costezki.eugen@gmail.com
+  license:
+    name: GNU General Public License Version 3 (GPLv3)
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html
+  version: 1.0.1
+
+servers:
+  - url: 'http://localhost:3030/'
+    description: Default development server
+
+paths:
+  /diffs:
+    get:
+      operationId: getAllDiffs
+      description: List the existent dataset version differences.
+      responses:
+        200:
+          description: List of dataset versions succesfully retreived.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CalculatedDiffDescription'
+        5XX:
+          description: Unexpected Error.
+    post:
+      operationId: createNewDiff
+      description: Calculate the diff of two dataset versions.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DiffSubmission'
+      responses:
+        202:
+          description: Request to create a new dataset diff succesfully accepted for processing, but the processing has not been completed.
+        5XX:
+          description: Unexpected Error.
+
+  /diffs/{dataset_id}:
+    get:
+      operationId: getDiffId
+      description: Get diffs for a dataset versions.
+      parameters:
+        - name: dataset_id
+          in: path
+          required: true
+          description: Dataset id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Dataset diff description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculatedDiffDescription'
+        404:
+          description: A dataset with the specified ID was not found.
+        5XX:
+          description: Unexpected Error.
+    delete:
+      operationId: deleteDiffId
+      description: Delete the dataset and all its diffs.
+      parameters:
+        - name: dataset_id
+          in: path
+          required: true
+          description: Dataset id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Dataset succesfully deteled.
+        404:
+          description: A dataset with the specified ID was not found.
+        5XX:
+          description: Unexpected Error.
+
+components:
+  schemas:
+
+    BasicDiffDescription:
+      type: object
+      description: A minimal dataset description.
+      required:
+        - dataset_id
+        - dataset_uri
+        - new_version_id
+        - old_version_id
+      properties:
+        dataset_id:
+          type: string
+          description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
+        dataset_description:
+          type: string
+          description: The dataset description. This is a free text description fo the dataset.
+        dataset_uri:
+          type: string
+          description: The dataset URI. For SKOS datasets this is usually the ConcepotSchem URI.
+        new_version_id:
+          type: string
+          description: The identifier for the newer version of the dataset.
+        old_version_id:
+          type: string
+          description: Identifier for the older version of the dataset.
+
+    DiffSubmission:
+      description: A request to diff two versions of a dataset.
+      allOf:
+        - $ref: '#/components/schemas/BasicDiffDescription'
+        - type: object
+          required:
+            - new_version_file_content
+            - new_version_file_name
+            - old_version_file_content
+            - old_version_file_name
+          properties:
+            new_version_file_content:
+              type: string
+              description: The content of the new version file.
+            new_version_file_name:
+              type: string
+              description: The filename of the new version file. Useful to determine the mime type.
+            old_version_file_content:
+              type: string
+              description: The content of the old version file.
+            old_version_file_name:
+              type: string
+              description: The filename of the old version file. Useful to determine the mime type.
+
+    CalculatedDiffDescription:
+      description: A description of diff in the triplestore.
+      allOf:
+        - $ref: '#/components/schemas/BasicDiffDescription'
+        - type: object
+          properties:
+            query_url:
+              type: string
+              description: The SPARQL endpoint URL to query the diff.
+            diff_date:
+              type: string
+              format: date
+              description: The date of the calculated diff.

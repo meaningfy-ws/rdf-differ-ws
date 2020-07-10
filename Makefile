@@ -21,6 +21,10 @@ stop-services:
 	@ echo "Stopping Fuseki"
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env down
 
+generate-api:
+	@echo "Generating API from OpenAPI 3.0 description using the standard openapitools/openapi-generator-cli"
+
+
 all:
 	install test
 
