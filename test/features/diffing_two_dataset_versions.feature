@@ -17,7 +17,6 @@ Feature: Diffing two dataset versions
     And a correct configuration file is created
     And the diff calculator is executed
 
-
   Scenario Outline: Controlling the mandatory descriptive metadata
     Given mandatory descriptive metadata
     But the <property> is missing or incorrect
@@ -29,4 +28,3 @@ Feature: Diffing two dataset versions
       | alpha dataset version |
       | beta dataset version  |
       | scheme URI            |
-      | basedir               |
