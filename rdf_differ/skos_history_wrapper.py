@@ -85,6 +85,19 @@ class SKOSHistoryRunner:
 
         return file_format
 
+    def generate(self):
+        return self.bash.format(
+            dataset=self.dataset,
+            scheme_uri=self.scheme_uri,
+            versions='({} {})'.format(*self.versions),
+            basedir=self.basedir,
+            filename=self.filename,
+            put_uri=self.put_uri,
+            update_uri=self.update_uri,
+            query_uri=self.query_uri,
+            input_type=self.input_file_mime
+        )
+
     def _read_envs(self):
         """
         Method for reading properties for the skos-history bash config file.

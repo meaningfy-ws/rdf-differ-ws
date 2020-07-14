@@ -10,7 +10,7 @@ from pytest_bdd import (
 
 
 @scenario('../features/prepare_config.feature', 'Generating the skos-history config file')
-def test_generating_the_skoshistory_config_file():
+def test_generating_the_skos_history_config_file():
     """Generating the skos-history config file."""
 
 
