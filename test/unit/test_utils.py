@@ -7,10 +7,10 @@ Email: coslet.mihai@gmail.com
 
 from pathlib import Path
 
+from rdf_differ.utils import dir_exists, file_exists
+
 
 def test_dir_exists():
-    from rdf_differ.utils import dir_exists
-
     test_path = Path.cwd().joinpath('test_path')
     test_path.mkdir()
 
@@ -20,16 +20,12 @@ def test_dir_exists():
 
 
 def test_dir_doesnt_exist():
-    from rdf_differ.utils import dir_exists
-
     test_path = Path.cwd().joinpath('test_path')
 
     assert dir_exists(test_path) is False
 
 
 def test_file_exists():
-    from rdf_differ.utils import file_exists
-
     test_path = Path.cwd().joinpath('test_file')
     test_path.touch()
 
@@ -39,8 +35,6 @@ def test_file_exists():
 
 
 def test_file_doesnt_exist():
-    from rdf_differ.utils import file_exists
-
     test_path = Path.cwd().joinpath('test_file')
 
     assert file_exists(test_path) is False

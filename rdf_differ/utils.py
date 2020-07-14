@@ -29,3 +29,14 @@ def file_exists(path: Union[str, Path]) -> bool:
         Whether the file exists or not.
     """
     return Path(path).is_file()
+
+
+# TODO: extend dict as required
+INPUT_MIME_TYPES = {
+    'rdf': 'application/rdf+xml',
+    'rdfs': 'application/rdf+xml',
+    'owl': 'application/rdf+xml',
+    'n3': 'text/n3',
+    'ttl': 'text/turtle',
+    'json': 'application/json',
+}

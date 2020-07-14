@@ -6,9 +6,11 @@ Email: coslet.mihai@gmail.com
 """
 import os
 from urllib.parse import urljoin
+from rdflib.util import guess_format
 
 from rdf_differ import defaults
 from rdf_differ.defaults import PUT_URI_BASE, QUERY_URI_BASE
+from rdf_differ.utils import INPUT_MIME_TYPES
 
 
 class SKOSHistoryRunner:
@@ -16,7 +18,7 @@ class SKOSHistoryRunner:
 
     """
 
-    def __init__(self):
+    def __init__(self, dataset: str, scheme_uri: str, versions: list):
         """
 
         """
@@ -37,26 +39,15 @@ class SKOSHistoryRunner:
     
             INPUT_MIME_TYPE = {input_type}
         """
-        self.dataset = None
-        self.scheme_uri = None
-        self.versions = None
+        self.dataset = dataset
+        self.scheme_uri = scheme_uri
+        self.versions = versions
 
         self.basedir = None
         self.filename = None
         self.endpoint = None
 
-        self.input_type = None
-
-        self.read_envs()
-
-    def read_envs(self):
-        """
-        Method for reading properties for the skos-history bash config file.
-        :return:
-        """
-        self.basedir = os.environ.get('BASEDIR', defaults.BASEDIR)
-        self.filename = os.environ.get('FILENAME', defaults.FILENAME)
-        self.endpoint = os.environ['ENDPOINT']
+        self._read_envs()
 
     @property
     def put_uri(self) -> str:
@@ -84,3 +75,21 @@ class SKOSHistoryRunner:
             query URI
         """
         return urljoin(self.endpoint, '/'.join([self.dataset, QUERY_URI_BASE]))
+
+    @property
+    def input_file_mime(self) -> str:
+        file_format = guess_format(self.filename, INPUT_MIME_TYPES)
+        # breakpoint()
+        if file_format is None:
+            raise Exception('File type not supported.')
+
+        return file_format
+
+    def _read_envs(self):
+        """
+        Method for reading properties for the skos-history bash config file.
+        :return:
+        """
+        self.basedir = os.environ.get('BASEDIR', defaults.BASEDIR)
+        self.filename = os.environ.get('FILENAME', defaults.FILENAME)
+        self.endpoint = os.environ['ENDPOINT']
