@@ -5,6 +5,7 @@ Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
 import os
+from pathlib import Path
 from urllib.parse import urljoin
 from rdflib.util import guess_format
 
@@ -18,27 +19,9 @@ class SKOSHistoryRunner:
 
     """
 
-    def __init__(self, dataset: str, scheme_uri: str, versions: list):
-        """
-
-        """
-
-        self.bash = """
-            # !/bin/bash
-    
-            DATASET = {dataset}
-            SCHEMEURI = {scheme_uri}
-    
-            VERSIONS = {versions}
-            BASEDIR = {basedir}
-            FILENAME = {filename}
-    
-            PUT_URI = {put_uri}
-            UPDATE_URI = {update_uri}
-            QUERY_URI = {query_uri}
-    
-            INPUT_MIME_TYPE = {input_type}
-        """
+    def __init__(self, dataset: str, scheme_uri: str, versions: list,
+                 config_template_location: str = '../templates/template.config'):
+        self.config_template = self._read_file(config_template_location)
         self.dataset = dataset
         self.scheme_uri = scheme_uri
         self.versions = versions
@@ -79,14 +62,13 @@ class SKOSHistoryRunner:
     @property
     def input_file_mime(self) -> str:
         file_format = guess_format(self.filename, INPUT_MIME_TYPES)
-        # breakpoint()
         if file_format is None:
             raise Exception('File type not supported.')
 
         return file_format
 
     def generate(self):
-        return self.bash.format(
+        return self.config_template.format(
             dataset=self.dataset,
             scheme_uri=self.scheme_uri,
             versions='({} {})'.format(*self.versions),
@@ -106,3 +88,11 @@ class SKOSHistoryRunner:
         self.basedir = os.environ.get('BASEDIR', defaults.BASEDIR)
         self.filename = os.environ.get('FILENAME', defaults.FILENAME)
         self.endpoint = os.environ['ENDPOINT']
+
+    @staticmethod
+    def _read_file(relative_location):
+        location = Path(__file__).parent / relative_location
+        file = open(location, 'r')
+        content = file.read()
+        file.close()
+        return content

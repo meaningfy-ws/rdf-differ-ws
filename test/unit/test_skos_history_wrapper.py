@@ -124,8 +124,37 @@ def test_input_file_mime_not_supported(mock_file_type_failure):
 
 def test_uris_creation(mock_env_endpoint):
     skos_runner = helper_create_skos_runner(dataset='dataset')
-    skos_runner.endpoint = 'http://current-test.point'
 
-    assert skos_runner.put_uri == 'http://current-test.point/dataset/data'
-    assert skos_runner.update_uri == 'http://current-test.point/dataset'
-    assert skos_runner.query_uri == 'http://current-test.point/dataset/query'
+    assert skos_runner.put_uri == 'http://test.point/dataset/data'
+    assert skos_runner.update_uri == 'http://test.point/dataset'
+    assert skos_runner.query_uri == 'http://test.point/dataset/query'
+
+
+@pytest.fixture
+def mock_all_envs(monkeypatch):
+    helper_endpoint_mock(monkeypatch)
+    monkeypatch.setenv('BASEDIR', '/basedir')
+    monkeypatch.setenv('FILENAME', 'test.rdf')
+
+
+def test_generate_config(mock_all_envs):
+    skos_runner = helper_create_skos_runner()
+
+    config = skos_runner.generate()
+    # breakpoint()
+    expected_config = '''# !/bin/bash
+
+DATASET = dataset
+SCHEMEURI = http://scheme.uri
+
+VERSIONS = (v1 v2)
+BASEDIR = /basedir
+FILENAME = test.rdf
+
+PUT_URI = http://test.point/dataset/data
+UPDATE_URI = http://test.point/dataset
+QUERY_URI = http://test.point/dataset/query
+
+INPUT_MIME_TYPE = application/rdf+xml'''
+    assert config == expected_config
+
