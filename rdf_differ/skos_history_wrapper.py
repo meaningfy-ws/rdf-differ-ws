@@ -5,13 +5,36 @@ Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
 import os
-from pathlib import Path
+from pathlib import Path, PurePath
 from urllib.parse import urljoin
 from rdflib.util import guess_format
 
 from rdf_differ import defaults
 from rdf_differ.defaults import PUT_URI_BASE, QUERY_URI_BASE
-from rdf_differ.utils import INPUT_MIME_TYPES
+from rdf_differ.utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty, file_exists
+
+
+class SKOSHistoryFolderSetUp:
+    def __init__(self, dataset: str, scheme_uri: str, alpha_file: str, beta_file: str, root_path: str):
+        self.dataset = dataset
+        self.scheme_uri = scheme_uri
+        self.alpha_file = alpha_file
+        self.beta_file = beta_file
+        self.root_path = root_path
+
+        self._check_root_path()
+
+    def generate(self):
+
+        pass
+
+    # TODO: decide if this functionality should remain in the class
+    def _check_root_path(self):
+        if dir_exists(self.root_path):
+            if not dir_is_empty(self.root_path):
+                raise Exception('Root path is not empty.')
+        else:
+            Path(self.root_path).mkdir()
 
 
 class SKOSHistoryRunner:
@@ -92,7 +115,6 @@ class SKOSHistoryRunner:
     @staticmethod
     def _read_file(relative_location):
         location = Path(__file__).parent / relative_location
-        file = open(location, 'r')
-        content = file.read()
-        file.close()
+        with open(location, 'r') as file:
+            content = file.read()
         return content

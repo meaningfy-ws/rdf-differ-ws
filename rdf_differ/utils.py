@@ -20,6 +20,21 @@ def dir_exists(path: Union[str, Path]) -> bool:
     return Path(path).is_dir()
 
 
+def dir_is_empty(path: Union[str, Path]) -> bool:
+    """
+    Method to check if the directory is empty.
+    :param path: str or Path
+        The path to be checked on.
+    :return: bool
+        True - dir exists and is empty
+        False - any other case
+    """
+    if dir_exists(path):
+        return not any(Path(path).iterdir())
+
+    return False
+
+
 def file_exists(path: Union[str, Path]) -> bool:
     """
     Method to check the existence of the file from the indicated path.

@@ -4,11 +4,13 @@ Date: 06/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
+from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
 from rdf_differ import defaults
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SKOSHistoryFolderSetUp
 
 
 def helper_endpoint_mock(monkeypatch):
@@ -117,7 +119,7 @@ def mock_file_type_failure(monkeypatch):
 def test_input_file_mime_not_supported(mock_file_type_failure):
     skos_runner = helper_create_skos_runner()
     with pytest.raises(Exception) as exception:
-        skos_runner.input_file_mime
+        _ = skos_runner.input_file_mime
 
     assert 'File type not supported.' in str(exception.value)
 
@@ -141,7 +143,6 @@ def test_generate_config(mock_all_envs):
     skos_runner = helper_create_skos_runner()
 
     config = skos_runner.generate()
-    # breakpoint()
     expected_config = '''# !/bin/bash
 
 DATASET = dataset
@@ -157,4 +158,36 @@ QUERY_URI = http://test.point/dataset/query
 
 INPUT_MIME_TYPE = application/rdf+xml'''
     assert config == expected_config
+
+
+def helper_create_skos_folder_setup(dataset='dataset', scheme_uri='http://scheme.uri', alpha_file='alpha.rdf',
+                                    beta_file='beta.rdf', root_path='root_path'):
+    return SKOSHistoryFolderSetUp(dataset, scheme_uri, alpha_file, beta_file, root_path)
+
+
+@patch.object(Path, 'mkdir')
+def test_skos_history_folder_setup_root_path_doest_exist(mock_mkdir):
+    root_path = Path.cwd().joinpath('root_folder')
+    _ = helper_create_skos_folder_setup(root_path=str(root_path))
+
+    mock_mkdir.assert_called_once()
+
+
+@patch.object(Path, 'mkdir')
+def test_skos_history_folder_setup_root_path_exist_is_empty(mock_mkdir, tmpdir):
+    root_path = tmpdir.mkdir('root_path')
+    _ = helper_create_skos_folder_setup(root_path=str(root_path))
+
+    mock_mkdir.assert_not_called()
+
+
+def test_skos_history_folder_setup_root_path_exist_is_not_empty(tmpdir):
+    root_path = tmpdir.mkdir('root_path')
+    file = root_path.join('file')
+    file.write('')
+    with pytest.raises(Exception) as exception:
+        _ = helper_create_skos_folder_setup(root_path=str(root_path))
+
+    assert 'Root path is not empty' in str(exception.value)
+
 
