@@ -10,13 +10,10 @@ from pathlib import Path
 from rdf_differ.utils import dir_exists, file_exists
 
 
-def test_dir_exists():
-    test_path = Path.cwd().joinpath('test_path')
-    test_path.mkdir()
+def test_dir_exists(tmpdir):
+    test_path = tmpdir.mkdir('test_path')
 
     assert dir_exists(test_path) is True
-
-    test_path.rmdir()
 
 
 def test_dir_doesnt_exist():
@@ -25,13 +22,11 @@ def test_dir_doesnt_exist():
     assert dir_exists(test_path) is False
 
 
-def test_file_exists():
-    test_path = Path.cwd().joinpath('test_file')
-    test_path.touch()
+def test_file_exists(tmpdir):
+    test_path = tmpdir.join('test_file')
+    test_path.write('')
 
     assert file_exists(test_path) is True
-
-    test_path.unlink()
 
 
 def test_file_doesnt_exist():
