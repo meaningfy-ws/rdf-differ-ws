@@ -4,6 +4,7 @@ Date: 06/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
+from filecmp import cmp
 from pathlib import Path
 from unittest.mock import patch
 
@@ -11,6 +12,7 @@ import pytest
 
 from rdf_differ import defaults
 from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SKOSHistoryFolderSetUp
+from rdf_differ.utils import dir_exists
 
 
 def helper_endpoint_mock(monkeypatch):
@@ -160,9 +162,9 @@ INPUT_MIME_TYPE = application/rdf+xml'''
     assert config == expected_config
 
 
-def helper_create_skos_folder_setup(dataset='dataset', scheme_uri='http://scheme.uri', alpha_file='alpha.rdf',
+def helper_create_skos_folder_setup(dataset='dataset', alpha_file='alpha.rdf',
                                     beta_file='beta.rdf', root_path='root_path'):
-    return SKOSHistoryFolderSetUp(dataset, scheme_uri, alpha_file, beta_file, root_path)
+    return SKOSHistoryFolderSetUp(dataset, alpha_file, beta_file, root_path)
 
 
 @patch.object(Path, 'mkdir')
@@ -191,3 +193,23 @@ def test_skos_history_folder_setup_root_path_exist_is_not_empty(tmpdir):
     assert 'Root path is not empty' in str(exception.value)
 
 
+def test_skos_history_folder_setup_generate(tmpdir):
+    root_path = tmpdir.mkdir('root_path')
+    alpha_file = tmpdir.join('alpha_file')
+    alpha_file.write('alpha')
+    beta_file = tmpdir.join('beta_file')
+    beta_file.write('beta')
+    dataset = 'dataset'
+
+    skos_folder_setup = helper_create_skos_folder_setup(dataset=dataset, alpha_file=alpha_file, beta_file=beta_file,
+                                                        root_path=root_path)
+    skos_folder_setup.generate()
+    data_path = Path(root_path) / 'dataset/data'
+    v1 = data_path / 'v1'
+    v2 = data_path / 'v2'
+
+    assert dir_exists(v1)
+    assert dir_exists(v2)
+
+    assert cmp(alpha_file, v1 / 'file.rdf')
+    assert cmp(beta_file, v2 / 'file.rdf')

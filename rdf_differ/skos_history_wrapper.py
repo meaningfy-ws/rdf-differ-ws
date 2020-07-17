@@ -5,19 +5,20 @@ Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
 import os
-from pathlib import Path, PurePath
+from pathlib import Path
+from shutil import copy
 from urllib.parse import urljoin
+
 from rdflib.util import guess_format
 
 from rdf_differ import defaults
 from rdf_differ.defaults import PUT_URI_BASE, QUERY_URI_BASE
-from rdf_differ.utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty, file_exists
+from rdf_differ.utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 
 class SKOSHistoryFolderSetUp:
-    def __init__(self, dataset: str, scheme_uri: str, alpha_file: str, beta_file: str, root_path: str):
+    def __init__(self, dataset: str, alpha_file: str, beta_file: str, root_path: str):
         self.dataset = dataset
-        self.scheme_uri = scheme_uri
         self.alpha_file = alpha_file
         self.beta_file = beta_file
         self.root_path = root_path
@@ -25,8 +26,13 @@ class SKOSHistoryFolderSetUp:
         self._check_root_path()
 
     def generate(self):
+        v1 = Path(self.root_path) / self.dataset / 'data' / 'v1'
+        v2 = Path(self.root_path) / self.dataset / 'data' / 'v2'
+        v1.mkdir(parents=True)
+        v2.mkdir(parents=True)
 
-        pass
+        copy(self.alpha_file, v1 / 'file.rdf')
+        copy(self.beta_file, v2 / 'file.rdf')
 
     # TODO: decide if this functionality should remain in the class
     def _check_root_path(self):

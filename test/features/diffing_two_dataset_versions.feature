@@ -6,7 +6,7 @@ Feature: Diffing two dataset versions
 
   As a user,
   I want to execute the diff of two dataset versions,
-  so that I can query the insertions and deletetions between them.
+  so that I can query the insertions and deletions between them.
 
   Scenario: Diffing two dataset versions
     Given alpha and beta RDF files
