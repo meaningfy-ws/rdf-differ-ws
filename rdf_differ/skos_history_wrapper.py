@@ -88,8 +88,8 @@ class SKOSHistoryRunner:
 
         return file_format
 
-    def generate(self):
-        return self.config_template.format(
+    def generate(self) -> str:
+        content = self.config_template.format(
             dataset=self.dataset,
             scheme_uri=self.scheme_uri,
             versions='({} {})'.format(*self.versions),
@@ -100,6 +100,11 @@ class SKOSHistoryRunner:
             query_uri=self.query_uri,
             input_type=self.input_file_mime
         )
+        location = Path(self.basedir) / '{}.config'.format(self.dataset)
+        with open(location, 'w') as file:
+            file.write(content)
+
+        return str(location)
 
     @staticmethod
     def _read_file(relative_location):

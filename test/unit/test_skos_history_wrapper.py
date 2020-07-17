@@ -54,25 +54,29 @@ def test_uris_creation():
     assert skos_runner.query_uri == 'http://test.point/dataset/query'
 
 
-def test_generate_config():
-    skos_runner = helper_create_skos_runner(filename='file.rdf', basedir='/basedir', endpoint='http://test.point')
+def test_generate_config(tmpdir):
+    basedir = tmpdir.mkdir('basedir')
+    skos_runner = helper_create_skos_runner(filename='file.rdf', basedir=basedir, endpoint='http://test.point')
 
-    config = skos_runner.generate()
-    expected_config = '''# !/bin/bash
+    config_file = skos_runner.generate()
+    expected_config_content = '''# !/bin/bash
 
 DATASET = dataset
 SCHEMEURI = http://scheme.uri
 
 VERSIONS = (v1 v2)
-BASEDIR = /basedir
+BASEDIR = {basedir}
 FILENAME = file.rdf
 
 PUT_URI = http://test.point/dataset/data
 UPDATE_URI = http://test.point/dataset
 QUERY_URI = http://test.point/dataset/query
 
-INPUT_MIME_TYPE = application/rdf+xml'''
-    assert config == expected_config
+INPUT_MIME_TYPE = application/rdf+xml'''.format(basedir=basedir)
+    expected_config = tmpdir.join('expected.config')
+    expected_config.write(expected_config_content)
+
+    assert cmp(config_file, expected_config)
 
 
 def helper_create_skos_folder_setup(dataset='dataset', filename='file.rdf', alpha_file='alpha.rdf',
