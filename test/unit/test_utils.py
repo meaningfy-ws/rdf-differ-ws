@@ -7,7 +7,80 @@ Email: coslet.mihai@gmail.com
 
 from pathlib import Path
 
-from rdf_differ.utils import dir_exists, file_exists, dir_is_empty
+import pytest
+
+from rdf_differ import defaults
+from rdf_differ.utils import dir_exists, file_exists, dir_is_empty, get_envs
+
+
+def helper_endpoint_mock(monkeypatch):
+    monkeypatch.setenv('ENDPOINT', 'http://test.point')
+
+
+@pytest.fixture
+def mock_env_basedir(monkeypatch):
+    helper_endpoint_mock(monkeypatch)
+    monkeypatch.setenv('BASEDIR', '/basedir')
+
+
+def test_read_envs_basedir_exists(mock_env_basedir):
+    envs = get_envs()
+    assert envs['basedir'] == '/basedir'
+
+
+@pytest.fixture
+def mock_env_basedir_missing(monkeypatch):
+    helper_endpoint_mock(monkeypatch)
+    monkeypatch.delenv("BASEDIR", raising=False)
+
+
+def test_read_envs_basedir_doesnt_exist(mock_env_basedir_missing):
+    envs = get_envs()
+    assert envs['basedir'] == defaults.BASEDIR
+
+
+@pytest.fixture
+def mock_env_filename(monkeypatch):
+    helper_endpoint_mock(monkeypatch)
+    monkeypatch.setenv('FILENAME', 'test.rdf')
+
+
+def test_read_envs_filename_exists(mock_env_filename):
+    envs = get_envs()
+    assert envs['filename'] == 'test.rdf'
+
+
+@pytest.fixture
+def mock_env_filename_missing(monkeypatch):
+    helper_endpoint_mock(monkeypatch)
+    monkeypatch.delenv("FILENAME", raising=False)
+
+
+def test_read_envs_filename_doesnt_exist(mock_env_filename_missing):
+    envs = get_envs()
+    assert envs['filename'] == defaults.FILENAME
+
+
+@pytest.fixture
+def mock_env_endpoint(monkeypatch):
+    helper_endpoint_mock(monkeypatch)
+
+
+def test_read_envs_endpoint_exists(mock_env_endpoint):
+    envs = get_envs()
+    assert envs['endpoint'] == 'http://test.point'
+
+
+@pytest.fixture
+def mock_env_endpoint_missing(monkeypatch):
+    monkeypatch.delenv("ENDPOINT", raising=False)
+
+
+def test_read_envs_endpoint_doesnt_exist(mock_env_endpoint_missing):
+    with pytest.raises(KeyError) as key_error:
+        _ = get_envs()
+
+    assert 'ENDPOINT' in str(key_error.value)
 
 
 def test_dir_exists(tmpdir):

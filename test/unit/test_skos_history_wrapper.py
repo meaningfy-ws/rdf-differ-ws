@@ -162,25 +162,9 @@ INPUT_MIME_TYPE = application/rdf+xml'''
     assert config == expected_config
 
 
-def helper_create_skos_folder_setup(dataset='dataset', alpha_file='alpha.rdf',
+def helper_create_skos_folder_setup(dataset='dataset', filename='file.rdf', alpha_file='alpha.rdf',
                                     beta_file='beta.rdf', root_path='root_path'):
-    return SKOSHistoryFolderSetUp(dataset, alpha_file, beta_file, root_path)
-
-
-@patch.object(Path, 'mkdir')
-def test_skos_history_folder_setup_root_path_doest_exist(mock_mkdir):
-    root_path = Path.cwd().joinpath('root_folder')
-    _ = helper_create_skos_folder_setup(root_path=str(root_path))
-
-    mock_mkdir.assert_called_once()
-
-
-@patch.object(Path, 'mkdir')
-def test_skos_history_folder_setup_root_path_exist_is_empty(mock_mkdir, tmpdir):
-    root_path = tmpdir.mkdir('root_path')
-    _ = helper_create_skos_folder_setup(root_path=str(root_path))
-
-    mock_mkdir.assert_not_called()
+    return SKOSHistoryFolderSetUp(dataset, filename, alpha_file, beta_file, root_path)
 
 
 def test_skos_history_folder_setup_root_path_exist_is_not_empty(tmpdir):
@@ -194,14 +178,16 @@ def test_skos_history_folder_setup_root_path_exist_is_not_empty(tmpdir):
 
 
 def test_skos_history_folder_setup_generate(tmpdir):
+    dataset = 'dataset'
+    filename = 'file.rdf'
     root_path = tmpdir.mkdir('root_path')
     alpha_file = tmpdir.join('alpha_file')
     alpha_file.write('alpha')
     beta_file = tmpdir.join('beta_file')
     beta_file.write('beta')
-    dataset = 'dataset'
 
-    skos_folder_setup = helper_create_skos_folder_setup(dataset=dataset, alpha_file=alpha_file, beta_file=beta_file,
+    skos_folder_setup = helper_create_skos_folder_setup(dataset=dataset, filename=filename, alpha_file=alpha_file,
+                                                        beta_file=beta_file,
                                                         root_path=root_path)
     skos_folder_setup.generate()
     data_path = Path(root_path) / 'dataset/data'

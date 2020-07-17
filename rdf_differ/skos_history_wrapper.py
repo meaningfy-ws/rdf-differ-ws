@@ -17,8 +17,9 @@ from rdf_differ.utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 
 class SKOSHistoryFolderSetUp:
-    def __init__(self, dataset: str, alpha_file: str, beta_file: str, root_path: str):
+    def __init__(self, dataset: str, filename: str, alpha_file: str, beta_file: str, root_path: str):
         self.dataset = dataset
+        self.filename = filename
         self.alpha_file = alpha_file
         self.beta_file = beta_file
         self.root_path = root_path
@@ -31,16 +32,12 @@ class SKOSHistoryFolderSetUp:
         v1.mkdir(parents=True)
         v2.mkdir(parents=True)
 
-        copy(self.alpha_file, v1 / 'file.rdf')
-        copy(self.beta_file, v2 / 'file.rdf')
+        copy(self.alpha_file, v1 / self.filename)
+        copy(self.beta_file, v2 / self.filename)
 
-    # TODO: decide if this functionality should remain in the class
     def _check_root_path(self):
-        if dir_exists(self.root_path):
-            if not dir_is_empty(self.root_path):
-                raise Exception('Root path is not empty.')
-        else:
-            Path(self.root_path).mkdir()
+        if dir_exists(self.root_path) and not dir_is_empty(self.root_path):
+            raise Exception('Root path is not empty.')
 
 
 class SKOSHistoryRunner:
