@@ -10,12 +10,12 @@ from pytest_bdd import (
 
 
 @scenario('../features/prepare_config.feature', 'Generating the skos-history config file')
-def test_generating_the_skos_history_config_file():
+def _test_generating_the_skos_history_config_file():
     """Generating the skos-history config file."""
 
 
 @scenario('../features/prepare_config.feature', 'Set up the folder structure')
-def test_set_up_the_folder_structure():
+def _test_set_up_the_folder_structure():
     """Set up the folder structure."""
 
 

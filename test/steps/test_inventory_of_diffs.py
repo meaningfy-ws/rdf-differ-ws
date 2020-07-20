@@ -10,7 +10,7 @@ from pytest_bdd import (
 
 
 @scenario('../features/inventory_of_diffs.feature', 'Query the triplestore')
-def test_query_the_triplestore():
+def _test_query_the_triplestore():
     """Query the triplestore."""
 
 

@@ -10,12 +10,12 @@ from pytest_bdd import (
 
 
 @scenario('../features/execute_skos_history.feature', 'Controlling the skos-history inputs')
-def test_controlling_the_skoshistory_inputs():
+def _test_controlling_the_skoshistory_inputs():
     """Controlling the skos-history inputs."""
 
 
 @scenario('../features/execute_skos_history.feature', 'Running the skos-history')
-def test_running_the_skoshistory():
+def _test_running_the_skoshistory():
     """Running the skos-history."""
 
 

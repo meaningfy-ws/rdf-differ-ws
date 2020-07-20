@@ -1,22 +1,11 @@
 """
-utils.py
+file_utils.py
 Date: 09/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
-import os
 from pathlib import Path
 from typing import Union
-
-from rdf_differ import defaults
-
-
-def get_envs() -> dict:
-    return {
-        'basedir': os.environ.get('BASEDIR', defaults.BASEDIR),
-        'filename': os.environ.get('FILENAME', defaults.FILENAME),
-        'endpoint': os.environ['ENDPOINT']
-    }
 
 
 def dir_exists(path: Union[str, Path]) -> bool:
@@ -56,7 +45,6 @@ def file_exists(path: Union[str, Path]) -> bool:
     return Path(path).is_file()
 
 
-# TODO: extend dict as required
 INPUT_MIME_TYPES = {
     'rdf': 'application/rdf+xml',
     'rdfs': 'application/rdf+xml',

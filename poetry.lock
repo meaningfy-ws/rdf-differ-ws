@@ -1,5 +1,5 @@
 [[package]]
-category = "main"
+category = "dev"
 description = "Disable App Nap on OS X 10.9"
 marker = "sys_platform == \"darwin\""
 name = "appnope"
@@ -8,7 +8,7 @@ python-versions = "*"
 version = "0.1.0"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Atomic file writes."
 marker = "sys_platform == \"win32\""
 name = "atomicwrites"
@@ -17,7 +17,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.4.0"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Classes Without Boilerplate"
 name = "attrs"
 optional = false
@@ -31,7 +31,7 @@ docs = ["sphinx", "zope.interface"]
 tests = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.interface"]
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Specifications for callback functions passed in to an API"
 name = "backcall"
 optional = false
@@ -47,7 +47,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 version = "7.1.2"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Cross-platform colored terminal text."
 marker = "sys_platform == \"win32\""
 name = "colorama"
@@ -67,7 +67,7 @@ version = "5.2"
 toml = ["toml"]
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Decorators for Humans"
 name = "decorator"
 optional = false
@@ -88,7 +88,7 @@ pycodestyle = ">=2.6.0a1,<2.7.0"
 pyflakes = ">=2.2.0,<2.3.0"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Version of the glob module that can capture patterns and supports recursive wildcards"
 name = "glob2"
 optional = false
@@ -96,7 +96,7 @@ python-versions = "*"
 version = "0.7"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "IPython: Productive Interactive Computing"
 name = "ipython"
 optional = false
@@ -128,7 +128,7 @@ qtconsole = ["qtconsole"]
 test = ["nose (>=0.10.1)", "requests", "testpath", "pygments", "nbformat", "ipykernel", "numpy (>=1.14)"]
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Vestigial utilities from IPython"
 name = "ipython-genutils"
 optional = false
@@ -147,7 +147,7 @@ version = "0.6.0"
 six = "*"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "An autocompletion tool for Python that can be used for text editors."
 name = "jedi"
 optional = false
@@ -162,7 +162,7 @@ qa = ["flake8 (3.7.9)"]
 testing = ["Django (<3.1)", "colorama", "docopt", "pytest (>=3.9.0,<5.0.0)"]
 
 [[package]]
-category = "main"
+category = "dev"
 description = "A super-fast templating language that borrows the  best ideas from the existing templating languages."
 name = "mako"
 optional = false
@@ -177,7 +177,7 @@ babel = ["babel"]
 lingua = ["lingua"]
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Safely add untrusted strings to HTML/XML markup."
 name = "markupsafe"
 optional = false
@@ -193,7 +193,7 @@ python-versions = "*"
 version = "0.6.1"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "More routines for operating on iterables, beyond itertools"
 name = "more-itertools"
 optional = false
@@ -201,7 +201,7 @@ python-versions = ">=3.5"
 version = "8.4.0"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Core utilities for Python packages"
 name = "packaging"
 optional = false
@@ -213,7 +213,7 @@ pyparsing = ">=2.0.2"
 six = "*"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "parse() is the opposite of format()"
 name = "parse"
 optional = false
@@ -221,7 +221,7 @@ python-versions = "*"
 version = "1.15.0"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Simplifies to build parse types based on the parse module"
 name = "parse-type"
 optional = false
@@ -237,7 +237,7 @@ develop = ["coverage (>=4.4)", "pytest (>=3.2)", "pytest-cov", "tox (>=2.8)"]
 docs = ["sphinx (>=1.2)"]
 
 [[package]]
-category = "main"
+category = "dev"
 description = "A Python Parser"
 name = "parso"
 optional = false
@@ -256,7 +256,7 @@ python-versions = "*"
 version = "1.0.1"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Pexpect allows easy control of interactive console applications."
 marker = "sys_platform != \"win32\""
 name = "pexpect"
@@ -268,7 +268,7 @@ version = "4.8.0"
 ptyprocess = ">=0.5"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Tiny 'shelve'-like database with concurrency support"
 name = "pickleshare"
 optional = false
@@ -276,7 +276,7 @@ python-versions = "*"
 version = "0.7.5"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "plugin and hook calling mechanisms for python"
 name = "pluggy"
 optional = false
@@ -287,7 +287,7 @@ version = "0.13.1"
 dev = ["pre-commit", "tox"]
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Library for building powerful interactive command lines in Python"
 name = "prompt-toolkit"
 optional = false
@@ -298,7 +298,7 @@ version = "3.0.5"
 wcwidth = "*"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Run a subprocess in a pseudo terminal"
 marker = "sys_platform != \"win32\""
 name = "ptyprocess"
@@ -307,7 +307,7 @@ python-versions = "*"
 version = "0.6.0"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
 name = "py"
 optional = false
@@ -331,7 +331,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.2.0"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Pygments is a syntax highlighting package written in Python."
 name = "pygments"
 optional = false
@@ -347,7 +347,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 version = "2.4.7"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
@@ -369,7 +369,7 @@ checkqa-mypy = ["mypy (v0.761)"]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xmlschema"]
 
 [[package]]
-category = "main"
+category = "dev"
 description = "BDD for pytest"
 name = "pytest-bdd"
 optional = false
@@ -442,7 +442,7 @@ rdflib = ">=4.0"
 keepalive = ["keepalive (>=0.5)"]
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Traitlets Python config system"
 name = "traitlets"
 optional = false
@@ -458,7 +458,7 @@ six = "*"
 test = ["pytest", "mock"]
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Measures the displayed width of unicode strings in a terminal"
 name = "wcwidth"
 optional = false
@@ -466,7 +466,7 @@ python-versions = "*"
 version = "0.2.5"
 
 [metadata]
-content-hash = "739fed481dbfb214e988f97cf7e639d459a470ed29fdf42ac352a895bf488942"
+content-hash = "c2520b50bb34d8416b36f12dcec90bfe8664d2d6e5b5a8b6e699618a30b4cb3e"
 python-versions = "^3.8"
 
 [metadata.files]

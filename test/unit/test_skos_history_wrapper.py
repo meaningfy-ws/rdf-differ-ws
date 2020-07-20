@@ -10,11 +10,7 @@ from pathlib import Path
 import pytest
 
 from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SKOSHistoryFolderSetUp
-from rdf_differ.utils import dir_exists
-
-
-def helper_endpoint_mock(monkeypatch):
-    monkeypatch.setenv('ENDPOINT', 'http://test.point')
+from utils.file_utils import dir_exists
 
 
 def helper_create_skos_runner(dataset='dataset', scheme_uri='http://scheme.uri', versions=None, basedir='/basedir',

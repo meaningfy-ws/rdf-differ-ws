@@ -10,8 +10,7 @@ from urllib.parse import urljoin
 
 from rdflib.util import guess_format
 
-from rdf_differ.defaults import PUT_URI_BASE, QUERY_URI_BASE
-from rdf_differ.utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
+from utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 
 class SKOSHistoryFolderSetUp:
@@ -60,7 +59,7 @@ class SKOSHistoryRunner:
         :return: str
             PUT URI
         """
-        return urljoin(self.endpoint, '/'.join([self.dataset, PUT_URI_BASE]))
+        return urljoin(self.endpoint, '/'.join([self.dataset, 'data']))
 
     @property
     def update_uri(self) -> str:
@@ -78,7 +77,7 @@ class SKOSHistoryRunner:
         :return: str
             query URI
         """
-        return urljoin(self.endpoint, '/'.join([self.dataset, QUERY_URI_BASE]))
+        return urljoin(self.endpoint, '/'.join([self.dataset, 'query']))
 
     @property
     def input_file_mime(self) -> str:
