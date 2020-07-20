@@ -50,31 +50,6 @@ def test_uris_creation():
     assert skos_runner.query_uri == 'http://test.point/dataset/query'
 
 
-def test_generate_config(tmpdir):
-    basedir = tmpdir.mkdir('basedir')
-    skos_runner = helper_create_skos_runner(filename='file.rdf', basedir=basedir, endpoint='http://test.point')
-
-    config_file = skos_runner.generate()
-    expected_config_content = '''# !/bin/bash
-
-DATASET = dataset
-SCHEMEURI = http://scheme.uri
-
-VERSIONS = (v1 v2)
-BASEDIR = {basedir}
-FILENAME = file.rdf
-
-PUT_URI = http://test.point/dataset/data
-UPDATE_URI = http://test.point/dataset
-QUERY_URI = http://test.point/dataset/query
-
-INPUT_MIME_TYPE = application/rdf+xml'''.format(basedir=basedir)
-    expected_config = tmpdir.join('expected.config')
-    expected_config.write(expected_config_content)
-
-    assert cmp(config_file, expected_config)
-
-
 def helper_create_skos_folder_setup(dataset='dataset', filename='file.rdf', old_version='old.rdf',
                                     new_version='new.rdf', root_path='root_path'):
     return SKOSHistoryFolderSetUp(dataset, filename, old_version, new_version, root_path)
@@ -88,26 +63,3 @@ def test_skos_history_folder_setup_root_path_exist_is_not_empty(tmpdir):
         _ = helper_create_skos_folder_setup(root_path=str(root_path))
 
     assert 'Root path is not empty' in str(exception.value)
-
-
-def test_skos_history_folder_setup_generate(tmpdir):
-    dataset = 'dataset'
-    filename = 'file.rdf'
-    root_path = tmpdir.mkdir('root_path')
-    old_version = tmpdir.join('old_version')
-    old_version.write('old')
-    new_version = tmpdir.join('new_version')
-    new_version.write('new')
-
-    skos_folder_setup = helper_create_skos_folder_setup(dataset=dataset, filename=filename, old_version=old_version,
-                                                        new_version=new_version, root_path=root_path)
-    skos_folder_setup.generate()
-    data_path = Path(root_path) / 'dataset/data'
-    v1 = data_path / 'v1'
-    v2 = data_path / 'v2'
-
-    assert dir_exists(v1)
-    assert dir_exists(v2)
-
-    assert cmp(old_version, v1 / 'file.rdf')
-    assert cmp(new_version, v2 / 'file.rdf')

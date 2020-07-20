@@ -16,20 +16,20 @@ from utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 class SKOSHistoryFolderSetUp:
     def __init__(self, dataset: str, filename: str, old_version: str, new_version: str, root_path: str,
-                 version_name1: str = 'v1', version_name2: str = 'v2'):
+                 version_1_name: str = 'v1', version_2_name: str = 'v2'):
         self.dataset = dataset
         self.filename = filename
         self.old_version = old_version
         self.new_version = new_version
         self.root_path = root_path
-        self.version_name1 = version_name1
-        self.version_name2 = version_name2
+        self.version_1_name = version_1_name
+        self.version_2_name = version_2_name
 
         self._check_root_path()
 
     def generate(self):
-        v1 = Path(self.root_path) / self.dataset / 'data' / self.version_name1
-        v2 = Path(self.root_path) / self.dataset / 'data' / self.version_name2
+        v1 = Path(self.root_path) / self.dataset / 'data' / self.version_1_name
+        v2 = Path(self.root_path) / self.dataset / 'data' / self.version_2_name
         v1.mkdir(parents=True)
         v2.mkdir(parents=True)
 
@@ -115,12 +115,11 @@ class SKOSHistoryRunner:
 
 
 def run_skos_history_generation(dataset: str, scheme_uri: str, versions: list, old_version: str,
-                                new_version: str, basedir: str):
-    envs = get_envs()
-
-    skos_folder_setup = SKOSHistoryFolderSetUp(dataset=dataset, filename=envs.get('filename'),
+                                new_version: str, basedir: str, filename: str, endpoint: str):
+    skos_folder_setup = SKOSHistoryFolderSetUp(dataset=dataset, filename=filename,
                                                old_version=old_version, new_version=new_version, root_path=basedir)
     skos_folder_setup.generate()
 
-    skos_runner = SKOSHistoryRunner(dataset=dataset, scheme_uri=scheme_uri, versions=versions, **envs)
+    skos_runner = SKOSHistoryRunner(dataset=dataset, scheme_uri=scheme_uri, versions=versions, endpoint=endpoint,
+                                    filename=filename, basedir=basedir)
     skos_runner.generate()
