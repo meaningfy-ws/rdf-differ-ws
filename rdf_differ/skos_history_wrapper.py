@@ -10,16 +10,17 @@ from urllib.parse import urljoin
 
 from rdflib.util import guess_format
 
+from rdf_differ.config import get_envs
 from utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 
 class SKOSHistoryFolderSetUp:
-    def __init__(self, dataset: str, filename: str, alpha_file: str, beta_file: str, root_path: str,
+    def __init__(self, dataset: str, filename: str, old_version: str, new_version: str, root_path: str,
                  version_name1: str = 'v1', version_name2: str = 'v2'):
         self.dataset = dataset
         self.filename = filename
-        self.alpha_file = alpha_file
-        self.beta_file = beta_file
+        self.old_version = old_version
+        self.new_version = new_version
         self.root_path = root_path
         self.version_name1 = version_name1
         self.version_name2 = version_name2
@@ -32,8 +33,8 @@ class SKOSHistoryFolderSetUp:
         v1.mkdir(parents=True)
         v2.mkdir(parents=True)
 
-        copy(self.alpha_file, v1 / self.filename)
-        copy(self.beta_file, v2 / self.filename)
+        copy(self.old_version, v1 / self.filename)
+        copy(self.new_version, v2 / self.filename)
 
     def _check_root_path(self):
         if dir_exists(self.root_path) and not dir_is_empty(self.root_path):
@@ -111,3 +112,15 @@ class SKOSHistoryRunner:
         with open(location, 'r') as file:
             content = file.read()
         return content
+
+
+def run_skos_history_generation(dataset: str, scheme_uri: str, versions: list, old_version: str,
+                                new_version: str, basedir: str):
+    envs = get_envs()
+
+    skos_folder_setup = SKOSHistoryFolderSetUp(dataset=dataset, filename=envs.get('filename'),
+                                               old_version=old_version, new_version=new_version, root_path=basedir)
+    skos_folder_setup.generate()
+
+    skos_runner = SKOSHistoryRunner(dataset=dataset, scheme_uri=scheme_uri, versions=versions, **envs)
+    skos_runner.generate()

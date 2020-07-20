@@ -75,9 +75,9 @@ INPUT_MIME_TYPE = application/rdf+xml'''.format(basedir=basedir)
     assert cmp(config_file, expected_config)
 
 
-def helper_create_skos_folder_setup(dataset='dataset', filename='file.rdf', alpha_file='alpha.rdf',
-                                    beta_file='beta.rdf', root_path='root_path'):
-    return SKOSHistoryFolderSetUp(dataset, filename, alpha_file, beta_file, root_path)
+def helper_create_skos_folder_setup(dataset='dataset', filename='file.rdf', old_version='old.rdf',
+                                    new_version='new.rdf', root_path='root_path'):
+    return SKOSHistoryFolderSetUp(dataset, filename, old_version, new_version, root_path)
 
 
 def test_skos_history_folder_setup_root_path_exist_is_not_empty(tmpdir):
@@ -94,14 +94,13 @@ def test_skos_history_folder_setup_generate(tmpdir):
     dataset = 'dataset'
     filename = 'file.rdf'
     root_path = tmpdir.mkdir('root_path')
-    alpha_file = tmpdir.join('alpha_file')
-    alpha_file.write('alpha')
-    beta_file = tmpdir.join('beta_file')
-    beta_file.write('beta')
+    old_version = tmpdir.join('old_version')
+    old_version.write('old')
+    new_version = tmpdir.join('new_version')
+    new_version.write('new')
 
-    skos_folder_setup = helper_create_skos_folder_setup(dataset=dataset, filename=filename, alpha_file=alpha_file,
-                                                        beta_file=beta_file,
-                                                        root_path=root_path)
+    skos_folder_setup = helper_create_skos_folder_setup(dataset=dataset, filename=filename, old_version=old_version,
+                                                        new_version=new_version, root_path=root_path)
     skos_folder_setup.generate()
     data_path = Path(root_path) / 'dataset/data'
     v1 = data_path / 'v1'
@@ -110,5 +109,5 @@ def test_skos_history_folder_setup_generate(tmpdir):
     assert dir_exists(v1)
     assert dir_exists(v2)
 
-    assert cmp(alpha_file, v1 / 'file.rdf')
-    assert cmp(beta_file, v2 / 'file.rdf')
+    assert cmp(old_version, v1 / 'file.rdf')
+    assert cmp(new_version, v2 / 'file.rdf')
