@@ -21,5 +21,6 @@ Feature: Prepare the skos-history config file and folder structure
   Scenario: Generating the skos-history config file
     Given mandatory descriptive metadata
     And the root path of folder structure
+    And old version and new version RDF files
     When the user runs the config generator
     Then a correct configuration file is created in the folder structure

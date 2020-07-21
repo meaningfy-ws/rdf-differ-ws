@@ -10,7 +10,7 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.skos_history_wrapper import SKOSHistoryFolderSetUp, SKOSHistoryRunner
+from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
 from utils.file_utils import dir_exists, dir_is_empty, file_exists
 
 
@@ -54,23 +54,25 @@ def old_version_and_new_version_rdf_files(tmpdir, metadata):
     new_version = tmpdir.join('new_version.rdf')
     new_version.write('new_version')
 
-    metadata['old_version'] = old_version
-    metadata['version_1_name'] = 'v1'
-    metadata['new_version'] = new_version
-    metadata['version_2_name'] = 'v2'
+    metadata['old_version_file'] = old_version
+    metadata['old_version_id'] = 'v1'
+    metadata['new_version_file'] = new_version
+    metadata['new_version_id'] = 'v2'
 
 
 @when('the user runs the folder structure generator')
 def the_user_runs_the_folder_structure_generator(metadata):
     """the user runs the folder structure generator."""
-    skos_folder_setup = SKOSHistoryFolderSetUp(dataset=metadata.get('dataset'),
-                                               filename=metadata.get('filename'),
-                                               old_version=metadata.get('old_version'),
-                                               new_version=metadata.get('new_version'),
-                                               root_path=metadata.get('basedir'),
-                                               version_1_name=metadata.get('version_1_name'),
-                                               version_2_name=metadata.get('version_2_name'))
-    skos_folder_setup.generate()
+    skos_folder_setup = SKOSHistoryRunner(dataset=metadata.get('dataset'),
+                                          filename=metadata.get('filename'),
+                                          old_version_file=metadata.get('old_version_file'),
+                                          new_version_file=metadata.get('new_version_file'),
+                                          basedir=metadata.get('basedir'),
+                                          old_version_id=metadata.get('old_version_id'),
+                                          new_version_id=metadata.get('new_version_id'),
+                                          endpoint=metadata.get('endpoint'),
+                                          scheme_uri=metadata.get('scheme_uri'))
+    skos_folder_setup.generate_structure()
 
 
 @then('a correct dataset folder structure is created')
@@ -105,8 +107,8 @@ def a_dataset_file_is_copied_into_the_version_sub_folder(metadata):
 @then('the file is renamed to a standard file name')
 def the_file_is_renamed_to_a_standard_file_name(metadata):
     """the file is renamed to a standard file name."""
-    assert cmp(metadata.get('old_version'), metadata.get('v1') / 'file.rdf')
-    assert cmp(metadata.get('new_version'), metadata.get('v2') / 'file.rdf')
+    assert cmp(metadata.get('old_version_file'), metadata.get('v1') / 'file.rdf')
+    assert cmp(metadata.get('new_version_file'), metadata.get('v2') / 'file.rdf')
 
 
 @when('the user runs the config generator')
@@ -114,11 +116,14 @@ def the_user_runs_the_config_generator(metadata):
     """the user runs the config generator."""
     skos_runner = SKOSHistoryRunner(dataset=metadata.get('dataset'),
                                     filename=metadata.get('filename'),
+                                    old_version_file=metadata.get('old_version_file'),
+                                    new_version_file=metadata.get('new_version_file'),
                                     basedir=metadata.get('basedir'),
-                                    scheme_uri=metadata.get('scheme_uri'),
-                                    versions=['v1', 'v2'],
-                                    endpoint=metadata.get('endpoint'))
-    metadata['config_location'] = skos_runner.generate()
+                                    old_version_id=metadata.get('old_version_id'),
+                                    new_version_id=metadata.get('new_version_id'),
+                                    endpoint=metadata.get('endpoint'),
+                                    scheme_uri=metadata.get('scheme_uri'))
+    metadata['config_location'] = skos_runner.generate_config()
 
 
 @then('a correct configuration file is created in the folder structure')
@@ -140,6 +145,5 @@ QUERY_URI = http://test.point/dataset/query
 INPUT_MIME_TYPE = application/rdf+xml'''.format(basedir=metadata.get('basedir'))
     expected_config = tmpdir.join('expected.config')
     expected_config.write(expected_config_content)
-
     assert file_exists(Path(metadata.get('basedir') / 'dataset.config'))
     assert cmp(metadata.get('config_location'), expected_config)

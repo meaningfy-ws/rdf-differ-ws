@@ -4,28 +4,34 @@ Date: 06/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
-from filecmp import cmp
-from pathlib import Path
 
 import pytest
 
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SKOSHistoryFolderSetUp
-from utils.file_utils import dir_exists
+from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
 
 
-def helper_create_skos_runner(dataset='dataset', scheme_uri='http://scheme.uri', versions=None, basedir='/basedir',
-                              filename='file.rdf', endpoint='http://test.point'):
-    if versions is None:
-        versions = ['v1', 'v2']
-    return SKOSHistoryRunner(dataset, scheme_uri, versions, basedir, filename, endpoint)
+def helper_create_skos_runner(dataset='dataset', scheme_uri='http://scheme.uri', basedir='/basedir',
+                              filename='file.rdf', endpoint='http://test.point', old_version_file='old.rdf',
+                              new_version_file='new.rdf', old_version_id='v1', new_version_id='v2'):
+
+    return SKOSHistoryRunner(dataset=dataset,
+                             filename=filename,
+                             old_version_file=old_version_file,
+                             new_version_file=new_version_file,
+                             basedir=basedir,
+                             old_version_id=old_version_id,
+                             new_version_id=new_version_id,
+                             endpoint=endpoint,
+                             scheme_uri=scheme_uri)
 
 
 test_values = [('test.rdf', 'application/rdf+xml'),
-               ('test.rdfs', 'application/rdf+xml'),
-               ('test.owl', 'application/rdf+xml'),
-               ('test.n3', 'text/n3'),
+               ('test.trix', 'application/xml'),
+               ('test.nq', 'application/n-quads'),
+               ('test.nt', 'application/n-triples'),
                ('test.ttl', 'text/turtle'),
-               ('test.json', 'application/json')]
+               ('test.n3', 'text/n3'),
+               ('test.jsonld', 'application/ld+json')]
 
 
 @pytest.mark.parametrize("filename,file_format", test_values)
@@ -50,16 +56,11 @@ def test_uris_creation():
     assert skos_runner.query_uri == 'http://test.point/dataset/query'
 
 
-def helper_create_skos_folder_setup(dataset='dataset', filename='file.rdf', old_version='old.rdf',
-                                    new_version='new.rdf', root_path='root_path'):
-    return SKOSHistoryFolderSetUp(dataset, filename, old_version, new_version, root_path)
-
-
 def test_skos_history_folder_setup_root_path_exist_is_not_empty(tmpdir):
     root_path = tmpdir.mkdir('root_path')
     file = root_path.join('file')
     file.write('')
     with pytest.raises(Exception) as exception:
-        _ = helper_create_skos_folder_setup(root_path=str(root_path))
+        _ = helper_create_skos_runner(basedir=str(root_path))
 
     assert 'Root path is not empty' in str(exception.value)

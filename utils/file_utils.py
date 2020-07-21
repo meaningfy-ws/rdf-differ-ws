@@ -47,9 +47,10 @@ def file_exists(path: Union[str, Path]) -> bool:
 
 INPUT_MIME_TYPES = {
     'rdf': 'application/rdf+xml',
-    'rdfs': 'application/rdf+xml',
-    'owl': 'application/rdf+xml',
+    'trix': 'application/xml',
+    'nq': 'application/n-quads',
+    'nt': 'application/n-triples',
+    'jsonld': 'application/ld+json',
     'n3': 'text/n3',
     'ttl': 'text/turtle',
-    'json': 'application/json',
 }

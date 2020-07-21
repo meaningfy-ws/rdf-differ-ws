@@ -6,52 +6,46 @@ Email: coslet.mihai@gmail.com
 """
 from pathlib import Path
 from shutil import copy
-from urllib.parse import urljoin
+from urllib.parse import urljoin, quote
 
 from rdflib.util import guess_format
 
-from rdf_differ.config import get_envs
 from utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
+CONFIG_TEMPLATE = """# !/bin/bash
 
-class SKOSHistoryFolderSetUp:
-    def __init__(self, dataset: str, filename: str, old_version: str, new_version: str, root_path: str,
-                 version_1_name: str = 'v1', version_2_name: str = 'v2'):
-        self.dataset = dataset
-        self.filename = filename
-        self.old_version = old_version
-        self.new_version = new_version
-        self.root_path = root_path
-        self.version_1_name = version_1_name
-        self.version_2_name = version_2_name
+DATASET = {dataset}
+SCHEMEURI = {scheme_uri}
 
-        self._check_root_path()
+VERSIONS = {versions}
+BASEDIR = {basedir}
+FILENAME = {filename}
 
-    def generate(self):
-        v1 = Path(self.root_path) / self.dataset / 'data' / self.version_1_name
-        v2 = Path(self.root_path) / self.dataset / 'data' / self.version_2_name
-        v1.mkdir(parents=True)
-        v2.mkdir(parents=True)
+PUT_URI = {put_uri}
+UPDATE_URI = {update_uri}
+QUERY_URI = {query_uri}
 
-        copy(self.old_version, v1 / self.filename)
-        copy(self.new_version, v2 / self.filename)
-
-    def _check_root_path(self):
-        if dir_exists(self.root_path) and not dir_is_empty(self.root_path):
-            raise Exception('Root path is not empty.')
+INPUT_MIME_TYPE = {input_type}"""
 
 
 class SKOSHistoryRunner:
-    def __init__(self, dataset: str, scheme_uri: str, versions: list, basedir: str, filename: str, endpoint: str,
-                 config_template_location: str = '../templates/template.config'):
-        self.config_template = self._read_file(config_template_location)
-        self.dataset = dataset
+    def __init__(self, dataset: str, scheme_uri: str, basedir: str, filename: str, endpoint: str,
+                 old_version_file: str, new_version_file: str, old_version_id: str = 'v1',
+                 new_version_id: str = 'v2', config_template: str = CONFIG_TEMPLATE):
+        self.config_template = config_template
+        self.dataset = quote(dataset)
         self.scheme_uri = scheme_uri
-        self.versions = versions
+
+        self.old_version_file = old_version_file
+        self.new_version_file = new_version_file
+        self.old_version_id = old_version_id
+        self.new_version_id = new_version_id
 
         self.basedir = basedir
         self.filename = filename
         self.endpoint = endpoint
+
+        self._check_root_path()
 
     @property
     def put_uri(self) -> str:
@@ -88,11 +82,24 @@ class SKOSHistoryRunner:
 
         return file_format
 
-    def generate(self) -> str:
+    def run(self):
+        self.generate_structure()
+        self.generate_config()
+
+    def generate_structure(self):
+        v1 = Path(self.basedir) / self.dataset / 'data' / self.old_version_id
+        v2 = Path(self.basedir) / self.dataset / 'data' / self.new_version_id
+        v1.mkdir(parents=True)
+        v2.mkdir(parents=True)
+
+        copy(self.old_version_file, v1 / self.filename)
+        copy(self.new_version_file, v2 / self.filename)
+
+    def generate_config(self) -> str:
         content = self.config_template.format(
             dataset=self.dataset,
             scheme_uri=self.scheme_uri,
-            versions='({} {})'.format(*self.versions),
+            versions='({} {})'.format(self.old_version_id, self.new_version_id),
             basedir=self.basedir,
             filename=self.filename,
             put_uri=self.put_uri,
@@ -106,20 +113,6 @@ class SKOSHistoryRunner:
 
         return str(location)
 
-    @staticmethod
-    def _read_file(relative_location):
-        location = Path(__file__).parent / relative_location
-        with open(location, 'r') as file:
-            content = file.read()
-        return content
-
-
-def run_skos_history_generation(dataset: str, scheme_uri: str, versions: list, old_version: str,
-                                new_version: str, basedir: str, filename: str, endpoint: str):
-    skos_folder_setup = SKOSHistoryFolderSetUp(dataset=dataset, filename=filename,
-                                               old_version=old_version, new_version=new_version, root_path=basedir)
-    skos_folder_setup.generate()
-
-    skos_runner = SKOSHistoryRunner(dataset=dataset, scheme_uri=scheme_uri, versions=versions, endpoint=endpoint,
-                                    filename=filename, basedir=basedir)
-    skos_runner.generate()
+    def _check_root_path(self):
+        if dir_exists(self.basedir) and not dir_is_empty(self.basedir):
+            raise Exception('Root path is not empty.')
