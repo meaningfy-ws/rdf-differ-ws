@@ -137,14 +137,13 @@ class SKOSHistoryRunner:
         return '{}{}'.format(self.filename, self.file_extension)
 
     def _check_file_formats(self):
-        formats = []
-        for file in [self.old_version_file, self.new_version_file]:
-            formats.append(self.get_file_format(file))
+        old_format = self.get_file_format(self.old_version_file)
+        new_format = self.get_file_format(self.new_version_file)
 
-        if len(set(formats)) > 1:
-            raise Exception(f'File formats are different: {", ".join(format for format in formats)}')
+        if old_format != new_format:
+            raise Exception(f'File formats are different: {old_format}, {new_format}')
 
-        return formats.pop()
+        return old_format
 
     def _check_basedir(self):
         if dir_exists(self.basedir) and not dir_is_empty(self.basedir):
