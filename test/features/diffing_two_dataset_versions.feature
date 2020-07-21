@@ -6,7 +6,7 @@ Feature: Diffing two dataset versions
 
   As a user,
   I want to execute the diff of two dataset versions,
-  so that I can query the insertions and deletetions between them.
+  so that I can query the insertions and deletions between them.
 
   Scenario: Diffing two dataset versions
     Given alpha and beta RDF files
@@ -16,7 +16,6 @@ Feature: Diffing two dataset versions
     And the files are copied and renamed accordingly in the folder structure
     And a correct configuration file is created
     And the diff calculator is executed
-
 
   Scenario Outline: Controlling the mandatory descriptive metadata
     Given mandatory descriptive metadata
@@ -29,4 +28,3 @@ Feature: Diffing two dataset versions
       | alpha dataset version |
       | beta dataset version  |
       | scheme URI            |
-      | basedir               |

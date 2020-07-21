@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "rdf_differ"
+version = "0.0.1"
+description = ""
+authors = ["Eugeniu Costetschi <costezki.eugen@gmail.com>", "Mihai Coslet <coslet.mihai@gmail.com>"]
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+click = "*"
+flake8 = "*"
+pathlib = "*"
+rdflib = "*"
+sparqlwrapper = "*"
+
+[tool.poetry.dev-dependencies]
+pytest-bdd = "^3.4.0"
+ipython = "^7.16.1"
+pytest = "*"
+coverage = "*"
+pytest-cov = "*"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

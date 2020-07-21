@@ -10,12 +10,12 @@ from pytest_bdd import (
 
 
 @scenario('../features/diffing_two_dataset_versions.feature', 'Controlling the mandatory descriptive metadata')
-def test_controlling_the_mandatory_descriptive_metadata():
+def _test_controlling_the_mandatory_descriptive_metadata():
     """Controlling the mandatory descriptive metadata."""
 
 
 @scenario('../features/diffing_two_dataset_versions.feature', 'Diffing two dataset versions')
-def test_diffing_two_dataset_versions():
+def _test_diffing_two_dataset_versions():
     """Diffing two dataset versions."""
 
 

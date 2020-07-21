@@ -11,7 +11,7 @@ Feature: Prepare the skos-history config file and folder structure
   Scenario: Set up the folder structure
     Given mandatory descriptive metadata
     And the root path of folder structure
-    And alpha and beta RDF files
+    And old version and new version RDF files
     When the user runs the folder structure generator
     Then a correct dataset folder structure is created
     And a sub-folder is created for each dataset version
@@ -21,5 +21,6 @@ Feature: Prepare the skos-history config file and folder structure
   Scenario: Generating the skos-history config file
     Given mandatory descriptive metadata
     And the root path of folder structure
+    And old version and new version RDF files
     When the user runs the config generator
     Then a correct configuration file is created in the folder structure
