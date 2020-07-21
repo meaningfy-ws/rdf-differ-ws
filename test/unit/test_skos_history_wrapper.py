@@ -9,20 +9,7 @@ from unittest.mock import patch
 import pytest
 
 from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
-
-
-def helper_create_skos_runner(dataset='dataset', scheme_uri='http://scheme.uri', basedir='/basedir',
-                              filename='file.rdf', endpoint='http://test.point', old_version_file='old.rdf',
-                              new_version_file='new.rdf', old_version_id='v1', new_version_id='v2'):
-    return SKOSHistoryRunner(dataset=dataset,
-                             filename=filename,
-                             old_version_file=old_version_file,
-                             new_version_file=new_version_file,
-                             basedir=basedir,
-                             old_version_id=old_version_id,
-                             new_version_id=new_version_id,
-                             endpoint=endpoint,
-                             scheme_uri=scheme_uri)
+from test.unit.conftest import helper_create_skos_runner
 
 
 @pytest.mark.parametrize("filename, file_format", [('test.rdf', 'application/rdf+xml'),

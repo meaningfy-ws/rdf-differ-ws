@@ -10,7 +10,7 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
+from test.unit.conftest import helper_create_skos_runner
 from utils.file_utils import dir_exists, dir_is_empty, file_exists
 
 
@@ -63,15 +63,15 @@ def old_version_and_new_version_rdf_files(tmpdir, metadata):
 @when('the user runs the folder structure generator')
 def the_user_runs_the_folder_structure_generator(metadata):
     """the user runs the folder structure generator."""
-    skos_folder_setup = SKOSHistoryRunner(dataset=metadata.get('dataset'),
-                                          filename=metadata.get('filename'),
-                                          old_version_file=metadata.get('old_version_file'),
-                                          new_version_file=metadata.get('new_version_file'),
-                                          basedir=metadata.get('basedir'),
-                                          old_version_id=metadata.get('old_version_id'),
-                                          new_version_id=metadata.get('new_version_id'),
-                                          endpoint=metadata.get('endpoint'),
-                                          scheme_uri=metadata.get('scheme_uri'))
+    skos_folder_setup = helper_create_skos_runner(dataset=metadata.get('dataset'),
+                                                  filename=metadata.get('filename'),
+                                                  old_version_file=metadata.get('old_version_file'),
+                                                  new_version_file=metadata.get('new_version_file'),
+                                                  basedir=metadata.get('basedir'),
+                                                  old_version_id=metadata.get('old_version_id'),
+                                                  new_version_id=metadata.get('new_version_id'),
+                                                  endpoint=metadata.get('endpoint'),
+                                                  scheme_uri=metadata.get('scheme_uri'))
     skos_folder_setup.generate_structure()
 
 
@@ -114,15 +114,15 @@ def the_file_is_renamed_to_a_standard_file_name(metadata):
 @when('the user runs the config generator')
 def the_user_runs_the_config_generator(metadata):
     """the user runs the config generator."""
-    skos_runner = SKOSHistoryRunner(dataset=metadata.get('dataset'),
-                                    filename=metadata.get('filename'),
-                                    old_version_file=metadata.get('old_version_file'),
-                                    new_version_file=metadata.get('new_version_file'),
-                                    basedir=metadata.get('basedir'),
-                                    old_version_id=metadata.get('old_version_id'),
-                                    new_version_id=metadata.get('new_version_id'),
-                                    endpoint=metadata.get('endpoint'),
-                                    scheme_uri=metadata.get('scheme_uri'))
+    skos_runner = helper_create_skos_runner(dataset=metadata.get('dataset'),
+                                            filename=metadata.get('filename'),
+                                            old_version_file=metadata.get('old_version_file'),
+                                            new_version_file=metadata.get('new_version_file'),
+                                            basedir=metadata.get('basedir'),
+                                            old_version_id=metadata.get('old_version_id'),
+                                            new_version_id=metadata.get('new_version_id'),
+                                            endpoint=metadata.get('endpoint'),
+                                            scheme_uri=metadata.get('scheme_uri'))
     metadata['config_location'] = skos_runner.generate_config()
 
 
