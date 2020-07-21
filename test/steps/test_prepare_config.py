@@ -29,7 +29,7 @@ def mandatory_descriptive_metadata():
     """mandatory descriptive metadata."""
     metadata = {
         'basedir': 'basedir',
-        'filename': 'file.rdf',
+        'filename': 'file',
         'endpoint': 'http://test.point',
         'dataset': 'dataset',
         'scheme_uri': 'http://scheme.uri',
@@ -145,5 +145,6 @@ QUERY_URI = http://test.point/dataset/query
 INPUT_MIME_TYPE = application/rdf+xml'''.format(basedir=metadata.get('basedir'))
     expected_config = tmpdir.join('expected.config')
     expected_config.write(expected_config_content)
+
     assert file_exists(Path(metadata.get('basedir') / 'dataset.config'))
     assert cmp(metadata.get('config_location'), expected_config)
