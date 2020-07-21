@@ -43,7 +43,7 @@ def test_read_envs_filename_doesnt_exist(monkeypatch):
     monkeypatch.delenv("FILENAME", raising=False)
 
     envs = get_envs()
-    assert envs['filename'] == 'file.rdf'
+    assert envs['filename'] == 'file'
 
 
 def test_read_envs_endpoint_exists(monkeypatch):

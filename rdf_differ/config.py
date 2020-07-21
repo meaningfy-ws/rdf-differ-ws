@@ -10,6 +10,6 @@ import os
 def get_envs() -> dict:
     return {
         'basedir': os.environ.get('BASEDIR', './basedir'),
-        'filename': os.environ.get('FILENAME', 'file.rdf'),
+        'filename': os.environ.get('FILENAME', 'file'),
         'endpoint': os.environ['ENDPOINT']
     }
