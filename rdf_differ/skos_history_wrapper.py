@@ -4,15 +4,17 @@ Date: 06/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
+import subprocess
 from pathlib import Path
 from shutil import copy
+from typing import Union
 from urllib.parse import urljoin, quote
 
 from rdflib.util import guess_format
 
 from utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
-CONFIG_TEMPLATE = """# !/bin/bash
+CONFIG_TEMPLATE = """#!/bin/bash
 
 DATASET = {dataset}
 SCHEMEURI = {scheme_uri}
@@ -103,7 +105,7 @@ class SKOSHistoryRunner:
     def run(self):
         self.generate_structure()
         config_location = self.generate_config()
-        # run in shell code
+        self.execute_subprocess(config_location)
 
     def generate_structure(self):
         v1 = Path(self.basedir) / self.dataset / 'data' / self.old_version_id
@@ -127,7 +129,7 @@ class SKOSHistoryRunner:
             query_uri=self.query_uri,
             input_type=self.file_format
         )
-        location = Path(self.basedir) / '{}.config'.format(self.dataset)
+        location = Path(self.basedir) / f'{self.dataset}.config'
         with open(location, 'w') as file:
             file.write(content)
 
@@ -148,3 +150,16 @@ class SKOSHistoryRunner:
     def _check_basedir(self):
         if dir_exists(self.basedir) and not dir_is_empty(self.basedir):
             raise Exception('Root path is not empty.')
+
+    @staticmethod
+    def execute_subprocess(config_location: Union[str, Path]) -> str:
+        script_location = Path(__file__).parent.parent / 'resources/load_versions.sh'
+        process = subprocess.Popen(
+            [script_location, '-f', config_location],
+            stdout=subprocess.PIPE)
+        output, _ = process.communicate()
+
+        if process.returncode != 0:
+            raise Exception(output)
+
+        return output.decode()
