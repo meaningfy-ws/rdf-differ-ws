@@ -4,7 +4,8 @@ Date: 06/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
-import subprocess
+import logging
+from subprocess import Popen, PIPE, STDOUT
 from pathlib import Path
 from shutil import copy
 from typing import Union
@@ -154,12 +155,17 @@ class SKOSHistoryRunner:
     @staticmethod
     def execute_subprocess(config_location: Union[str, Path]) -> str:
         script_location = Path(__file__).parent.parent / 'resources/load_versions.sh'
-        process = subprocess.Popen(
+
+        logging.info('Subprocess: run load_versions.sh start.')
+
+        process = Popen(
             [script_location, '-f', config_location],
-            stdout=subprocess.PIPE)
+            stdout=PIPE)
         output, _ = process.communicate()
 
         if process.returncode != 0:
+            logging.info('Subprocess: load_versions.sh failed.')
             raise Exception(output)
 
+        logging.info('Subprocess: load_versions.sh finished successful.')
         return output.decode()
