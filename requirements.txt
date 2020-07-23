@@ -2,6 +2,7 @@ Click
 pathlib
 rdflib
 sparqlwrapper
+requests
 
 pytest
 coverage
