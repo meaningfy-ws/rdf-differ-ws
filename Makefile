@@ -15,11 +15,11 @@ lint:
 
 start-services:
 	@ echo "Starting Fuseki"
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env-dev up -d
 
 stop-services:
 	@ echo "Stopping Fuseki"
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env down
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env-dev down
 
 generate-api:
 	@echo "Generating API from OpenAPI 3.0 description using the standard openapitools/openapi-generator-cli"
