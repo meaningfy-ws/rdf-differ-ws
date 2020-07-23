@@ -129,7 +129,7 @@ def the_user_runs_the_config_generator(metadata):
 @then('a correct configuration file is created in the folder structure')
 def a_correct_configuration_file_is_created_in_the_folder_structure(tmpdir, metadata):
     """a correct configuration file is created in the folder structure."""
-    expected_config_content = '''# !/bin/bash
+    expected_config_content = '''#!/bin/bash
 
 DATASET = dataset
 SCHEMEURI = http://scheme.uri

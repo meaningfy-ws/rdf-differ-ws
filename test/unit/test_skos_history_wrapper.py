@@ -4,6 +4,7 @@ Date: 06/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
+from pathlib import Path
 from unittest.mock import patch
 
 import pytest
@@ -65,11 +66,42 @@ def test_skos_history_folder_setup_root_path_exist_is_not_empty(tmpdir):
     assert 'Root path is not empty' in str(exception.value)
 
 
+def test_skos_history_execute_subprocess(tmpdir):
+    skos_runner = helper_create_skos_runner()
+    # get absolute path as script is wonky when relative path is used
+    test_data_location = Path(__file__).parent.parent / 'test_data/subdivisions_sh_ds/data'
+    config_content = f"""#!/bin/bash
+DATASET=ds-subdivision
+SCHEMEURI="http://publications.europa.eu/resource/authority/subdivision"
+
+VERSIONS=(v1 v2)
+BASEDIR={test_data_location}
+FILENAME=subdivisions-skos.rdf
+
+PUT_URI=http://localhost:3030/subdiv/data
+UPDATE_URI=http://localhost:3030/subdiv
+QUERY_URI=http://localhost:3030/subdiv/query
+
+INPUT_MIME_TYPE="application/rdf+xml"
+"""
+    config_file = tmpdir.join('test.config')
+    config_file.write(config_content)
+
+    output = skos_runner.execute_subprocess(config_file)
+
+    assert 'Initializing the version history graph with the current version' in output
+    assert 'Loading version http://publications.europa.eu/resource/authority/subdivision/version/v1' in output
+    assert 'Loading version http://publications.europa.eu/resource/authority/subdivision/version/v2' in output
+    assert 'Creating the delta http://publications.europa.eu/resource/authority/subdivision/version/v1/delta/v2' in output
+
+
+@patch.object(SKOSHistoryRunner, 'execute_subprocess')
 @patch.object(SKOSHistoryRunner, 'generate_config')
 @patch.object(SKOSHistoryRunner, 'generate_structure')
-def test_skos_history_run(mock_generate_structure, mock_generate_config):
+def test_skos_history_run(mock_generate_structure, mock_generate_config, mock_execute_subprocess):
     skos_runner = helper_create_skos_runner()
     skos_runner.run()
 
     mock_generate_structure.asssert_called_once()
     mock_generate_config.asssert_called_once()
+    mock_execute_subprocess.asssert_called_once()

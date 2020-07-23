@@ -12,10 +12,8 @@ def helper_endpoint_mock(monkeypatch):
 
 
 def helper_create_skos_runner(dataset='dataset', scheme_uri='http://scheme.uri', endpoint='http://test.point',
-                              basedir='/basedir',
-                              old_version_file='old.rdf',
-                              new_version_file='new.rdf', old_version_id='v1', new_version_id='v2',
-                              filename='file'):
+                              basedir='/basedir', old_version_file='old.rdf', new_version_file='new.rdf',
+                              old_version_id='v1', new_version_id='v2', filename='file'):
     return SKOSHistoryRunner(dataset=dataset,
                              scheme_uri=scheme_uri,
                              basedir=basedir,
