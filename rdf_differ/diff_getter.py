@@ -77,7 +77,7 @@ prefix xhv: <http://www.w3.org/1999/xhtml/vocab#>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 """
 
-DATASET_DESCRIPTION = """
+QUERY_DATASET_DESCRIPTION1 = """
 SELECT ?datasetURI ?versionDescriptionGraph
 WHERE {
   GRAPH ?g {
@@ -86,7 +86,38 @@ WHERE {
 } 
 """
 
-INSERTIONS_COUNT = """
+QUERY_DATASET_DESCRIPTION = """
+SELECT ?versionHistoryGraph (?vhr AS ?versionHistoryRecord) (?identifier AS ?datasetVersion) (str(?vhrDate) AS ?date) ?current ?schemeURI ?versionNamedGraph ?versionId
+WHERE {
+  # parameters
+  VALUES ( ?versionHistoryGraph ) {
+    ( undef )
+  }
+  GRAPH ?versionHistoryGraph {
+    ?vhr dsv:hasVersionHistorySet ?vhs .
+    OPTIONAL {
+    	?vhr dc:date ?vhrDate .
+    }
+    OPTIONAL {
+    	?vhr dc:identifier ?identifier
+    }
+    OPTIONAL {
+    	?vhr skos-history:usingNamedGraph/sd:name ?versionNamedGraph .
+        bind ( replace(str(?versionNamedGraph), "(.*[\\/#])(.*)", "$2") as ?versionId) 
+    }
+    OPTIONAL {
+      ?vhs dsv:currentVersionRecord ?current
+      FILTER ( ?vhr = ?current )
+    }
+    OPTIONAL {
+    	?versionHistoryGraph skos-history:isVersionHistoryOf ?schemeURI .
+    }
+  }
+}
+ORDER BY ?date
+"""
+
+QUERY_INSERTIONS_COUNT = """
 SELECT ?insertionsGraph ?triplesInInsertionGraph ?versionGraph
 WHERE {
   graph ?versionGraph {
@@ -101,27 +132,44 @@ WHERE {
 }
 """
 
+QUERY_DELETIONS_COUNT = """
+SELECT ?deletionsGraph ?triplesInDeletionGraph ?versionGraph
+WHERE {
+  graph ?versionGraph {
+  	?deletionsGraph a skos-history:SchemeDeltaDeletions .
+  }
+  {
+    select ?deletionsGraph (count(*) as ?triplesInDeletionGraph)    
+    {
+      graph ?deletionsGraph {?s ?p ?o}
+    } group by ?deletionsGraph 
+  }
+}
+"""
+
 
 class FusekiDiffGetter(AbstractDiffGetter):
 
     def count_inserted_triples(self, dataset_name: str) -> int:
         query_result = self.execute_query(dataset_name=dataset_name,
-                                          sparql_query=SKOS_HISTORY_PREFIXES + INSERTIONS_COUNT)
+                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_INSERTIONS_COUNT)
         return int(self._extract_insertion_count(query_result))
 
-    def count_deleted_triples(self, dataset_name: str, old_version_id: str, new_version_id: str) -> int:
-        pass
+    def count_deleted_triples(self, dataset_name: str) -> int:
+        query_result = self.execute_query(dataset_name=dataset_name,
+                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
+        return int(self._extract_deletion_count(query_result))
 
     def loaded_versions(self, dataset_name: str) -> List[str]:
         pass
 
-    def dataset_description(self, dataset_name: str) -> Tuple[str, str]:
+    def dataset_description(self, dataset_name: str) -> str:
         query_result = self.execute_query(dataset_name=dataset_name,
-                                          sparql_query=SKOS_HISTORY_PREFIXES + DATASET_DESCRIPTION)
+                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
 
         return self._extract_dataset_description(response=query_result)
 
-    def execute_query(self, dataset_name: str, sparql_query):
+    def execute_query(self, dataset_name: str, sparql_query: str) -> dict:
         endpoint = SPARQLWrapper(self.make_sparql_endpoint(dataset_name=dataset_name))
 
         endpoint.setQuery(sparql_query)
@@ -167,3 +215,11 @@ class FusekiDiffGetter(AbstractDiffGetter):
         :return:
         """
         return response['results']['bindings'][0]['triplesInInsertionGraph']['value']
+
+    def _extract_deletion_count(self, response: dict) -> str:
+        """
+            digging for the single expected datasetURI
+        :param response: sparql query result
+        :return:
+        """
+        return response['results']['bindings'][0]['triplesInDeletionGraph']['value']

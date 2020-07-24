@@ -215,6 +215,7 @@ def test_FusekiDiffGetter_count_inserted_triples_success(mock_query):
             }
         }
 
+    # this is a hack, for mocking the SPARQL result set as well, along with the SPARQLWrapper
     mock_query.return_value = mock_query
     mock_query.convert = convert
 
@@ -236,6 +237,7 @@ def test_FusekiDiffGetter_count_inserted_triples_failing(mock_query):
             }
         }
 
+    # this is a hack, for mocking the SPARQL result set as well, along with the SPARQLWrapper
     mock_query.return_value = mock_query
     mock_query.convert = convert
 
@@ -243,3 +245,35 @@ def test_FusekiDiffGetter_count_inserted_triples_failing(mock_query):
 
     with pytest.raises(IndexError):
         fuseki_service.count_inserted_triples('subdiv')
+
+
+@patch.object(SPARQLWrapper, 'query')
+def test_FusekiDiffGetter_count_deleted_triples_success(mock_query):
+    def convert():
+        return {
+            "head": {
+                "vars": ["deletionsGraph", "triplesInDeletionGraph", "versionGraph"]
+            },
+            "results": {
+                "bindings": [
+                    {
+                        "deletionsGraph": {"type": "uri",
+                                           "value": "http://publications.europa.eu/resource/authority/subdivision/version/v1/delta/v2/deletions"},
+                        "triplesInDeletionGraph": {"type": "literal",
+                                                   "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+                                                   "value": "3"},
+                        "versionGraph": {"type": "uri",
+                                         "value": "http://publications.europa.eu/resource/authority/subdivision/version"}
+                    }
+                ]
+            }
+        }
+
+    # this is a hack, for mocking the SPARQL result set as well, along with the SPARQLWrapper
+    mock_query.return_value = mock_query
+    mock_query.convert = convert
+
+    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
+    count = fuseki_service.count_deleted_triples('subdiv')
+
+    assert 3 == count
