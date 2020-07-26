@@ -7,6 +7,6 @@ services:
       - ADMIN_PASSWORD=admin
       - JVM_ARGS=-Xmx2g
     ports:
-     - 3030:3030
+     - ${FUSEKI_PORT-3030}:3030
     volumes:
       - ${PWD}/${DATA_FOLDER}/fuseki:/fuseki
