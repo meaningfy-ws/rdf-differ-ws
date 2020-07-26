@@ -169,20 +169,58 @@ def test_FusekiDiffGetter_list_datasets_failing(mock_get):
 @patch.object(SPARQLWrapper, 'query')
 def test_FusekiDiffGetter_dataset_description(mock_query):
     def convert():
-        return {'head': {'vars': ['datasetURI', 'versionDescriptionGraph']}, 'results': {'bindings': [
-            {'datasetURI': {'type': 'uri', 'value': 'http://publications.europa.eu/resource/authority/subdivision'}}]}}
+        return {
+            "head": {
+                "vars": ["versionHistoryGraph", "datasetVersion", "date", "currentVersionGraph", "schemeURI",
+                         "versionNamedGraph", "versionId"]
+            },
+            "results": {
+                "bindings": [
+                    {
+                        "versionHistoryGraph": {"type": "uri",
+                                                "value": "http://publications.europa.eu/resource/authority/subdivision/version"},
+                        "datasetVersion": {"type": "literal", "value": "20171213-0"},
+                        "schemeURI": {"type": "uri",
+                                      "value": "http://publications.europa.eu/resource/authority/subdivision"},
+                        "versionNamedGraph": {"type": "uri",
+                                              "value": "http://publications.europa.eu/resource/authority/subdivision/version/v1"},
+                        "versionId": {"type": "literal", "value": "v1"}
+                    },
+                    {
+                        "versionHistoryGraph": {"type": "uri",
+                                                "value": "http://publications.europa.eu/resource/authority/subdivision/version"},
+                        "datasetVersion": {"type": "literal", "value": "20190220-0"},
+                        "currentVersionGraph": {"type": "uri",
+                                                "value": "http://publications.europa.eu/resource/authority/subdivision/version/v2"},
+                        "schemeURI": {"type": "uri",
+                                      "value": "http://publications.europa.eu/resource/authority/subdivision"},
+                        "versionNamedGraph": {"type": "uri",
+                                              "value": "http://publications.europa.eu/resource/authority/subdivision/version/v2"},
+                        "versionId": {"type": "literal", "value": "v2"}
+                    }
+                ]
+            }
+        }
 
     mock_query.return_value = mock_query
     mock_query.convert = convert
 
     fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
-    response = fuseki_service.dataset_description(dataset_name='/subdiv')
+    response = fuseki_service.diff_description(dataset_name='/subdiv')
 
-    assert response == "http://publications.europa.eu/resource/authority/subdivision"
+    assert response['versionHistoryGraph'] == "http://publications.europa.eu/resource/authority/subdivision/version"
+    assert response['currentVersionGraph'] == "http://publications.europa.eu/resource/authority/subdivision/version/v2"
+    assert response['datasetURI'] == "http://publications.europa.eu/resource/authority/subdivision"
+
+    assert "20171213-0" in response['datasetVersions'] and "20190220-0" in response['datasetVersions']
+    assert "v1" in response['versionIds'] and "v2" in response['versionIds']
+    assert "http://publications.europa.eu/resource/authority/subdivision/version/v1" in response['versionNamedGraphs'] \
+           and "http://publications.europa.eu/resource/authority/subdivision/version/v2" in response[
+               'versionNamedGraphs']
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_FusekiDiffGetter_dataset_description_failing(mock_query):
+def test_FusekiDiffGetter_diff_description_failing(mock_query):
     def convert():
         return {'head': {'vars': ['datasetURI', 'versionDescriptionGraph']}, 'results': {'bindings': []}}
 
@@ -192,7 +230,7 @@ def test_FusekiDiffGetter_dataset_description_failing(mock_query):
     fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
 
     with pytest.raises(IndexError):
-        fuseki_service.dataset_description(dataset_name='/subdiv')
+        fuseki_service.diff_description(dataset_name='/subdiv')
 
 
 @patch.object(SPARQLWrapper, 'query')

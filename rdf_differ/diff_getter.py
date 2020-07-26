@@ -27,18 +27,9 @@ class AbstractDiffGetter(ABC):
         """
 
     @abstractmethod
-    def dataset_description(self, dataset_name: str) -> Tuple[str, str]:
+    def diff_description(self, dataset_name: str) -> Tuple[str, str]:
         """
             Return the dataset description.
-        :type dataset_name: the name of the desired dataset
-        :return:
-        """
-
-    @abstractmethod
-    def loaded_versions(self, dataset_name: str) -> List[str]:
-        """
-            Return the version ids that have been loaded.
-
         :type dataset_name: the name of the desired dataset
         :return:
         """
@@ -87,7 +78,8 @@ WHERE {
 """
 
 QUERY_DATASET_DESCRIPTION = """
-SELECT ?versionHistoryGraph (?vhr AS ?versionHistoryRecord) (?identifier AS ?datasetVersion) (str(?vhrDate) AS ?date) ?current ?schemeURI ?versionNamedGraph ?versionId
+SELECT ?versionHistoryGraph (?identifier AS ?datasetVersion) (str(?vhrDate) AS ?date) ?currentVersionGraph ?schemeURI \
+?versionNamedGraph ?versionId
 WHERE {
   # parameters
   VALUES ( ?versionHistoryGraph ) {
@@ -96,32 +88,33 @@ WHERE {
   GRAPH ?versionHistoryGraph {
     ?vhr dsv:hasVersionHistorySet ?vhs .
     OPTIONAL {
-    	?vhr dc:date ?vhrDate .
+        ?vhr dc:date ?vhrDate .
     }
     OPTIONAL {
-    	?vhr dc:identifier ?identifier
+        ?vhr dc:identifier ?identifier
     }
     OPTIONAL {
-    	?vhr skos-history:usingNamedGraph/sd:name ?versionNamedGraph .
+        ?vhr skos-history:usingNamedGraph/sd:name ?versionNamedGraph .
         bind ( replace(str(?versionNamedGraph), "(.*[\\/#])(.*)", "$2") as ?versionId) 
     }
     OPTIONAL {
-      ?vhs dsv:currentVersionRecord ?current
-      FILTER ( ?vhr = ?current )
+      ?vhs dsv:currentVersionRecord ?currentRecord .
+      ?currentRecord skos-history:usingNamedGraph/sd:name ?currentVersionGraph .
+      FILTER ( ?vhr = ?currentRecord )
     }
     OPTIONAL {
-    	?versionHistoryGraph skos-history:isVersionHistoryOf ?schemeURI .
+        ?versionHistoryGraph skos-history:isVersionHistoryOf ?schemeURI .
     }
   }
 }
-ORDER BY ?date
+ORDER BY ?date ?datasetVersion
 """
 
 QUERY_INSERTIONS_COUNT = """
 SELECT ?insertionsGraph ?triplesInInsertionGraph ?versionGraph
 WHERE {
   graph ?versionGraph {
-  	?insertionsGraph a skos-history:SchemeDeltaInsertions .
+    ?insertionsGraph a skos-history:SchemeDeltaInsertions .
   }
   {
     select ?insertionsGraph (count(*) as ?triplesInInsertionGraph)    
@@ -136,7 +129,7 @@ QUERY_DELETIONS_COUNT = """
 SELECT ?deletionsGraph ?triplesInDeletionGraph ?versionGraph
 WHERE {
   graph ?versionGraph {
-  	?deletionsGraph a skos-history:SchemeDeltaDeletions .
+    ?deletionsGraph a skos-history:SchemeDeltaDeletions .
   }
   {
     select ?deletionsGraph (count(*) as ?triplesInDeletionGraph)    
@@ -160,10 +153,18 @@ class FusekiDiffGetter(AbstractDiffGetter):
                                           sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
         return int(self._extract_deletion_count(query_result))
 
-    def loaded_versions(self, dataset_name: str) -> List[str]:
-        pass
-
-    def dataset_description(self, dataset_name: str) -> str:
+    def diff_description(self, dataset_name: str) -> dict:
+        """
+            Provide a generic description
+        :param dataset_name:
+        :return:
+            * datasetURI = dataset/scheme URI,
+            * version history graph = the graph that stores the structure of the calculated diffs
+            * current version graph = the graph that corresponds to the latest version of the dataset,
+            * datasetVersions = list of loaded dataset versions as declared by the datasets themselves,
+            * versionIds = list of versionIds as provided in the configurations file
+            * versionNamedGraphs = named graphs where the versions of datasets are loaded
+        """
         query_result = self.execute_query(dataset_name=dataset_name,
                                           sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
 
@@ -200,13 +201,29 @@ class FusekiDiffGetter(AbstractDiffGetter):
         result = json.loads(response.text)
         return [d_item['ds.name'] for d_item in result['datasets']]
 
-    def _extract_dataset_description(self, response: dict) -> str:
+    def _extract_dataset_description(self, response: dict) -> dict:
         """
-            digging for the single expected datasetURI
+            digging for:
+            * datasetURI = dataset/scheme URI,
+            * version history graph = the graph that stores the structure of the calculated diffs
+            * current version graph = the graph that corresponds to the latest version of the dataset,
+            * datasetVersions = list of loaded dataset versions as declared by the datasets themselves,
+            * versionIds = list of versionIds as provided in the configurations file
+            * versionNamedGraphs = named graphs where the versions of datasets are loaded
         :param response: sparql query result
         :return:
         """
-        return response['results']['bindings'][0]['datasetURI']['value']
+        helper_current_version = [line['currentVersionGraph']['value'] for line in response['results']['bindings'] if
+                                  'currentVersionGraph' in line and line['currentVersionGraph']['value']]
+
+        return {
+            'datasetURI': response['results']['bindings'][0]['schemeURI']['value'],
+            'versionHistoryGraph': response['results']['bindings'][0]['versionHistoryGraph']['value'],
+            'currentVersionGraph': helper_current_version[0] if helper_current_version else None,
+            'datasetVersions': [line['datasetVersion']['value'] for line in response['results']['bindings']],
+            'versionIds': [line['versionId']['value'] for line in response['results']['bindings']],
+            'versionNamedGraphs': [line['versionNamedGraph']['value'] for line in response['results']['bindings']]
+        }
 
     def _extract_insertion_count(self, response: dict) -> str:
         """
