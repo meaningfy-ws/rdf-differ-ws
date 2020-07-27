@@ -101,7 +101,6 @@ INPUT_MIME_TYPE="application/rdf+xml"
 def test_skos_history_run(mock_generate_structure, mock_generate_config, mock_execute_subprocess):
     skos_runner = helper_create_skos_runner()
     skos_runner.run()
-
     mock_generate_structure.asssert_called_once()
     mock_generate_config.asssert_called_once()
     mock_execute_subprocess.asssert_called_once()
