@@ -24,7 +24,7 @@ jobs:
         python-version: 3.8
     - name: Run Fuseki image
       run: |
-        make start-service
+        make start-fuseki
     - name: Install dependencies
       run: |
         make install
