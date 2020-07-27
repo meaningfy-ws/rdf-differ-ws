@@ -234,6 +234,20 @@ def test_FusekiDiffGetter_diff_description_failing(mock_query):
 
 
 @patch.object(SPARQLWrapper, 'query')
+def test_FusekiDiffGetter_diff_description_failing1(mock_query):
+    def convert():
+        return {}
+
+    mock_query.return_value = mock_query
+    mock_query.convert = convert
+
+    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
+
+    with pytest.raises(KeyError):
+        fuseki_service.diff_description(dataset_name='/subdiv')
+
+
+@patch.object(SPARQLWrapper, 'query')
 def test_FusekiDiffGetter_count_inserted_triples_success(mock_query):
     def convert():
         return {
@@ -315,3 +329,4 @@ def test_FusekiDiffGetter_count_deleted_triples_success(mock_query):
     count = fuseki_service.count_deleted_triples('subdiv')
 
     assert 3 == count
+

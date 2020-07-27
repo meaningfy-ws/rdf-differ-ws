@@ -141,7 +141,16 @@ WHERE {
 """
 
 
+class FusekiException(Exception):
+    """
+        An exception when Fuseki server interaction has failed.
+    """
+
+
 class FusekiDiffGetter(AbstractDiffGetter):
+
+    def __init__(self, triplestore_service_url: str):
+        self.triplestore_service_url = triplestore_service_url
 
     def count_inserted_triples(self, dataset_name: str) -> int:
         query_result = self.execute_query(dataset_name=dataset_name,
@@ -182,12 +191,9 @@ class FusekiDiffGetter(AbstractDiffGetter):
                                 auth=HTTPBasicAuth('admin', 'admin'))
 
         if response.status_code != 200:
-            raise Exception(f"Fuseki server request ({response.url}) got response {response.status_code}")
+            raise FusekiException(f"Fuseki server request ({response.url}) got response {response.status_code}")
 
         return self._select_dataset_names_from_fuseki_response(response=response)
-
-    def __init__(self, triplestore_service_url: str):
-        self.triplestore_service_url = triplestore_service_url
 
     def make_sparql_endpoint(self, dataset_name: str):
         return urllib.parse.urljoin(self.triplestore_service_url, dataset_name + "/sparql")
@@ -213,16 +219,16 @@ class FusekiDiffGetter(AbstractDiffGetter):
         :param response: sparql query result
         :return:
         """
-        helper_current_version = [line['currentVersionGraph']['value'] for line in response['results']['bindings'] if
-                                  'currentVersionGraph' in line and line['currentVersionGraph']['value']]
+        helper_current_version = [item['currentVersionGraph']['value'] for item in response['results']['bindings'] if
+                                  'currentVersionGraph' in item and item['currentVersionGraph']['value']]
 
         return {
             'datasetURI': response['results']['bindings'][0]['schemeURI']['value'],
             'versionHistoryGraph': response['results']['bindings'][0]['versionHistoryGraph']['value'],
             'currentVersionGraph': helper_current_version[0] if helper_current_version else None,
-            'datasetVersions': [line['datasetVersion']['value'] for line in response['results']['bindings']],
-            'versionIds': [line['versionId']['value'] for line in response['results']['bindings']],
-            'versionNamedGraphs': [line['versionNamedGraph']['value'] for line in response['results']['bindings']]
+            'datasetVersions': [item['datasetVersion']['value'] for item in response['results']['bindings']],
+            'versionIds': [item['versionId']['value'] for item in response['results']['bindings']],
+            'versionNamedGraphs': [item['versionNamedGraph']['value'] for item in response['results']['bindings']]
         }
 
     def _extract_insertion_count(self, response: dict) -> str:
