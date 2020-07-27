@@ -43,5 +43,3 @@ $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_F
 
 all:
 	install test
-
-
