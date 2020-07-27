@@ -1,4 +1,4 @@
-name: RDF differ test and lint
+name: test project
 
 on:
   push:
@@ -22,7 +22,9 @@ jobs:
       uses: actions/setup-python@master
       with:
         python-version: 3.8
-
+    - name: Run Fuseki image
+      run: |
+        make start-fuseki
     - name: Install dependencies
       run: |
         make install
