@@ -7,4 +7,4 @@ Email: costezki.eugen@gmail.com
 
 
 def test_trivial_assertion():
-    assert False
+    assert True
