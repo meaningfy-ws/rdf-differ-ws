@@ -9,7 +9,7 @@ install:
 
 test:
 	@ echo -e "$(BUILD_PRINT)Running the tests"
-	@ pytest || true
+	@ pytest
 
 lint:
 	@ echo -e "$(BUILD_PRINT)Linting the code"
