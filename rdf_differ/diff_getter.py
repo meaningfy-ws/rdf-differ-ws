@@ -52,7 +52,6 @@ class AbstractDiffGetter(ABC):
         :return:
         """
 
-
 SKOS_HISTORY_PREFIXES = """
 prefix skos-history: <http://purl.org/skos-history/>
 prefix dc: <http://purl.org/dc/elements/1.1/>
