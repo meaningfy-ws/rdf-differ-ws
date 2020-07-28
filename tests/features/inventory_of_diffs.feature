@@ -11,7 +11,6 @@ Feature: List the diffs in the triplestore
   Scenario: Query the triplestore
     Given the configured endpoint
     And a set of well defined SPARQL queries for inventory checking
-    And an output folder is provided
     When the user requests the diff inventory
     Then the datasetURI is returned
     And at least two dataset versions are returned

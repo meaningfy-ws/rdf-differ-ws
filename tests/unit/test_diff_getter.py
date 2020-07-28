@@ -4,14 +4,14 @@ Date:  23/07/2020
 Author: Eugeniu Costetchi
 Email: costezki.eugen@gmail.com 
 """
-from unittest.mock import patch
 from collections import namedtuple
+from unittest.mock import patch
 
 import pytest
 import requests
 from SPARQLWrapper import SPARQLWrapper
 
-from rdf_differ.diff_getter import FusekiDiffGetter
+from rdf_differ.diff_getter import FusekiDiffGetter, FusekiException
 
 RequestObj = namedtuple('RequestObj', ['status_code', 'url', 'text'])
 
@@ -160,7 +160,7 @@ def test_FusekiDiffGetter_list_datasets_failing(mock_get):
     mock_get.return_value = RequestObj(400, 'http://some.url', None)
     fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
 
-    with pytest.raises(Exception) as exception:
+    with pytest.raises(FusekiException) as exception:
         fuseki_service.list_datasets()
 
     assert '400' in str(exception.value)

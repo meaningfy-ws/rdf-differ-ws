@@ -24,8 +24,8 @@ def test_generating_the_skos_history_config_file():
     """Generating the skos-history config file."""
 
 
-@given('mandatory descriptive metadata', target_fixture='metadata')
-def mandatory_descriptive_metadata():
+@given('mandatory descriptive metadata')
+def metadata():
     """mandatory descriptive metadata."""
     metadata = {
         'basedir': 'basedir',

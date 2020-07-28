@@ -1,43 +1,43 @@
-.PHONY: test install lint start-services stop-services
+.PHONY: test install lint start-service stop-service
 
 include docker/.env-dev
 
 BUILD_PRINT = \e[1;34mSTEP: \e[0m
 
 install:
-	@ echo -e "$(BUILD_PRINT)Installing the requirements"
+	@ echo -e '$(BUILD_PRINT)Installing the requirements'
 	@ pip install --upgrade pip
 	@ pip install -r requirements.txt
 
 test:
-	@ echo -e "$(BUILD_PRINT)Running the tests"
+	@ echo -e '$(BUILD_PRINT)Running the tests'
 	@ pytest
 
 lint:
-	@ echo -e "$(BUILD_PRINT)Linting the code"
+	@ echo -e '$(BUILD_PRINT)Linting the code'
 	@ flake8 || true
 
 start-fuseki:
-	@ echo '$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')'
+	@ echo -e '$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env-dev up -d
 
 stop-fuseki:
-	@ echo "$(BUILD_PRINT)Stopping Fuseki"
+	@ echo -e '$(BUILD_PRINT)Stopping Fuseki'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env-dev down
 
 fuseki-create-test-dbs:
-	@ echo  "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(FUSEKI_PORT),$(FUSEKI_PORT),unknown port)/$$/datasets"
-	@ sleep 2
+	@ echo -e  '$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(FUSEKI_PORT),$(FUSEKI_PORT),unknown port)/$$/datasets'
+	@ sleep 5
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
 
 clean-data:
-	@ echo "$(BUILD_PRINT)Deleting the $(DATA_FOLDER)"
+	@ echo -e '$(BUILD_PRINT)Deleting the $(DATA_FOLDER)'
 	@ sudo rm -rf $(DATA_FOLDER)
 
-start-service: start-fuseki fuseki-create-test-dbs
+start-service: | start-fuseki fuseki-create-test-dbs
 
-stop-service: stop-fuseki clean-data
+stop-service: | stop-fuseki clean-data
 
 FEATURES_FOLDER = test/features
 STEPS_FOLDER = test/steps
@@ -53,7 +53,7 @@ generate-tests-from-features: $(TEST_FILES)
 	@ py.test --generate-missing --feature $(FEATURES_FOLDER)
 
 $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_FOLDER)/%.feature
-	@ echo -e '$(BUILD_PRINT)Generating the testfile "$@"  from "$<" feature file'
+	@ echo -e '$(BUILD_PRINT)Generating the testfile '$@'  from '$<' feature file'
 	@ pytest-bdd generate $< > $@
 	@ sed -i  's|features|../features|' $@
 
