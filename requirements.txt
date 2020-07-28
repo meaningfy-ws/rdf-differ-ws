@@ -1,8 +1,9 @@
 Click
-pathlib
 rdflib
 sparqlwrapper
 requests
+connexion
+Flask
 
 pytest
 coverage

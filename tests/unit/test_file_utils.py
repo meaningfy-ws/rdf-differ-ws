@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from test.unit.conftest import helper_endpoint_mock
+from tests.unit.conftest import helper_endpoint_mock
 from utils.file_utils import dir_exists, file_exists, dir_is_empty
 from rdf_differ.config import get_envs
 
@@ -32,10 +32,10 @@ def test_read_envs_basedir_doesnt_exist(monkeypatch):
 
 def test_read_envs_filename_exists(monkeypatch):
     helper_endpoint_mock(monkeypatch)
-    monkeypatch.setenv('FILENAME', 'test.rdf')
+    monkeypatch.setenv('FILENAME', 'tests.rdf')
 
     envs = get_envs()
-    assert envs['filename'] == 'test.rdf'
+    assert envs['filename'] == 'tests.rdf'
 
 
 def test_read_envs_filename_doesnt_exist(monkeypatch):

@@ -10,7 +10,7 @@ from pytest_bdd import (
     when,
 )
 
-from test.unit.conftest import helper_create_skos_runner
+from tests.unit.conftest import helper_create_skos_runner
 from utils.file_utils import dir_exists, dir_is_empty, file_exists
 
 

@@ -1,8 +1,8 @@
-name: test project
+name: run test
 
 on:
   push:
-    branches: [ master ]
+    branches:  [ '*' ]
   pull_request:
     branches: [ master ]
 
@@ -22,9 +22,9 @@ jobs:
       uses: actions/setup-python@master
       with:
         python-version: 3.8
-    - name: Run Fuseki image
+    - name: Run adjacent services (Fuseki)
       run: |
-        make start-fuseki
+        make start-service
     - name: Install dependencies
       run: |
         make install
