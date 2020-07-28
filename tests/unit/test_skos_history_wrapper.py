@@ -10,16 +10,16 @@ from unittest.mock import patch
 import pytest
 
 from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
-from test.unit.conftest import helper_create_skos_runner
+from tests.unit.conftest import helper_create_skos_runner
 
 
-@pytest.mark.parametrize("filename, file_format", [('test.rdf', 'application/rdf+xml'),
-                                                   ('test.trix', 'application/xml'),
-                                                   ('test.nq', 'application/n-quads'),
-                                                   ('test.nt', 'application/n-triples'),
-                                                   ('test.ttl', 'text/turtle'),
-                                                   ('test.n3', 'text/n3'),
-                                                   ('test.jsonld', 'application/ld+json')])
+@pytest.mark.parametrize("filename, file_format", [('tests.rdf', 'application/rdf+xml'),
+                                                   ('tests.trix', 'application/xml'),
+                                                   ('tests.nq', 'application/n-quads'),
+                                                   ('tests.nt', 'application/n-triples'),
+                                                   ('tests.ttl', 'text/turtle'),
+                                                   ('tests.n3', 'text/n3'),
+                                                   ('tests.jsonld', 'application/ld+json')])
 def test_input_file_mime_supported(filename, file_format):
     skos_runner = helper_create_skos_runner(filename=filename)
 
@@ -27,12 +27,12 @@ def test_input_file_mime_supported(filename, file_format):
 
 
 def test_input_file_mime_not_supported():
-    filename = 'test.doc'
+    filename = 'tests.doc'
     skos_runner = helper_create_skos_runner()
     with pytest.raises(Exception) as exception:
         _ = skos_runner.get_file_format(filename)
 
-    assert 'Format of "test.doc" is not supported.' in str(exception.value)
+    assert 'Format of "tests.doc" is not supported.' in str(exception.value)
 
 
 def test_file_formats_equal():
@@ -84,7 +84,7 @@ QUERY_URI=http://localhost:3030/subdiv/query
 
 INPUT_MIME_TYPE="application/rdf+xml"
 """
-    config_file = tmpdir.join('test.config')
+    config_file = tmpdir.join('tests.config')
     config_file.write(config_content)
 
     output = skos_runner.execute_subprocess(config_file)

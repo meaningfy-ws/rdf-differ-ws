@@ -24,7 +24,7 @@ servers:
 paths:
   /diffs:
     get:
-      operationId: getAllDiffs
+      operationId: rdf_differ.entrypoints.flask_app.get_diffs
       description: List the existent dataset version differences.
       responses:
         200:
@@ -38,7 +38,7 @@ paths:
         5XX:
           description: Unexpected Error.
     post:
-      operationId: createNewDiff
+      operationId: rdf_differ.entrypoints.flask_app.create_diff
       description: Calculate the diff of two dataset versions.
       requestBody:
         required: true
@@ -54,7 +54,7 @@ paths:
 
   /diffs/{dataset_id}:
     get:
-      operationId: getDiffId
+      operationId: rdf_differ.entrypoints.flask_app.get_diff
       description: Get diffs for a dataset versions.
       parameters:
         - name: dataset_id
@@ -75,7 +75,7 @@ paths:
         5XX:
           description: Unexpected Error.
     delete:
-      operationId: deleteDiffId
+      operationId: rdf_differ.entrypoints.flask_app.delete_diff
       description: Delete the dataset and all its diffs.
       parameters:
         - name: dataset_id

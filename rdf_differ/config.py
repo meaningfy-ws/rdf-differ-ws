@@ -13,3 +13,6 @@ def get_envs() -> dict:
         'filename': os.environ.get('FILENAME', 'file'),
         'endpoint': os.environ['ENDPOINT']
     }
+
+
+RDF_DIFFER_API_PORT = os.environ.get('RDF_DIFFER_API_PORT', '3040'),
