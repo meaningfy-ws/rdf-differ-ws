@@ -13,6 +13,6 @@ Feature: List the diffs in the triplestore
     And a set of well defined SPARQL queries for inventory checking
     And an output folder is provided
     When the user requests the diff inventory
-    Then the the inventory queries are executed on the endpoint
-    And the non-empty query result-sets are writen into output files
-    And the result-set file is named based on the query file with a timestamp suffix
+    Then the datasetURI is returned
+    And at least two dataset versions are returned
+    And the count of deleted and inserted triples are returned
