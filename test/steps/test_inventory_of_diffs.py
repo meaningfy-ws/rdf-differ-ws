@@ -38,20 +38,20 @@ def the_user_requests_the_diff_inventory():
     raise NotImplementedError
 
 
-@then('the non-empty query result-sets are writen into output files')
-def the_nonempty_query_resultsets_are_writen_into_output_files():
-    """the non-empty query result-sets are writen into output files."""
+@then('the datasetURI is returned')
+def the_dataseturi_is_returned():
+    """the datasetURI is returned."""
     raise NotImplementedError
 
 
-@then('the result-set file is named based on the query file with a timestamp suffix')
-def the_resultset_file_is_named_based_on_the_query_file_with_a_timestamp_suffix():
-    """the result-set file is named based on the query file with a timestamp suffix."""
+@then('at least two dataset versions are returned')
+def at_least_two_dataset_versions_are_returned():
+    """at least two dataset versions are returned."""
     raise NotImplementedError
 
 
-@then('the the inventory queries are executed on the endpoint')
-def the_the_inventory_queries_are_executed_on_the_endpoint():
-    """the the inventory queries are executed on the endpoint."""
+@then('the count of deleted and inserted triples are returned')
+def the_count_of_deleted_and_inserted_triples_are_returned():
+    """the count of deleted and inserted triples are returned."""
     raise NotImplementedError
 
