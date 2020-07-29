@@ -39,8 +39,8 @@ start-service: | start-fuseki fuseki-create-test-dbs
 
 stop-service: | stop-fuseki clean-data
 
-FEATURES_FOLDER = test/features
-STEPS_FOLDER = test/steps
+FEATURES_FOLDER = tests/features
+STEPS_FOLDER = tests/steps
 FEATURE_FILES := $(wildcard $(FEATURES_FOLDER)/*.feature)
 EXISTENT_TEST_FILES = $(wildcard $(STEPS_FOLDER)/*.py)
 HYPOTHETICAL_TEST_FILES :=  $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(FEATURE_FILES:.feature=.py)))
