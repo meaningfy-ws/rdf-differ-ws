@@ -4,10 +4,10 @@ Date:  23/07/2020
 Author: Eugeniu Costetchi
 Email: costezki.eugen@gmail.com 
 """
-import json
-import urllib
-from typing import List, Tuple
+from json import loads
 from abc import ABC, abstractmethod
+from typing import List, Tuple
+from urllib.parse import urljoin
 
 import requests
 from SPARQLWrapper import SPARQLWrapper, JSON
@@ -35,12 +35,10 @@ class AbstractDiffAdapter(ABC):
         """
 
     @abstractmethod
-    def count_deleted_triples(self, dataset_name: str, old_version_id: str, new_version_id: str) -> int:
+    def count_deleted_triples(self, dataset_name: str) -> int:
         """
             Return the number of triples that have been deleted in the new version of the dataset.
         :type dataset_name: the name of the desired dataset
-        :param old_version_id:
-        :param new_version_id:
         :return:
         """
 
@@ -51,6 +49,7 @@ class AbstractDiffAdapter(ABC):
         :type dataset_name: the name of the desired dataset
         :return:
         """
+
 
 SKOS_HISTORY_PREFIXES = """
 prefix skos-history: <http://purl.org/skos-history/>
@@ -176,7 +175,8 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         query_result = self.execute_query(dataset_name=dataset_name,
                                           sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
 
-        return self._extract_dataset_description(response=query_result)
+        return self._extract_dataset_description(response=query_result, dataset_id=dataset_name,
+                                                 query_url=self.make_sparql_endpoint(dataset_name))
 
     def execute_query(self, dataset_name: str, sparql_query: str) -> dict:
         endpoint = SPARQLWrapper(self.make_sparql_endpoint(dataset_name=dataset_name))
@@ -186,7 +186,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         return endpoint.query().convert()
 
     def list_datasets(self) -> List[str]:
-        response = requests.get(urllib.parse.urljoin(self.triplestore_service_url, "/$/datasets"),
+        response = requests.get(urljoin(self.triplestore_service_url, "/$/datasets"),
                                 auth=HTTPBasicAuth('admin', 'admin'))
 
         if response.status_code != 200:
@@ -195,18 +195,20 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         return self._select_dataset_names_from_fuseki_response(response=response)
 
     def make_sparql_endpoint(self, dataset_name: str):
-        return urllib.parse.urljoin(self.triplestore_service_url, dataset_name + "/sparql")
+        return urljoin(self.triplestore_service_url, dataset_name + "/sparql")
 
-    def _select_dataset_names_from_fuseki_response(self, response):
+    @staticmethod
+    def _select_dataset_names_from_fuseki_response(response):
         """
             digging for the list of datasets
         :param response: fuseki API response
         :return:
         """
-        result = json.loads(response.text)
+        result = loads(response.text)
         return [d_item['ds.name'] for d_item in result['datasets']]
 
-    def _extract_dataset_description(self, response: dict) -> dict:
+    @staticmethod
+    def _extract_dataset_description(response: dict, dataset_id: str, query_url: str) -> dict:
         """
             digging for:
             * datasetURI = dataset/scheme URI,
@@ -225,15 +227,22 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             return {}
 
         return {
-            'datasetURI': response['results']['bindings'][0]['schemeURI']['value'],
-            'versionHistoryGraph': response['results']['bindings'][0]['versionHistoryGraph']['value'],
-            'currentVersionGraph': helper_current_version[0] if helper_current_version else None,
-            'datasetVersions': [item['datasetVersion']['value'] for item in response['results']['bindings']],
-            'versionIds': [item['versionId']['value'] for item in response['results']['bindings']],
-            'versionNamedGraphs': [item['versionNamedGraph']['value'] for item in response['results']['bindings']]
+            'dataset_id': dataset_id,
+            'dataset_description': None,
+            'dataset_uri': response['results']['bindings'][0]['schemeURI']['value'],
+            'diff_date': None,
+            'old_version_id': response['results']['bindings'][0]['versionId']['value'],
+            'new_version_id': response['results']['bindings'][1]['versionId']['value'],
+            'query_url': query_url,
+
+            'version_history_graph': response['results']['bindings'][0]['versionHistoryGraph']['value'],
+            'current_version_graph': helper_current_version[0] if helper_current_version else None,
+            'dataset_versions': [item['datasetVersion']['value'] for item in response['results']['bindings']],
+            'version_named_graphs': [item['versionNamedGraph']['value'] for item in response['results']['bindings']],
         }
 
-    def _extract_insertion_count(self, response: dict) -> str:
+    @staticmethod
+    def _extract_insertion_count(response: dict) -> str:
         """
             digging for the single expected datasetURI
         :param response: sparql query result
@@ -241,7 +250,8 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         """
         return response['results']['bindings'][0]['triplesInInsertionGraph']['value']
 
-    def _extract_deletion_count(self, response: dict) -> str:
+    @staticmethod
+    def _extract_deletion_count(response: dict) -> str:
         """
             digging for the single expected datasetURI
         :param response: sparql query result

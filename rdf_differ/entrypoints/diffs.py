@@ -15,18 +15,14 @@ def get_diffs():
     """
     fuseki_adapter = FusekiDiffAdapter('http://localhost:3030')
     datasets = fuseki_adapter.list_datasets()
-    response = []
-    for dataset in datasets:
-        response.append({dataset: fuseki_adapter.diff_description(dataset)})
-
-    return response
+    return [{dataset: fuseki_adapter.diff_description(dataset)} for dataset in datasets]
 
 
 def create_diff(dataset_id, dataset_uri, new_version_id, old_version_id, new_version_file_content,
                 new_version_file_name, old_version_file_content, old_version_file_name):
     """
 
-    :param dataset_id:
+    :param dataset_id:http://localhost:3030/subdiv/sparql
     :param dataset_uri:
     :param new_version_id:
     :param old_version_id:
@@ -41,10 +37,10 @@ def create_diff(dataset_id, dataset_uri, new_version_id, old_version_id, new_ver
 def get_diff(dataset_id):
     """
 
-    :param dataset_id:
+    :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
     :return:
     """
-    return dataset_id
+    return FusekiDiffAdapter('http://localhost:3030').diff_description(dataset_id)
 
 
 def delete_diff(dataset_id):

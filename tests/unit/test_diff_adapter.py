@@ -4,8 +4,8 @@ Date:  23/07/2020
 Author: Eugeniu Costetchi
 Email: costezki.eugen@gmail.com 
 """
-from unittest.mock import patch
 from collections import namedtuple
+from unittest.mock import patch
 
 import pytest
 import requests
@@ -208,15 +208,20 @@ def test_fuseki_diff_adapter_dataset_description(mock_query):
     fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
     response = fuseki_service.diff_description(dataset_name='/subdiv')
 
-    assert response['versionHistoryGraph'] == "http://publications.europa.eu/resource/authority/subdivision/version"
-    assert response['currentVersionGraph'] == "http://publications.europa.eu/resource/authority/subdivision/version/v2"
-    assert response['datasetURI'] == "http://publications.europa.eu/resource/authority/subdivision"
+    assert response['dataset_id'] == '/subdiv'
+    assert response['dataset_description'] is None
+    assert response['dataset_uri'] == "http://publications.europa.eu/resource/authority/subdivision"
+    assert response['diff_date'] is None
+    assert "v1" in response['old_version_id']
+    assert "v2" in response['new_version_id']
+    assert response['query_url'] == 'http://localhost:3030/subdiv/sparql'
 
-    assert "20171213-0" in response['datasetVersions'] and "20190220-0" in response['datasetVersions']
-    assert "v1" in response['versionIds'] and "v2" in response['versionIds']
-    assert "http://publications.europa.eu/resource/authority/subdivision/version/v1" in response['versionNamedGraphs'] \
-           and "http://publications.europa.eu/resource/authority/subdivision/version/v2" in response[
-               'versionNamedGraphs']
+    assert response['version_history_graph'] == "http://publications.europa.eu/resource/authority/subdivision/version"
+    assert response[
+               'current_version_graph'] == "http://publications.europa.eu/resource/authority/subdivision/version/v2"
+    assert "20171213-0" in response['dataset_versions'] and "20190220-0" in response['dataset_versions']
+    assert "http://publications.europa.eu/resource/authority/subdivision/version/v1" in response['version_named_graphs']
+    assert "http://publications.europa.eu/resource/authority/subdivision/version/v2" in response['version_named_graphs']
 
 
 @patch.object(SPARQLWrapper, 'query')
