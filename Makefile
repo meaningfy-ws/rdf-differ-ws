@@ -1,8 +1,12 @@
-.PHONY: test install lint start-services stop-services
+.PHONY: test install lint start-services stop-services docker-stop-dev docker-start-dev docker-build-dev
 
-include docker/.env-dev
+include .env-dev
 
 BUILD_PRINT = \e[1;34mSTEP: \e[0m
+
+#-----------------------------------------------------------------------------
+# Basic commands
+#-----------------------------------------------------------------------------
 
 install:
 	@ echo -e "$(BUILD_PRINT)Installing the requirements"
@@ -17,13 +21,17 @@ lint:
 	@ echo -e "$(BUILD_PRINT)Linting the code"
 	@ flake8 || true
 
+#-----------------------------------------------------------------------------
+# Fuseki related commands
+#-----------------------------------------------------------------------------
+
 start-fuseki:
 	@ echo '$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env-dev up -d
+	@ docker-compose --file docker-compose.yml --env-file .env-dev up -d fuseki
 
 stop-fuseki:
 	@ echo "$(BUILD_PRINT)Stopping Fuseki"
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env-dev down
+	@ docker-compose --file docker-compose.yml --env-file .env-dev down
 
 fuseki-create-test-dbs:
 	@ echo  "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(FUSEKI_PORT),$(FUSEKI_PORT),unknown port)/$$/datasets"
@@ -38,6 +46,10 @@ clean-data:
 start-service: start-fuseki fuseki-create-test-dbs
 
 stop-service: stop-fuseki clean-data
+
+#-----------------------------------------------------------------------------
+# Gherkin feature and acceptance test generation commands
+#-----------------------------------------------------------------------------
 
 FEATURES_FOLDER = test/features
 STEPS_FOLDER = test/steps
@@ -57,5 +69,24 @@ $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_F
 	@ pytest-bdd generate $< > $@
 	@ sed -i  's|features|../features|' $@
 
+#-----------------------------------------------------------------------------
+# Docker commands
+#-----------------------------------------------------------------------------
+
+docker-build-dev:
+	@ echo -e '$(BUILD_PRINT)Building the Docker container locally'
+	@ docker-compose build --env-file docker/.env-dev
+
+docker-start-dev:
+	@ echo -e '$(BUILD_PRINT)Starting the docker services (dev environment)'
+	@ docker-compose up -d --env-file docker/dev/.env-dev --file docker/dev/docker-compose.yml
+
+docker-stop-dev:
+	@ echo -e '$(BUILD_PRINT)Stopping the docker services (prod environment)'
+	@ docker-compose down
+
+#-----------------------------------------------------------------------------
+# Default
+#-----------------------------------------------------------------------------
 all:
 	install test
