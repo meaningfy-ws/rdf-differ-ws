@@ -1,5 +1,5 @@
 """
-diff_getter.py
+diff_adapter.py
 Date:  23/07/2020
 Author: Eugeniu Costetchi
 Email: costezki.eugen@gmail.com 
@@ -14,7 +14,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 from requests.auth import HTTPBasicAuth
 
 
-class AbstractDiffGetter(ABC):
+class AbstractDiffAdapter(ABC):
     """
         An abstract class that return information about the available diffs.
     """
@@ -94,7 +94,7 @@ WHERE {
     }
     OPTIONAL {
         ?vhr skos-history:usingNamedGraph/sd:name ?versionNamedGraph .
-        bind ( replace(str(?versionNamedGraph), "(.*[\\/#])(.*)", "$2") as ?versionId) 
+        bind ( replace(str(?versionNamedGraph), "(.*[\\\\/#])(.*)", "$2") as ?versionId) 
     }
     OPTIONAL {
       ?vhs dsv:currentVersionRecord ?currentRecord .
@@ -146,7 +146,7 @@ class FusekiException(Exception):
     """
 
 
-class FusekiDiffGetter(AbstractDiffGetter):
+class FusekiDiffAdapter(AbstractDiffAdapter):
 
     def __init__(self, triplestore_service_url: str):
         self.triplestore_service_url = triplestore_service_url
@@ -220,6 +220,9 @@ class FusekiDiffGetter(AbstractDiffGetter):
         """
         helper_current_version = [item['currentVersionGraph']['value'] for item in response['results']['bindings'] if
                                   'currentVersionGraph' in item and item['currentVersionGraph']['value']]
+
+        if not response['results']['bindings']:
+            return {}
 
         return {
             'datasetURI': response['results']['bindings'][0]['schemeURI']['value'],
