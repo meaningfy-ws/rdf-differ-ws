@@ -13,6 +13,7 @@ flake8 = "*"
 pathlib = "*"
 rdflib = "*"
 sparqlwrapper = "*"
+connexion = {extras = ["swagger-ui"], version = "^2.7.0"}
 
 [tool.poetry.dev-dependencies]
 pytest-bdd = "^3.4.0"
