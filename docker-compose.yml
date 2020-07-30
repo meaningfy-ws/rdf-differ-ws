@@ -7,8 +7,8 @@ services:
     image: rdf_differ:latest
     env_file:
       - .env-dev
-    ports:
-      - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
+#    ports:
+#      - ${RDF_DIFFER_API_PORT-3040}:${RDF_DIFFER_API_PORT-3040}
 
   fuseki:
     container_name: fuseki

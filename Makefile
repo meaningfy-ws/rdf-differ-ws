@@ -9,16 +9,16 @@ BUILD_PRINT = \e[1;34mSTEP: \e[0m
 #-----------------------------------------------------------------------------
 
 install:
-	@ echo -e "$(BUILD_PRINT)Installing the requirements"
+	@ echo "$(BUILD_PRINT)Installing the requirements"
 	@ pip install --upgrade pip
 	@ pip install -r requirements.txt
 
 test:
-	@ echo -e "$(BUILD_PRINT)Running the tests"
+	@ echo "$(BUILD_PRINT)Running the tests"
 	@ pytest
 
 lint:
-	@ echo -e "$(BUILD_PRINT)Linting the code"
+	@ echo "$(BUILD_PRINT)Linting the code"
 	@ flake8 || true
 
 #-----------------------------------------------------------------------------
@@ -26,7 +26,7 @@ lint:
 #-----------------------------------------------------------------------------
 
 start-fuseki:
-	@ echo '$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')'
+	@ echo "$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')"
 	@ docker-compose --file docker-compose.yml --env-file .env-dev up -d fuseki
 
 stop-fuseki:
@@ -34,7 +34,7 @@ stop-fuseki:
 	@ docker-compose --file docker-compose.yml --env-file .env-dev down
 
 fuseki-create-test-dbs:
-	@ echo  "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(FUSEKI_PORT),$(FUSEKI_PORT),unknown port)/$$/datasets"
+	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(FUSEKI_PORT),$(FUSEKI_PORT),unknown port)/$$/datasets"
 	@ sleep 2
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
@@ -59,13 +59,13 @@ HYPOTHETICAL_TEST_FILES :=  $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(FEATUR
 TEST_FILES := $(filter-out $(EXISTENT_TEST_FILES),$(HYPOTHETICAL_TEST_FILES))
 
 generate-tests-from-features: $(TEST_FILES)
-	@ echo -e '$(BUILD_PRINT) test files to be generated are: $(TEST_FILES)'
-	@ echo -e '$(BUILD_PRINT)Done generating missing feature files'
-	@ echo -e '$(BUILD_PRINT)Verifying if there are any missing step implementations'
+	@ echo "$(BUILD_PRINT)The following test files should be generated: $(TEST_FILES)"
+	@ echo "$(BUILD_PRINT)Done generating missing feature files"
+	@ echo "$(BUILD_PRINT)Verifying if there are any missing step implementations"
 	@ py.test --generate-missing --feature $(FEATURES_FOLDER)
 
 $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_FOLDER)/%.feature
-	@ echo -e '$(BUILD_PRINT)Generating the testfile "$@"  from "$<" feature file'
+	@ echo "$(BUILD_PRINT)Generating the testfile "$@"  from "$<" feature file"
 	@ pytest-bdd generate $< > $@
 	@ sed -i  's|features|../features|' $@
 
@@ -75,11 +75,11 @@ $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_F
 
 docker-build-dev:
 	@ echo -e '$(BUILD_PRINT)Building the Docker container locally'
-	@ docker-compose build --env-file docker/.env-dev
+	@ docker-compose --file docker-compose.yml --env-file .env-dev build
 
 docker-start-dev:
 	@ echo -e '$(BUILD_PRINT)Starting the docker services (dev environment)'
-	@ docker-compose up -d --env-file docker/dev/.env-dev --file docker/dev/docker-compose.yml
+	@ docker-compose --file docker-compose.yml --env-file .env-dev up -d rdf-differ
 
 docker-stop-dev:
 	@ echo -e '$(BUILD_PRINT)Stopping the docker services (prod environment)'
