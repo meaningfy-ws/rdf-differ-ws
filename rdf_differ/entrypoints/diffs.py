@@ -46,6 +46,7 @@ def get_diff(dataset_id):
 def delete_diff(dataset_id):
     """
 
-    :param dataset_id:
-    :return:
+    :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
+    :return: tuple (response.text, response.status_code)
     """
+    return FusekiDiffAdapter('http://localhost:3030').delete_dataset(dataset_id)

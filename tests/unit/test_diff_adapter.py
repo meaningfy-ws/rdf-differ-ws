@@ -217,8 +217,8 @@ def test_fuseki_diff_adapter_dataset_description(mock_query):
     assert response['query_url'] == 'http://localhost:3030/subdiv/sparql'
 
     assert response['version_history_graph'] == "http://publications.europa.eu/resource/authority/subdivision/version"
-    assert response[
-               'current_version_graph'] == "http://publications.europa.eu/resource/authority/subdivision/version/v2"
+    assert response['current_version_graph'] == \
+           "http://publications.europa.eu/resource/authority/subdivision/version/v2"
     assert "20171213-0" in response['dataset_versions'] and "20190220-0" in response['dataset_versions']
     assert "http://publications.europa.eu/resource/authority/subdivision/version/v1" in response['version_named_graphs']
     assert "http://publications.europa.eu/resource/authority/subdivision/version/v2" in response['version_named_graphs']
@@ -342,3 +342,23 @@ def test_fuseki_diff_adapter_count_deleted_triples_success(mock_query):
     count = fuseki_service.count_deleted_triples('subdiv')
 
     assert 3 == count
+
+
+@patch.object(requests, 'delete')
+def test_fuseki_diff_adapter_delete_dataset_success(mock_delete):
+    mock_delete.return_value = RequestObj(200, 'http://some.url', '')
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url='http://localhost:3030/')
+
+    response = fuseki_service.delete_dataset('dataset')
+
+    assert response == ('', 200)
+
+
+@patch.object(requests, 'delete')
+def test_fuseki_diff_adapter_delete_dataset_not_found(mock_delete):
+    mock_delete.return_value = RequestObj(404, 'http://some.url', '')
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url='http://localhost:3030/')
+
+    response = fuseki_service.delete_dataset('dataset')
+
+    assert response == ('', 404)

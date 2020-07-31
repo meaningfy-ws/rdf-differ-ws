@@ -178,12 +178,11 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         return self._extract_dataset_description(response=query_result, dataset_id=dataset_name,
                                                  query_url=self.make_sparql_endpoint(dataset_name))
 
-    def execute_query(self, dataset_name: str, sparql_query: str) -> dict:
-        endpoint = SPARQLWrapper(self.make_sparql_endpoint(dataset_name=dataset_name))
+    def delete_dataset(self, dataset_name: str) -> tuple:
+        response = requests.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
+                                   auth=HTTPBasicAuth('admin', 'admin'))
 
-        endpoint.setQuery(sparql_query)
-        endpoint.setReturnFormat(JSON)
-        return endpoint.query().convert()
+        return response.text, response.status_code
 
     def list_datasets(self) -> List[str]:
         response = requests.get(urljoin(self.triplestore_service_url, "/$/datasets"),
@@ -193,6 +192,13 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             raise FusekiException(f"Fuseki server request ({response.url}) got response {response.status_code}")
 
         return self._select_dataset_names_from_fuseki_response(response=response)
+
+    def execute_query(self, dataset_name: str, sparql_query: str) -> dict:
+        endpoint = SPARQLWrapper(self.make_sparql_endpoint(dataset_name=dataset_name))
+
+        endpoint.setQuery(sparql_query)
+        endpoint.setReturnFormat(JSON)
+        return endpoint.query().convert()
 
     def make_sparql_endpoint(self, dataset_name: str):
         return urljoin(self.triplestore_service_url, dataset_name + "/sparql")
