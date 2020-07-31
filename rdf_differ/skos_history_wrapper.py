@@ -36,19 +36,23 @@ class SKOSHistoryRunner:
                  old_version_file: str, new_version_file: str, old_version_id: str = 'v1',
                  new_version_id: str = 'v2', config_template: str = CONFIG_TEMPLATE):
         """
-        file_format:
-        file_extension:
+        Class for running the skos-history shell script.
+        It includes folder structure creation and config file population.
 
-        :param dataset:
-        :param scheme_uri:
-        :param basedir:
-        :param filename: explain that it doesn't contain the suffix.
-        :param endpoint:
-        :param old_version_file:
-        :param new_version_file:
-        :param old_version_id:
-        :param new_version_id:
-        :param config_template:
+        :param dataset: the name used
+        :param scheme_uri: the concept scheme or dataset URI
+        :param basedir: location for folder generation
+        :param filename: the name of the file to be used for upload
+        (its extension will not be taken into consideration if given)
+        :param endpoint: upload url
+        :param old_version_file: the location of the file to be uploaded
+        :param new_version_file: the location of the file to be uploaded
+        :param old_version_id: name used for diff upload
+        :param new_version_id: name used for diff upload
+        :param config_template: string
+
+        file_format: format of the files used, as defined in INPUT_MIME_TYPES
+        file_extension: extension of the files used, as defined in INPUT_MIME_TYPES
         """
         self.config_template = config_template
         self.dataset = quote(dataset)
@@ -152,8 +156,8 @@ class SKOSHistoryRunner:
         if dir_exists(self.basedir) and not dir_is_empty(self.basedir):
             raise Exception('Root path is not empty.')
 
-    @staticmethod
-    def execute_subprocess(config_location: Union[str, Path]) -> str:
+    @classmethod
+    def execute_subprocess(cls, config_location: Union[str, Path]) -> str:
         script_location = Path(__file__).parent.parent / 'resources/load_versions.sh'
 
         logging.info('Subprocess: run load_versions.sh start.')
