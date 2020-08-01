@@ -31,6 +31,7 @@ def basedir(tmpdir):
 
     shutil.copy(Path('tests/test_data/subdivisions_sh_ds/data/v1/subdivisions-skos.rdf'), old_version_file)
     shutil.copy(Path('tests/test_data/subdivisions_sh_ds/data/v2/subdivisions-skos.rdf'), new_version_file)
+
     return basedir
 
 
@@ -65,8 +66,7 @@ def the_user_runs_the_skos_history_calculator(config_location):
 @then('the DSV description is generated')
 def the_dsv_description_is_generated():
     """the DSV description is generated."""
-    # TODO: write the assertion
-    diff_description = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
+    assert FusekiDiffGetter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
 
 
 @then('the dataset versions are loaded into the triplestore')

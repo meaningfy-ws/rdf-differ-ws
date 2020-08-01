@@ -17,18 +17,18 @@ from utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 CONFIG_TEMPLATE = """#!/bin/bash
 
-DATASET = {dataset}
-SCHEMEURI = {scheme_uri}
+DATASET={dataset}
+SCHEMEURI=\"{scheme_uri}\"
 
-VERSIONS = {versions}
-BASEDIR = {basedir}
-FILENAME = {filename}
+VERSIONS={versions}
+BASEDIR={basedir}
+FILENAME={filename}
 
-PUT_URI = {put_uri}
-UPDATE_URI = {update_uri}
-QUERY_URI = {query_uri}
+PUT_URI={put_uri}
+UPDATE_URI={update_uri}
+QUERY_URI={query_uri}
 
-INPUT_MIME_TYPE = {input_type}"""
+INPUT_MIME_TYPE=\"{input_type}\""""
 
 
 class SKOSHistoryRunner:
@@ -113,8 +113,8 @@ class SKOSHistoryRunner:
         self.execute_subprocess(config_location)
 
     def generate_structure(self):
-        v1 = Path(self.basedir) / self.dataset / 'data' / self.old_version_id
-        v2 = Path(self.basedir) / self.dataset / 'data' / self.new_version_id
+        v1 = Path(self.basedir) / self.old_version_id
+        v2 = Path(self.basedir) / self.new_version_id
 
         v1.mkdir(parents=True)
         v2.mkdir(parents=True)

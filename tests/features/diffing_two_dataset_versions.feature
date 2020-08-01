@@ -9,12 +9,10 @@ Feature: Diffing two dataset versions
   so that I can query the insertions and deletions between them.
 
   Scenario: Diffing two dataset versions
-    Given alpha and beta RDF files
+    Given old and new version RDF files
     And mandatory descriptive metadata
     When the user runs the diff calculator
     Then a correct dataset folder structure is created
-    And the files are copied and renamed accordingly in the folder structure
-    And a correct configuration file is created
     And the diff calculator is executed
 
   Scenario Outline: Controlling the mandatory descriptive metadata
