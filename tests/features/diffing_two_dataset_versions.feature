@@ -18,11 +18,11 @@ Feature: Diffing two dataset versions
   Scenario Outline: Controlling the mandatory descriptive metadata
     Given mandatory descriptive metadata
     But the <property> is missing or incorrect
-    When the user runs the diff calculator
+    When the user runs the incomplete diff calculator
     Then an error message is generated indicating the <property> problem
     Examples:
-      | property              |
-      | dataset name          |
-      | alpha dataset version |
-      | beta dataset version  |
-      | scheme URI            |
+      | property       |
+      | dataset        |
+      | old_version_id |
+      | new_version_id |
+      | scheme_uri     |

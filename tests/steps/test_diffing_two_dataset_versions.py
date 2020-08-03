@@ -3,6 +3,7 @@
 import shutil
 from pathlib import Path
 
+import pytest
 from pytest_bdd import (
     given,
     scenario,
@@ -11,7 +12,7 @@ from pytest_bdd import (
 )
 
 from rdf_differ.diff_getter import FusekiDiffGetter
-from tests.unit.conftest import helper_create_skos_runner
+from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
 from utils.file_utils import dir_exists
 
 
@@ -21,7 +22,7 @@ def test_diffing_two_dataset_versions():
 
 
 @scenario('../features/diffing_two_dataset_versions.feature', 'Controlling the mandatory descriptive metadata')
-def _test_controlling_the_mandatory_descriptive_metadata():
+def test_controlling_the_mandatory_descriptive_metadata():
     """Controlling the mandatory descriptive metadata."""
 
 
@@ -57,7 +58,7 @@ def metadata(tmpdir, files):
 @when('the user runs the diff calculator')
 def the_user_runs_the_diff_calculator(metadata):
     """the user runs the diff calculator."""
-    skos_history_runner = helper_create_skos_runner(**metadata)
+    skos_history_runner = SKOSHistoryRunner(**metadata)
     skos_history_runner.run()
 
 
@@ -77,12 +78,22 @@ def the_diff_calculator_is_executed():
 
 
 @given('the <property> is missing or incorrect')
-def the_property_is_missing_or_incorrect():
+def the_property_is_missing_or_incorrect(metadata, property):
     """the <property> is missing or incorrect."""
-    raise NotImplementedError
+    metadata[property] = ''
+
+
+@when('the user runs the incomplete diff calculator')
+def the_user_runs_the_incomplete_diff_calculator(metadata):
+    """the user runs the diff calculator."""
+    with pytest.raises(Exception) as exception:
+        _ = SKOSHistoryRunner(**metadata)
+
+    # workaround to passing the exception to the next step
+    metadata['exception'] = exception
 
 
 @then('an error message is generated indicating the <property> problem')
-def an_error_message_is_generated_indicating_the_property_problem():
+def an_error_message_is_generated_indicating_the_property_problem(metadata, property):
     """an error message is generated indicating the <property> problem."""
-    raise NotImplementedError
+    assert property in str(metadata['exception'])

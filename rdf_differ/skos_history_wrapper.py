@@ -13,6 +13,7 @@ from urllib.parse import urljoin, quote
 
 from rdflib.util import guess_format
 
+from rdf_differ.config import get_envs
 from utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 CONFIG_TEMPLATE = """#!/bin/bash
@@ -33,8 +34,8 @@ INPUT_MIME_TYPE=\"{input_type}\""""
 
 class SKOSHistoryRunner:
     def __init__(self, dataset: str, scheme_uri: str, basedir: str, filename: str, endpoint: str,
-                 old_version_file: str, new_version_file: str, old_version_id: str = 'v1',
-                 new_version_id: str = 'v2', config_template: str = CONFIG_TEMPLATE):
+                 old_version_file: str, new_version_file: str, old_version_id: str, new_version_id: str,
+                 config_template: str = CONFIG_TEMPLATE):
         """
         Class for running the skos-history shell script.
         It includes folder structure creation and config file population.
@@ -54,6 +55,15 @@ class SKOSHistoryRunner:
         file_format: format of the files used, as defined in INPUT_MIME_TYPES
         file_extension: extension of the files used, as defined in INPUT_MIME_TYPES
         """
+        if not (dataset and scheme_uri and old_version_file and old_version_id and new_version_file and new_version_id):
+            raise Exception('These parameters cannot be empty:'
+                            f'{" dataset" if not dataset else ""}'
+                            f'{" scheme_uri" if not scheme_uri else ""}'
+                            f'{" old_version_file" if not old_version_file else ""}'
+                            f'{" old_version_id" if not old_version_id else ""}'
+                            f'{" new_version_file" if not new_version_file else ""}'
+                            f'{" new_version_id." if not new_version_id else "."}')
+
         self.config_template = config_template
         self.dataset = quote(dataset)
         self.scheme_uri = scheme_uri
@@ -63,9 +73,9 @@ class SKOSHistoryRunner:
         self.old_version_id = old_version_id
         self.new_version_id = new_version_id
 
-        self.basedir = basedir
-        self.filename = filename
-        self.endpoint = endpoint
+        self.basedir = basedir if basedir else get_envs().get('basedir')
+        self.filename = filename if filename else get_envs().get('filename')
+        self.endpoint = endpoint if endpoint else get_envs().get('endpoint')
 
         self._check_basedir()
 
