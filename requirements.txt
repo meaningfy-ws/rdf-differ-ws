@@ -5,9 +5,16 @@ requests
 connexion
 Flask
 
+# Testing Dependencies
 pytest
 coverage
 pytest-cov
 pytest-bdd
 
+# Linting dependecies
 flake8
+
+# Documentation Dependencies
+myst-parser
+sphinx<3
+sphinxcontrib-apidoc
