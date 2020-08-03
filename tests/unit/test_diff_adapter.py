@@ -150,9 +150,10 @@ def test_fuseki_diff_adapter_list_datasets(mock_get):
 
     mock_get.return_value = RequestObj(200, 'http://some.url', response_text)
     fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
+    response_text, _ = fuseki_service.list_datasets()
 
-    assert 3 == len(fuseki_service.list_datasets())
-    assert '/subdiv' in fuseki_service.list_datasets()
+    assert len(response_text) == 3
+    assert '/subdiv' in response_text
 
 
 @patch.object(requests, 'get')
@@ -160,10 +161,9 @@ def test_fuseki_diff_adapter_list_datasets_failing(mock_get):
     mock_get.return_value = RequestObj(400, 'http://some.url', None)
     fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
 
-    with pytest.raises(Exception) as exception:
-        fuseki_service.list_datasets()
+    _, status = fuseki_service.list_datasets()
 
-    assert '400' in str(exception.value)
+    assert status == 400
 
 
 @patch.object(SPARQLWrapper, 'query')
@@ -206,7 +206,7 @@ def test_fuseki_diff_adapter_dataset_description(mock_query):
     mock_query.convert = convert
 
     fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
-    response = fuseki_service.diff_description(dataset_name='/subdiv')
+    response, _ = fuseki_service.diff_description(dataset_name='/subdiv')
 
     assert response['dataset_id'] == '/subdiv'
     assert response['dataset_description'] is None
@@ -241,7 +241,7 @@ def test_fuseki_diff_adapter_dataset_description_empty(mock_query):
     mock_query.convert = convert
 
     fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
-    response = fuseki_service.diff_description(dataset_name='/subdiv')
+    response, _ = fuseki_service.diff_description(dataset_name='/subdiv')
 
     assert response == {}
 
@@ -285,7 +285,7 @@ def test_fuseki_diff_adapter_count_inserted_triples_success(mock_query):
     mock_query.convert = convert
 
     fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
-    count = fuseki_service.count_inserted_triples('subdiv')
+    count, _ = fuseki_service.count_inserted_triples('subdiv')
 
     assert 387 == count
 
@@ -339,9 +339,9 @@ def test_fuseki_diff_adapter_count_deleted_triples_success(mock_query):
     mock_query.convert = convert
 
     fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
-    count = fuseki_service.count_deleted_triples('subdiv')
+    count, _ = fuseki_service.count_deleted_triples('subdiv')
 
-    assert 3 == count
+    assert count == 3
 
 
 @patch.object(requests, 'delete')

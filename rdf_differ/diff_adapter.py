@@ -150,61 +150,76 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
     def __init__(self, triplestore_service_url: str):
         self.triplestore_service_url = triplestore_service_url
 
-    def count_inserted_triples(self, dataset_name: str) -> int:
-        query_result = self.execute_query(dataset_name=dataset_name,
-                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_INSERTIONS_COUNT)
-        return int(self._extract_insertion_count(query_result))
+    def count_inserted_triples(self, dataset_name: str) -> tuple:
+        query_result, status = self.execute_query(dataset_name=dataset_name,
+                                                  sparql_query=SKOS_HISTORY_PREFIXES + QUERY_INSERTIONS_COUNT)
+        return int(self._extract_insertion_count(query_result)), status
 
-    def count_deleted_triples(self, dataset_name: str) -> int:
-        query_result = self.execute_query(dataset_name=dataset_name,
-                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
-        return int(self._extract_deletion_count(query_result))
+    def count_deleted_triples(self, dataset_name: str) -> tuple:
+        query_result, status = self.execute_query(dataset_name=dataset_name,
+                                                  sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
+        return int(self._extract_deletion_count(query_result)), status
 
-    def diff_description(self, dataset_name: str) -> dict:
+    def diff_description(self, dataset_name: str) -> tuple:
         """
             Provide a generic description
         :param dataset_name:
-        :return:
+        :return: tuple:
+            diff description:
             * datasetURI = dataset/scheme URI,
             * version history graph = the graph that stores the structure of the calculated diffs
             * current version graph = the graph that corresponds to the latest version of the dataset,
             * datasetVersions = list of loaded dataset versions as declared by the datasets themselves,
             * versionIds = list of versionIds as provided in the configurations file
             * versionNamedGraphs = named graphs where the versions of datasets are loaded
+            response status
         """
-        query_result = self.execute_query(dataset_name=dataset_name,
-                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
+        query_result, status = self.execute_query(dataset_name=dataset_name,
+                                                  sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
 
         return self._extract_dataset_description(response=query_result, dataset_id=dataset_name,
-                                                 query_url=self.make_sparql_endpoint(dataset_name))
+                                                 query_url=self.make_sparql_endpoint(dataset_name)), status
 
     def delete_dataset(self, dataset_name: str) -> tuple:
+        """
+
+        :param dataset_name:
+        :return:
+        """
         response = requests.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
                                    auth=HTTPBasicAuth('admin', 'admin'))
 
         return response.text, response.status_code
 
-    def list_datasets(self) -> List[str]:
+    def list_datasets(self) -> tuple:
+        """
+
+        :return:
+        """
         response = requests.get(urljoin(self.triplestore_service_url, "/$/datasets"),
                                 auth=HTTPBasicAuth('admin', 'admin'))
 
         if response.status_code != 200:
-            raise FusekiException(f"Fuseki server request ({response.url}) got response {response.status_code}")
+            return {
+                       'error': f"Fuseki server request ({response.url}) got response {response.status_code}"
+                   }, response.status_code
 
-        return self._select_dataset_names_from_fuseki_response(response=response)
+        return self._select_dataset_names_from_fuseki_response(response=response), response.status_code
 
-    def execute_query(self, dataset_name: str, sparql_query: str) -> dict:
+    def execute_query(self, dataset_name: str, sparql_query: str) -> tuple:
         endpoint = SPARQLWrapper(self.make_sparql_endpoint(dataset_name=dataset_name))
 
         endpoint.setQuery(sparql_query)
         endpoint.setReturnFormat(JSON)
-        return endpoint.query().convert()
+        query = endpoint.query()
+
+        return query.convert(), query.response.status
 
     def make_sparql_endpoint(self, dataset_name: str):
         return urljoin(self.triplestore_service_url, dataset_name + "/sparql")
 
     @staticmethod
-    def _select_dataset_names_from_fuseki_response(response):
+    def _select_dataset_names_from_fuseki_response(response) -> list:
         """
             digging for the list of datasets
         :param response: fuseki API response

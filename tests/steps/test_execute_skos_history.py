@@ -10,7 +10,7 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.diff_getter import FusekiDiffGetter
+from rdf_differ.diff_adapter import FusekiDiffAdapter
 from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
 
 
@@ -66,26 +66,26 @@ def the_user_runs_the_skos_history_calculator(config_location):
 @then('the DSV description is generated')
 def the_dsv_description_is_generated():
     """the DSV description is generated."""
-    assert FusekiDiffGetter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
+    assert FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
 
 
 @then('the dataset versions are loaded into the triplestore')
 def the_dataset_versions_are_loaded_into_the_triplestore():
     """the dataset versions are loaded into the triplestore."""
-    diff_description = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
+    diff_description, _ = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
 
-    assert len(diff_description['datasetVersions']) == 2
-    assert "v1" in diff_description['versionIds']
-    assert "v2" in diff_description['versionIds']
+    assert len(diff_description['dataset_versions']) == 2
+    assert "v1" in diff_description['old_version_id']
+    assert "v2" in diff_description['new_version_id']
 
 
 @then('the insertions and deletions graphs are created')
 def the_insertions_and_deletions_graphs_are_created():
     """the insertions and deletions graphs are created."""
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
 
-    insertions_count = fuseki_service.count_inserted_triples('subdiv')
-    deletions_count = fuseki_service.count_deleted_triples('subdiv')
+    insertions_count, _ = fuseki_service.count_inserted_triples('subdiv')
+    deletions_count, _ = fuseki_service.count_deleted_triples('subdiv')
 
     assert insertions_count != 0
     assert deletions_count != 0
