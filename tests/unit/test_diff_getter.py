@@ -4,19 +4,19 @@ Date:  23/07/2020
 Author: Eugeniu Costetchi
 Email: costezki.eugen@gmail.com 
 """
-from unittest.mock import patch
 from collections import namedtuple
+from unittest.mock import patch
 
 import pytest
 import requests
 from SPARQLWrapper import SPARQLWrapper
 
-from rdf_differ.diff_getter import FusekiDiffGetter
+from rdf_differ.diff_getter import FusekiDiffGetter, FusekiException
 
 RequestObj = namedtuple('RequestObj', ['status_code', 'url', 'text'])
 
 
-def test_FusekiDiffGetter_sparql_endpoint():
+def test_fuseki_diff_getter_sparql_endpoint():
     fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030")
     assert fuseki_service.make_sparql_endpoint(dataset_name="subdiv") == "http://localhost:3030/subdiv/sparql"
     assert fuseki_service.make_sparql_endpoint(dataset_name="/foe") == "http://localhost:3030/foe/sparql"
@@ -27,7 +27,7 @@ def test_FusekiDiffGetter_sparql_endpoint():
 
 
 @patch.object(requests, 'get')
-def test_FusekiDiffGetter_list_datasets(mock_get):
+def test_fuseki_diff_getter_list_datasets(mock_get):
     response_text = """{ 
           "datasets" : [ 
               { 
@@ -156,18 +156,18 @@ def test_FusekiDiffGetter_list_datasets(mock_get):
 
 
 @patch.object(requests, 'get')
-def test_FusekiDiffGetter_list_datasets_failing(mock_get):
+def test_fuseki_diff_getter_list_datasets_failing(mock_get):
     mock_get.return_value = RequestObj(400, 'http://some.url', None)
     fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
 
-    with pytest.raises(Exception) as exception:
+    with pytest.raises(FusekiException) as exception:
         fuseki_service.list_datasets()
 
     assert '400' in str(exception.value)
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_FusekiDiffGetter_dataset_description(mock_query):
+def test_fuseki_diff_getter_dataset_description(mock_query):
     def convert():
         return {
             "head": {
@@ -220,7 +220,7 @@ def test_FusekiDiffGetter_dataset_description(mock_query):
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_FusekiDiffGetter_diff_description_failing(mock_query):
+def test_fuseki_diff_getter_diff_description_failing_index_error(mock_query):
     def convert():
         return {'head': {'vars': ['datasetURI', 'versionDescriptionGraph']}, 'results': {'bindings': []}}
 
@@ -234,7 +234,7 @@ def test_FusekiDiffGetter_diff_description_failing(mock_query):
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_FusekiDiffGetter_diff_description_failing1(mock_query):
+def test_fuseki_diff_getter_diff_description_failing_key_error(mock_query):
     def convert():
         return {}
 
@@ -248,7 +248,7 @@ def test_FusekiDiffGetter_diff_description_failing1(mock_query):
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_FusekiDiffGetter_count_inserted_triples_success(mock_query):
+def test_fuseki_diff_getter_count_inserted_triples_success(mock_query):
     def convert():
         return {
             "head": {
@@ -278,7 +278,7 @@ def test_FusekiDiffGetter_count_inserted_triples_success(mock_query):
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_FusekiDiffGetter_count_inserted_triples_failing(mock_query):
+def test_fuseki_diff_getter_count_inserted_triples_failing(mock_query):
     def convert():
         return {
             "head": {
@@ -300,7 +300,7 @@ def test_FusekiDiffGetter_count_inserted_triples_failing(mock_query):
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_FusekiDiffGetter_count_deleted_triples_success(mock_query):
+def test_fuseki_diff_getter_count_deleted_triples_success(mock_query):
     def convert():
         return {
             "head": {

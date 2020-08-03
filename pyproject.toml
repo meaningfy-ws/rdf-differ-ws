@@ -13,6 +13,9 @@ flake8 = "*"
 pathlib = "*"
 rdflib = "*"
 sparqlwrapper = "*"
+requests = "^2.24.0"
+connexion = "^2.7.0"
+Flask = "^1.1.2"
 
 [tool.poetry.dev-dependencies]
 pytest-bdd = "^3.4.0"
