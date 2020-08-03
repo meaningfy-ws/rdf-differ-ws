@@ -9,22 +9,20 @@ Feature: Diffing two dataset versions
   so that I can query the insertions and deletions between them.
 
   Scenario: Diffing two dataset versions
-    Given alpha and beta RDF files
+    Given old and new version RDF files
     And mandatory descriptive metadata
     When the user runs the diff calculator
     Then a correct dataset folder structure is created
-    And the files are copied and renamed accordingly in the folder structure
-    And a correct configuration file is created
     And the diff calculator is executed
 
   Scenario Outline: Controlling the mandatory descriptive metadata
     Given mandatory descriptive metadata
     But the <property> is missing or incorrect
-    When the user runs the diff calculator
+    When the user runs the incomplete diff calculator
     Then an error message is generated indicating the <property> problem
     Examples:
-      | property              |
-      | dataset name          |
-      | alpha dataset version |
-      | beta dataset version  |
-      | scheme URI            |
+      | property       |
+      | dataset        |
+      | old_version_id |
+      | new_version_id |
+      | scheme_uri     |

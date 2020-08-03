@@ -4,10 +4,10 @@ Date:  23/07/2020
 Author: Eugeniu Costetchi
 Email: costezki.eugen@gmail.com 
 """
-import json
-import urllib
-from typing import List, Tuple
+from json import loads
 from abc import ABC, abstractmethod
+from typing import List, Tuple
+from urllib.parse import urljoin
 
 import requests
 from SPARQLWrapper import SPARQLWrapper, JSON
@@ -35,12 +35,10 @@ class AbstractDiffGetter(ABC):
         """
 
     @abstractmethod
-    def count_deleted_triples(self, dataset_name: str, old_version_id: str, new_version_id: str) -> int:
+    def count_deleted_triples(self, dataset_name: str) -> int:
         """
             Return the number of triples that have been deleted in the new version of the dataset.
         :type dataset_name: the name of the desired dataset
-        :param old_version_id:
-        :param new_version_id:
         :return:
         """
 
@@ -51,6 +49,7 @@ class AbstractDiffGetter(ABC):
         :type dataset_name: the name of the desired dataset
         :return:
         """
+
 
 SKOS_HISTORY_PREFIXES = """
 prefix skos-history: <http://purl.org/skos-history/>
@@ -66,7 +65,6 @@ prefix void: <http://rdfs.org/ns/void#>
 prefix xhv: <http://www.w3.org/1999/xhtml/vocab#>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 """
-
 QUERY_DATASET_DESCRIPTION1 = """
 SELECT ?datasetURI ?versionDescriptionGraph
 WHERE {
@@ -75,10 +73,8 @@ WHERE {
   }  
 } 
 """
-
-QUERY_DATASET_DESCRIPTION = """
-SELECT ?versionHistoryGraph (?identifier AS ?datasetVersion) (str(?vhrDate) AS ?date) ?currentVersionGraph ?schemeURI \
-?versionNamedGraph ?versionId
+QUERY_DATASET_DESCRIPTION = r"""
+SELECT ?versionHistoryGraph (?identifier AS ?datasetVersion) (str(?vhrDate) AS ?date) ?currentVersionGraph ?schemeURI ?versionNamedGraph ?versionId
 WHERE {
   # parameters
   VALUES ( ?versionHistoryGraph ) {
@@ -108,7 +104,6 @@ WHERE {
 }
 ORDER BY ?date ?datasetVersion
 """
-
 QUERY_INSERTIONS_COUNT = """
 SELECT ?insertionsGraph ?triplesInInsertionGraph ?versionGraph
 WHERE {
@@ -123,7 +118,6 @@ WHERE {
   }
 }
 """
-
 QUERY_DELETIONS_COUNT = """
 SELECT ?deletionsGraph ?triplesInDeletionGraph ?versionGraph
 WHERE {
@@ -186,7 +180,7 @@ class FusekiDiffGetter(AbstractDiffGetter):
         return endpoint.query().convert()
 
     def list_datasets(self) -> List[str]:
-        response = requests.get(urllib.parse.urljoin(self.triplestore_service_url, "/$/datasets"),
+        response = requests.get(urljoin(self.triplestore_service_url, "/$/datasets"),
                                 auth=HTTPBasicAuth('admin', 'admin'))
 
         if response.status_code != 200:
@@ -195,18 +189,20 @@ class FusekiDiffGetter(AbstractDiffGetter):
         return self._select_dataset_names_from_fuseki_response(response=response)
 
     def make_sparql_endpoint(self, dataset_name: str):
-        return urllib.parse.urljoin(self.triplestore_service_url, dataset_name + "/sparql")
+        return urljoin(self.triplestore_service_url, dataset_name + "/sparql")
 
-    def _select_dataset_names_from_fuseki_response(self, response):
+    @staticmethod
+    def _select_dataset_names_from_fuseki_response(response):
         """
             digging for the list of datasets
         :param response: fuseki API response
         :return:
         """
-        result = json.loads(response.text)
+        result = loads(response.text)
         return [d_item['ds.name'] for d_item in result['datasets']]
 
-    def _extract_dataset_description(self, response: dict) -> dict:
+    @staticmethod
+    def _extract_dataset_description(response: dict) -> dict:
         """
             digging for:
             * datasetURI = dataset/scheme URI,
@@ -230,7 +226,8 @@ class FusekiDiffGetter(AbstractDiffGetter):
             'versionNamedGraphs': [item['versionNamedGraph']['value'] for item in response['results']['bindings']]
         }
 
-    def _extract_insertion_count(self, response: dict) -> str:
+    @staticmethod
+    def _extract_insertion_count(response: dict) -> str:
         """
             digging for the single expected datasetURI
         :param response: sparql query result
@@ -238,7 +235,8 @@ class FusekiDiffGetter(AbstractDiffGetter):
         """
         return response['results']['bindings'][0]['triplesInInsertionGraph']['value']
 
-    def _extract_deletion_count(self, response: dict) -> str:
+    @staticmethod
+    def _extract_deletion_count(response: dict) -> str:
         """
             digging for the single expected datasetURI
         :param response: sparql query result
