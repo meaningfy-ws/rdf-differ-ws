@@ -13,43 +13,57 @@ from urllib.parse import urljoin, quote
 
 from rdflib.util import guess_format
 
+from rdf_differ.config import get_envs
 from utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 CONFIG_TEMPLATE = """#!/bin/bash
 
-DATASET = {dataset}
-SCHEMEURI = {scheme_uri}
+DATASET={dataset}
+SCHEMEURI=\"{scheme_uri}\"
 
-VERSIONS = {versions}
-BASEDIR = {basedir}
-FILENAME = {filename}
+VERSIONS={versions}
+BASEDIR={basedir}
+FILENAME={filename}
 
-PUT_URI = {put_uri}
-UPDATE_URI = {update_uri}
-QUERY_URI = {query_uri}
+PUT_URI={put_uri}
+UPDATE_URI={update_uri}
+QUERY_URI={query_uri}
 
-INPUT_MIME_TYPE = {input_type}"""
+INPUT_MIME_TYPE=\"{input_type}\""""
 
 
 class SKOSHistoryRunner:
     def __init__(self, dataset: str, scheme_uri: str, basedir: str, filename: str, endpoint: str,
-                 old_version_file: str, new_version_file: str, old_version_id: str = 'v1',
-                 new_version_id: str = 'v2', config_template: str = CONFIG_TEMPLATE):
+                 old_version_file: str, new_version_file: str, old_version_id: str, new_version_id: str,
+                 config_template: str = CONFIG_TEMPLATE):
         """
-        file_format:
-        file_extension:
+        Class for running the skos-history shell script.
+        It includes folder structure creation and config file population.
 
-        :param dataset:
-        :param scheme_uri:
-        :param basedir:
-        :param filename: explain that it doesn't contain the suffix.
-        :param endpoint:
-        :param old_version_file:
-        :param new_version_file:
-        :param old_version_id:
-        :param new_version_id:
-        :param config_template:
+        :param dataset: the name used
+        :param scheme_uri: the concept scheme or dataset URI
+        :param basedir: location for folder generation
+        :param filename: the name of the file to be used for upload
+        (its extension will not be taken into consideration if given)
+        :param endpoint: upload url
+        :param old_version_file: the location of the file to be uploaded
+        :param new_version_file: the location of the file to be uploaded
+        :param old_version_id: name used for diff upload
+        :param new_version_id: name used for diff upload
+        :param config_template: string
+
+        file_format: format of the files used, as defined in INPUT_MIME_TYPES
+        file_extension: extension of the files used, as defined in INPUT_MIME_TYPES
         """
+        if not (dataset and scheme_uri and old_version_file and old_version_id and new_version_file and new_version_id):
+            raise Exception('These parameters cannot be empty:'
+                            f'{" dataset" if not dataset else ""}'
+                            f'{" scheme_uri" if not scheme_uri else ""}'
+                            f'{" old_version_file" if not old_version_file else ""}'
+                            f'{" old_version_id" if not old_version_id else ""}'
+                            f'{" new_version_file" if not new_version_file else ""}'
+                            f'{" new_version_id." if not new_version_id else "."}')
+
         self.config_template = config_template
         self.dataset = quote(dataset)
         self.scheme_uri = scheme_uri
@@ -59,9 +73,9 @@ class SKOSHistoryRunner:
         self.old_version_id = old_version_id
         self.new_version_id = new_version_id
 
-        self.basedir = basedir
-        self.filename = filename
-        self.endpoint = endpoint
+        self.basedir = basedir if basedir else get_envs().get('basedir')
+        self.filename = filename if filename else get_envs().get('filename')
+        self.endpoint = endpoint if endpoint else get_envs().get('endpoint')
 
         self._check_basedir()
 
@@ -109,8 +123,8 @@ class SKOSHistoryRunner:
         self.execute_subprocess(config_location)
 
     def generate_structure(self):
-        v1 = Path(self.basedir) / self.dataset / 'data' / self.old_version_id
-        v2 = Path(self.basedir) / self.dataset / 'data' / self.new_version_id
+        v1 = Path(self.basedir) / self.old_version_id
+        v2 = Path(self.basedir) / self.new_version_id
 
         v1.mkdir(parents=True)
         v2.mkdir(parents=True)
@@ -152,8 +166,8 @@ class SKOSHistoryRunner:
         if dir_exists(self.basedir) and not dir_is_empty(self.basedir):
             raise Exception('Root path is not empty.')
 
-    @staticmethod
-    def execute_subprocess(config_location: Union[str, Path]) -> str:
+    @classmethod
+    def execute_subprocess(cls, config_location: Union[str, Path]) -> str:
         script_location = Path(__file__).parent.parent / 'resources/load_versions.sh'
 
         logging.info('Subprocess: run load_versions.sh start.')

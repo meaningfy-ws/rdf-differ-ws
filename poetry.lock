@@ -100,10 +100,6 @@ jsonschema = ">=2.5.1"
 openapi-spec-validator = ">=0.2.4"
 requests = ">=2.9.1"
 
-[package.dependencies.swagger-ui-bundle]
-optional = true
-version = ">=0.0.2"
-
 [package.extras]
 aiohttp = ["aiohttp (>=2.3.10)", "aiohttp-jinja2 (>=0.14.0)"]
 flask = ["flask (>=1.0.4)"]
@@ -625,17 +621,6 @@ rdflib = ">=4.0"
 keepalive = ["keepalive (>=0.5)"]
 
 [[package]]
-category = "main"
-description = "swagger_ui_bundle - swagger-ui files in a pip package"
-name = "swagger-ui-bundle"
-optional = false
-python-versions = "*"
-version = "0.0.8"
-
-[package.dependencies]
-Jinja2 = ">=2.0"
-
-[[package]]
 category = "dev"
 description = "Traitlets Python config system"
 name = "traitlets"
@@ -685,7 +670,7 @@ dev = ["pytest", "pytest-timeout", "coverage", "tox", "sphinx", "pallets-sphinx-
 watchdog = ["watchdog"]
 
 [metadata]
-content-hash = "f243f90a47cf7dde202e1ba8409a176d19009680375a3e713eeaba7703166fd9"
+content-hash = "88dca40e6febac510f6a9ac83d82b7055fd2e9808898bb11dd086d71b46ae234"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -971,10 +956,6 @@ sparqlwrapper = [
     {file = "SPARQLWrapper-1.8.5-py3-none-any.whl", hash = "sha256:c7f9c9d8ebb13428771bc3b6dee54197422507dcc3dea34e30d5dcfc53478dec"},
     {file = "SPARQLWrapper-1.8.5-py3.4.egg", hash = "sha256:8cf6c21126ed76edc85c5c232fd6f77b9f61f8ad1db90a7147cdde2104aff145"},
     {file = "SPARQLWrapper-1.8.5.tar.gz", hash = "sha256:d6a66b5b8cda141660e07aeb00472db077a98d22cb588c973209c7336850fb3c"},
-]
-swagger-ui-bundle = [
-    {file = "swagger_ui_bundle-0.0.8-py3-none-any.whl", hash = "sha256:f5255f786cde67a2638111f4a7d04355836743198a83c4ecbe815d9fc384b0c8"},
-    {file = "swagger_ui_bundle-0.0.8.tar.gz", hash = "sha256:f5691167f2e9f73ecbe8229a89454ae5ea958f90bb0d4583ed7adaae598c4122"},
 ]
 traitlets = [
     {file = "traitlets-4.3.3-py2.py3-none-any.whl", hash = "sha256:70b4c6a1d9019d7b4f6846832288f86998aa3b9207c6821f3578a6a6a467fe44"},

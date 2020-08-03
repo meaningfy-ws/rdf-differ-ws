@@ -13,13 +13,13 @@ from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
 from tests.unit.conftest import helper_create_skos_runner
 
 
-@pytest.mark.parametrize("filename, file_format", [('tests.rdf', 'application/rdf+xml'),
-                                                   ('tests.trix', 'application/xml'),
-                                                   ('tests.nq', 'application/n-quads'),
-                                                   ('tests.nt', 'application/n-triples'),
-                                                   ('tests.ttl', 'text/turtle'),
-                                                   ('tests.n3', 'text/n3'),
-                                                   ('tests.jsonld', 'application/ld+json')])
+@pytest.mark.parametrize("filename, file_format", [('test.rdf', 'application/rdf+xml'),
+                                                   ('test.trix', 'application/xml'),
+                                                   ('test.nq', 'application/n-quads'),
+                                                   ('test.nt', 'application/n-triples'),
+                                                   ('test.ttl', 'text/turtle'),
+                                                   ('test.n3', 'text/n3'),
+                                                   ('test.jsonld', 'application/ld+json')])
 def test_input_file_mime_supported(filename, file_format):
     skos_runner = helper_create_skos_runner(filename=filename)
 
@@ -56,12 +56,12 @@ def test_uris_creation():
     assert skos_runner.query_uri == 'http://test.point/dataset/query'
 
 
-def test_skos_history_folder_setup_root_path_exist_is_not_empty(tmpdir):
-    root_path = tmpdir.mkdir('root_path')
-    file = root_path.join('file')
+def test_skos_history_folder_setup_basedir_exist_is_not_empty(tmpdir):
+    basedir = tmpdir.mkdir('basedir')
+    file = basedir.join('file')
     file.write('')
     with pytest.raises(Exception) as exception:
-        _ = helper_create_skos_runner(basedir=str(root_path))
+        _ = helper_create_skos_runner(basedir=str(basedir))
 
     assert 'Root path is not empty' in str(exception.value)
 

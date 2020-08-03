@@ -33,3 +33,9 @@ sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
 ```
+
+## Source code structure
+
+Please refer to [this](https://meaningfy.atlassian.net/l/c/bK0uVdG7) page.
+
+
