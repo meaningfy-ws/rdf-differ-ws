@@ -4,9 +4,8 @@ Date:  23/07/2020
 Author: Eugeniu Costetchi
 Email: costezki.eugen@gmail.com 
 """
-from json import loads
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from json import loads
 from urllib.parse import urljoin
 
 import requests

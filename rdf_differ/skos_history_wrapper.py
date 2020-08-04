@@ -5,9 +5,9 @@ Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
 import logging
-from subprocess import Popen, PIPE, STDOUT
 from pathlib import Path
 from shutil import copy
+from subprocess import Popen, PIPE
 from typing import Union
 from urllib.parse import urljoin, quote
 
