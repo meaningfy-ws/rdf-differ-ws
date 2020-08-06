@@ -4,7 +4,12 @@ Date: 30/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
+from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
+from werkzeug.datastructures import FileStorage
+
 from rdf_differ.diff_adapter import FusekiDiffAdapter
+from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
+from utils.file_utils import temporarily_save_files
 
 
 def get_diffs() -> tuple:
@@ -18,35 +23,53 @@ def get_diffs() -> tuple:
     return [{dataset: fuseki_adapter.diff_description(dataset)[0]} for dataset in datasets], status
 
 
-def create_diff(dataset_id, dataset_uri, new_version_id, old_version_id, new_version_file_content,
-                new_version_file_name, old_version_file_content, old_version_file_name) -> tuple:
+def create_diff(body: dict, old_version_file_content: FileStorage, new_version_file_content: FileStorage) -> tuple:
     """
-
-    :param dataset_id:
-    :param dataset_uri:
-    :param new_version_id:
-    :param old_version_id:
-    :param new_version_file_content:
-    :param new_version_file_name:
-    :param old_version_file_content:
-    :param old_version_file_name:
-    :return: created diff description
+        Create a diff based on the versions send with old_Version_file_content and new_version_file_content.
+    :param body:
+        {
+          "dataset_description": "string",
+          "dataset_id": "string",
+          "dataset_uri": "string",
+          "new_version_id": "string",
+          "old_version_id": "string",
+        }
+    :param old_version_file_content: The content of the old version file.
+    :param new_version_file_content: The content of the new version file.
+    :return:
     :rtype: dict, int
     """
-    return {}, 200
+    try:
+        with temporarily_save_files(old_version_file_content, new_version_file_content) as \
+                (temp_dir, old_version_file, new_version_file):
+            SKOSHistoryRunner(dataset=body.get('dataset_id'),
+                              basedir=temp_dir / 'basedir',
+                              scheme_uri=body.get('dataset_uri'),
+                              old_version_id=body.get('old_version_id'),
+                              new_version_id=body.get('new_version_id'),
+                              old_version_file=old_version_file,
+                              new_version_file=new_version_file).run()
+
+        return "Request to create a new dataset diff successfully accepted for processing, " \
+               "but the processing has not been completed.", 202
+    except Exception as exception:
+        return str(exception), 500
 
 
-def get_diff(dataset_id) -> tuple:
+def get_diff(dataset_id: str) -> tuple:
     """
         Get the dataset description
     :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
     :return: dataset description
     :rtype: dict, int
     """
-    return FusekiDiffAdapter('http://localhost:3030').diff_description(dataset_id)
+    try:
+        return FusekiDiffAdapter('http://localhost:3030').diff_description(dataset_id)
+    except EndPointNotFound:
+        return f'<{dataset_id}> does not exist.', 404
 
 
-def delete_diff(dataset_id) -> tuple:
+def delete_diff(dataset_id: str) -> tuple:
     """
         Delete a dataset
     :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset

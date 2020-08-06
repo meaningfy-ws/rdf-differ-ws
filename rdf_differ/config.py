@@ -9,9 +9,8 @@ import os
 
 def get_envs() -> dict:
     return {
-        'basedir': os.environ.get('BASEDIR', './basedir'),
         'filename': os.environ.get('FILENAME', 'file'),
-        'endpoint': os.environ['ENDPOINT']
+        'endpoint': os.environ.get('ENDPOINT', 'http://localhost:3030')
     }
 
 

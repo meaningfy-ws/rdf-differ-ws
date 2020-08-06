@@ -7,27 +7,9 @@ Email: coslet.mihai@gmail.com
 
 from pathlib import Path
 
-import pytest
-
+from rdf_differ.config import get_envs
 from tests.unit.conftest import helper_endpoint_mock
 from utils.file_utils import dir_exists, file_exists, dir_is_empty
-from rdf_differ.config import get_envs
-
-
-def test_read_envs_basedir_exists(monkeypatch):
-    helper_endpoint_mock(monkeypatch)
-    monkeypatch.setenv('BASEDIR', '/basedir')
-
-    envs = get_envs()
-    assert envs['basedir'] == '/basedir'
-
-
-def test_read_envs_basedir_doesnt_exist(monkeypatch):
-    helper_endpoint_mock(monkeypatch)
-    monkeypatch.delenv("BASEDIR", raising=False)
-
-    envs = get_envs()
-    assert envs['basedir'] == './basedir'
 
 
 def test_read_envs_filename_exists(monkeypatch):
@@ -51,15 +33,6 @@ def test_read_envs_endpoint_exists(monkeypatch):
 
     envs = get_envs()
     assert envs['endpoint'] == 'http://test.point'
-
-
-def test_read_envs_endpoint_doesnt_exist(monkeypatch):
-    monkeypatch.delenv("ENDPOINT", raising=False)
-
-    with pytest.raises(KeyError) as key_error:
-        _ = get_envs()
-
-    assert 'ENDPOINT' in str(key_error.value)
 
 
 def test_dir_exists(tmpdir):

@@ -33,8 +33,8 @@ INPUT_MIME_TYPE=\"{input_type}\""""
 
 
 class SKOSHistoryRunner:
-    def __init__(self, dataset: str, scheme_uri: str, basedir: str, filename: str, endpoint: str,
-                 old_version_file: str, new_version_file: str, old_version_id: str, new_version_id: str,
+    def __init__(self, dataset: str, scheme_uri: str, old_version_file: str, new_version_file: str, old_version_id: str,
+                 new_version_id: str, basedir: str, filename: str = None, endpoint: str = None,
                  config_template: str = CONFIG_TEMPLATE):
         """
         Class for running the skos-history shell script.
@@ -42,14 +42,14 @@ class SKOSHistoryRunner:
 
         :param dataset: the name used
         :param scheme_uri: the concept scheme or dataset URI
-        :param basedir: location for folder generation
-        :param filename: the name of the file to be used for upload
-        (its extension will not be taken into consideration if given)
-        :param endpoint: upload url
         :param old_version_file: the location of the file to be uploaded
         :param new_version_file: the location of the file to be uploaded
         :param old_version_id: name used for diff upload
         :param new_version_id: name used for diff upload
+        :param basedir: location for folder generation
+        :param filename: the name of the file to be used for upload
+        (its extension will not be taken into consideration if given)
+        :param endpoint: upload url
         :param config_template: string
 
         file_format: format of the files used, as defined in INPUT_MIME_TYPES
@@ -73,7 +73,7 @@ class SKOSHistoryRunner:
         self.old_version_id = old_version_id
         self.new_version_id = new_version_id
 
-        self.basedir = basedir if basedir else get_envs().get('basedir')
+        self.basedir = basedir
         self.filename = filename if filename else get_envs().get('filename')
         self.endpoint = endpoint if endpoint else get_envs().get('endpoint')
 
@@ -111,7 +111,7 @@ class SKOSHistoryRunner:
 
     @staticmethod
     def get_file_format(file: str) -> str:
-        file_format = guess_format(file, INPUT_MIME_TYPES)
+        file_format = guess_format(str(file), INPUT_MIME_TYPES)
         if file_format is None:
             raise Exception('Format of "{}" is not supported.'.format(file))
 

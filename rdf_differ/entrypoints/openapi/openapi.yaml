@@ -45,10 +45,42 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/DiffSubmission'
+              # using this explicit type definition until $ref method is fixed by connexion
+              type: object
+              properties:
+                dataset_id:
+                  type: string
+                  description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
+                dataset_description:
+                  type: string
+                  description: The dataset description. This is a free text description fo the dataset.
+                dataset_uri:
+                  type: string
+                  description: The dataset URI. For SKOS datasets this is usually the ConceptSchema URI.
+                old_version_id:
+                  type: string
+                  description: Identifier for the older version of the dataset.
+                new_version_id:
+                  type: string
+                  description: The identifier for the newer version of the dataset.
+                new_version_file_content:
+                  type: string
+                  format: binary
+                  description: The content of the new version file.
+                old_version_file_content:
+                  type: string
+                  format: binary
+                  description: The content of the old version file.
+              required:
+                - dataset_id
+                - dataset_uri
+                - new_version_id
+                - old_version_id
+                - old_version_file_content
+                - new_version_file_content
       responses:
         202:
-          description: Request to create a new dataset diff succesfully accepted for processing, but the processing has not been completed.
+          description: Request to create a new dataset diff successfully accepted for processing, but the processing has not been completed.
         5XX:
           description: Unexpected Error.
 
@@ -121,27 +153,21 @@ components:
 
     DiffSubmission:
       description: A request to diff two versions of a dataset.
-      allOf:
+      oneOf:
         - $ref: '#/components/schemas/BasicDiffDescription'
         - type: object
           properties:
             new_version_file_content:
               type: string
+              format: binary
               description: The content of the new version file.
-            new_version_file_name:
-              type: string
-              description: The filename of the new version file. Useful to determine the mime type.
             old_version_file_content:
               type: string
+              format: binary
               description: The content of the old version file.
-            old_version_file_name:
-              type: string
-              description: The filename of the old version file. Useful to determine the mime type.
           required:
             - new_version_file_content
-            - new_version_file_name
             - old_version_file_content
-            - old_version_file_name
 
     CalculatedDiffDescription:
       description: A description of diff in the triplestore.

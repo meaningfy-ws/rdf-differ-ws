@@ -4,8 +4,13 @@ Date: 09/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
+import tempfile
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Union
+
+from werkzeug.datastructures import FileStorage
+from werkzeug.utils import secure_filename
 
 
 def dir_exists(path: Union[str, Path]) -> bool:
@@ -43,6 +48,21 @@ def file_exists(path: Union[str, Path]) -> bool:
         Whether the file exists or not.
     """
     return Path(path).is_file()
+
+
+@contextmanager
+def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
+    temp_dir = tempfile.TemporaryDirectory()
+    try:
+        saved_old_file = Path(temp_dir.name) / secure_filename(old_file.filename)
+        saved_new_file = Path(temp_dir.name) / secure_filename(new_file.filename)
+
+        old_file.save(saved_old_file)
+        new_file.save(saved_new_file)
+
+        yield Path(temp_dir.name), saved_old_file, saved_new_file
+    finally:
+        temp_dir.cleanup()
 
 
 INPUT_MIME_TYPES = {
