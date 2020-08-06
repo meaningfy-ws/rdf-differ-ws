@@ -52,6 +52,9 @@ def file_exists(path: Union[str, Path]) -> bool:
 
 @contextmanager
 def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
+    if not old_file or not new_file:
+        raise TypeError("Files cannot be of None type.")
+
     temp_dir = tempfile.TemporaryDirectory()
     try:
         saved_old_file = Path(temp_dir.name) / secure_filename(old_file.filename)
