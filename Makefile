@@ -7,13 +7,15 @@ BUILD_PRINT = \e[1;34mSTEP: \e[0m
 #-----------------------------------------------------------------------------
 # Basic commands
 #-----------------------------------------------------------------------------
+env-export: .env-dev
+	@ $(shel SHELL $(sed -ne '/^export / {p;d}; /.*=/ s/^/export / p' .env-dev))
 
 install:
 	@ echo "$(BUILD_PRINT)Installing the requirements"
 	@ pip install --upgrade pip
 	@ pip install -r requirements.txt
 
-test:
+test: env-export
 	@ echo "$(BUILD_PRINT)Running the tests"
 	@ pytest
 

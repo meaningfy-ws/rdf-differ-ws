@@ -11,7 +11,7 @@ from typing import Union
 def get_envs(key: str = None) -> Union[str, dict]:
     envs = {
         'filename': os.environ.get('FILENAME', 'file'),
-        'endpoint': os.environ.get('ENDPOINT', 'http://localhost:3030')
+        'endpoint': os.environ['ENDPOINT']
     }
 
     if key:
