@@ -58,8 +58,8 @@ def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
 
     temp_dir = tempfile.TemporaryDirectory()
     try:
-        saved_old_file = Path(temp_dir.name) / (secure_filename(old_file.filename) + str(uuid4()))
-        saved_new_file = Path(temp_dir.name) / (secure_filename(new_file.filename) + str(uuid4()))
+        saved_old_file = Path(temp_dir.name) / (str(uuid4()) + secure_filename(old_file.filename))
+        saved_new_file = Path(temp_dir.name) / (str(uuid4()) + secure_filename(new_file.filename))
 
         old_file.save(saved_old_file)
         new_file.save(saved_new_file)

@@ -241,9 +241,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
                                 auth=HTTPBasicAuth('admin', 'admin'))
 
         if response.status_code != 200:
-            return {
-                       'error': f"Fuseki server request ({response.url}) got response {response.status_code}"
-                   }, response.status_code
+            raise FusekiException(f"Fuseki server request ({response.url}) got response {response.status_code}")
 
         return self._select_dataset_names_from_fuseki_response(response=response), response.status_code
 

@@ -11,7 +11,7 @@ import pytest
 import requests
 from SPARQLWrapper import SPARQLWrapper
 
-from rdf_differ.diff_adapter import FusekiDiffAdapter
+from rdf_differ.diff_adapter import FusekiDiffAdapter, FusekiException
 
 RequestObj = namedtuple('RequestObj', ['status_code', 'url', 'text'])
 
@@ -161,9 +161,10 @@ def test_fuseki_diff_adapter_list_datasets_failing(mock_get):
     mock_get.return_value = RequestObj(400, 'http://some.url', None)
     fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
 
-    _, status = fuseki_service.list_datasets()
+    with pytest.raises(FusekiException) as exception:
+        _ = fuseki_service.list_datasets()
 
-    assert status == 400
+    assert 'Fuseki server request (http://some.url) got response 400' in str(exception)
 
 
 @patch.object(SPARQLWrapper, 'query')

@@ -32,6 +32,12 @@ QUERY_URI={query_uri}
 INPUT_MIME_TYPE=\"{input_type}\""""
 
 
+class SKOSException(Exception):
+    """
+        An exception for SKOSHistoryRunner.
+    """
+
+
 class SKOSHistoryRunner:
     def __init__(self, dataset: str, scheme_uri: str, old_version_file: str, new_version_file: str, old_version_id: str,
                  new_version_id: str, basedir: str, filename: str = None, endpoint: str = None,
@@ -56,13 +62,13 @@ class SKOSHistoryRunner:
         file_extension: extension of the files used, as defined in INPUT_MIME_TYPES
         """
         if not (dataset and scheme_uri and old_version_file and old_version_id and new_version_file and new_version_id):
-            raise Exception('These parameters cannot be empty:'
-                            f'{" dataset" if not dataset else ""}'
-                            f'{" scheme_uri" if not scheme_uri else ""}'
-                            f'{" old_version_file" if not old_version_file else ""}'
-                            f'{" old_version_id" if not old_version_id else ""}'
-                            f'{" new_version_file" if not new_version_file else ""}'
-                            f'{" new_version_id." if not new_version_id else "."}')
+            raise SKOSException('These parameters cannot be empty:'
+                                f'{" dataset" if not dataset else ""}'
+                                f'{" scheme_uri" if not scheme_uri else ""}'
+                                f'{" old_version_file" if not old_version_file else ""}'
+                                f'{" old_version_id" if not old_version_id else ""}'
+                                f'{" new_version_file" if not new_version_file else ""}'
+                                f'{" new_version_id." if not new_version_id else "."}')
 
         self.config_template = config_template
         self.dataset = quote(dataset)
@@ -113,7 +119,7 @@ class SKOSHistoryRunner:
     def get_file_format(file: str) -> str:
         file_format = guess_format(str(file), INPUT_MIME_TYPES)
         if file_format is None:
-            raise Exception('Format of "{}" is not supported.'.format(file))
+            raise SKOSException('Format of "{}" is not supported.'.format(file))
 
         return file_format
 
@@ -158,13 +164,13 @@ class SKOSHistoryRunner:
         new_format = self.get_file_format(self.new_version_file)
 
         if old_format != new_format:
-            raise Exception(f'File formats are different: {old_format}, {new_format}')
+            raise SKOSException(f'File formats are different: {old_format}, {new_format}')
 
         return old_format
 
     def _check_basedir(self):
         if dir_exists(self.basedir) and not dir_is_empty(self.basedir):
-            raise Exception('Root path is not empty.')
+            raise SKOSException('Root path is not empty.')
 
     @classmethod
     def execute_subprocess(cls, config_location: Union[str, Path]) -> str:
@@ -179,7 +185,7 @@ class SKOSHistoryRunner:
 
         if process.returncode != 0:
             logging.info('Subprocess: load_versions.sh failed.')
-            raise Exception(output)
+            raise SKOSException(output)
 
         logging.info('Subprocess: load_versions.sh finished successful.')
         return output.decode()

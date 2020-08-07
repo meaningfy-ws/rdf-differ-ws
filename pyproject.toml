@@ -15,7 +15,6 @@ rdflib = "*"
 sparqlwrapper = "*"
 connexion = {extras = ["swagger-ui"], version = "^2.7.0"}
 requests = "^2.24.0"
-connexion = "^2.7.0"
 Flask = "^1.1.2"
 
 [tool.poetry.dev-dependencies]
