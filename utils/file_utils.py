@@ -8,6 +8,7 @@ import tempfile
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Union
+from uuid import uuid4
 
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
@@ -57,8 +58,8 @@ def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
 
     temp_dir = tempfile.TemporaryDirectory()
     try:
-        saved_old_file = Path(temp_dir.name) / secure_filename(old_file.filename)
-        saved_new_file = Path(temp_dir.name) / secure_filename(new_file.filename)
+        saved_old_file = Path(temp_dir.name) / (secure_filename(old_file.filename) + str(uuid4()))
+        saved_new_file = Path(temp_dir.name) / (secure_filename(new_file.filename) + str(uuid4()))
 
         old_file.save(saved_old_file)
         new_file.save(saved_new_file)
