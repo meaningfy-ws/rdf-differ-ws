@@ -27,6 +27,26 @@ def get_diffs() -> tuple:
         return str(exception), 500
 
 
+def create_dataset(body: dict) -> tuple:
+    """
+        Create a dataset in the Fuseki store.
+    :param body:
+        {
+          "dataset_id": "string"
+        }
+    :return: str, int
+    """
+    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT)
+
+    try:
+        response, _ = fuseki_adapter.create_dataset(dataset_name=body.get('dataset_id'))
+        return response, 200
+    except ValueError as exception:
+        return str(exception), 400
+    except FusekiException as exception:
+        return str(exception), 409
+
+
 def create_diff(dataset_id: str, body: dict, old_version_file_content: FileStorage,
                 new_version_file_content: FileStorage) -> tuple:
     """
@@ -44,7 +64,6 @@ def create_diff(dataset_id: str, body: dict, old_version_file_content: FileStora
     :return:
     :rtype: str, int
     """
-    breakpoint()
     try:
         with temporarily_save_files(old_version_file_content, new_version_file_content) as \
                 (temp_dir, old_version_file, new_version_file):

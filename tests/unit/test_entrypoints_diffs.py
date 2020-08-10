@@ -7,11 +7,12 @@ Email: coslet.mihai@gmail.com
 from io import BytesIO
 from unittest.mock import patch
 
+import pytest
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from werkzeug.datastructures import FileStorage
 
 from rdf_differ.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff
+from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff, create_dataset
 from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
 
 
@@ -152,3 +153,31 @@ def test_delete_diff_404(mock_diff_description):
 
     assert status == 404
     assert response == ""
+
+
+@patch.object(FusekiDiffAdapter, 'create_dataset')
+def test_create_dataset_200(mock_create_dataset):
+    mock_create_dataset.return_value = "", 200
+
+    response, status = create_dataset({'dataset_id': 'dataset'})
+
+    assert status == 200
+    assert response == ""
+
+
+@patch.object(FusekiDiffAdapter, 'create_dataset')
+def test_create_dataset_400(mock_create_dataset):
+    mock_create_dataset.side_effect = ValueError()
+
+    _, status = create_dataset({'dataset_id': 'dataset'})
+
+    assert status == 400
+
+
+@patch.object(FusekiDiffAdapter, 'create_dataset')
+def test_create_dataset_409(mock_create_dataset):
+    mock_create_dataset.side_effect = FusekiException()
+
+    _, status = create_dataset({'dataset_id': 'dataset'})
+
+    assert status == 409

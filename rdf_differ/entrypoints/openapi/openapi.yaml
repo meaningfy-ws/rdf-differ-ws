@@ -50,17 +50,13 @@ paths:
                 dataset_id:
                   type: string
                   description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
-                dataset_description:
-                  type: string
-                  description: The dataset description. This is a free text description fo the dataset.
-                dataset_uri:
-                  type: string
-                  description: The dataset URI. For SKOS datasets this is usually the ConceptSchema URI.
               required:
                 - dataset_id
       responses:
         200:
           description: Dataset created successfully.
+        400:
+          description: Dataset name cannot be empty.
         409:
           description: A dataset with this name already exists.
 
