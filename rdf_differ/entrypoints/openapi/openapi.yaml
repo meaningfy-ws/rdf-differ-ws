@@ -38,60 +38,8 @@ paths:
         5XX:
           description: Unexpected Error.
     post:
-      operationId: rdf_differ.entrypoints.diffs.create_dataset
-      description: Calculate the diff of two dataset versions.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                dataset_id:
-                  type: string
-                  description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
-              required:
-                - dataset_id
-      responses:
-        200:
-          description: Dataset created successfully.
-        400:
-          description: Dataset name cannot be empty.
-        409:
-          description: A dataset with this name already exists.
-
-  /diffs/{dataset_id}:
-    get:
-      operationId: rdf_differ.entrypoints.diffs.get_diff
-      description: Get diffs for a dataset versions.
-      parameters:
-        - name: dataset_id
-          in: path
-          required: true
-          description: Dataset id
-          schema:
-            type: string
-      responses:
-        200:
-          description: Dataset diff description succesfully retreived.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CalculatedDiffDescription'
-        404:
-          description: A dataset with the specified ID was not found.
-        5XX:
-          description: Unexpected Error.
-    post:
       operationId: rdf_differ.entrypoints.diffs.create_diff
       description: Calculate the diff of two dataset versions.
-      parameters:
-        - name: dataset_id
-          in: path
-          required: true
-          description: Dataset id
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -100,6 +48,9 @@ paths:
               # using this explicit type definition until $ref method is fixed by connexion
               type: object
               properties:
+                dataset_id:
+                  type: string
+                  description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
                 dataset_description:
                   type: string
                   description: The dataset description. This is a free text description fo the dataset.
@@ -121,6 +72,7 @@ paths:
                   format: binary
                   description: The content of the old version file.
               required:
+                - dataset_id
                 - dataset_uri
                 - new_version_id
                 - old_version_id
@@ -129,6 +81,29 @@ paths:
       responses:
         200:
           description: Request to create a new dataset diff successfully accepted for processing.
+        5XX:
+          description: Unexpected Error.
+
+  /diffs/{dataset_id}:
+    get:
+      operationId: rdf_differ.entrypoints.diffs.get_diff
+      description: Get diffs for a dataset versions.
+      parameters:
+        - name: dataset_id
+          in: path
+          required: true
+          description: Dataset id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Dataset diff description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculatedDiffDescription'
+        404:
+          description: A dataset with the specified ID was not found.
         5XX:
           description: Unexpected Error.
     delete:

@@ -27,34 +27,14 @@ def get_diffs() -> tuple:
         return str(exception), 500
 
 
-def create_dataset(body: dict) -> tuple:
-    """
-        Create a dataset in the Fuseki store.
-    :param body:
-        {
-          "dataset_id": "string"
-        }
-    :return: str, int
-    """
-    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT)
-
-    try:
-        response, _ = fuseki_adapter.create_dataset(dataset_name=body.get('dataset_id'))
-        return response, 200
-    except ValueError as exception:
-        return str(exception), 400
-    except FusekiException as exception:
-        return str(exception), 409
-
-
-def create_diff(dataset_id: str, body: dict, old_version_file_content: FileStorage,
+def create_diff(body: dict, old_version_file_content: FileStorage,
                 new_version_file_content: FileStorage) -> tuple:
     """
         Create a diff based on the versions send with old_Version_file_content and new_version_file_content.
-    :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
     :param body:
         {
           "dataset_description": "string",
+          "dataset_id": "string",
           "dataset_uri": "string",
           "new_version_id": "string",
           "old_version_id": "string",
@@ -67,7 +47,7 @@ def create_diff(dataset_id: str, body: dict, old_version_file_content: FileStora
     try:
         with temporarily_save_files(old_version_file_content, new_version_file_content) as \
                 (temp_dir, old_version_file, new_version_file):
-            SKOSHistoryRunner(dataset=dataset_id,
+            SKOSHistoryRunner(dataset=body.get('dataset_id'),
                               basedir=temp_dir / 'basedir',
                               scheme_uri=body.get('dataset_uri'),
                               old_version_id=body.get('old_version_id'),

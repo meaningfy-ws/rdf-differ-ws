@@ -7,12 +7,11 @@ Email: coslet.mihai@gmail.com
 from io import BytesIO
 from unittest.mock import patch
 
-import pytest
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from werkzeug.datastructures import FileStorage
 
 from rdf_differ.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff, create_dataset
+from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff
 from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
 
 
@@ -64,7 +63,7 @@ def test_create_diff_202(_, mock_init):
         'old_version_id': 'old',
         'new_version_id': 'new',
     }
-    response, status = create_diff(dataset_id='dataset', body=body,
+    response, status = create_diff(body=body,
                                    old_version_file_content=file_1,
                                    new_version_file_content=file_2)
 
@@ -80,7 +79,7 @@ def test_creat_diff_500(_, mock_init):
     file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
     file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
     body = {}
-    response, status = create_diff(dataset_id='dataset', body=body,
+    response, status = create_diff(body=body,
                                    old_version_file_content=file_1,
                                    new_version_file_content=file_2)
 
@@ -96,7 +95,7 @@ def test_creat_diff_500(_, mock_init):
     file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
     file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
     body = {}
-    response, status = create_diff(dataset_id='dataset', body=body,
+    response, status = create_diff(body=body,
                                    old_version_file_content=file_1,
                                    new_version_file_content=file_2)
 
@@ -153,31 +152,3 @@ def test_delete_diff_404(mock_diff_description):
 
     assert status == 404
     assert response == ""
-
-
-@patch.object(FusekiDiffAdapter, 'create_dataset')
-def test_create_dataset_200(mock_create_dataset):
-    mock_create_dataset.return_value = "", 200
-
-    response, status = create_dataset({'dataset_id': 'dataset'})
-
-    assert status == 200
-    assert response == ""
-
-
-@patch.object(FusekiDiffAdapter, 'create_dataset')
-def test_create_dataset_400(mock_create_dataset):
-    mock_create_dataset.side_effect = ValueError()
-
-    _, status = create_dataset({'dataset_id': 'dataset'})
-
-    assert status == 400
-
-
-@patch.object(FusekiDiffAdapter, 'create_dataset')
-def test_create_dataset_409(mock_create_dataset):
-    mock_create_dataset.side_effect = FusekiException()
-
-    _, status = create_dataset({'dataset_id': 'dataset'})
-
-    assert status == 409
