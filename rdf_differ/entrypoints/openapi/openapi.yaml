@@ -38,14 +38,13 @@ paths:
         5XX:
           description: Unexpected Error.
     post:
-      operationId: rdf_differ.entrypoints.diffs.create_diff
+      operationId: rdf_differ.entrypoints.diffs.create_dataset
       description: Calculate the diff of two dataset versions.
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
-              # using this explicit type definition until $ref method is fixed by connexion
               type: object
               properties:
                 dataset_id:
@@ -57,32 +56,13 @@ paths:
                 dataset_uri:
                   type: string
                   description: The dataset URI. For SKOS datasets this is usually the ConceptSchema URI.
-                old_version_id:
-                  type: string
-                  description: Identifier for the older version of the dataset.
-                new_version_id:
-                  type: string
-                  description: The identifier for the newer version of the dataset.
-                new_version_file_content:
-                  type: string
-                  format: binary
-                  description: The content of the new version file.
-                old_version_file_content:
-                  type: string
-                  format: binary
-                  description: The content of the old version file.
               required:
                 - dataset_id
-                - dataset_uri
-                - new_version_id
-                - old_version_id
-                - old_version_file_content
-                - new_version_file_content
       responses:
         200:
-          description: Request to create a new dataset diff successfully accepted for processing.
-        5XX:
-          description: Unexpected Error.
+          description: Dataset created successfully.
+        409:
+          description: A dataset with this name already exists.
 
   /diffs/{dataset_id}:
     get:
@@ -104,6 +84,55 @@ paths:
                 $ref: '#/components/schemas/CalculatedDiffDescription'
         404:
           description: A dataset with the specified ID was not found.
+        5XX:
+          description: Unexpected Error.
+    post:
+      operationId: rdf_differ.entrypoints.diffs.create_diff
+      description: Calculate the diff of two dataset versions.
+      parameters:
+        - name: dataset_id
+          in: path
+          required: true
+          description: Dataset id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              # using this explicit type definition until $ref method is fixed by connexion
+              type: object
+              properties:
+                dataset_description:
+                  type: string
+                  description: The dataset description. This is a free text description fo the dataset.
+                dataset_uri:
+                  type: string
+                  description: The dataset URI. For SKOS datasets this is usually the ConceptSchema URI.
+                old_version_id:
+                  type: string
+                  description: Identifier for the older version of the dataset.
+                new_version_id:
+                  type: string
+                  description: The identifier for the newer version of the dataset.
+                new_version_file_content:
+                  type: string
+                  format: binary
+                  description: The content of the new version file.
+                old_version_file_content:
+                  type: string
+                  format: binary
+                  description: The content of the old version file.
+              required:
+                - dataset_uri
+                - new_version_id
+                - old_version_id
+                - old_version_file_content
+                - new_version_file_content
+      responses:
+        200:
+          description: Request to create a new dataset diff successfully accepted for processing.
         5XX:
           description: Unexpected Error.
     delete:
