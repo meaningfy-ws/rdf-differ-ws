@@ -6,13 +6,7 @@ Email: coslet.mihai@gmail.com
 """
 import os
 
-
-def get_envs() -> dict:
-    return {
-        'basedir': os.environ.get('BASEDIR', './basedir'),
-        'filename': os.environ.get('FILENAME', 'file'),
-        'endpoint': os.environ['ENDPOINT']
-    }
-
+FILENAME = os.environ.get('FILENAME', 'file')
+ENDPOINT = os.environ.get('ENDPOINT', 'http://localhost:3030')
 
 RDF_DIFFER_API_PORT = os.environ.get('RDF_DIFFER_API_PORT', '3040'),

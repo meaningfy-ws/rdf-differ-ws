@@ -1,5 +1,5 @@
 """
-test_diff_getter.py
+test_diff_adapter.py
 Date:  23/07/2020
 Author: Eugeniu Costetchi
 Email: costezki.eugen@gmail.com 
@@ -11,23 +11,23 @@ import pytest
 import requests
 from SPARQLWrapper import SPARQLWrapper
 
-from rdf_differ.diff_getter import FusekiDiffGetter, FusekiException
+from rdf_differ.diff_adapter import FusekiDiffAdapter, FusekiException
 
 RequestObj = namedtuple('RequestObj', ['status_code', 'url', 'text'])
 
 
-def test_fuseki_diff_getter_sparql_endpoint():
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030")
+def test_fuseki_diff_adapter_sparql_endpoint():
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030")
     assert fuseki_service.make_sparql_endpoint(dataset_name="subdiv") == "http://localhost:3030/subdiv/sparql"
     assert fuseki_service.make_sparql_endpoint(dataset_name="/foe") == "http://localhost:3030/foe/sparql"
 
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
     assert fuseki_service.make_sparql_endpoint(dataset_name="subdiv") == "http://localhost:3030/subdiv/sparql"
     assert fuseki_service.make_sparql_endpoint(dataset_name="/foe") == "http://localhost:3030/foe/sparql"
 
 
 @patch.object(requests, 'get')
-def test_fuseki_diff_getter_list_datasets(mock_get):
+def test_fuseki_diff_adapter_list_datasets(mock_get):
     response_text = """{ 
           "datasets" : [ 
               { 
@@ -149,25 +149,26 @@ def test_fuseki_diff_getter_list_datasets(mock_get):
         """
 
     mock_get.return_value = RequestObj(200, 'http://some.url', response_text)
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
+    response_text, _ = fuseki_service.list_datasets()
 
-    assert 3 == len(fuseki_service.list_datasets())
-    assert '/subdiv' in fuseki_service.list_datasets()
+    assert len(response_text) == 3
+    assert '/subdiv' in response_text
 
 
 @patch.object(requests, 'get')
-def test_fuseki_diff_getter_list_datasets_failing(mock_get):
+def test_fuseki_diff_adapter_list_datasets_failing(mock_get):
     mock_get.return_value = RequestObj(400, 'http://some.url', None)
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
 
     with pytest.raises(FusekiException) as exception:
-        fuseki_service.list_datasets()
+        _ = fuseki_service.list_datasets()
 
-    assert '400' in str(exception.value)
+    assert 'Fuseki server request (http://some.url) got response 400' in str(exception)
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_fuseki_diff_getter_dataset_description(mock_query):
+def test_fuseki_diff_adapter_dataset_description(mock_query):
     def convert():
         return {
             "head": {
@@ -205,50 +206,63 @@ def test_fuseki_diff_getter_dataset_description(mock_query):
     mock_query.return_value = mock_query
     mock_query.convert = convert
 
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
-    response = fuseki_service.diff_description(dataset_name='/subdiv')
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
+    response, _ = fuseki_service.diff_description(dataset_name='/subdiv')
 
-    assert response['versionHistoryGraph'] == "http://publications.europa.eu/resource/authority/subdivision/version"
-    assert response['currentVersionGraph'] == "http://publications.europa.eu/resource/authority/subdivision/version/v2"
-    assert response['datasetURI'] == "http://publications.europa.eu/resource/authority/subdivision"
+    assert response['dataset_id'] == '/subdiv'
+    assert response['dataset_description'] is None
+    assert response['dataset_uri'] == "http://publications.europa.eu/resource/authority/subdivision"
+    assert response['diff_date'] is None
+    assert "v1" in response['old_version_id']
+    assert "v2" in response['new_version_id']
+    assert response['query_url'] == 'http://localhost:3030/subdiv/sparql'
 
-    assert "20171213-0" in response['datasetVersions'] and "20190220-0" in response['datasetVersions']
-    assert "v1" in response['versionIds'] and "v2" in response['versionIds']
-    assert "http://publications.europa.eu/resource/authority/subdivision/version/v1" in response['versionNamedGraphs'] \
-           and "http://publications.europa.eu/resource/authority/subdivision/version/v2" in response[
-               'versionNamedGraphs']
+    assert response['version_history_graph'] == "http://publications.europa.eu/resource/authority/subdivision/version"
+    assert response['current_version_graph'] == \
+           "http://publications.europa.eu/resource/authority/subdivision/version/v2"
+    assert "20171213-0" in response['dataset_versions'] and "20190220-0" in response['dataset_versions']
+    assert "http://publications.europa.eu/resource/authority/subdivision/version/v1" in response['version_named_graphs']
+    assert "http://publications.europa.eu/resource/authority/subdivision/version/v2" in response['version_named_graphs']
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_fuseki_diff_getter_diff_description_failing_index_error(mock_query):
+def test_fuseki_diff_adapter_dataset_description_empty(mock_query):
     def convert():
-        return {'head': {'vars': ['datasetURI', 'versionDescriptionGraph']}, 'results': {'bindings': []}}
+        return {
+            "head": {
+                "vars": ["versionHistoryGraph", "datasetVersion", "date", "currentVersionGraph", "schemeURI",
+                         "versionNamedGraph", "versionId"]
+            },
+            "results": {
+                "bindings": []
+            }
+        }
 
     mock_query.return_value = mock_query
     mock_query.convert = convert
 
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
+    response, _ = fuseki_service.diff_description(dataset_name='/subdiv')
 
-    with pytest.raises(IndexError):
-        fuseki_service.diff_description(dataset_name='/subdiv')
+    assert response == {}
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_fuseki_diff_getter_diff_description_failing_key_error(mock_query):
+def test_fuseki_diff_adapter_diff_description_failing1(mock_query):
     def convert():
         return {}
 
     mock_query.return_value = mock_query
     mock_query.convert = convert
 
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
 
     with pytest.raises(KeyError):
         fuseki_service.diff_description(dataset_name='/subdiv')
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_fuseki_diff_getter_count_inserted_triples_success(mock_query):
+def test_fuseki_diff_adapter_count_inserted_triples_success(mock_query):
     def convert():
         return {
             "head": {
@@ -271,14 +285,14 @@ def test_fuseki_diff_getter_count_inserted_triples_success(mock_query):
     mock_query.return_value = mock_query
     mock_query.convert = convert
 
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
-    count = fuseki_service.count_inserted_triples('subdiv')
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
+    count, _ = fuseki_service.count_inserted_triples('subdiv')
 
     assert 387 == count
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_fuseki_diff_getter_count_inserted_triples_failing(mock_query):
+def test_fuseki_diff_adapter_count_inserted_triples_failing(mock_query):
     def convert():
         return {
             "head": {
@@ -293,14 +307,14 @@ def test_fuseki_diff_getter_count_inserted_triples_failing(mock_query):
     mock_query.return_value = mock_query
     mock_query.convert = convert
 
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
 
     with pytest.raises(IndexError):
         fuseki_service.count_inserted_triples('subdiv')
 
 
 @patch.object(SPARQLWrapper, 'query')
-def test_fuseki_diff_getter_count_deleted_triples_success(mock_query):
+def test_fuseki_diff_adapter_count_deleted_triples_success(mock_query):
     def convert():
         return {
             "head": {
@@ -325,8 +339,27 @@ def test_fuseki_diff_getter_count_deleted_triples_success(mock_query):
     mock_query.return_value = mock_query
     mock_query.convert = convert
 
-    fuseki_service = FusekiDiffGetter(triplestore_service_url="http://localhost:3030/")
-    count = fuseki_service.count_deleted_triples('subdiv')
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
+    count, _ = fuseki_service.count_deleted_triples('subdiv')
 
-    assert 3 == count
+    assert count == 3
 
+
+@patch.object(requests, 'delete')
+def test_fuseki_diff_adapter_delete_dataset_success(mock_delete):
+    mock_delete.return_value = RequestObj(200, 'http://some.url', '')
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url='http://localhost:3030/')
+
+    response = fuseki_service.delete_dataset('dataset')
+
+    assert response == ('', 200)
+
+
+@patch.object(requests, 'delete')
+def test_fuseki_diff_adapter_delete_dataset_not_found(mock_delete):
+    mock_delete.return_value = RequestObj(404, 'http://some.url', '')
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url='http://localhost:3030/')
+
+    response = fuseki_service.delete_dataset('dataset')
+
+    assert response == ('', 404)

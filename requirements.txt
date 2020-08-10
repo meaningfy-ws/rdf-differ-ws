@@ -11,7 +11,7 @@ coverage
 pytest-cov
 pytest-bdd
 
-# Linting dependecies
+# Linting dependencies
 flake8
 
 # Documentation Dependencies

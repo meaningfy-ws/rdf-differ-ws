@@ -12,8 +12,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
 
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
@@ -32,12 +32,9 @@ version = release
 # ones.
 extensions = ["myst_parser",
               "sphinxcontrib.apidoc",
-              # 'sphinx.ext.autosectionlabel',
               "sphinx.ext.autodoc",
               "sphinx.ext.intersphinx",
               "sphinx.ext.viewcode",
-              # "sphinxcontrib.bibtex",
-              # "sphinx_tabs.tabs",
               ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -45,13 +42,13 @@ templates_path = ['_templates']
 
 apidoc_module_dir = "../rdf_differ"
 apidoc_output_dir = "srcdocs"
+autodoc_default_flags = ["private-members"]
 autodoc_default_options = {"special-members": True}
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
 
 # -- Options for HTML output -------------------------------------------------
 

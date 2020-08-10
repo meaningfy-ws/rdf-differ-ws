@@ -11,7 +11,7 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.diff_getter import FusekiDiffGetter
+from rdf_differ.diff_adapter import FusekiDiffAdapter
 from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
 from utils.file_utils import dir_exists
 
@@ -74,7 +74,7 @@ def a_correct_dataset_folder_structure_is_created(metadata):
 @then('the diff calculator is executed')
 def the_diff_calculator_is_executed():
     """the diff calculator is executed."""
-    assert FusekiDiffGetter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
+    assert FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
 
 
 @given('the <property> is missing or incorrect')

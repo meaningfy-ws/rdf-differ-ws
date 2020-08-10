@@ -4,6 +4,14 @@ rdf\_differ.entrypoints package
 Submodules
 ----------
 
+rdf\_differ.entrypoints.diffs module
+------------------------------------
+
+.. automodule:: rdf_differ.entrypoints.diffs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 rdf\_differ.entrypoints.flask\_app module
 -----------------------------------------
 

@@ -19,10 +19,10 @@ rdf\_differ.config module
    :undoc-members:
    :show-inheritance:
 
-rdf\_differ.diff\_getter module
--------------------------------
+rdf\_differ.diff\_adapter module
+--------------------------------
 
-.. automodule:: rdf_differ.diff_getter
+.. automodule:: rdf_differ.diff_adapter
    :members:
    :undoc-members:
    :show-inheritance:
