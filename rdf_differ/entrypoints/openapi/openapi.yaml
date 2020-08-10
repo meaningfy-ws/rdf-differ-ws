@@ -79,8 +79,8 @@ paths:
                 - old_version_file_content
                 - new_version_file_content
       responses:
-        202:
-          description: Request to create a new dataset diff successfully accepted for processing, but the processing has not been completed.
+        200:
+          description: Request to create a new dataset diff successfully accepted for processing.
         5XX:
           description: Unexpected Error.
 

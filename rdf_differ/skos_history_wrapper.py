@@ -13,7 +13,7 @@ from urllib.parse import urljoin, quote
 
 from rdflib.util import guess_format
 
-from rdf_differ.config import get_envs
+from rdf_differ.config import ENDPOINT, FILENAME
 from utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 CONFIG_TEMPLATE = """#!/bin/bash
@@ -32,7 +32,7 @@ QUERY_URI={query_uri}
 INPUT_MIME_TYPE=\"{input_type}\""""
 
 
-class SKOSException(Exception):
+class SubprocessFailure(Exception):
     """
         An exception for SKOSHistoryRunner.
     """
@@ -62,13 +62,13 @@ class SKOSHistoryRunner:
         file_extension: extension of the files used, as defined in INPUT_MIME_TYPES
         """
         if not (dataset and scheme_uri and old_version_file and old_version_id and new_version_file and new_version_id):
-            raise SKOSException('These parameters cannot be empty:'
-                                f'{" dataset" if not dataset else ""}'
-                                f'{" scheme_uri" if not scheme_uri else ""}'
-                                f'{" old_version_file" if not old_version_file else ""}'
-                                f'{" old_version_id" if not old_version_id else ""}'
-                                f'{" new_version_file" if not new_version_file else ""}'
-                                f'{" new_version_id." if not new_version_id else "."}')
+            raise ValueError('These parameters cannot be empty:'
+                             f'{" dataset" if not dataset else ""}'
+                             f'{" scheme_uri" if not scheme_uri else ""}'
+                             f'{" old_version_file" if not old_version_file else ""}'
+                             f'{" old_version_id" if not old_version_id else ""}'
+                             f'{" new_version_file" if not new_version_file else ""}'
+                             f'{" new_version_id." if not new_version_id else "."}')
 
         self.config_template = config_template
         self.dataset = quote(dataset)
@@ -80,8 +80,8 @@ class SKOSHistoryRunner:
         self.new_version_id = new_version_id
 
         self.basedir = basedir
-        self.filename = filename if filename else get_envs().get('filename')
-        self.endpoint = endpoint if endpoint else get_envs().get('endpoint')
+        self.filename = filename if filename else FILENAME
+        self.endpoint = endpoint if endpoint else ENDPOINT
 
         self._check_basedir()
 
@@ -119,7 +119,7 @@ class SKOSHistoryRunner:
     def get_file_format(file: str) -> str:
         file_format = guess_format(str(file), INPUT_MIME_TYPES)
         if file_format is None:
-            raise SKOSException('Format of "{}" is not supported.'.format(file))
+            raise ValueError('Format of "{}" is not supported.'.format(file))
 
         return file_format
 
@@ -164,13 +164,13 @@ class SKOSHistoryRunner:
         new_format = self.get_file_format(self.new_version_file)
 
         if old_format != new_format:
-            raise SKOSException(f'File formats are different: {old_format}, {new_format}')
+            raise ValueError(f'File formats are different: {old_format}, {new_format}')
 
         return old_format
 
     def _check_basedir(self):
         if dir_exists(self.basedir) and not dir_is_empty(self.basedir):
-            raise SKOSException('Root path is not empty.')
+            raise ValueError('Root path is not empty.')
 
     @classmethod
     def execute_subprocess(cls, config_location: Union[str, Path]) -> str:
@@ -185,7 +185,7 @@ class SKOSHistoryRunner:
 
         if process.returncode != 0:
             logging.info('Subprocess: load_versions.sh failed.')
-            raise SKOSException(output)
+            raise SubprocessFailure(output)
 
         logging.info('Subprocess: load_versions.sh finished successful.')
         return output.decode()

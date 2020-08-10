@@ -7,9 +7,9 @@ Email: coslet.mihai@gmail.com
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from werkzeug.datastructures import FileStorage
 
-from rdf_differ.config import get_envs
+from rdf_differ import config
 from rdf_differ.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SKOSException
+from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
 from utils.file_utils import temporarily_save_files
 
 
@@ -19,7 +19,7 @@ def get_diffs() -> tuple:
     :return: list of existent datasets
     :rtype: list, int
     """
-    fuseki_adapter = FusekiDiffAdapter(get_envs('endpoint'))
+    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT)
     try:
         datasets, status = fuseki_adapter.list_datasets()
         return [{dataset: fuseki_adapter.diff_description(dataset)[0]} for dataset in datasets], status
@@ -54,10 +54,11 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
                               old_version_file=old_version_file,
                               new_version_file=new_version_file).run()
 
-        return "Request to create a new dataset diff successfully accepted for processing, " \
-               "but the processing has not been completed.", 202
-    except SKOSException as exception:
+        return "Request to create a new dataset diff successfully accepted for processing.", 200
+    except ValueError as exception:
         return str(exception), 500
+    except SubprocessFailure:
+        return 'Internal error while uploading the diffs.', 500
 
 
 def get_diff(dataset_id: str) -> tuple:
@@ -68,7 +69,7 @@ def get_diff(dataset_id: str) -> tuple:
     :rtype: dict, int
     """
     try:
-        return FusekiDiffAdapter(get_envs('endpoint')).diff_description(dataset_id)
+        return FusekiDiffAdapter(config.ENDPOINT).diff_description(dataset_id)
     except EndPointNotFound:
         return f'<{dataset_id}> does not exist.', 404
     # TODO: improve on the type of the error catching
@@ -83,4 +84,4 @@ def delete_diff(dataset_id: str) -> tuple:
     :return: info about deletion
     :rtype: str, int
     """
-    return FusekiDiffAdapter(get_envs('endpoint')).delete_dataset(dataset_id)
+    return FusekiDiffAdapter(config.ENDPOINT).delete_dataset(dataset_id)

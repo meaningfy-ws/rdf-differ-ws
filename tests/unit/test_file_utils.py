@@ -10,32 +10,7 @@ from pathlib import Path
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from rdf_differ.config import get_envs
-from tests.unit.conftest import helper_endpoint_mock
 from utils.file_utils import dir_exists, file_exists, dir_is_empty, temporarily_save_files
-
-
-def test_read_envs_filename_exists(monkeypatch):
-    helper_endpoint_mock(monkeypatch)
-    monkeypatch.setenv('FILENAME', 'tests.rdf')
-
-    envs = get_envs()
-    assert envs['filename'] == 'tests.rdf'
-
-
-def test_read_envs_filename_doesnt_exist(monkeypatch):
-    helper_endpoint_mock(monkeypatch)
-    monkeypatch.delenv("FILENAME", raising=False)
-
-    envs = get_envs()
-    assert envs['filename'] == 'file'
-
-
-def test_read_envs_endpoint_exists(monkeypatch):
-    helper_endpoint_mock(monkeypatch)
-
-    envs = get_envs()
-    assert envs['endpoint'] == 'http://test.point'
 
 
 def test_dir_exists(tmpdir):

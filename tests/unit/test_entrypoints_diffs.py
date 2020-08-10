@@ -12,7 +12,7 @@ from werkzeug.datastructures import FileStorage
 
 from rdf_differ.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SKOSException
+from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
 
 
 @patch.object(FusekiDiffAdapter, 'diff_description')
@@ -66,22 +66,35 @@ def test_create_diff_202(_, mock_init):
     }
     response, status = create_diff(body, file_1, file_2)
 
-    assert "Request to create a new dataset diff successfully accepted for processing, " \
-           "but the processing has not been completed." in response
-    assert status == 202
+    assert "Request to create a new dataset diff successfully accepted for processing." in response
+    assert status == 200
 
 
 @patch.object(SKOSHistoryRunner, '__init__')
 @patch.object(SKOSHistoryRunner, 'run')
 def test_creat_diff_500(_, mock_init):
-    mock_init.side_effect = SKOSException('500 exception')
+    mock_init.side_effect = ValueError('Value error')
 
     file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
     file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
     body = {}
     response, status = create_diff(body, file_1, file_2)
 
-    assert '500 exception' in response
+    assert 'Value error' in response
+    assert status == 500
+
+
+@patch.object(SKOSHistoryRunner, '__init__')
+@patch.object(SKOSHistoryRunner, 'run')
+def test_creat_diff_500(_, mock_init):
+    mock_init.side_effect = SubprocessFailure()
+
+    file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
+    file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
+    body = {}
+    response, status = create_diff(body, file_1, file_2)
+
+    assert 'Internal error while uploading the diffs.' in response
     assert status == 500
 
 
