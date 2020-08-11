@@ -4,6 +4,7 @@ Date: 30/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
+
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from werkzeug.datastructures import FileStorage
 
@@ -44,21 +45,30 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     :rtype: str, int
     """
     try:
-        with temporarily_save_files(old_version_file_content, new_version_file_content) as \
-                (temp_dir, old_version_file, new_version_file):
-            SKOSHistoryRunner(dataset=body.get('dataset_id'),
-                              basedir=temp_dir / 'basedir',
-                              scheme_uri=body.get('dataset_uri'),
-                              old_version_id=body.get('old_version_id'),
-                              new_version_id=body.get('new_version_id'),
-                              old_version_file=old_version_file,
-                              new_version_file=new_version_file).run()
+        dataset, _ = FusekiDiffAdapter(config.ENDPOINT).diff_description(dataset_name=body.get('dataset_id'))
+        can_create = 'dataset_uri' in dataset
+    except EndPointNotFound:
+        can_create = True
 
-        return "Request to create a new dataset diff successfully accepted for processing.", 200
-    except ValueError as exception:
-        return str(exception), 500
-    except SubprocessFailure:
-        return 'Internal error while uploading the diffs.', 500
+    if can_create:
+        try:
+            with temporarily_save_files(old_version_file_content, new_version_file_content) as \
+                    (temp_dir, old_version_file, new_version_file):
+                SKOSHistoryRunner(dataset=body.get('dataset_id'),
+                                  basedir=temp_dir / 'basedir',
+                                  scheme_uri=body.get('dataset_uri'),
+                                  old_version_id=body.get('old_version_id'),
+                                  new_version_id=body.get('new_version_id'),
+                                  old_version_file=old_version_file,
+                                  new_version_file=new_version_file).run()
+
+            return "Request to create a new dataset diff successfully accepted for processing.", 200
+        except ValueError as exception:
+            return str(exception), 500
+        except SubprocessFailure:
+            return 'Internal error while uploading the diffs.', 500
+    else:
+        return 'Dataset is not empty.', 409
 
 
 def get_diff(dataset_id: str) -> tuple:

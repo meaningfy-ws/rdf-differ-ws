@@ -64,7 +64,9 @@ def test_create_diff_202(_, mock_init):
         'old_version_id': 'old',
         'new_version_id': 'new',
     }
-    response, status = create_diff(body, file_1, file_2)
+    response, status = create_diff(body=body,
+                                   old_version_file_content=file_1,
+                                   new_version_file_content=file_2)
 
     assert "Request to create a new dataset diff successfully accepted for processing." in response
     assert status == 200
@@ -77,8 +79,10 @@ def test_creat_diff_500(_, mock_init):
 
     file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
     file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
-    body = {}
-    response, status = create_diff(body, file_1, file_2)
+    body = {'dataset_id': 'dataset'}
+    response, status = create_diff(body=body,
+                                   old_version_file_content=file_1,
+                                   new_version_file_content=file_2)
 
     assert 'Value error' in response
     assert status == 500
@@ -91,8 +95,10 @@ def test_creat_diff_500(_, mock_init):
 
     file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
     file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
-    body = {}
-    response, status = create_diff(body, file_1, file_2)
+    body = {'dataset_id': 'dataset'}
+    response, status = create_diff(body=body,
+                                   old_version_file_content=file_1,
+                                   new_version_file_content=file_2)
 
     assert 'Internal error while uploading the diffs.' in response
     assert status == 500

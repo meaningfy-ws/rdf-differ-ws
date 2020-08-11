@@ -363,3 +363,35 @@ def test_fuseki_diff_adapter_delete_dataset_not_found(mock_delete):
     response = fuseki_service.delete_dataset('dataset')
 
     assert response == ('', 404)
+
+
+@patch.object(requests, 'post')
+def test_fuseki_diff_adapter_create_dataset_success(mock_post):
+    mock_post.return_value = RequestObj(200, None, '')
+
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url='http://localhost:3030/')
+
+    response = fuseki_service.create_dataset('dataset')
+
+    assert response == ('', 200)
+
+
+def test_fuseki_diff_adapter_create_dataset_empty():
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url='http://localhost:3030/')
+
+    with pytest.raises(ValueError) as exception:
+        _ = fuseki_service.create_dataset('')
+
+    assert 'Dataset name cannot be empty.' in str(exception)
+
+
+@patch.object(requests, 'post')
+def test_fuseki_diff_adapter_create_dataset_already_exists(mock_post):
+    mock_post.return_value = RequestObj(409, None, '')
+
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url='http://localhost:3030/')
+
+    with pytest.raises(FusekiException) as exception:
+        _ = fuseki_service.create_dataset('dataset')
+
+    assert 'A dataset with this name already exists.' in str(exception)

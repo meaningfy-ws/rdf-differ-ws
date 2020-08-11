@@ -19,9 +19,19 @@ class AbstractDiffAdapter(ABC):
     """
 
     @abstractmethod
+    def create_dataset(self, dataset_name: str) -> tuple:
+        """
+            Create the dataset for the __ store
+        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
+        identifying the dataset
+        :return: text and status of the deleted dataset
+        :rtype: text, int
+        """
+
+    @abstractmethod
     def delete_dataset(self, dataset_name: str) -> tuple:
         """
-            Delete the dataset from the Fuseki store
+            Delete the dataset from the __ store
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :return: text and status of the deleted dataset
@@ -31,7 +41,7 @@ class AbstractDiffAdapter(ABC):
     @abstractmethod
     def list_datasets(self) -> tuple:
         """
-            Get the list of the dataset names from the Fuseki store.
+            Get the list of the dataset names from the __ store.
         :return: the list of the dataset names
         :rtype: list, int
         """
@@ -217,6 +227,31 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
 
         return self._extract_dataset_description(response=query_result, dataset_id=dataset_name,
                                                  query_url=self.make_sparql_endpoint(dataset_name)), status
+
+    def create_dataset(self, dataset_name: str) -> tuple:
+        """
+            Create the dataset for the Fuseki store
+        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
+        identifying the dataset
+        :return: text and status of the deleted dataset
+        :rtype: text, int
+        """
+        if not dataset_name:
+            raise ValueError('Dataset name cannot be empty.')
+
+        data = {
+            'dbType': 'tdb',  # assuming that all databases are created persistent across restart
+            'dbName': dataset_name
+        }
+
+        response = requests.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
+                                 auth=requests.auth.HTTPBasicAuth('admin', 'admin'),
+                                 data=data)
+
+        if response.status_code == 409:
+            raise FusekiException('A dataset with this name already exists.')
+
+        return response.text, response.status_code
 
     def delete_dataset(self, dataset_name: str) -> tuple:
         """
