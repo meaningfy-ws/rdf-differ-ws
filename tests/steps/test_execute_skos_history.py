@@ -72,7 +72,7 @@ def the_dsv_description_is_generated():
 @then('the dataset versions are loaded into the triplestore')
 def the_dataset_versions_are_loaded_into_the_triplestore():
     """the dataset versions are loaded into the triplestore."""
-    diff_description, _ = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
+    diff_description = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
 
     assert len(diff_description['dataset_versions']) == 2
     assert "v1" in diff_description['old_version_id']
@@ -84,8 +84,8 @@ def the_insertions_and_deletions_graphs_are_created():
     """the insertions and deletions graphs are created."""
     fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/")
 
-    insertions_count, _ = fuseki_service.count_inserted_triples('subdiv')
-    deletions_count, _ = fuseki_service.count_deleted_triples('subdiv')
+    insertions_count = fuseki_service.count_inserted_triples('subdiv')
+    deletions_count = fuseki_service.count_deleted_triples('subdiv')
 
     assert insertions_count != 0
     assert deletions_count != 0

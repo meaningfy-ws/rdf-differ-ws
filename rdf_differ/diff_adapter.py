@@ -8,8 +8,6 @@ from abc import ABC, abstractmethod
 from json import loads
 from urllib.parse import urljoin
 
-import requests
-from SPARQLWrapper import SPARQLWrapper, JSON
 from requests.auth import HTTPBasicAuth
 
 
@@ -180,34 +178,34 @@ class FusekiException(Exception):
 
 class FusekiDiffAdapter(AbstractDiffAdapter):
 
-    def __init__(self, triplestore_service_url: str):
+    def __init__(self, triplestore_service_url: str, http_requests, sparql_requests):
         self.triplestore_service_url = triplestore_service_url
+        self.sparql_requests = sparql_requests
+        self.http_requests = http_requests
 
-    def count_inserted_triples(self, dataset_name: str) -> tuple:
+    def count_inserted_triples(self, dataset_name: str) -> int:
         """
             Get number of inserted triples in the given dataset
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :return: inserted triples count
-        :rtype: int, int
         """
-        query_result, status = self.execute_query(dataset_name=dataset_name,
-                                                  sparql_query=SKOS_HISTORY_PREFIXES + QUERY_INSERTIONS_COUNT)
-        return self._extract_insertion_count(query_result), status
+        query_result = self.execute_query(dataset_name=dataset_name,
+                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_INSERTIONS_COUNT)
+        return self._extract_insertion_count(query_result)
 
-    def count_deleted_triples(self, dataset_name: str) -> tuple:
+    def count_deleted_triples(self, dataset_name: str) -> int:
         """
             Get number of deleted triples in the given dataset.
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :return: deleted triples count
-        :rtype: int, int
         """
-        query_result, status = self.execute_query(dataset_name=dataset_name,
-                                                  sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
-        return self._extract_deletion_count(query_result), status
+        query_result = self.execute_query(dataset_name=dataset_name,
+                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
+        return self._extract_deletion_count(query_result)
 
-    def diff_description(self, dataset_name: str) -> tuple:
+    def diff_description(self, dataset_name: str) -> dict:
         """
             Provide a generic description of the dataset.
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
@@ -220,13 +218,12 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             * datasetVersions = list of loaded dataset versions as declared by the datasets themselves,
             * versionIds = list of versionIds as provided in the configurations file
             * versionNamedGraphs = named graphs where the versions of datasets are loaded
-        :rtype: dict, int
         """
-        query_result, status = self.execute_query(dataset_name=dataset_name,
-                                                  sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
+        query_result = self.execute_query(dataset_name=dataset_name,
+                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
 
         return self._extract_dataset_description(response=query_result, dataset_id=dataset_name,
-                                                 query_url=self.make_sparql_endpoint(dataset_name)), status
+                                                 query_url=self.make_sparql_endpoint(dataset_name))
 
     def create_dataset(self, dataset_name: str) -> tuple:
         """
@@ -244,9 +241,9 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             'dbName': dataset_name
         }
 
-        response = requests.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
-                                 auth=requests.auth.HTTPBasicAuth('admin', 'admin'),
-                                 data=data)
+        response = self.http_requests.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
+                                           auth=HTTPBasicAuth('admin', 'admin'),
+                                           data=data)
 
         if response.status_code == 409:
             raise FusekiException('A dataset with this name already exists.')
@@ -261,8 +258,8 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :return: text and status of the deleted dataset
         :rtype: text, int
         """
-        response = requests.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
-                                   auth=HTTPBasicAuth('admin', 'admin'))
+        response = self.http_requests.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
+                                             auth=HTTPBasicAuth('admin', 'admin'))
 
         return response.text, response.status_code
 
@@ -272,30 +269,24 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :return: the list of the dataset names
         :rtype: list, int
         """
-        response = requests.get(urljoin(self.triplestore_service_url, "/$/datasets"),
-                                auth=HTTPBasicAuth('admin', 'admin'))
+        response = self.http_requests.get(urljoin(self.triplestore_service_url, "/$/datasets"),
+                                          auth=HTTPBasicAuth('admin', 'admin'))
 
         if response.status_code != 200:
             raise FusekiException(f"Fuseki server request ({response.url}) got response {response.status_code}")
 
         return self._select_dataset_names_from_fuseki_response(response=response), response.status_code
 
-    def execute_query(self, dataset_name: str, sparql_query: str) -> tuple:
+    def execute_query(self, dataset_name: str, sparql_query: str) -> dict:
         """
             Helper method to execute queries to the Fuseki store using the SPARQLWrapper.
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :param sparql_query: query to be executed
         :return: SPARQLWrapper query response
-        :rtype: [json, list, text], int
         """
-        endpoint = SPARQLWrapper(self.make_sparql_endpoint(dataset_name=dataset_name))
-
-        endpoint.setQuery(sparql_query)
-        endpoint.setReturnFormat(JSON)
-        query = endpoint.query()
-
-        return query.convert(), query.response.status
+        return self.sparql_requests.execute(endpoint_url=self.make_sparql_endpoint(dataset_name),
+                                            query_text=sparql_query)
 
     def make_sparql_endpoint(self, dataset_name: str) -> str:
         """

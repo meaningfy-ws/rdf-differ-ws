@@ -4,11 +4,12 @@ Date: 30/07/2020
 Author: Mihai Coșleț
 Email: coslet.mihai@gmail.com
 """
-
+import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from werkzeug.datastructures import FileStorage
 
 from rdf_differ import config
+from rdf_differ.adapters.external import SPARQLRunner
 from rdf_differ.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
 from utils.file_utils import temporarily_save_files
@@ -20,7 +21,7 @@ def get_diffs() -> tuple:
     :return: list of existent datasets
     :rtype: list, int
     """
-    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT)
+    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT, http_requests=requests, sparql_requests=SPARQLRunner())
     try:
         datasets, status = fuseki_adapter.list_datasets()
         return [{dataset: fuseki_adapter.diff_description(dataset)[0]} for dataset in datasets], status

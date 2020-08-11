@@ -32,9 +32,9 @@ def diff_object():
 def the_user_requests_the_diff_inventory(fuseki_diff_getter, diff_object):
     """the user requests the diff inventory."""
     dataset = '/subdiv'
-    diff_object.append(fuseki_diff_getter.diff_description(dataset)[0])
-    diff_object.append(fuseki_diff_getter.count_inserted_triples(dataset)[0])
-    diff_object.append(fuseki_diff_getter.count_deleted_triples(dataset)[0])
+    diff_object.append(fuseki_diff_getter.diff_description(dataset))
+    diff_object.append(fuseki_diff_getter.count_inserted_triples(dataset))
+    diff_object.append(fuseki_diff_getter.count_deleted_triples(dataset))
 
 
 @then('the datasetURI is returned')

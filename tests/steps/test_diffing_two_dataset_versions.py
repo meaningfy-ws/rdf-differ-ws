@@ -4,6 +4,7 @@ import shutil
 from pathlib import Path
 
 import pytest
+from SPARQLWrapper import SPARQLWrapper
 from pytest_bdd import (
     given,
     scenario,
