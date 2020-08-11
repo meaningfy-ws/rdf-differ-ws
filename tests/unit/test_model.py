@@ -8,71 +8,71 @@ from uuid import uuid4
 
 import pytest
 
-from rdf_differ.domain.model import Dataset, DatasetVersion, RDFContentReference, VersionExists, VersionDeltaExists, \
+from rdf_differ.domain.model import Dataset, DatasetVersion, RDFContentReference, VersionExists, VersionsDeltaExists, \
     VersionMissing
 
 
-def helper_dataset(name: str = 'dataset', uri: str = 'http://some.uri', description: str = '') -> Dataset:
+@pytest.fixture()
+def a_dataset(name: str = 'dataset', uri: str = 'http://some.uri', description: str = '') -> Dataset:
     return Dataset(name=name, uri=uri, description=description)
 
 
-def helper_dataset_version(version_id: str = uuid4(), description: str = '',
-                           content_reference: RDFContentReference = RDFContentReference()) -> DatasetVersion:
+@pytest.fixture(scope="function")
+def a_dataset_version(version_id: str = uuid4(), description: str = 'This si a dataset version',
+                      content_reference: RDFContentReference = RDFContentReference()) -> DatasetVersion:
     return DatasetVersion(version_id=version_id, description=description, content_reference=content_reference)
 
 
-def test_dataset_add_version():
-    dataset = helper_dataset()
-    dataset_version = helper_dataset_version(version_id='v1')
-    dataset.add_version(dataset_version)
-
-    assert len(dataset.versions) == 1
-
-
-def test_dataset_calculate_diff():
-    dataset = helper_dataset()
-    dataset_version_1 = helper_dataset_version(version_id='v1')
-    dataset_version_2 = helper_dataset_version(version_id='v2')
+@pytest.fixture(scope="module")
+def a_dataset_with_v1_v2(name: str = 'dataset', uri: str = 'http://some.uri', description: str = ''):
+    dataset = Dataset(name=name, uri=uri, description=description)
+    dataset_version_1 = DatasetVersion(version_id="v1", description="", content_reference=None)
+    dataset_version_2 = DatasetVersion(version_id="v2", description="", content_reference=None)
 
     dataset.add_version(dataset_version_1)
     dataset.add_version(dataset_version_2)
 
-    diff = dataset.calculate_diff(old=dataset_version_1.version_id,
-                                  new=dataset_version_2.version_id)
-
-    assert diff.old == 'v1'
-    assert diff.new == 'v2'
-    assert len(diff.version_deltas) == 1
-    assert diff.insertions is not None
-    assert diff.deletions is not None
+    return dataset
 
 
-def test_dataset_add_version_already_exists():
-    dataset = helper_dataset()
-    dataset_version_1 = helper_dataset_version(version_id='v1')
-    dataset.add_version(dataset_version_1)
+def test_dataset_add_version(a_dataset, a_dataset_version):
+    a_dataset.add_version(a_dataset_version)
+
+    assert len(a_dataset.versions) == 1
+
+
+def test_dataset_add_version_already_exists(a_dataset, a_dataset_version):
+    a_dataset.add_version(a_dataset_version)
 
     with pytest.raises(VersionExists):
-        dataset.add_version(dataset_version_1)
+        a_dataset.add_version(a_dataset_version)
 
 
-def test_dataset_calculate_diff_already_exists():
-    dataset = helper_dataset()
-    dataset_version_1 = helper_dataset_version(version_id='v1')
-    dataset_version_2 = helper_dataset_version(version_id='v2')
+def test_dataset_calculate_diff_already_exists(a_dataset_with_v1_v2):
+    diff1 = a_dataset_with_v1_v2.calculate_diff(old_version_id='v1',
+                                                new_version_id='v2')
 
-    diff = dataset.calculate_diff(old=dataset_version_1.version_id,
-                                  new=dataset_version_2.version_id)
+    diff2 = a_dataset_with_v1_v2.calculate_diff(old_version_id='v1',
+                                                new_version_id='v2')
 
-    with pytest.raises(VersionDeltaExists):
-        diff = dataset.calculate_diff(old=dataset_version_1.version_id,
-                                      new=dataset_version_2.version_id)
+    assert diff1 is diff2
 
 
-def test_dataset_calculate_diff_missing_dataset_version():
-    dataset = helper_dataset()
-    dataset_version_2 = helper_dataset_version(version_id='v2')
+def test_dataset_calculate_diff(a_dataset_with_v1_v2):
+    diff = a_dataset_with_v1_v2.calculate_diff(old_version_id="v1",
+                                               new_version_id="v2")
 
+    assert diff.old_version_id == 'v1'
+    assert diff.new_version_id == 'v2'
+    assert len(a_dataset_with_v1_v2.version_deltas) == 1
+
+    diff = a_dataset_with_v1_v2.calculate_diff(old_version_id="v1",
+                                               new_version_id="v2")
+
+    assert len(a_dataset_with_v1_v2.version_deltas) == 1
+
+
+def test_dataset_calculate_diff_missing_dataset_version(a_dataset_with_v1_v2):
     with pytest.raises(VersionMissing):
-        diff = dataset.calculate_diff(old='v1',
-                                      new=dataset_version_2.version_id)
+        diff = a_dataset_with_v1_v2.calculate_diff(old_version_id='v1',
+                                                   new_version_id='v3')
