@@ -59,6 +59,7 @@ def test_create_diff_202(_, mock_init):
     file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
     file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
     body = {
+        'dataset_id': 'dataset',
         'dataset_uri': 'uri',
         'old_version_id': 'old',
         'new_version_id': 'new',
@@ -78,7 +79,7 @@ def test_creat_diff_500(_, mock_init):
 
     file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
     file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
-    body = {}
+    body = {'dataset_id': 'dataset'}
     response, status = create_diff(body=body,
                                    old_version_file_content=file_1,
                                    new_version_file_content=file_2)
@@ -94,7 +95,7 @@ def test_creat_diff_500(_, mock_init):
 
     file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
     file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
-    body = {}
+    body = {'dataset_id': 'dataset'}
     response, status = create_diff(body=body,
                                    old_version_file_content=file_1,
                                    new_version_file_content=file_2)
