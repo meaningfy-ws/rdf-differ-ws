@@ -115,14 +115,6 @@ class SKOSHistoryRunner:
         """
         return urljoin(self.endpoint, '/'.join([self.dataset, 'query']))
 
-    @staticmethod
-    def get_file_format(file: str) -> str:
-        file_format = guess_format(str(file), INPUT_MIME_TYPES)
-        if file_format is None:
-            raise ValueError('Format of "{}" is not supported.'.format(file))
-
-        return file_format
-
     def run(self):
         self.generate_structure()
         config_location = self.generate_config()
@@ -174,7 +166,7 @@ class SKOSHistoryRunner:
 
     @classmethod
     def execute_subprocess(cls, config_location: Union[str, Path]) -> str:
-        script_location = Path(__file__).parent.parent / 'resources/load_versions.sh'
+        script_location = Path(__file__).parents[2] / 'resources/load_versions.sh'
 
         logging.info('Subprocess: run load_versions.sh start.')
 
@@ -189,3 +181,11 @@ class SKOSHistoryRunner:
 
         logging.info('Subprocess: load_versions.sh finished successful.')
         return output.decode()
+
+    @staticmethod
+    def get_file_format(file: str) -> str:
+        file_format = guess_format(str(file), INPUT_MIME_TYPES)
+        if file_format is None:
+            raise ValueError('Format of "{}" is not supported.'.format(file))
+
+        return file_format

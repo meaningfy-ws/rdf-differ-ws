@@ -11,9 +11,9 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.adapters.external import SPARQLRunner
-from rdf_differ.diff_adapter import FusekiDiffAdapter
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.adapters.sparql import SPARQLRunner
+from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
 @scenario('../features/execute_skos_history.feature', 'Running the skos-history')

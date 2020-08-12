@@ -11,7 +11,7 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from tests.conftest import helper_fuseki_service
 from utils.file_utils import dir_exists
 

@@ -10,9 +10,9 @@ from unittest.mock import patch
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from werkzeug.datastructures import FileStorage
 
-from rdf_differ.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
 
 
 @patch.object(FusekiDiffAdapter, 'diff_description')

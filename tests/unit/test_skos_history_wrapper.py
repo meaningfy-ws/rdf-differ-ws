@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 import pytest
 
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from tests.conftest import helper_create_skos_runner
 
 

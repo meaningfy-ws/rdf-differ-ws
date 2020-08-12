@@ -8,8 +8,8 @@ from collections import namedtuple
 
 import pytest
 
-from rdf_differ.diff_adapter import FusekiDiffAdapter
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
 class FakeSPARQLRunner:

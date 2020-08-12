@@ -9,24 +9,10 @@ from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from werkzeug.datastructures import FileStorage
 
 from rdf_differ import config
-from rdf_differ.adapters.external import SPARQLRunner
-from rdf_differ.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
+from rdf_differ.adapters.sparql import SPARQLRunner
+from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
 from utils.file_utils import temporarily_save_files
-
-
-def get_diffs() -> tuple:
-    """
-        List the existent datasets with their descriptions.
-    :return: list of existent datasets
-    :rtype: list, int
-    """
-    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT, http_requests=requests, sparql_requests=SPARQLRunner())
-    try:
-        datasets, status = fuseki_adapter.list_datasets()
-        return [{dataset: fuseki_adapter.diff_description(dataset)[0]} for dataset in datasets], status
-    except FusekiException as exception:
-        return str(exception), 500
 
 
 def create_diff(body: dict, old_version_file_content: FileStorage, new_version_file_content: FileStorage) -> tuple:
@@ -57,6 +43,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
         try:
             with temporarily_save_files(old_version_file_content, new_version_file_content) as \
                     (temp_dir, old_version_file, new_version_file):
+                # TODO move this to fusekiadapter
                 SKOSHistoryRunner(dataset=body.get('dataset_id'),
                                   basedir=temp_dir / 'basedir',
                                   scheme_uri=body.get('dataset_uri'),
@@ -72,6 +59,20 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
             return 'Internal error while uploading the diffs.', 500
     else:
         return 'Dataset is not empty.', 409
+
+
+def get_diffs() -> tuple:
+    """
+        List the existent datasets with their descriptions.
+    :return: list of existent datasets
+    :rtype: list, int
+    """
+    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT, http_requests=requests, sparql_requests=SPARQLRunner())
+    try:
+        datasets, status = fuseki_adapter.list_datasets()
+        return [{dataset: fuseki_adapter.diff_description(dataset)[0]} for dataset in datasets], status
+    except FusekiException as exception:
+        return str(exception), 500
 
 
 def get_diff(dataset_id: str) -> tuple:
