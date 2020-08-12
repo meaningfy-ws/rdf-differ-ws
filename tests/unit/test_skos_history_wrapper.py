@@ -10,7 +10,7 @@ from unittest.mock import patch
 import pytest
 
 from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
-from tests.unit.conftest import helper_create_skos_runner
+from tests.conftest import helper_create_skos_runner
 
 
 @pytest.mark.parametrize("filename, file_format", [('test.rdf', 'application/rdf+xml'),

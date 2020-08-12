@@ -328,11 +328,11 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             * dataset_versions = list of loaded dataset versions as declared by the datasets themselves,
             * version_named_graphs = named graphs where the versions of datasets are loaded
         """
-        helper_current_version = [item['currentVersionGraph']['value'] for item in response['results']['bindings'] if
-                                  'currentVersionGraph' in item and item['currentVersionGraph']['value']]
-
         if not response['results']['bindings']:
             return {}
+
+        helper_current_version = [item['currentVersionGraph']['value'] for item in response['results']['bindings'] if
+                                  'currentVersionGraph' in item and item['currentVersionGraph']['value']]
 
         return {
             'dataset_id': dataset_id,

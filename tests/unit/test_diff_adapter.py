@@ -8,7 +8,8 @@ Email: costezki.eugen@gmail.com
 import pytest
 
 from rdf_differ.diff_adapter import FusekiException
-from tests.unit.conftest import helper_fuseki_service
+from tests import DUMMY_DATASET_DIFF_DESCRIPTION
+from tests.conftest import helper_fuseki_service
 
 
 def test_fuseki_diff_adapter_sparql_endpoint():
@@ -157,38 +158,7 @@ def test_fuseki_diff_adapter_list_datasets_failing(fake_requests):
 
 
 def test_fuseki_diff_adapter_dataset_description(fake_sparql_runner):
-    fake_sparql_runner.return_value = {
-        "head": {
-            "vars": ["versionHistoryGraph", "datasetVersion", "date", "currentVersionGraph", "schemeURI",
-                     "versionNamedGraph", "versionId"]
-        },
-        "results": {
-            "bindings": [
-                {
-                    "versionHistoryGraph": {"type": "uri",
-                                            "value": "http://publications.europa.eu/resource/authority/subdivision/version"},
-                    "datasetVersion": {"type": "literal", "value": "20171213-0"},
-                    "schemeURI": {"type": "uri",
-                                  "value": "http://publications.europa.eu/resource/authority/subdivision"},
-                    "versionNamedGraph": {"type": "uri",
-                                          "value": "http://publications.europa.eu/resource/authority/subdivision/version/v1"},
-                    "versionId": {"type": "literal", "value": "v1"}
-                },
-                {
-                    "versionHistoryGraph": {"type": "uri",
-                                            "value": "http://publications.europa.eu/resource/authority/subdivision/version"},
-                    "datasetVersion": {"type": "literal", "value": "20190220-0"},
-                    "currentVersionGraph": {"type": "uri",
-                                            "value": "http://publications.europa.eu/resource/authority/subdivision/version/v2"},
-                    "schemeURI": {"type": "uri",
-                                  "value": "http://publications.europa.eu/resource/authority/subdivision"},
-                    "versionNamedGraph": {"type": "uri",
-                                          "value": "http://publications.europa.eu/resource/authority/subdivision/version/v2"},
-                    "versionId": {"type": "literal", "value": "v2"}
-                }
-            ]
-        }
-    }
+    fake_sparql_runner.return_value = DUMMY_DATASET_DIFF_DESCRIPTION
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://localhost:3030',
                                            sparql_requests=fake_sparql_runner)

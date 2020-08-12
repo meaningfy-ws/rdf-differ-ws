@@ -46,7 +46,9 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     :rtype: str, int
     """
     try:
-        dataset, _ = FusekiDiffAdapter(config.ENDPOINT).diff_description(dataset_name=body.get('dataset_id'))
+        dataset, _ = FusekiDiffAdapter(config.ENDPOINT, http_requests=requests,
+                                       sparql_requests=SPARQLRunner()).diff_description(
+            dataset_name=body.get('dataset_id'))
         can_create = 'dataset_uri' in dataset
     except EndPointNotFound:
         can_create = True
@@ -80,7 +82,8 @@ def get_diff(dataset_id: str) -> tuple:
     :rtype: dict, int
     """
     try:
-        return FusekiDiffAdapter(config.ENDPOINT).diff_description(dataset_id)
+        return FusekiDiffAdapter(config.ENDPOINT, http_requests=requests,
+                                 sparql_requests=SPARQLRunner()).diff_description(dataset_id)
     except EndPointNotFound:
         return f'<{dataset_id}> does not exist.', 404
     # TODO: improve on the type of the error catching
@@ -95,4 +98,5 @@ def delete_diff(dataset_id: str) -> tuple:
     :return: info about deletion
     :rtype: str, int
     """
-    return FusekiDiffAdapter(config.ENDPOINT).delete_dataset(dataset_id)
+    return FusekiDiffAdapter(config.ENDPOINT, http_requests=requests, sparql_requests=SPARQLRunner()) \
+        .delete_dataset(dataset_id)
