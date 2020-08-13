@@ -74,7 +74,7 @@ def a_correct_dataset_folder_structure_is_created(metadata):
 @then('the diff calculator is executed')
 def the_diff_calculator_is_executed():
     """the diff calculator is executed."""
-    assert helper_fuseki_service().diff_description('subdiv') == {}
+    assert helper_fuseki_service().dataset_description('subdiv') == {}
 
 
 @given('the <property> is missing or incorrect')

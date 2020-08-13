@@ -33,7 +33,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     """
     try:
         dataset, _ = FusekiDiffAdapter(config.ENDPOINT, http_requests=requests,
-                                       sparql_requests=SPARQLRunner()).diff_description(
+                                       sparql_requests=SPARQLRunner()).dataset_description(
             dataset_name=body.get('dataset_id'))
         can_create = 'dataset_uri' in dataset
     except EndPointNotFound:
@@ -70,7 +70,7 @@ def get_diffs() -> tuple:
     fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT, http_requests=requests, sparql_requests=SPARQLRunner())
     try:
         datasets, status = fuseki_adapter.list_datasets()
-        return [{dataset: fuseki_adapter.diff_description(dataset)[0]} for dataset in datasets], status
+        return [{dataset: fuseki_adapter.dataset_description(dataset)} for dataset in datasets], status
     except FusekiException as exception:
         return str(exception), 500
 
@@ -84,7 +84,7 @@ def get_diff(dataset_id: str) -> tuple:
     """
     try:
         return FusekiDiffAdapter(config.ENDPOINT, http_requests=requests,
-                                 sparql_requests=SPARQLRunner()).diff_description(dataset_id)
+                                 sparql_requests=SPARQLRunner()).dataset_description(dataset_id)
     except EndPointNotFound:
         return f'<{dataset_id}> does not exist.', 404
     # TODO: improve on the type of the error catching

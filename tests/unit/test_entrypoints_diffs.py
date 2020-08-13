@@ -13,19 +13,20 @@ from werkzeug.datastructures import FileStorage
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
+from tests import DUMMY_DATASET_DIFF_DESCRIPTION
 
 
-@patch.object(FusekiDiffAdapter, 'diff_description')
+@patch.object(FusekiDiffAdapter, 'dataset_description')
 @patch.object(FusekiDiffAdapter, 'list_datasets')
-def test_get_diffs_200(mock_list_datasets, mock_diff_description):
+def test_get_diffs_200(mock_list_datasets, mock_dataset_description):
     mock_list_datasets.return_value = (['first_dataset', 'second_dataset'], 200)
-    mock_diff_description.side_effect = [
+    mock_dataset_description.side_effect = [
         ({
              'dataset_id': "first_dataset"
-         }, None),
+         }),
         ({
              'dataset_id': "second_dataset"
-         }, None)
+         })
     ]
 
     response, status = get_diffs()
@@ -74,7 +75,7 @@ def test_create_diff_202(_, mock_init):
 
 @patch.object(SKOSHistoryRunner, '__init__')
 @patch.object(SKOSHistoryRunner, 'run')
-def test_creat_diff_500(_, mock_init):
+def test_create_diff_500(_, mock_init):
     mock_init.side_effect = ValueError('Value error')
 
     file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
@@ -90,7 +91,7 @@ def test_creat_diff_500(_, mock_init):
 
 @patch.object(SKOSHistoryRunner, '__init__')
 @patch.object(SKOSHistoryRunner, 'run')
-def test_creat_diff_500(_, mock_init):
+def test_create_diff_500(_, mock_init):
     mock_init.side_effect = SubprocessFailure()
 
     file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
@@ -104,9 +105,9 @@ def test_creat_diff_500(_, mock_init):
     assert status == 500
 
 
-@patch.object(FusekiDiffAdapter, 'diff_description')
-def test_get_diff_200(mock_diff_description):
-    mock_diff_description.return_value = {'dataset_id': "dataset"}, 200
+@patch.object(FusekiDiffAdapter, 'dataset_description')
+def test_get_diff_200(mock_dataset_description):
+    mock_dataset_description.return_value = {'dataset_id': "dataset"}, 200
 
     response, status = get_diff('dataset')
 
@@ -114,9 +115,9 @@ def test_get_diff_200(mock_diff_description):
     assert response == {'dataset_id': "dataset"}
 
 
-@patch.object(FusekiDiffAdapter, 'diff_description')
-def test_get_diff_404(mock_diff_description):
-    mock_diff_description.side_effect = EndPointNotFound()
+@patch.object(FusekiDiffAdapter, 'dataset_description')
+def test_get_diff_404(mock_dataset_description):
+    mock_dataset_description.side_effect = EndPointNotFound()
 
     response, status = get_diff('dataset')
 
@@ -124,9 +125,9 @@ def test_get_diff_404(mock_diff_description):
     assert response == "<dataset> does not exist."
 
 
-@patch.object(FusekiDiffAdapter, 'diff_description')
-def test_get_diff_500(mock_diff_description):
-    mock_diff_description.side_effect = Exception()
+@patch.object(FusekiDiffAdapter, 'dataset_description')
+def test_get_diff_500(mock_dataset_description):
+    mock_dataset_description.side_effect = Exception()
 
     response, status = get_diff('dataset')
 
@@ -136,8 +137,8 @@ def test_get_diff_500(mock_diff_description):
 
 # TODO: update tests after refactoring. Add 5xx testing
 @patch.object(FusekiDiffAdapter, 'delete_dataset')
-def test_delete_diff_200(mock_diff_description):
-    mock_diff_description.return_value = "", 200
+def test_delete_diff_200(mock_delete_dataset):
+    mock_delete_dataset.return_value = "", 200
 
     response, status = delete_diff('dataset')
 
@@ -146,8 +147,8 @@ def test_delete_diff_200(mock_diff_description):
 
 
 @patch.object(FusekiDiffAdapter, 'delete_dataset')
-def test_delete_diff_404(mock_diff_description):
-    mock_diff_description.return_value = "", 404
+def test_delete_diff_404(mock_delete_dataset):
+    mock_delete_dataset.return_value = "", 404
 
     response, status = delete_diff('dataset')
 

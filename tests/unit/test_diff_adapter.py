@@ -162,7 +162,7 @@ def test_fuseki_diff_adapter_dataset_description(fake_sparql_runner):
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://localhost:3030',
                                            sparql_requests=fake_sparql_runner)
-    response = fuseki_service.diff_description(dataset_name='/subdiv')
+    response = fuseki_service.dataset_description(dataset_name='/subdiv')
 
     assert response['dataset_id'] == '/subdiv'
     assert response['dataset_description'] is None
@@ -193,7 +193,7 @@ def test_fuseki_diff_adapter_dataset_description_empty(fake_sparql_runner):
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://localhost:3030',
                                            sparql_requests=fake_sparql_runner)
-    response = fuseki_service.diff_description(dataset_name='/subdiv')
+    response = fuseki_service.dataset_description(dataset_name='/subdiv')
 
     assert response == {}
 
@@ -205,7 +205,7 @@ def test_fuseki_diff_adapter_diff_description_failing1(fake_sparql_runner):
                                            sparql_requests=fake_sparql_runner)
 
     with pytest.raises(KeyError):
-        fuseki_service.diff_description(dataset_name='/subdiv')
+        fuseki_service.dataset_description(dataset_name='/subdiv')
 
 
 def test_fuseki_diff_adapter_count_inserted_triples_success(fake_sparql_runner):

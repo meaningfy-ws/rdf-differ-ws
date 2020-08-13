@@ -48,7 +48,7 @@ class AbstractDiffAdapter(ABC):
         """
 
     @abstractmethod
-    def diff_description(self, dataset_name: str) -> tuple:
+    def dataset_description(self, dataset_name: str) -> tuple:
         """
             Provide a generic description of the dataset.
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
@@ -120,7 +120,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
                                           sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
         return self._extract_deletion_count(query_result)
 
-    def diff_description(self, dataset_name: str) -> dict:
+    def dataset_description(self, dataset_name: str) -> dict:
         """
             Provide a generic description of the dataset.
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
