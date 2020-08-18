@@ -8,7 +8,8 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.diff_adapter import FusekiDiffAdapter
+from tests import DUMMY_DATASET_DIFF_DESCRIPTION, DUMMY_DATASET_DELETED_COUNT, DUMMY_DATASET_INSERTED_COUNT
+from tests.conftest import helper_fuseki_service
 
 
 @scenario('../features/inventory_of_diffs.feature', 'Query the triplestore')
@@ -19,7 +20,7 @@ def test_query_the_triplestore():
 @given('a set of well defined SPARQL queries for inventory checking')
 def fuseki_diff_getter():
     """create fuseki fixture"""
-    return FusekiDiffAdapter("http://localhost:3030")
+    return helper_fuseki_service()
 
 
 @given('the configured endpoint')
@@ -29,12 +30,20 @@ def diff_object():
 
 
 @when('the user requests the diff inventory')
-def the_user_requests_the_diff_inventory(fuseki_diff_getter, diff_object):
+def the_user_requests_the_diff_inventory(fake_sparql_runner, fuseki_diff_getter, diff_object):
     """the user requests the diff inventory."""
     dataset = '/subdiv'
-    diff_object.append(fuseki_diff_getter.diff_description(dataset)[0])
-    diff_object.append(fuseki_diff_getter.count_inserted_triples(dataset)[0])
-    diff_object.append(fuseki_diff_getter.count_deleted_triples(dataset)[0])
+    fake_sparql_runner.return_value = DUMMY_DATASET_DIFF_DESCRIPTION
+    fuseki_diff_getter.sparql_client = fake_sparql_runner
+    diff_object.append(fuseki_diff_getter.dataset_description(dataset))
+
+    fake_sparql_runner.return_value = DUMMY_DATASET_INSERTED_COUNT
+    fuseki_diff_getter.sparql_client = fake_sparql_runner
+    diff_object.append(fuseki_diff_getter.count_inserted_triples(dataset))
+
+    fake_sparql_runner.return_value = DUMMY_DATASET_DELETED_COUNT
+    fuseki_diff_getter.sparql_client = fake_sparql_runner
+    diff_object.append(fuseki_diff_getter.count_deleted_triples(dataset))
 
 
 @then('the datasetURI is returned')

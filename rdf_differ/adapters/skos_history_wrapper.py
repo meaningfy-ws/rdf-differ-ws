@@ -1,9 +1,10 @@
-"""
-skos_history_wrapper.py
-Date: 06/07/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
+
+# skos_history_wrapper.py
+# Date: 06/07/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
+
 import logging
 from pathlib import Path
 from shutil import copy
@@ -46,7 +47,7 @@ class SKOSHistoryRunner:
         Class for running the skos-history shell script.
         It includes folder structure creation and config file population.
 
-        :param dataset: the name used
+        :param dataset: the name used for the dataset
         :param scheme_uri: the concept scheme or dataset URI
         :param old_version_file: the location of the file to be uploaded
         :param new_version_file: the location of the file to be uploaded
@@ -76,8 +77,8 @@ class SKOSHistoryRunner:
 
         self.old_version_file = old_version_file
         self.new_version_file = new_version_file
-        self.old_version_id = old_version_id
-        self.new_version_id = new_version_id
+        self.old_version_id = old_version_id.strip()
+        self.new_version_id = new_version_id.strip()
 
         self.basedir = basedir
         self.filename = filename if filename else FILENAME
@@ -114,14 +115,6 @@ class SKOSHistoryRunner:
             query URI
         """
         return urljoin(self.endpoint, '/'.join([self.dataset, 'query']))
-
-    @staticmethod
-    def get_file_format(file: str) -> str:
-        file_format = guess_format(str(file), INPUT_MIME_TYPES)
-        if file_format is None:
-            raise ValueError('Format of "{}" is not supported.'.format(file))
-
-        return file_format
 
     def run(self):
         self.generate_structure()
@@ -174,7 +167,7 @@ class SKOSHistoryRunner:
 
     @classmethod
     def execute_subprocess(cls, config_location: Union[str, Path]) -> str:
-        script_location = Path(__file__).parent.parent / 'resources/load_versions.sh'
+        script_location = Path(__file__).parents[2] / 'resources/load_versions.sh'
 
         logging.info('Subprocess: run load_versions.sh start.')
 
@@ -185,7 +178,16 @@ class SKOSHistoryRunner:
 
         if process.returncode != 0:
             logging.info('Subprocess: load_versions.sh failed.')
+            logging.info(f'Subprocess: {output.decode()}')
             raise SubprocessFailure(output)
 
         logging.info('Subprocess: load_versions.sh finished successful.')
         return output.decode()
+
+    @staticmethod
+    def get_file_format(file: str) -> str:
+        file_format = guess_format(str(file), INPUT_MIME_TYPES)
+        if file_format is None:
+            raise ValueError('Format of "{}" is not supported.'.format(file))
+
+        return file_format

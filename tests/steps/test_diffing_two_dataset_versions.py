@@ -4,6 +4,7 @@ import shutil
 from pathlib import Path
 
 import pytest
+import requests
 from pytest_bdd import (
     given,
     scenario,
@@ -11,8 +12,9 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.diff_adapter import FusekiDiffAdapter
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.adapters.sparql import SPARQLRunner
+from tests.conftest import helper_fuseki_service
 from utils.file_utils import dir_exists
 
 
@@ -74,7 +76,7 @@ def a_correct_dataset_folder_structure_is_created(metadata):
 @then('the diff calculator is executed')
 def the_diff_calculator_is_executed():
     """the diff calculator is executed."""
-    assert FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/").diff_description('subdiv')
+    assert helper_fuseki_service(http_client=requests, sparql_client=SPARQLRunner()).dataset_description('subdiv')
 
 
 @given('the <property> is missing or incorrect')

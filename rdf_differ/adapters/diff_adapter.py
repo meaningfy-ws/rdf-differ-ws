@@ -1,16 +1,21 @@
-"""
-diff_adapter.py
-Date:  23/07/2020
-Author: Eugeniu Costetchi
-Email: costezki.eugen@gmail.com 
-"""
+#!/usr/bin/python3
+
+# diff_adapter.py
+# Date: 23/07/2020
+# Author: Eugeniu Costetchi
+# Email: costezki.eugen@gmail.com
+
 from abc import ABC, abstractmethod
 from json import loads
+from pathlib import Path
 from urllib.parse import urljoin
 
-import requests
-from SPARQLWrapper import SPARQLWrapper, JSON
 from requests.auth import HTTPBasicAuth
+
+from rdf_differ import config
+from rdf_differ.adapters import SKOS_HISTORY_PREFIXES, QUERY_DATASET_DESCRIPTION, QUERY_INSERTIONS_COUNT, \
+    QUERY_DELETIONS_COUNT
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
 class AbstractDiffAdapter(ABC):
@@ -19,35 +24,48 @@ class AbstractDiffAdapter(ABC):
     """
 
     @abstractmethod
-    def create_dataset(self, dataset_name: str) -> tuple:
+    def create_dataset(self, dataset_name: str) -> bool:
         """
             Create the dataset for the __ store
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
-        :return: text and status of the deleted dataset
-        :rtype: text, int
+        :return: true if dataset was created
         """
 
     @abstractmethod
-    def delete_dataset(self, dataset_name: str) -> tuple:
+    def delete_dataset(self, dataset_name: str) -> bool:
         """
             Delete the dataset from the __ store
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
-        :return: text and status of the deleted dataset
-        :rtype: text, int
+        :return: true if dataset was deleted
         """
 
     @abstractmethod
-    def list_datasets(self) -> tuple:
+    def list_datasets(self) -> list:
         """
             Get the list of the dataset names from the __ store.
         :return: the list of the dataset names
-        :rtype: list, int
         """
 
     @abstractmethod
-    def diff_description(self, dataset_name: str) -> tuple:
+    def create_diff(self, dataset: str, dataset_uri: str, temp_dir: Path,
+                    old_version_id: str, new_version_id: str,
+                    old_version_file: Path, new_version_file: Path) -> bool:
+        """
+            Create a dataset diff using the data from the provided files.
+        :param dataset: the name used for the dataset
+        :param dataset_uri: the concept scheme or dataset URI
+        :param temp_dir: location for folder generation
+        :param old_version_file: the location of the file to be uploaded
+        :param new_version_file: the location of the file to be uploaded
+        :param old_version_id: name used for diff upload
+        :param new_version_id: name used for diff upload
+        :return: true if diff was created
+        """
+
+    @abstractmethod
+    def dataset_description(self, dataset_name: str) -> dict:
         """
             Provide a generic description of the dataset.
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
@@ -60,116 +78,25 @@ class AbstractDiffAdapter(ABC):
             * datasetVersions = list of loaded dataset versions as declared by the datasets themselves,
             * versionIds = list of versionIds as provided in the configurations file
             * versionNamedGraphs = named graphs where the versions of datasets are loaded
-        :rtype: dict, int
         """
 
     @abstractmethod
-    def count_deleted_triples(self, dataset_name: str) -> tuple:
+    def count_deleted_triples(self, dataset_name: str) -> int:
         """
             Get number of inserted triples in the given dataset
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :return: inserted triples count
-        :rtype: int, int
         """
 
     @abstractmethod
-    def count_inserted_triples(self, dataset_name: str) -> tuple:
+    def count_inserted_triples(self, dataset_name: str) -> int:
         """
             Get number of inserted triples in the given dataset
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :return: inserted triples count
-        :rtype: int, int
         """
-
-
-SKOS_HISTORY_PREFIXES = """
-prefix skos-history: <http://purl.org/skos-history/>
-prefix dc: <http://purl.org/dc/elements/1.1/>
-prefix dcterms: <http://purl.org/dc/terms/>
-prefix dsv: <http://purl.org/iso25964/DataSet/Versioning#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix sd: <http://www.w3.org/ns/sparql-service-description#>
-prefix skos: <http://www.w3.org/2004/02/skos/core#>
-prefix void: <http://rdfs.org/ns/void#>
-prefix xhv: <http://www.w3.org/1999/xhtml/vocab#>
-prefix xsd: <http://www.w3.org/2001/XMLSchema#>
-"""
-
-QUERY_DATASET_DESCRIPTION1 = """
-SELECT ?datasetURI ?versionDescriptionGraph
-WHERE {
-  GRAPH ?g {
-    ?s skos-history:isVersionHistoryOf ?datasetURI . 
-  }  
-} 
-"""
-
-QUERY_DATASET_DESCRIPTION = """
-SELECT ?versionHistoryGraph (?identifier AS ?datasetVersion) (str(?vhrDate) AS ?date) ?currentVersionGraph ?schemeURI \
-?versionNamedGraph ?versionId
-WHERE {
-  # parameters
-  VALUES ( ?versionHistoryGraph ) {
-    ( undef )
-  }
-  GRAPH ?versionHistoryGraph {
-    ?vhr dsv:hasVersionHistorySet ?vhs .
-    OPTIONAL {
-        ?vhr dc:date ?vhrDate .
-    }
-    OPTIONAL {
-        ?vhr dc:identifier ?identifier
-    }
-    OPTIONAL {
-        ?vhr skos-history:usingNamedGraph/sd:name ?versionNamedGraph .
-        bind ( replace(str(?versionNamedGraph), "(.*[\\\\/#])(.*)", "$2") as ?versionId) 
-    }
-    OPTIONAL {
-      ?vhs dsv:currentVersionRecord ?currentRecord .
-      ?currentRecord skos-history:usingNamedGraph/sd:name ?currentVersionGraph .
-      FILTER ( ?vhr = ?currentRecord )
-    }
-    OPTIONAL {
-        ?versionHistoryGraph skos-history:isVersionHistoryOf ?schemeURI .
-    }
-  }
-}
-ORDER BY ?date ?datasetVersion
-"""
-
-QUERY_INSERTIONS_COUNT = """
-SELECT ?insertionsGraph ?triplesInInsertionGraph ?versionGraph
-WHERE {
-  graph ?versionGraph {
-    ?insertionsGraph a skos-history:SchemeDeltaInsertions .
-  }
-  {
-    select ?insertionsGraph (count(*) as ?triplesInInsertionGraph)    
-    {
-      graph ?insertionsGraph {?s ?p ?o}
-    } group by ?insertionsGraph 
-  }
-}
-"""
-
-QUERY_DELETIONS_COUNT = """
-SELECT ?deletionsGraph ?triplesInDeletionGraph ?versionGraph
-WHERE {
-  graph ?versionGraph {
-    ?deletionsGraph a skos-history:SchemeDeltaDeletions .
-  }
-  {
-    select ?deletionsGraph (count(*) as ?triplesInDeletionGraph)    
-    {
-      graph ?deletionsGraph {?s ?p ?o}
-    } group by ?deletionsGraph 
-  }
-}
-"""
 
 
 class FusekiException(Exception):
@@ -180,34 +107,99 @@ class FusekiException(Exception):
 
 class FusekiDiffAdapter(AbstractDiffAdapter):
 
-    def __init__(self, triplestore_service_url: str):
+    def __init__(self, triplestore_service_url: str, http_client, sparql_client):
         self.triplestore_service_url = triplestore_service_url
+        self.sparql_client = sparql_client
+        self.http_client = http_client
 
-    def count_inserted_triples(self, dataset_name: str) -> tuple:
+    def count_inserted_triples(self, dataset_name: str) -> int:
         """
             Get number of inserted triples in the given dataset
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :return: inserted triples count
-        :rtype: int, int
         """
-        query_result, status = self.execute_query(dataset_name=dataset_name,
-                                                  sparql_query=SKOS_HISTORY_PREFIXES + QUERY_INSERTIONS_COUNT)
-        return self._extract_insertion_count(query_result), status
+        query_result = self.execute_query(dataset_name=dataset_name,
+                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_INSERTIONS_COUNT)
+        return self._extract_insertion_count(query_result)
 
-    def count_deleted_triples(self, dataset_name: str) -> tuple:
+    def count_deleted_triples(self, dataset_name: str) -> int:
         """
             Get number of deleted triples in the given dataset.
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :return: deleted triples count
-        :rtype: int, int
         """
-        query_result, status = self.execute_query(dataset_name=dataset_name,
-                                                  sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
-        return self._extract_deletion_count(query_result), status
+        query_result = self.execute_query(dataset_name=dataset_name,
+                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
+        return self._extract_deletion_count(query_result)
 
-    def diff_description(self, dataset_name: str) -> tuple:
+    def create_diff(self, dataset: str, dataset_uri: str, temp_dir: Path,
+                    old_version_id: str, new_version_id: str,
+                    old_version_file: Path, new_version_file: Path) -> bool:
+        """
+            Create a dataset diff using the data from the provided files.
+        :param dataset: the name used for the dataset
+        :param dataset_uri: the concept scheme or dataset URI
+        :param temp_dir: location for folder generation
+        :param old_version_file: the location of the file to be uploaded
+        :param new_version_file: the location of the file to be uploaded
+        :param old_version_id: name used for diff upload
+        :param new_version_id: name used for diff upload
+        :return: true if diff created successfully
+        """
+        SKOSHistoryRunner(dataset=dataset,
+                          basedir=str(temp_dir / 'basedir'),
+                          scheme_uri=dataset_uri,
+                          old_version_id=old_version_id,
+                          new_version_id=new_version_id,
+                          old_version_file=str(old_version_file),
+                          new_version_file=str(new_version_file)).run()
+
+        return True
+
+    def create_dataset(self, dataset_name: str) -> bool:
+        """
+            Create the dataset for the Fuseki store
+        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
+        identifying the dataset
+        :return: true if dataset was created
+        """
+        if not dataset_name:
+            raise ValueError('Dataset name cannot be empty.')
+
+        data = {
+            'dbType': 'tdb',  # assuming that all databases are created persistent across restart
+            'dbName': dataset_name
+        }
+
+        response = self.http_client.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
+                                         auth=HTTPBasicAuth(config.USERNAME, config.PASSWORD),
+                                         data=data)
+
+        if response.status_code == 409:
+            # TODO: change exception if better one found
+            raise FusekiException('A dataset with this name already exists.')
+
+        return True
+
+    def delete_dataset(self, dataset_name: str) -> bool:
+        """
+            Delete the dataset from the Fuseki store
+        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
+        identifying the dataset
+        :return: true if dataset was deleted
+        """
+        response = self.http_client.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
+                                           auth=HTTPBasicAuth(config.USERNAME, config.PASSWORD))
+
+        if response.status_code == 404:
+            # TODO: change exception if better one found
+            raise FusekiException('The dataset doesn\'t exist.')
+
+        return True
+
+    def dataset_description(self, dataset_name: str) -> dict:
         """
             Provide a generic description of the dataset.
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
@@ -220,82 +212,38 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             * datasetVersions = list of loaded dataset versions as declared by the datasets themselves,
             * versionIds = list of versionIds as provided in the configurations file
             * versionNamedGraphs = named graphs where the versions of datasets are loaded
-        :rtype: dict, int
         """
-        query_result, status = self.execute_query(dataset_name=dataset_name,
-                                                  sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
+        query_result = self.execute_query(dataset_name=dataset_name,
+                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
 
         return self._extract_dataset_description(response=query_result, dataset_id=dataset_name,
-                                                 query_url=self.make_sparql_endpoint(dataset_name)), status
+                                                 query_url=self.make_sparql_endpoint(dataset_name))
 
-    def create_dataset(self, dataset_name: str) -> tuple:
-        """
-            Create the dataset for the Fuseki store
-        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
-        identifying the dataset
-        :return: text and status of the deleted dataset
-        :rtype: text, int
-        """
-        if not dataset_name:
-            raise ValueError('Dataset name cannot be empty.')
-
-        data = {
-            'dbType': 'tdb',  # assuming that all databases are created persistent across restart
-            'dbName': dataset_name
-        }
-
-        response = requests.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
-                                 auth=requests.auth.HTTPBasicAuth('admin', 'admin'),
-                                 data=data)
-
-        if response.status_code == 409:
-            raise FusekiException('A dataset with this name already exists.')
-
-        return response.text, response.status_code
-
-    def delete_dataset(self, dataset_name: str) -> tuple:
-        """
-            Delete the dataset from the Fuseki store
-        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
-        identifying the dataset
-        :return: text and status of the deleted dataset
-        :rtype: text, int
-        """
-        response = requests.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
-                                   auth=HTTPBasicAuth('admin', 'admin'))
-
-        return response.text, response.status_code
-
-    def list_datasets(self) -> tuple:
+    def list_datasets(self) -> list:
         """
             Get the list of the dataset names from the Fuseki store.
         :return: the list of the dataset names
-        :rtype: list, int
+        :rtype: list
         """
-        response = requests.get(urljoin(self.triplestore_service_url, "/$/datasets"),
-                                auth=HTTPBasicAuth('admin', 'admin'))
+        response = self.http_client.get(urljoin(self.triplestore_service_url, "/$/datasets"),
+                                        auth=HTTPBasicAuth(config.USERNAME, config.PASSWORD))
 
+        # investigate what codes can fuseki return for this endpoint
         if response.status_code != 200:
             raise FusekiException(f"Fuseki server request ({response.url}) got response {response.status_code}")
 
-        return self._select_dataset_names_from_fuseki_response(response=response), response.status_code
+        return self._select_dataset_names_from_fuseki_response(response_text=response.text)
 
-    def execute_query(self, dataset_name: str, sparql_query: str) -> tuple:
+    def execute_query(self, dataset_name: str, sparql_query: str) -> dict:
         """
             Helper method to execute queries to the Fuseki store using the SPARQLWrapper.
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :param sparql_query: query to be executed
         :return: SPARQLWrapper query response
-        :rtype: [json, list, text], int
         """
-        endpoint = SPARQLWrapper(self.make_sparql_endpoint(dataset_name=dataset_name))
-
-        endpoint.setQuery(sparql_query)
-        endpoint.setReturnFormat(JSON)
-        query = endpoint.query()
-
-        return query.convert(), query.response.status
+        return self.sparql_client.execute(endpoint_url=self.make_sparql_endpoint(dataset_name),
+                                          query_text=sparql_query)
 
     def make_sparql_endpoint(self, dataset_name: str) -> str:
         """
@@ -307,13 +255,13 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         return urljoin(self.triplestore_service_url, dataset_name + "/sparql")
 
     @staticmethod
-    def _select_dataset_names_from_fuseki_response(response) -> list:
+    def _select_dataset_names_from_fuseki_response(response_text) -> list:
         """
             Helper method for digging for the list of datasets.
-        :param response: fuseki API response
+        :param response_text:
         :return: list of the dataset names
         """
-        result = loads(response.text)
+        result = loads(response_text)
         return [d_item['ds.name'] for d_item in result['datasets']]
 
     @staticmethod
@@ -337,11 +285,11 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             * dataset_versions = list of loaded dataset versions as declared by the datasets themselves,
             * version_named_graphs = named graphs where the versions of datasets are loaded
         """
-        helper_current_version = [item['currentVersionGraph']['value'] for item in response['results']['bindings'] if
-                                  'currentVersionGraph' in item and item['currentVersionGraph']['value']]
-
         if not response['results']['bindings']:
             return {}
+
+        helper_current_version = [item['currentVersionGraph']['value'] for item in response['results']['bindings'] if
+                                  'currentVersionGraph' in item and item['currentVersionGraph']['value']]
 
         return {
             'dataset_id': dataset_id,

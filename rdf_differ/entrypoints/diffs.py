@@ -1,16 +1,19 @@
-"""
-diffs.py
-Date: 30/07/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
 
+# diffs.py
+# Date: 30/07/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
+
+import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from werkzeug.datastructures import FileStorage
+from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound
 
 from rdf_differ import config
-from rdf_differ.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
+from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
+from rdf_differ.adapters.sparql import SPARQLRunner
 from utils.file_utils import temporarily_save_files
 
 
@@ -20,12 +23,29 @@ def get_diffs() -> tuple:
     :return: list of existent datasets
     :rtype: list, int
     """
-    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT)
+    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT, http_client=requests, sparql_client=SPARQLRunner())
     try:
-        datasets, status = fuseki_adapter.list_datasets()
-        return [{dataset: fuseki_adapter.diff_description(dataset)[0]} for dataset in datasets], status
-    except FusekiException as exception:
-        return str(exception), 500
+        datasets = fuseki_adapter.list_datasets()
+        return [{dataset: fuseki_adapter.dataset_description(dataset)} for dataset in datasets], 200
+    except (FusekiException, ValueError, IndexError) as exception:
+        raise InternalServerError(str(exception))  # 500
+
+
+def get_diff(dataset_id: str) -> tuple:
+    """
+        Get the dataset description
+    :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
+    :return: dataset description
+    :rtype: dict, int
+    """
+    try:
+        dataset = FusekiDiffAdapter(config.ENDPOINT, http_client=requests,
+                                    sparql_client=SPARQLRunner()).dataset_description(dataset_id)
+        return dataset, 200
+    except EndPointNotFound:
+        raise NotFound(f'<{dataset_id}> does not exist.')  # 404
+    except (ValueError, IndexError):
+        raise InternalServerError('Unexpected Error.')  # 500
 
 
 def create_diff(body: dict, old_version_file_content: FileStorage, new_version_file_content: FileStorage) -> tuple:
@@ -42,49 +62,37 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     :param old_version_file_content: The content of the old version file.
     :param new_version_file_content: The content of the new version file.
     :return:
-    :rtype: str, int
+    :rtype: dict, int
     """
+    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT, http_client=requests, sparql_client=SPARQLRunner())
+
     try:
-        dataset, _ = FusekiDiffAdapter(config.ENDPOINT).diff_description(dataset_name=body.get('dataset_id'))
-        can_create = 'dataset_uri' in dataset
+        dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_id'))
+        # if description is {} (empty) then we can create the diff
+        can_create = not bool(dataset)
     except EndPointNotFound:
+        fuseki_adapter.create_dataset(dataset_name=body.get('dataset_id'))
         can_create = True
 
     if can_create:
         try:
             with temporarily_save_files(old_version_file_content, new_version_file_content) as \
                     (temp_dir, old_version_file, new_version_file):
-                SKOSHistoryRunner(dataset=body.get('dataset_id'),
-                                  basedir=temp_dir / 'basedir',
-                                  scheme_uri=body.get('dataset_uri'),
-                                  old_version_id=body.get('old_version_id'),
-                                  new_version_id=body.get('new_version_id'),
-                                  old_version_file=old_version_file,
-                                  new_version_file=new_version_file).run()
+                fuseki_adapter.create_diff(dataset=body.get('dataset_id'),
+                                           dataset_uri=body.get('dataset_uri'),
+                                           temp_dir=temp_dir,
+                                           old_version_id=body.get('old_version_id'),
+                                           new_version_id=body.get('new_version_id'),
+                                           old_version_file=old_version_file,
+                                           new_version_file=new_version_file)
 
-            return "Request to create a new dataset diff successfully accepted for processing.", 200
+            return 'Request to create a new dataset diff successfully accepted for processing.', 200
         except ValueError as exception:
-            return str(exception), 500
+            raise BadRequest(str(exception))  # 400
         except SubprocessFailure:
-            return 'Internal error while uploading the diffs.', 500
+            raise InternalServerError('Internal error while uploading the diffs.')  # 500
     else:
-        return 'Dataset is not empty.', 409
-
-
-def get_diff(dataset_id: str) -> tuple:
-    """
-        Get the dataset description
-    :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
-    :return: dataset description
-    :rtype: dict, int
-    """
-    try:
-        return FusekiDiffAdapter(config.ENDPOINT).diff_description(dataset_id)
-    except EndPointNotFound:
-        return f'<{dataset_id}> does not exist.', 404
-    # TODO: improve on the type of the error catching
-    except Exception:
-        return "Unexpected Error.", 500
+        raise Conflict('Dataset is not empty.')  # 409
 
 
 def delete_diff(dataset_id: str) -> tuple:
@@ -94,4 +102,9 @@ def delete_diff(dataset_id: str) -> tuple:
     :return: info about deletion
     :rtype: str, int
     """
-    return FusekiDiffAdapter(config.ENDPOINT).delete_dataset(dataset_id)
+    try:
+        FusekiDiffAdapter(config.ENDPOINT, http_client=requests, sparql_client=SPARQLRunner()).delete_dataset(
+            dataset_id)
+        return f'<{dataset_id}> created successfully.', 200
+    except FusekiException:
+        raise NotFound(f'<{dataset_id}> does not exist.')  # 404
