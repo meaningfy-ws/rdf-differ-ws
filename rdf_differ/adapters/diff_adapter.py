@@ -23,37 +23,34 @@ class AbstractDiffAdapter(ABC):
     """
 
     @abstractmethod
-    def create_dataset(self, dataset_name: str) -> tuple:
+    def create_dataset(self, dataset_name: str) -> bool:
         """
             Create the dataset for the __ store
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
-        :return: text and status of the deleted dataset
-        :rtype: text, int
+        :return: true if dataset was created
         """
 
     @abstractmethod
-    def delete_dataset(self, dataset_name: str) -> tuple:
+    def delete_dataset(self, dataset_name: str) -> bool:
         """
             Delete the dataset from the __ store
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
-        :return: text and status of the deleted dataset
-        :rtype: text, int
+        :return: true if dataset was deleted
         """
 
     @abstractmethod
-    def list_datasets(self) -> tuple:
+    def list_datasets(self) -> list:
         """
             Get the list of the dataset names from the __ store.
         :return: the list of the dataset names
-        :rtype: list, int
         """
 
     @abstractmethod
     def create_diff(self, dataset: str, dataset_uri: str, temp_dir: Path,
                     old_version_id: str, new_version_id: str,
-                    old_version_file: Path, new_version_file: Path):
+                    old_version_file: Path, new_version_file: Path) -> bool:
         """
             Create a dataset diff using the data from the provided files.
         :param dataset: the name used for the dataset
@@ -63,10 +60,11 @@ class AbstractDiffAdapter(ABC):
         :param new_version_file: the location of the file to be uploaded
         :param old_version_id: name used for diff upload
         :param new_version_id: name used for diff upload
+        :return: true if diff was created
         """
 
     @abstractmethod
-    def dataset_description(self, dataset_name: str) -> tuple:
+    def dataset_description(self, dataset_name: str) -> dict:
         """
             Provide a generic description of the dataset.
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
@@ -79,27 +77,24 @@ class AbstractDiffAdapter(ABC):
             * datasetVersions = list of loaded dataset versions as declared by the datasets themselves,
             * versionIds = list of versionIds as provided in the configurations file
             * versionNamedGraphs = named graphs where the versions of datasets are loaded
-        :rtype: dict, int
         """
 
     @abstractmethod
-    def count_deleted_triples(self, dataset_name: str) -> tuple:
+    def count_deleted_triples(self, dataset_name: str) -> int:
         """
             Get number of inserted triples in the given dataset
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :return: inserted triples count
-        :rtype: int, int
         """
 
     @abstractmethod
-    def count_inserted_triples(self, dataset_name: str) -> tuple:
+    def count_inserted_triples(self, dataset_name: str) -> int:
         """
             Get number of inserted triples in the given dataset
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
         :return: inserted triples count
-        :rtype: int, int
         """
 
 
@@ -140,7 +135,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
 
     def create_diff(self, dataset: str, dataset_uri: str, temp_dir: Path,
                     old_version_id: str, new_version_id: str,
-                    old_version_file: Path, new_version_file: Path):
+                    old_version_file: Path, new_version_file: Path) -> bool:
         """
             Create a dataset diff using the data from the provided files.
         :param dataset: the name used for the dataset
@@ -150,6 +145,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :param new_version_file: the location of the file to be uploaded
         :param old_version_id: name used for diff upload
         :param new_version_id: name used for diff upload
+        :return: true if diff created successfully
         """
         SKOSHistoryRunner(dataset=dataset,
                           basedir=str(temp_dir / 'basedir'),
@@ -158,6 +154,49 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
                           new_version_id=new_version_id,
                           old_version_file=str(old_version_file),
                           new_version_file=str(new_version_file)).run()
+
+        return True
+
+    def create_dataset(self, dataset_name: str) -> bool:
+        """
+            Create the dataset for the Fuseki store
+        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
+        identifying the dataset
+        :return: true if dataset was created
+        """
+        if not dataset_name:
+            raise ValueError('Dataset name cannot be empty.')
+
+        data = {
+            'dbType': 'tdb',  # assuming that all databases are created persistent across restart
+            'dbName': dataset_name
+        }
+
+        response = self.http_requests.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
+                                           auth=HTTPBasicAuth('admin', 'admin'),
+                                           data=data)
+
+        if response.status_code == 409:
+            # TODO: change exception if better one found
+            raise FusekiException('A dataset with this name already exists.')
+
+        return True
+
+    def delete_dataset(self, dataset_name: str) -> bool:
+        """
+            Delete the dataset from the Fuseki store
+        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
+        identifying the dataset
+        :return: true if dataset was deleted
+        """
+        response = self.http_requests.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
+                                             auth=HTTPBasicAuth('admin', 'admin'))
+
+        if response.status_code == 404:
+            # TODO: change exception if better one found
+            raise FusekiException('The dataset doesn\'t exist.')
+
+        return True
 
     def dataset_description(self, dataset_name: str) -> dict:
         """
@@ -179,57 +218,20 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         return self._extract_dataset_description(response=query_result, dataset_id=dataset_name,
                                                  query_url=self.make_sparql_endpoint(dataset_name))
 
-    def create_dataset(self, dataset_name: str) -> tuple:
-        """
-            Create the dataset for the Fuseki store
-        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
-        identifying the dataset
-        :return: text and status of the deleted dataset
-        :rtype: text, int
-        """
-        if not dataset_name:
-            raise ValueError('Dataset name cannot be empty.')
-
-        data = {
-            'dbType': 'tdb',  # assuming that all databases are created persistent across restart
-            'dbName': dataset_name
-        }
-
-        response = self.http_requests.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
-                                           auth=HTTPBasicAuth('admin', 'admin'),
-                                           data=data)
-
-        if response.status_code == 409:
-            raise FusekiException('A dataset with this name already exists.')
-
-        return response.text, response.status_code
-
-    def delete_dataset(self, dataset_name: str) -> tuple:
-        """
-            Delete the dataset from the Fuseki store
-        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
-        identifying the dataset
-        :return: text and status of the deleted dataset
-        :rtype: text, int
-        """
-        response = self.http_requests.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
-                                             auth=HTTPBasicAuth('admin', 'admin'))
-
-        return response.text, response.status_code
-
-    def list_datasets(self) -> tuple:
+    def list_datasets(self) -> list:
         """
             Get the list of the dataset names from the Fuseki store.
         :return: the list of the dataset names
-        :rtype: list, int
+        :rtype: list
         """
         response = self.http_requests.get(urljoin(self.triplestore_service_url, "/$/datasets"),
                                           auth=HTTPBasicAuth('admin', 'admin'))
 
+        # investigate what codes can fuseki return for this endpoint
         if response.status_code != 200:
             raise FusekiException(f"Fuseki server request ({response.url}) got response {response.status_code}")
 
-        return self._select_dataset_names_from_fuseki_response(response_text=response.text), response.status_code
+        return self._select_dataset_names_from_fuseki_response(response_text=response.text)
 
     def execute_query(self, dataset_name: str, sparql_query: str) -> dict:
         """

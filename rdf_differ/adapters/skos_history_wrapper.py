@@ -4,6 +4,7 @@
 # Date: 06/07/2020
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
+
 import logging
 from pathlib import Path
 from shutil import copy
@@ -76,8 +77,8 @@ class SKOSHistoryRunner:
 
         self.old_version_file = old_version_file
         self.new_version_file = new_version_file
-        self.old_version_id = old_version_id
-        self.new_version_id = new_version_id
+        self.old_version_id = old_version_id.strip()
+        self.new_version_id = new_version_id.strip()
 
         self.basedir = basedir
         self.filename = filename if filename else FILENAME
@@ -177,6 +178,7 @@ class SKOSHistoryRunner:
 
         if process.returncode != 0:
             logging.info('Subprocess: load_versions.sh failed.')
+            logging.info(f'Subprocess: {output.decode()}')
             raise SubprocessFailure(output)
 
         logging.info('Subprocess: load_versions.sh finished successful.')

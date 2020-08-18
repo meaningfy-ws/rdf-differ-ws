@@ -1,9 +1,9 @@
-"""
-test_diff_adapter.py
-Date:  23/07/2020
-Author: Eugeniu Costetchi
-Email: costezki.eugen@gmail.com 
-"""
+#!/usr/bin/python3
+
+# test_diff_adapter.py
+# Date:  23/07/2020
+# Author: Eugeniu Costetchi
+# Email: costezki.eugen@gmail.com
 
 import pytest
 
@@ -141,7 +141,7 @@ def test_fuseki_diff_adapter_list_datasets(fake_requests):
     fake_requests.status_code = 200
 
     fuseki_service = helper_fuseki_service(http_requests=fake_requests)
-    response_text, _ = fuseki_service.list_datasets()
+    response_text = fuseki_service.list_datasets()
 
     assert len(response_text) == 3
     assert '/subdiv' in response_text
@@ -281,18 +281,19 @@ def test_fuseki_diff_adapter_delete_dataset_success(fake_requests):
     fake_requests.text, fake_requests.status_code = '', 200
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_requests=fake_requests)
 
-    response = fuseki_service.delete_dataset('dataset')
+    success = fuseki_service.delete_dataset('dataset')
 
-    assert response == ('', 200)
+    assert success
 
 
 def test_fuseki_diff_adapter_delete_dataset_not_found(fake_requests):
     fake_requests.text, fake_requests.status_code = '', 404
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_requests=fake_requests)
 
-    response = fuseki_service.delete_dataset('dataset')
+    with pytest.raises(FusekiException) as e:
+        _ = fuseki_service.delete_dataset('dataset')
 
-    assert response == ('', 404)
+    assert 'The dataset doesn\'t exist.' in str(e.value)
 
 
 def test_fuseki_diff_adapter_create_dataset_success(fake_requests):
@@ -300,12 +301,12 @@ def test_fuseki_diff_adapter_create_dataset_success(fake_requests):
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_requests=fake_requests)
 
-    response = fuseki_service.create_dataset('dataset')
+    success = fuseki_service.create_dataset('dataset')
 
-    assert response == ('', 200)
+    assert success
 
 
-def test_fuseki_diff_adapter_create_dataset_empty():
+def test_fuseki_diff_adapter_create_dataset_name_empty():
     fuseki_service = helper_fuseki_service()
 
     with pytest.raises(ValueError) as exception:
