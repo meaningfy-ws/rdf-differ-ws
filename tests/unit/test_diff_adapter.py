@@ -140,7 +140,7 @@ def test_fuseki_diff_adapter_list_datasets(fake_requests):
         """
     fake_requests.status_code = 200
 
-    fuseki_service = helper_fuseki_service(http_requests=fake_requests)
+    fuseki_service = helper_fuseki_service(http_client=fake_requests)
     response_text = fuseki_service.list_datasets()
 
     assert len(response_text) == 3
@@ -149,7 +149,7 @@ def test_fuseki_diff_adapter_list_datasets(fake_requests):
 
 def test_fuseki_diff_adapter_list_datasets_failing(fake_requests):
     fake_requests.url, fake_requests.status_code = 'http://some.url', 400
-    fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_requests=fake_requests)
+    fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_client=fake_requests)
 
     with pytest.raises(FusekiException) as exception:
         _ = fuseki_service.list_datasets()
@@ -161,7 +161,7 @@ def test_fuseki_diff_adapter_dataset_description(fake_sparql_runner):
     fake_sparql_runner.return_value = DUMMY_DATASET_DIFF_DESCRIPTION
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://localhost:3030',
-                                           sparql_requests=fake_sparql_runner)
+                                           sparql_client=fake_sparql_runner)
     response = fuseki_service.dataset_description(dataset_name='/subdiv')
 
     assert response['dataset_id'] == '/subdiv'
@@ -192,7 +192,7 @@ def test_fuseki_diff_adapter_dataset_description_empty(fake_sparql_runner):
     }
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://localhost:3030',
-                                           sparql_requests=fake_sparql_runner)
+                                           sparql_client=fake_sparql_runner)
     response = fuseki_service.dataset_description(dataset_name='/subdiv')
 
     assert response == {}
@@ -202,7 +202,7 @@ def test_fuseki_diff_adapter_diff_description_failing1(fake_sparql_runner):
     fake_sparql_runner.return_value = {}
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://localhost:3030',
-                                           sparql_requests=fake_sparql_runner)
+                                           sparql_client=fake_sparql_runner)
 
     with pytest.raises(KeyError):
         fuseki_service.dataset_description(dataset_name='/subdiv')
@@ -227,7 +227,7 @@ def test_fuseki_diff_adapter_count_inserted_triples_success(fake_sparql_runner):
     }
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://localhost:3030',
-                                           sparql_requests=fake_sparql_runner)
+                                           sparql_client=fake_sparql_runner)
     count = fuseki_service.count_inserted_triples('subdiv')
 
     assert 387 == count
@@ -244,7 +244,7 @@ def test_fuseki_diff_adapter_count_inserted_triples_failing(fake_sparql_runner):
     }
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://localhost:3030',
-                                           sparql_requests=fake_sparql_runner)
+                                           sparql_client=fake_sparql_runner)
 
     with pytest.raises(IndexError):
         fuseki_service.count_inserted_triples('subdiv')
@@ -271,7 +271,7 @@ def test_fuseki_diff_adapter_count_deleted_triples_success(fake_sparql_runner):
     }
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://localhost:3030',
-                                           sparql_requests=fake_sparql_runner)
+                                           sparql_client=fake_sparql_runner)
     count = fuseki_service.count_deleted_triples('subdiv')
 
     assert count == 3
@@ -279,7 +279,7 @@ def test_fuseki_diff_adapter_count_deleted_triples_success(fake_sparql_runner):
 
 def test_fuseki_diff_adapter_delete_dataset_success(fake_requests):
     fake_requests.text, fake_requests.status_code = '', 200
-    fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_requests=fake_requests)
+    fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_client=fake_requests)
 
     success = fuseki_service.delete_dataset('dataset')
 
@@ -288,7 +288,7 @@ def test_fuseki_diff_adapter_delete_dataset_success(fake_requests):
 
 def test_fuseki_diff_adapter_delete_dataset_not_found(fake_requests):
     fake_requests.text, fake_requests.status_code = '', 404
-    fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_requests=fake_requests)
+    fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_client=fake_requests)
 
     with pytest.raises(FusekiException) as e:
         _ = fuseki_service.delete_dataset('dataset')
@@ -299,7 +299,7 @@ def test_fuseki_diff_adapter_delete_dataset_not_found(fake_requests):
 def test_fuseki_diff_adapter_create_dataset_success(fake_requests):
     fake_requests.text, fake_requests.status_code = '', 200
 
-    fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_requests=fake_requests)
+    fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_client=fake_requests)
 
     success = fuseki_service.create_dataset('dataset')
 
@@ -318,7 +318,7 @@ def test_fuseki_diff_adapter_create_dataset_name_empty():
 def test_fuseki_diff_adapter_create_dataset_already_exists(fake_requests):
     fake_requests.text, fake_requests.status_code = '', 409
 
-    fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_requests=fake_requests)
+    fuseki_service = helper_fuseki_service(triplestore_service_url='http://some.url', http_client=fake_requests)
 
     with pytest.raises(FusekiException) as exception:
         _ = fuseki_service.create_dataset('dataset')

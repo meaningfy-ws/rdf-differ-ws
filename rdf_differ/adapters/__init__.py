@@ -20,14 +20,6 @@ prefix void: <http://rdfs.org/ns/void#>
 prefix xhv: <http://www.w3.org/1999/xhtml/vocab#>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 """
-QUERY_DATASET_DESCRIPTION1 = """
-SELECT ?datasetURI ?versionDescriptionGraph
-WHERE {
-  GRAPH ?g {
-    ?s skos-history:isVersionHistoryOf ?datasetURI . 
-  }  
-} 
-"""
 QUERY_DATASET_DESCRIPTION = """
 SELECT ?versionHistoryGraph (?identifier AS ?datasetVersion) (str(?vhrDate) AS ?date) ?currentVersionGraph ?schemeURI \
 ?versionNamedGraph ?versionId
