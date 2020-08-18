@@ -1,9 +1,10 @@
-"""
-test_model.py
-Date: 11/08/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
+
+# test_model.py
+# Date: 11/08/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
+
 from uuid import uuid4
 
 import pytest

@@ -1,9 +1,10 @@
-"""
-config.py
-Date: 20/07/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
+
+# config.py
+# Date: 20/07/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
+
 import os
 
 FILENAME = os.environ.get('FILENAME', 'file')

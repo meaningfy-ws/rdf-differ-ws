@@ -1,5 +1,12 @@
-# coding=utf-8
+#!/usr/bin/python3
+
+# test_prepare_config.py
+# Date:  08/07/2020
+# Author: Eugeniu Costetchi
+# Email: costezki.eugen@gmail.com
+
 """Prepare the skos-history config file and folder structure feature tests."""
+
 from filecmp import cmp
 from pathlib import Path
 

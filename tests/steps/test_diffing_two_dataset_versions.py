@@ -1,5 +1,12 @@
-# coding=utf-8
+#!/usr/bin/python3
+
+# test_diffing_two_dataset_versions.py
+# Date:  08/07/2020
+# Author: Eugeniu Costetchi
+# Email: costezki.eugen@gmail.com
+
 """Diffing two dataset versions feature tests."""
+
 import shutil
 from pathlib import Path
 

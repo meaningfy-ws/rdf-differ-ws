@@ -1,5 +1,12 @@
-# coding=utf-8
+#!/usr/bin/python3
+
+# test_execute_skos_history.py
+# Date:  07/07/2020
+# Author: Eugeniu Costetchi
+# Email: costezki.eugen@gmail.com
+
 """Running the skos-history diff of two dataset versions feature tests."""
+
 import shutil
 from pathlib import Path
 

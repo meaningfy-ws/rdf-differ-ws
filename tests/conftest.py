@@ -1,9 +1,10 @@
-"""
-conftest.py
-Date: 11/08/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
+
+# conftest.py
+# Date: 11/08/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
+
 from collections import namedtuple
 
 import pytest

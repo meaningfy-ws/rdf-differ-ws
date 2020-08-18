@@ -1,8 +1,6 @@
-"""
-__init__.py
-Date: 11/08/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
 
-# Did you add the test?
+# __init__.py
+# Date: 11/08/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com

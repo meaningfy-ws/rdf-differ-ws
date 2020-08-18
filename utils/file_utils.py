@@ -1,9 +1,10 @@
-"""
-file_utils.py
-Date: 09/07/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
+
+# file_utils.py
+# Date: 09/07/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
+
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
