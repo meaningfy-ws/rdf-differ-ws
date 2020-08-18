@@ -1,9 +1,10 @@
-"""
-test_skos_history_wrapper.py
-Date: 06/07/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
+
+# test_skos_history_wrapper.py
+# Date: 06/07/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
+
 from pathlib import Path
 from unittest.mock import patch
 

@@ -1,9 +1,10 @@
-"""
-test_file_utils.py
-Date: 09/07/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
+
+# test_file_utils.py
+# Date: 09/07/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
+
 from io import BytesIO
 from pathlib import Path
 

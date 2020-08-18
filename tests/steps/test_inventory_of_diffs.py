@@ -1,4 +1,10 @@
-# coding=utf-8
+#!/usr/bin/python3
+
+# test_inventory_of_diffs.py
+# Date:  07/07/2020
+# Author: Eugeniu Costetchi
+# Email: costezki.eugen@gmail.com
+
 """List the diffs in the triplestore feature tests."""
 
 from pytest_bdd import (
