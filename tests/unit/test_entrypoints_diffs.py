@@ -66,7 +66,7 @@ def test_create_diff_200_empty_dataset(_, mock_init, mock_dataset_description):
                                    old_version_file_content=file_1,
                                    new_version_file_content=file_2)
 
-    assert "Request to create a new dataset diff successfully accepted for processing." in response['detail']
+    assert "Request to create a new dataset diff successfully accepted for processing." in response
     assert status == 200
 
 
@@ -85,7 +85,7 @@ def test_create_diff_200_dataset_doesnt_exist(_, mock_init, mock_dataset_descrip
                                    new_version_file_content=file_2)
 
     mock_create_dataset.assert_called_once()
-    assert "Request to create a new dataset diff successfully accepted for processing." in response['detail']
+    assert "Request to create a new dataset diff successfully accepted for processing." in response
     assert status == 200
 
 
@@ -169,7 +169,7 @@ def test_delete_diff_200(mock_delete_dataset):
 
     response, status = delete_diff('dataset')
 
-    assert '<dataset> created successfully.' in response['detail']
+    assert '<dataset> created successfully.' in response
     assert status == 200
 
 

@@ -64,13 +64,10 @@ class Dataset:
         return False
 
     def get_delta(self, old_version_id: str, new_version_id: str) -> Optional[VersionsDelta]:
-        try:
-            dummy_delta = VersionsDelta(old_version_id=old_version_id, new_version_id=new_version_id, insertions=None,
-                                        deletions=None)
-            return next(filter(lambda existent_delta: dummy_delta == existent_delta,
-                               self.version_deltas))
-        except StopIteration:
-            return None
+        target_delta = VersionsDelta(old_version_id=old_version_id, new_version_id=new_version_id, insertions=None,
+                                     deletions=None)
+        return next(filter(lambda existent_delta: target_delta == existent_delta,
+                           self.version_deltas), None)
 
     def calculate_diff(self, old_version_id: str, new_version_id: str) -> VersionsDelta:
         if not (self._version_exists(old_version_id) and self._version_exists(new_version_id)):

@@ -34,15 +34,15 @@ def the_user_requests_the_diff_inventory(fake_sparql_runner, fuseki_diff_getter,
     """the user requests the diff inventory."""
     dataset = '/subdiv'
     fake_sparql_runner.return_value = DUMMY_DATASET_DIFF_DESCRIPTION
-    fuseki_diff_getter.sparql_requests = fake_sparql_runner
+    fuseki_diff_getter.sparql_client = fake_sparql_runner
     diff_object.append(fuseki_diff_getter.dataset_description(dataset))
 
     fake_sparql_runner.return_value = DUMMY_DATASET_INSERTED_COUNT
-    fuseki_diff_getter.sparql_requests = fake_sparql_runner
+    fuseki_diff_getter.sparql_client = fake_sparql_runner
     diff_object.append(fuseki_diff_getter.count_inserted_triples(dataset))
 
     fake_sparql_runner.return_value = DUMMY_DATASET_DELETED_COUNT
-    fuseki_diff_getter.sparql_requests = fake_sparql_runner
+    fuseki_diff_getter.sparql_client = fake_sparql_runner
     diff_object.append(fuseki_diff_getter.count_deleted_triples(dataset))
 
 

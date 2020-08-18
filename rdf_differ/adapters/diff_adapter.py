@@ -12,6 +12,7 @@ from urllib.parse import urljoin
 
 from requests.auth import HTTPBasicAuth
 
+from rdf_differ import config
 from rdf_differ.adapters import SKOS_HISTORY_PREFIXES, QUERY_DATASET_DESCRIPTION, QUERY_INSERTIONS_COUNT, \
     QUERY_DELETIONS_COUNT
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
@@ -106,10 +107,10 @@ class FusekiException(Exception):
 
 class FusekiDiffAdapter(AbstractDiffAdapter):
 
-    def __init__(self, triplestore_service_url: str, http_requests, sparql_requests):
+    def __init__(self, triplestore_service_url: str, http_client, sparql_client):
         self.triplestore_service_url = triplestore_service_url
-        self.sparql_requests = sparql_requests
-        self.http_requests = http_requests
+        self.sparql_client = sparql_client
+        self.http_client = http_client
 
     def count_inserted_triples(self, dataset_name: str) -> int:
         """
@@ -172,9 +173,9 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             'dbName': dataset_name
         }
 
-        response = self.http_requests.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
-                                           auth=HTTPBasicAuth('admin', 'admin'),
-                                           data=data)
+        response = self.http_client.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
+                                         auth=HTTPBasicAuth(config.USERNAME, config.PASSWORD),
+                                         data=data)
 
         if response.status_code == 409:
             # TODO: change exception if better one found
@@ -189,8 +190,8 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         identifying the dataset
         :return: true if dataset was deleted
         """
-        response = self.http_requests.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
-                                             auth=HTTPBasicAuth('admin', 'admin'))
+        response = self.http_client.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
+                                           auth=HTTPBasicAuth(config.USERNAME, config.PASSWORD))
 
         if response.status_code == 404:
             # TODO: change exception if better one found
@@ -224,8 +225,8 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :return: the list of the dataset names
         :rtype: list
         """
-        response = self.http_requests.get(urljoin(self.triplestore_service_url, "/$/datasets"),
-                                          auth=HTTPBasicAuth('admin', 'admin'))
+        response = self.http_client.get(urljoin(self.triplestore_service_url, "/$/datasets"),
+                                        auth=HTTPBasicAuth(config.USERNAME, config.PASSWORD))
 
         # investigate what codes can fuseki return for this endpoint
         if response.status_code != 200:
@@ -241,8 +242,8 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :param sparql_query: query to be executed
         :return: SPARQLWrapper query response
         """
-        return self.sparql_requests.execute(endpoint_url=self.make_sparql_endpoint(dataset_name),
-                                            query_text=sparql_query)
+        return self.sparql_client.execute(endpoint_url=self.make_sparql_endpoint(dataset_name),
+                                          query_text=sparql_query)
 
     def make_sparql_endpoint(self, dataset_name: str) -> str:
         """
