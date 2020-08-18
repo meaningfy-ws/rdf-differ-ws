@@ -1,9 +1,9 @@
-"""
-skos_history_wrapper.py
-Date: 06/07/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
+
+# skos_history_wrapper.py
+# Date: 06/07/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
 import logging
 from pathlib import Path
 from shutil import copy
@@ -46,7 +46,7 @@ class SKOSHistoryRunner:
         Class for running the skos-history shell script.
         It includes folder structure creation and config file population.
 
-        :param dataset: the name used
+        :param dataset: the name used for the dataset
         :param scheme_uri: the concept scheme or dataset URI
         :param old_version_file: the location of the file to be uploaded
         :param new_version_file: the location of the file to be uploaded

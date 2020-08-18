@@ -1,19 +1,19 @@
-"""
-test_entrypoints_diffs.py
-Date: 07/08/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
-from io import BytesIO
+#!/usr/bin/python3
+
+# test_entrypoints_diffs.py
+# Date: 07/08/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
 from unittest.mock import patch
 
+import pytest
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
-from werkzeug.datastructures import FileStorage
+from werkzeug.exceptions import InternalServerError, Conflict, BadRequest
 
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
-from tests import DUMMY_DATASET_DIFF_DESCRIPTION
+from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff
+from tests.unit.conftest import helper_create_diff
 
 
 @patch.object(FusekiDiffAdapter, 'dataset_description')
@@ -22,11 +22,11 @@ def test_get_diffs_200(mock_list_datasets, mock_dataset_description):
     mock_list_datasets.return_value = (['first_dataset', 'second_dataset'], 200)
     mock_dataset_description.side_effect = [
         ({
-             'dataset_id': "first_dataset"
-         }),
+            'dataset_id': "first_dataset"
+        }),
         ({
-             'dataset_id': "second_dataset"
-         })
+            'dataset_id': "second_dataset"
+        })
     ]
 
     response, status = get_diffs()
@@ -54,39 +54,44 @@ def test_get_diffs_500(mock_list_datasets):
 
 @patch.object(SKOSHistoryRunner, '__init__')
 @patch.object(SKOSHistoryRunner, 'run')
-def test_create_diff_202(_, mock_init):
+def test_create_diff_200(_, mock_init):
     mock_init.return_value = None
 
-    file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
-    file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
-    body = {
-        'dataset_id': 'dataset',
-        'dataset_uri': 'uri',
-        'old_version_id': 'old',
-        'new_version_id': 'new',
-    }
+    file_1, file_2, body = helper_create_diff()
+
     response, status = create_diff(body=body,
                                    old_version_file_content=file_1,
                                    new_version_file_content=file_2)
 
-    assert "Request to create a new dataset diff successfully accepted for processing." in response
+    assert "Request to create a new dataset diff successfully accepted for processing." in response['detail']
     assert status == 200
 
 
 @patch.object(SKOSHistoryRunner, '__init__')
 @patch.object(SKOSHistoryRunner, 'run')
-def test_create_diff_500(_, mock_init):
+def test_create_diff_400(_, mock_init):
     mock_init.side_effect = ValueError('Value error')
 
-    file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
-    file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
-    body = {'dataset_id': 'dataset'}
-    response, status = create_diff(body=body,
-                                   old_version_file_content=file_1,
-                                   new_version_file_content=file_2)
+    file_1, file_2, body = helper_create_diff()
 
-    assert 'Value error' in response
-    assert status == 500
+    with pytest.raises(BadRequest) as e:
+        _ = create_diff(body=body,
+                        old_version_file_content=file_1,
+                        new_version_file_content=file_2)
+
+    assert 'Value error' in str(e.value)
+
+
+@patch.object(FusekiDiffAdapter, 'dataset_description')
+def test_create_diff_409(mock_dataset_description):
+    mock_dataset_description.return_value = {'dataset_uri': 'http://some.uri'}
+
+    file_1, file_2, body = helper_create_diff()
+
+    with pytest.raises(Conflict) as e:
+        _ = create_diff(body=body,
+                        old_version_file_content=file_1,
+                        new_version_file_content=file_2)
 
 
 @patch.object(SKOSHistoryRunner, '__init__')
@@ -94,15 +99,14 @@ def test_create_diff_500(_, mock_init):
 def test_create_diff_500(_, mock_init):
     mock_init.side_effect = SubprocessFailure()
 
-    file_1 = FileStorage((BytesIO(b'1')), filename='old_file.rdf')
-    file_2 = FileStorage((BytesIO(b'2')), filename='new_file.rdf')
-    body = {'dataset_id': 'dataset'}
-    response, status = create_diff(body=body,
-                                   old_version_file_content=file_1,
-                                   new_version_file_content=file_2)
+    file_1, file_2, body = helper_create_diff()
 
-    assert 'Internal error while uploading the diffs.' in response
-    assert status == 500
+    with pytest.raises(InternalServerError) as e:
+        _ = create_diff(body=body,
+                        old_version_file_content=file_1,
+                        new_version_file_content=file_2)
+
+    assert 'Internal error while uploading the diffs.' in str(e.value)
 
 
 @patch.object(FusekiDiffAdapter, 'dataset_description')

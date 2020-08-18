@@ -1,17 +1,20 @@
-"""
-diff_adapter.py
-Date:  23/07/2020
-Author: Eugeniu Costetchi
-Email: costezki.eugen@gmail.com 
-"""
+#!/usr/bin/python3
+
+# diff_adapter.py
+# Date: 23/07/2020
+# Author: Eugeniu Costetchi
+# Email: costezki.eugen@gmail.com
+
 from abc import ABC, abstractmethod
 from json import loads
+from pathlib import Path
 from urllib.parse import urljoin
 
 from requests.auth import HTTPBasicAuth
 
 from rdf_differ.adapters import SKOS_HISTORY_PREFIXES, QUERY_DATASET_DESCRIPTION, QUERY_INSERTIONS_COUNT, \
     QUERY_DELETIONS_COUNT
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
 class AbstractDiffAdapter(ABC):
@@ -45,6 +48,21 @@ class AbstractDiffAdapter(ABC):
             Get the list of the dataset names from the __ store.
         :return: the list of the dataset names
         :rtype: list, int
+        """
+
+    @abstractmethod
+    def create_diff(self, dataset: str, dataset_uri: str, temp_dir: Path,
+                    old_version_id: str, new_version_id: str,
+                    old_version_file: Path, new_version_file: Path):
+        """
+            Create a dataset diff using the data from the provided files.
+        :param dataset: the name used for the dataset
+        :param dataset_uri: the concept scheme or dataset URI
+        :param temp_dir: location for folder generation
+        :param old_version_file: the location of the file to be uploaded
+        :param new_version_file: the location of the file to be uploaded
+        :param old_version_id: name used for diff upload
+        :param new_version_id: name used for diff upload
         """
 
     @abstractmethod
@@ -119,6 +137,27 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         query_result = self.execute_query(dataset_name=dataset_name,
                                           sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
         return self._extract_deletion_count(query_result)
+
+    def create_diff(self, dataset: str, dataset_uri: str, temp_dir: Path,
+                    old_version_id: str, new_version_id: str,
+                    old_version_file: Path, new_version_file: Path):
+        """
+            Create a dataset diff using the data from the provided files.
+        :param dataset: the name used for the dataset
+        :param dataset_uri: the concept scheme or dataset URI
+        :param temp_dir: location for folder generation
+        :param old_version_file: the location of the file to be uploaded
+        :param new_version_file: the location of the file to be uploaded
+        :param old_version_id: name used for diff upload
+        :param new_version_id: name used for diff upload
+        """
+        SKOSHistoryRunner(dataset=dataset,
+                          basedir=str(temp_dir / 'basedir'),
+                          scheme_uri=dataset_uri,
+                          old_version_id=old_version_id,
+                          new_version_id=new_version_id,
+                          old_version_file=str(old_version_file),
+                          new_version_file=str(new_version_file)).run()
 
     def dataset_description(self, dataset_name: str) -> dict:
         """

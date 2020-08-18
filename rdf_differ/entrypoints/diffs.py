@@ -1,17 +1,19 @@
-"""
-diffs.py
-Date: 30/07/2020
-Author: Mihai Coșleț
-Email: coslet.mihai@gmail.com
-"""
+#!/usr/bin/python3
+
+# diffs.py
+# Date: 30/07/2020
+# Author: Mihai Coșleț
+# Email: coslet.mihai@gmail.com
+
 import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from werkzeug.datastructures import FileStorage
+from werkzeug.exceptions import Conflict, InternalServerError, BadRequest
 
 from rdf_differ import config
-from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
+from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
+from rdf_differ.adapters.sparql import SPARQLRunner
 from utils.file_utils import temporarily_save_files
 
 
@@ -29,13 +31,14 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     :param old_version_file_content: The content of the old version file.
     :param new_version_file_content: The content of the new version file.
     :return:
-    :rtype: str, int
+    :rtype: dict, int
     """
+    fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT, http_requests=requests, sparql_requests=SPARQLRunner())
+
     try:
-        dataset, _ = FusekiDiffAdapter(config.ENDPOINT, http_requests=requests,
-                                       sparql_requests=SPARQLRunner()).dataset_description(
-            dataset_name=body.get('dataset_id'))
-        can_create = 'dataset_uri' in dataset
+        dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_id'))
+        # if description is {} (empty) then we can create the diff
+        can_create = not bool(dataset)
     except EndPointNotFound:
         can_create = True
 
@@ -43,22 +46,21 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
         try:
             with temporarily_save_files(old_version_file_content, new_version_file_content) as \
                     (temp_dir, old_version_file, new_version_file):
-                # TODO move this to fusekiadapter
-                SKOSHistoryRunner(dataset=body.get('dataset_id'),
-                                  basedir=temp_dir / 'basedir',
-                                  scheme_uri=body.get('dataset_uri'),
-                                  old_version_id=body.get('old_version_id'),
-                                  new_version_id=body.get('new_version_id'),
-                                  old_version_file=old_version_file,
-                                  new_version_file=new_version_file).run()
+                fuseki_adapter.create_diff(dataset=body.get('dataset_id'),
+                                           dataset_uri=body.get('dataset_uri'),
+                                           temp_dir=temp_dir,
+                                           old_version_id=body.get('old_version_id'),
+                                           new_version_id=body.get('new_version_id'),
+                                           old_version_file=old_version_file,
+                                           new_version_file=new_version_file)
 
-            return "Request to create a new dataset diff successfully accepted for processing.", 200
+            return {'detail': 'Request to create a new dataset diff successfully accepted for processing.'}, 200
         except ValueError as exception:
-            return str(exception), 500
+            raise BadRequest(str(exception))  # 400
         except SubprocessFailure:
-            return 'Internal error while uploading the diffs.', 500
+            raise InternalServerError('Internal error while uploading the diffs.')  # 500
     else:
-        return 'Dataset is not empty.', 409
+        raise Conflict('Dataset is not empty.')  # 409
 
 
 def get_diffs() -> tuple:
