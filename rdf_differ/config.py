@@ -10,7 +10,7 @@ import os
 FILENAME = os.environ.get('FILENAME', 'file')
 ENDPOINT = os.environ.get('ENDPOINT', 'http://localhost:3030')
 
-RDF_DIFFER_API_PORT = os.environ.get('RDF_DIFFER_API_PORT', '3040'),
+RDF_DIFFER_API_PORT = os.environ.get('RDF_DIFFER_API_PORT', 3040),
 
-USERNAME = os.environ.get('USERNAME', 'admin')
-PASSWORD = os.environ.get('PASSWORD', 'admin')
+FUSEKI_USERNAME = os.environ.get('FUSEKI_USERNAME', 'admin')
+FUSEKI_PASSWORD = os.environ.get('FUSEKI_PASSWORD', 'admin')
