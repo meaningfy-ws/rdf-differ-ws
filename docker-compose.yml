@@ -1,22 +1,24 @@
-version: '3'
+version: '3.7'
 
 services:
   rdf-differ:
     container_name: rdf_differ
     build: .
-    image: rdf_differ:latest
+    command: flask run --host=0.0.0.0 --port=${RDF_DIFFER_API_PORT}
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
     env_file:
       - .env-dev
-#    ports:
-#      - ${RDF_DIFFER_API_PORT-3040}:${RDF_DIFFER_API_PORT-3040}
 
   fuseki:
     container_name: fuseki
     image: stain/jena-fuseki
+    volumes:
+      - ${PWD}/${DATA_FOLDER}/fuseki:/fuseki
     environment:
       - ADMIN_PASSWORD=admin
       - JVM_ARGS=-Xmx2g
     ports:
-      - ${FUSEKI_PORT-3030}:3030
-    volumes:
-      - ${PWD}/${DATA_FOLDER}/fuseki:/fuseki
+      - ${FUSEKI_PORT-3030}:${FUSEKI_PORT-3030}

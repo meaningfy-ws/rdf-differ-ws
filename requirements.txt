@@ -2,7 +2,7 @@ Click
 rdflib
 sparqlwrapper
 requests
-connexion
+connexion[swagger-ui]
 Flask
 
 # Testing Dependencies
