@@ -14,7 +14,9 @@ services:
 
   fuseki:
     container_name: fuseki
-    build: ./fuseki
+    build:
+      context: .
+      dockerfile: Dockerfile.fuseki
     volumes:
       - ${PWD}/${DATA_FOLDER}/fuseki:/fuseki
     environment:
