@@ -4,13 +4,13 @@ services:
   rdf-differ:
     container_name: rdf_differ
     build: .
-    command: flask run --host=0.0.0.0 --port=${RDF_DIFFER_API_PORT}
+    command: gunicorn --bind 0.0.0.0:${RDF_DIFFER_API_PORT} ${FLASK_APP}:app
     volumes:
       - ./:/usr/src/app
     ports:
       - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
     env_file:
-      - .env.dev
+      - .env.prod
 
   fuseki:
     container_name: fuseki
@@ -20,7 +20,7 @@ services:
     volumes:
       - ${PWD}/${DATA_FOLDER}/fuseki:/fuseki
     environment:
-      - ADMIN_PASSWORD=admin
-      - JVM_ARGS=-Xmx2g
+      - ADMIN_PASSWORD=${FUSEKI_ADMIN_PASSWORD}
+      - JVM_ARGS=${FUSEKI_JVM_ARGS}
     ports:
       - ${FUSEKI_PORT}:${FUSEKI_PORT}

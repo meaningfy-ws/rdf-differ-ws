@@ -1,0 +1,9 @@
+Click
+rdflib
+sparqlwrapper
+requests
+connexion[swagger-ui]
+Flask
+
+
+gunicorn
