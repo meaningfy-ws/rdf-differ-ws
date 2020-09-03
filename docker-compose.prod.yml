@@ -3,20 +3,30 @@ version: '3.7'
 services:
   rdf-differ:
     container_name: rdf_differ
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
     command: gunicorn --bind 0.0.0.0:${RDF_DIFFER_API_PORT} ${FLASK_APP}:app
     volumes:
       - ./:/usr/src/app
-    ports:
-      - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
+    expose:
+      - ${RDF_DIFFER_API_PORT}
     env_file:
       - .env.prod
+
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - rdf-differ
 
   fuseki:
     container_name: fuseki
     build:
       context: .
-      dockerfile: fuseki.Dockerfile
+      dockerfile: fuseki/Dockerfile
     volumes:
       - ${PWD}/${DATA_FOLDER}/fuseki:/fuseki
     environment:
