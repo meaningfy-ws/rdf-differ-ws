@@ -18,6 +18,3 @@ flake8
 myst-parser
 sphinx<3
 sphinxcontrib-apidoc
-
-
-gunicorn
