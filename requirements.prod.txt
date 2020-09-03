@@ -2,8 +2,6 @@ Click
 rdflib
 sparqlwrapper
 requests
-connexion[swagger-ui]
+connexion
 Flask
-
-
 gunicorn
