@@ -14,7 +14,9 @@ services:
 
   fuseki:
     container_name: fuseki
-    image: stain/jena-fuseki
+    build:
+      context: .
+      dockerfile: fuseki.Dockerfile
     volumes:
       - ${PWD}/${DATA_FOLDER}/fuseki:/fuseki
     environment:
