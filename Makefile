@@ -24,10 +24,42 @@ lint:
 	@ flake8 || true
 
 #-----------------------------------------------------------------------------
+# Development environment
+#-----------------------------------------------------------------------------
+
+build-dev:
+	@ echo -e '$(BUILD_PRINT)Building the dev container'
+	@ docker-compose --file docker-compose.yml --env-file .env.dev build
+
+run-dev:
+	@ echo -e '$(BUILD_PRINT)Starting the dev services'
+	@ docker-compose --file docker-compose.yml --env-file .env.dev up -d
+
+stop-dev:
+	@ echo -e '$(BUILD_PRINT)Stopping the dev services'
+	@ docker-compose --file docker-compose.yml --env-file .env.dev down
+
+#-----------------------------------------------------------------------------
+# Production environment
+#-----------------------------------------------------------------------------
+
+build-prod:
+	@ echo -e '$(BUILD_PRINT)Building the prod container'
+	@ docker-compose --file docker-compose.prod.yml --env-file .env.prod build
+
+run-prod:
+	@ echo -e '$(BUILD_PRINT)Starting the prod services'
+	@ docker-compose --file docker-compose.prod.yml --env-file .env.prod up -d
+
+stop-prod:
+	@ echo -e '$(BUILD_PRINT)Stopping the prod services'
+	@ docker-compose --file docker-compose.prod.yml --env-file .env.prod down
+
+#-----------------------------------------------------------------------------
 # Fuseki related commands
 #-----------------------------------------------------------------------------
 
-start-fuseki:
+run-fuseki:
 	@ echo "$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')"
 	@ docker-compose --file docker-compose.yml --env-file .env.dev up -d fuseki
 
@@ -41,13 +73,7 @@ fuseki-create-test-dbs:
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
 
-clean-data:
-	@ echo "$(BUILD_PRINT)Deleting the $(DATA_FOLDER)"
-	@ sudo rm -rf $(DATA_FOLDER)
-
-start-service: start-fuseki fuseki-create-test-dbs
-
-stop-service: stop-fuseki clean-data
+run-fuseki-dirty: run-fuseki fuseki-create-test-dbs
 
 #-----------------------------------------------------------------------------
 # Gherkin feature and acceptance test generation commands
@@ -70,22 +96,6 @@ $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_F
 	@ echo "$(BUILD_PRINT)Generating the testfile "$@"  from "$<" feature file"
 	@ pytest-bdd generate $< > $@
 	@ sed -i  's|features|../features|' $@
-
-#-----------------------------------------------------------------------------
-# Docker commands
-#-----------------------------------------------------------------------------
-
-docker-build-dev:
-	@ echo -e '$(BUILD_PRINT)Building the Docker container locally'
-	@ docker-compose --file docker-compose.yml --env-file .env.dev build
-
-docker-start-dev:
-	@ echo -e '$(BUILD_PRINT)Starting the docker services (dev environment)'
-	@ docker-compose --file docker-compose.yml --env-file .env.dev up -d rdf-differ
-
-docker-stop-dev:
-	@ echo -e '$(BUILD_PRINT)Stopping the docker services (prod environment)'
-	@ docker-compose down
 
 #-----------------------------------------------------------------------------
 # Default
