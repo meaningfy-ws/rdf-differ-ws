@@ -25,28 +25,17 @@ from tests.conftest import helper_fuseki_service
 from utils.file_utils import dir_exists
 
 
-@scenario('../features/diffing_two_dataset_versions.feature', 'Diffing two dataset versions')
-def test_diffing_two_dataset_versions():
-    """Diffing two dataset versions."""
-
-
-@scenario('../features/diffing_two_dataset_versions.feature', 'Controlling the mandatory descriptive metadata')
-def test_controlling_the_mandatory_descriptive_metadata():
-    """Controlling the mandatory descriptive metadata."""
-
-
-@given('old and new version RDF files')
+@pytest.fixture()
 def files(tmpdir):
     """alpha and beta RDF files."""
     old_version_file = tmpdir.join('old_version.rdf')
     shutil.copy(Path('tests/test_data/subdivisions_sh_ds/data/v1/subdivisions-skos.rdf'), old_version_file)
     new_version_file = tmpdir.join('new_version.rdf')
     shutil.copy(Path('tests/test_data/subdivisions_sh_ds/data/v2/subdivisions-skos.rdf'), new_version_file)
-
     return old_version_file, new_version_file
 
 
-@given('mandatory descriptive metadata')
+@pytest.fixture()
 def metadata(tmpdir, files):
     """mandatory descriptive metadata."""
     metadata = {
@@ -62,6 +51,26 @@ def metadata(tmpdir, files):
     }
 
     return metadata
+
+
+@scenario('../features/diffing_two_dataset_versions.feature', 'Diffing two dataset versions')
+def test_diffing_two_dataset_versions():
+    """Diffing two dataset versions."""
+
+
+@scenario('../features/diffing_two_dataset_versions.feature', 'Controlling the mandatory descriptive metadata')
+def test_controlling_the_mandatory_descriptive_metadata():
+    """Controlling the mandatory descriptive metadata."""
+
+
+@given('old and new version RDF files')
+def old_and_new_version_rdf_files():
+    pass
+
+
+@given('mandatory descriptive metadata')
+def mandatory_descriptive_metadata():
+    pass
 
 
 @when('the user runs the diff calculator')

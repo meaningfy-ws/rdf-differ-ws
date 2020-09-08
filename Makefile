@@ -9,12 +9,12 @@ BUILD_PRINT = \e[1;34mSTEP: \e[0m
 #-----------------------------------------------------------------------------
 
 install-prod:
-	@ echo "$(BUILD_PRINT)Installing the requirements"
+	@ echo "$(BUILD_PRINT)Installing the production requirements"
 	@ pip install --upgrade pip
 	@ pip install -r requirements.txt
 
 install-dev:
-	@ echo "$(BUILD_PRINT)Installing the requirements"
+	@ echo "$(BUILD_PRINT)Installing the development requirements"
 	@ pip install --upgrade pip
 	@ pip install -r requirements/dev.txt
 
