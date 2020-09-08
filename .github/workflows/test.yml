@@ -27,16 +27,10 @@ jobs:
         make start-service
     - name: Install dependencies
       run: |
-        make install
-
-#    - name: Lint with flake8
-#      run: |
-#        make lint
-
+        make install dev
     - name: Test with pytest
       run: |
         make test
-
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
