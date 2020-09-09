@@ -1,0 +1,15 @@
+-r common.txt
+
+# Testing Dependencies
+pytest
+coverage
+pytest-cov
+pytest-bdd
+
+# Linting dependencies
+flake8
+
+# Documentation Dependencies
+myst-parser
+sphinx<3
+sphinxcontrib-apidoc

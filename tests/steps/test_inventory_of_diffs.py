@@ -6,7 +6,7 @@
 # Email: costezki.eugen@gmail.com
 
 """List the diffs in the triplestore feature tests."""
-
+import pytest
 from pytest_bdd import (
     given,
     scenario,
@@ -18,21 +18,31 @@ from tests import DUMMY_DATASET_DIFF_DESCRIPTION, DUMMY_DATASET_DELETED_COUNT, D
 from tests.conftest import helper_fuseki_service
 
 
+@pytest.fixture()
+def fuseki_diff_getter():
+    """create fuseki fixture"""
+    return helper_fuseki_service()
+
+
+@pytest.fixture()
+def diff_object():
+    """create diff_object fixture"""
+    return list()
+
+
 @scenario('../features/inventory_of_diffs.feature', 'Query the triplestore')
 def test_query_the_triplestore():
     """Query the triplestore."""
 
 
 @given('a set of well defined SPARQL queries for inventory checking')
-def fuseki_diff_getter():
-    """create fuseki fixture"""
-    return helper_fuseki_service()
+def a_set_of_well_defined_spqrql_queries_for_inventory_checking():
+    pass
 
 
 @given('the configured endpoint')
-def diff_object():
-    """create diff_object fixture"""
-    return list()
+def the_configured_endpoint():
+    pass
 
 
 @when('the user requests the diff inventory')

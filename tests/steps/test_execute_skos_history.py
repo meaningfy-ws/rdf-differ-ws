@@ -10,6 +10,7 @@
 import shutil
 from pathlib import Path
 
+import pytest
 import requests
 from pytest_bdd import (
     given,
@@ -23,12 +24,7 @@ from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
-@scenario('../features/execute_skos_history.feature', 'Running the skos-history')
-def test_running_the_skos_history():
-    """Running the skos-history."""
-
-
-@given("a correct dataset folder structure")
+@pytest.fixture()
 def basedir(tmpdir):
     """a correct dataset folder structure"""
     basedir = tmpdir.mkdir('basedir')
@@ -44,7 +40,7 @@ def basedir(tmpdir):
     return basedir
 
 
-@given("a correct configuration file")
+@pytest.fixture()
 def config_location(tmpdir, basedir):
     """a correct configuration file"""
     config_content = f"""#!/bin/bash
@@ -64,6 +60,21 @@ INPUT_MIME_TYPE="application/rdf+xml"
     config_location = basedir.join('skos.config')
     config_location.write(config_content)
     return config_location
+
+
+@scenario('../features/execute_skos_history.feature', 'Running the skos-history')
+def test_running_the_skos_history():
+    """Running the skos-history."""
+
+
+@given("a correct dataset folder structure")
+def a_correct_dataset_folder_structure():
+    pass
+
+
+@given("a correct configuration file")
+def a_correct_configuration_file():
+    pass
 
 
 @when("the user runs the skos-history calculator")

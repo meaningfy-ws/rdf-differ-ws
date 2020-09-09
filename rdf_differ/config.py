@@ -8,7 +8,7 @@
 import os
 
 FILENAME = os.environ.get('FILENAME', 'file')
-ENDPOINT = os.environ.get('ENDPOINT', 'http://localhost:3030')
+ENDPOINT = os.environ.get('FUSEKI_ENDPOINT', 'http://localhost:3030')
 
 RDF_DIFFER_API_PORT = os.environ.get('RDF_DIFFER_API_PORT', 3040),
 
