@@ -4,24 +4,54 @@
 # rdf-differ
 A service for calculating the difference between versions of a given RDF dataset. 
 
-
-## starting the triple store 
-    make start-services
-
-## stopping the triple store 
-    make stop-services
-
-## running the tests
-    make test
-
-
-
-## Install
-
-* Required libs
-
+## to run the development environment through docker
+To create the containers run:
+```bash
+make build-dev
 ```
-make install
+To run the docker containers (both `rdf-differ` and `fuseki`):
+```bash
+make run-dev
+```
+To stop the containers run:
+```bash
+make stop-dev
+```
+
+## to run the triple store (fuseki only)
+To build and run: 
+```bash
+    make run-fuseki
+```
+
+To stop fuseki:
+```bash
+    make stop-fuseki
+``` 
+
+## to run the tests
+To install test/dev dependencies
+```bash
+    make install-dev
+```
+
+To run the tests (make sure that fuseki is running `make run-fuseki`)
+```bash
+    make test
+```
+
+
+## to run without docker
+
+Install dev requirements
+
+```bash
+make install-dev
+```
+
+Install production requirements
+```bash
+make install-prod
 ```
 
 * Docker
