@@ -32,11 +32,11 @@ lint:
 
 start-fuseki:
 	@ echo "$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')"
-	@ docker-compose --file docker-compose.yml --env-file .env.dev up -d fuseki
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev up --build -d fuseki
 
 stop-fuseki:
 	@ echo "$(BUILD_PRINT)Stopping Fuseki"
-	@ docker-compose --file docker-compose.yml --env-file .env.dev down
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev down
 
 fuseki-create-test-dbs:
 	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(FUSEKI_PORT),$(FUSEKI_PORT),unknown port)/$$/datasets"
