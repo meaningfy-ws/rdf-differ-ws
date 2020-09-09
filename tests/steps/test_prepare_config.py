@@ -10,6 +10,7 @@
 from filecmp import cmp
 from pathlib import Path
 
+import pytest
 from pytest_bdd import (
     given,
     scenario,
@@ -19,6 +20,19 @@ from pytest_bdd import (
 
 from tests.conftest import helper_create_skos_runner
 from utils.file_utils import dir_exists, dir_is_empty, file_exists
+
+
+@pytest.fixture()
+def metadata():
+    """mandatory descriptive metadata."""
+    metadata = {
+        'filename': 'file',
+        'endpoint': 'http://test.point',
+        'dataset': 'dataset',
+        'scheme_uri': 'http://scheme.uri',
+    }
+
+    return metadata
 
 
 @scenario('../features/prepare_config.feature', 'Set up the folder structure')
@@ -32,16 +46,8 @@ def test_generating_the_skos_history_config_file():
 
 
 @given('mandatory descriptive metadata')
-def metadata():
-    """mandatory descriptive metadata."""
-    metadata = {
-        'filename': 'file',
-        'endpoint': 'http://test.point',
-        'dataset': 'dataset',
-        'scheme_uri': 'http://scheme.uri',
-    }
-
-    return metadata
+def mandatory_descriptive_metadata():
+    pass
 
 
 @given('the root path of folder structure')

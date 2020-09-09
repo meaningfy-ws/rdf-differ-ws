@@ -7,8 +7,10 @@
 
 import connexion
 
-from rdf_differ.config import RDF_DIFFER_API_PORT
+connexion_app = connexion.FlaskApp(__name__, specification_dir='openapi')
+connexion_app.add_api('openapi.yaml')
 
-app = connexion.FlaskApp(__name__, specification_dir='openapi')
-app.add_api('openapi.yaml')
-app.run(port=RDF_DIFFER_API_PORT)
+app = connexion_app.app
+
+if __name__ == '__main__':
+    app.run()

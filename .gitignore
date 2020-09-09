@@ -130,7 +130,7 @@ dmypy.json
 .idea/
 
 # projest related
-/fuseki
+#/fuseki
 /data-dev
 cucumber_report.json
 junit_report.xml

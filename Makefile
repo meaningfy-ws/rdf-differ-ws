@@ -1,21 +1,24 @@
 .PHONY: test install lint start-services stop-services docker-stop-dev docker-start-dev docker-build-dev
 
-include .env-dev
+include .env.dev
 
 BUILD_PRINT = \e[1;34mSTEP: \e[0m
 
 #-----------------------------------------------------------------------------
 # Basic commands
 #-----------------------------------------------------------------------------
-env-export: .env-dev
-	@ $(shel SHELL $(sed -ne '/^export / {p;d}; /.*=/ s/^/export / p' .env-dev))
 
-install:
-	@ echo "$(BUILD_PRINT)Installing the requirements"
+install-prod:
+	@ echo "$(BUILD_PRINT)Installing the production requirements"
 	@ pip install --upgrade pip
 	@ pip install -r requirements.txt
 
-test: env-export
+install-dev:
+	@ echo "$(BUILD_PRINT)Installing the development requirements"
+	@ pip install --upgrade pip
+	@ pip install -r requirements/dev.txt
+
+test:
 	@ echo "$(BUILD_PRINT)Running the tests"
 	@ pytest
 
@@ -29,11 +32,11 @@ lint:
 
 start-fuseki:
 	@ echo "$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')"
-	@ docker-compose --file docker-compose.yml --env-file .env-dev up -d fuseki
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev up --build -d fuseki
 
 stop-fuseki:
 	@ echo "$(BUILD_PRINT)Stopping Fuseki"
-	@ docker-compose --file docker-compose.yml --env-file .env-dev down
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev down
 
 fuseki-create-test-dbs:
 	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(FUSEKI_PORT),$(FUSEKI_PORT),unknown port)/$$/datasets"
@@ -77,11 +80,11 @@ $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_F
 
 docker-build-dev:
 	@ echo -e '$(BUILD_PRINT)Building the Docker container locally'
-	@ docker-compose --file docker-compose.yml --env-file .env-dev build
+	@ docker-compose --file docker-compose.yml --env-file .env.dev build
 
 docker-start-dev:
 	@ echo -e '$(BUILD_PRINT)Starting the docker services (dev environment)'
-	@ docker-compose --file docker-compose.yml --env-file .env-dev up -d rdf-differ
+	@ docker-compose --file docker-compose.yml --env-file .env.dev up -d rdf-differ
 
 docker-stop-dev:
 	@ echo -e '$(BUILD_PRINT)Stopping the docker services (prod environment)'
