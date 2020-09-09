@@ -32,15 +32,15 @@ lint:
 
 build-dev:
 	@ echo -e '$(BUILD_PRINT)Building the dev container'
-	@ docker-compose --file docker-compose.yml --env-file .env.dev build
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev build
 
 run-dev:
 	@ echo -e '$(BUILD_PRINT)Starting the dev services'
-	@ docker-compose --file docker-compose.yml --env-file .env.dev up -d
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev up -d
 
 stop-dev:
 	@ echo -e '$(BUILD_PRINT)Stopping the dev services'
-	@ docker-compose --file docker-compose.yml --env-file .env.dev down
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev down
 
 #-----------------------------------------------------------------------------
 # Production environment
@@ -48,15 +48,15 @@ stop-dev:
 
 build-prod:
 	@ echo -e '$(BUILD_PRINT)Building the prod container'
-	@ docker-compose --file docker-compose.prod.yml --env-file .env.prod build
+	@ docker-compose --file docker-compose.yml --env-file .env.prod build
 
 run-prod:
 	@ echo -e '$(BUILD_PRINT)Starting the prod services'
-	@ docker-compose --file docker-compose.prod.yml --env-file .env.prod up -d
+	@ docker-compose --file docker-compose.yml --env-file .env.prod up -d
 
 stop-prod:
 	@ echo -e '$(BUILD_PRINT)Stopping the prod services'
-	@ docker-compose --file docker-compose.prod.yml --env-file .env.prod down
+	@ docker-compose --file docker-compose.yml --env-file .env.prod down
 
 #-----------------------------------------------------------------------------
 # Fuseki related commands
