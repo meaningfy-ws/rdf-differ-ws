@@ -24,7 +24,7 @@ jobs:
         python-version: 3.8
     - name: Run adjacent services (Fuseki)
       run: |
-        make start-service
+        make run-fuseki-dirty
     - name: Install dependencies
       run: |
         make install-dev
