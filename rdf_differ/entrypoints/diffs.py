@@ -6,7 +6,9 @@
 # Email: coslet.mihai@gmail.com
 
 import tempfile
+from json import dumps
 from pathlib import Path
+from shutil import copytree
 
 import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
@@ -116,11 +118,31 @@ def delete_diff(dataset_id: str) -> tuple:
         raise NotFound(f'<{dataset_id}> does not exist.')  # 404
 
 
-def get_report(dataset_id: str = "", old: str = "", new: str = "") -> tuple:
+def get_report(dataset_id: str, dataset_url: str) -> tuple:
     """
     """
-    with tempfile.TemporaryDirectory() as temp_dir:
-        rp = ReportBuilder(target_path=Path.cwd() / 'resources/templates_test',
-                           output_path=temp_dir)
-        rp.make_document()
-        return send_from_directory(Path(str(temp_dir)) / 'output', 'main.html', as_attachment=True)
+    # is there a better way to check if diff exists?
+    get_diff(dataset_id)  # here it can return 404
+
+    try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            copytree(Path.cwd() / 'resources/eds_templates', temp_dir, dirs_exist_ok=True)
+            with open(Path(temp_dir) / 'config.json', 'w') as config_file:
+                config = {
+                    "template": "main.html",
+                    "conf":
+                        {
+                            "default_endpoint": dataset_url,
+                            "title": "Dataset Diff Report",
+                            "type": "report"
+                        }
+                }
+                config_file.write(dumps(config))
+
+            rp = ReportBuilder(target_path=temp_dir,
+                               output_path=temp_dir)
+            rp.make_document()
+
+            return send_from_directory(Path(str(temp_dir)) / 'output', 'main.html', as_attachment=True)
+    except Exception as e:
+        raise InternalServerError(str(e))  # 500

@@ -136,15 +136,12 @@ paths:
           schema:
             type: string
         - in: query
-          name: old
+          name: dataset_url
+          required: true
+          description: URL to query on
           schema:
             type: string
-          description: Identifier for the older version of the dataset.
-        - in: query
-          name: new
-          schema:
-            type: string
-          description: Identifier for the newer version of the dataset.
+            format: url
       responses:
         200:
           description: Dataset diff report succesfully retreived.
