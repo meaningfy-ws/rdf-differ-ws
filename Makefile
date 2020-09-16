@@ -42,6 +42,9 @@ stop-dev:
 	@ echo -e '$(BUILD_PRINT)Stopping the dev services'
 	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev down
 
+populate-fuseki:
+	@ python rdf_differ/commands.py
+
 #-----------------------------------------------------------------------------
 # Production environment
 #-----------------------------------------------------------------------------
