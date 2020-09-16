@@ -4,3 +4,5 @@ sparqlwrapper
 requests
 connexion[swagger-ui]
 Flask
+
+git+https://github.com/meaningfy-ws/eds4jinja2

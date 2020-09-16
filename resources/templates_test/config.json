@@ -1,0 +1,9 @@
+{
+    "template": "main.html",
+    "conf":
+    {
+        "default_endpoint" : "http://publications.europa.eu/webapi/rdf/sparql",
+        "title": "Dataset Fingerprint Report (Diff)",
+        "type": "report"
+    }
+}

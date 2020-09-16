@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% import "macros.html" as mc %}
+
+
+{% block content %}
+    {# Read the and invert the namespace/prefix definitions for substitution #}
+
+    {% include "sections/class_instantiation.html" with context %}
+{% endblock %}

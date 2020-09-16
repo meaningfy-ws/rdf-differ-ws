@@ -5,8 +5,13 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 
+import tempfile
+from pathlib import Path
+
 import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
+from eds4jinja2.builders.report_builder import ReportBuilder
+from flask import send_from_directory
 from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound
 
@@ -86,6 +91,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
                                            old_version_file=old_version_file,
                                            new_version_file=new_version_file)
 
+            # TODO: return dataset url, in case that this call could take more time that usual api request.
             return 'Request to create a new dataset diff successfully accepted for processing.', 200
         except ValueError as exception:
             raise BadRequest(str(exception))  # 400
@@ -108,3 +114,13 @@ def delete_diff(dataset_id: str) -> tuple:
         return f'<{dataset_id}> created successfully.', 200
     except FusekiException:
         raise NotFound(f'<{dataset_id}> does not exist.')  # 404
+
+
+def get_report(dataset_id: str = "", old: str = "", new: str = "") -> tuple:
+    """
+    """
+    with tempfile.TemporaryDirectory() as temp_dir:
+        rp = ReportBuilder(target_path=Path.cwd() / 'resources/templates_test',
+                           output_path=temp_dir)
+        rp.make_document()
+        return send_from_directory(Path(str(temp_dir)) / 'output', 'main.html', as_attachment=True)
