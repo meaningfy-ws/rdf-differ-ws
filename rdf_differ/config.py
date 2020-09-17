@@ -14,3 +14,5 @@ RDF_DIFFER_API_PORT = os.environ.get('RDF_DIFFER_API_PORT', 3040),
 
 FUSEKI_USERNAME = os.environ.get('FUSEKI_USERNAME', 'admin')
 FUSEKI_PASSWORD = os.environ.get('FUSEKI_PASSWORD', 'admin')
+
+FLASK_SECRET_KEY = os.environ.get('SECRET_KEY', 'secret key')

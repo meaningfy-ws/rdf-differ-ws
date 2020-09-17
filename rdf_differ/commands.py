@@ -8,7 +8,7 @@
 from werkzeug.datastructures import FileStorage
 from pathlib import Path
 
-from rdf_differ.entrypoints.diffs import create_diff
+from rdf_differ.entrypoints.api.views import create_diff
 
 
 def run_create(dataset, dataset_uri, old_path, new_path, old_version='old', new_version='new'):

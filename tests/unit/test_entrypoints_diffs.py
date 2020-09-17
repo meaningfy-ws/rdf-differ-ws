@@ -13,7 +13,7 @@ from werkzeug.exceptions import InternalServerError, Conflict, BadRequest, NotFo
 
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
-from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff
+from rdf_differ.entrypoints.api.views import get_diffs, create_diff, get_diff, delete_diff
 from tests.unit.conftest import helper_create_diff
 
 
