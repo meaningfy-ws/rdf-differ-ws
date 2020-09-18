@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 
-# ui.py
-# Date:  17/09/2020
+# __init__.py
+# Date:  18/09/2020
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
-from rdf_differ.entrypoints.ui import app
+
+"""
+Module description
+
+"""

@@ -1,6 +1,30 @@
 {% extends "base.html" %}
+{% set active_page = "index" %}
 
-{% block content %}
-    <h1>HOME PAGE, YO!</h1>
-    <a href="/diffs">Go to create a diff</a>
+{% block app_content %}
+    <h1>List of calculated diffs</h1>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">New version name</th>
+            <th scope="col">Old version name</th>
+            <th scope="col">Dataset URI</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for dataset in datasets %}
+            {% if dataset %}
+            <tr>
+                <th scope="row">
+                    <a href="{{ url_for('view_dataset', dataset_id=dataset.dataset_id[1:]) }}">{{ dataset.dataset_id }}</a>
+                </th>
+                <td>{{ dataset.new_version_id }}</td>
+                <td>{{ dataset.old_version_id }}</td>
+                <td><a href="{{ dataset.dataset_uri }}" target="_blank">{{ dataset.dataset_uri }}</a></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
