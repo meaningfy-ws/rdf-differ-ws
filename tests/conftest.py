@@ -11,6 +11,7 @@ import pytest
 
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.entrypoints.ui import app as ui_app
 
 
 class FakeSPARQLRunner:
@@ -77,3 +78,12 @@ def helper_fuseki_service(triplestore_service_url: str = "http://localhost:3030/
     return FusekiDiffAdapter(triplestore_service_url=triplestore_service_url,
                              http_client=http_client,
                              sparql_client=sparql_client)
+
+
+# TODO: update configuration handling https://flask.palletsprojects.com/en/1.1.x/config/#development-production
+@pytest.fixture
+def ui_client():
+    ui_app.config['TESTING'] = True
+    ui_app.config['WTF_CSRF_ENABLED'] = False
+
+    return ui_app.test_client()

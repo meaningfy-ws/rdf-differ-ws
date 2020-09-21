@@ -5,6 +5,7 @@ pytest
 coverage
 pytest-cov
 pytest-bdd
+beautifulsoup4
 
 # Linting dependencies
 flake8

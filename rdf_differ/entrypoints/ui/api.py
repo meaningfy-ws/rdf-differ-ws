@@ -15,12 +15,13 @@ from rdf_differ.entrypoints.ui import config
 
 
 def get_datasets():
-    datasets = requests.get(config.API_ENDPOINT + '/diffs')
-    return datasets.json()
+    response = requests.get(config.API_ENDPOINT + '/diffs')
+    return response.json(), response.status_code
 
 
 def get_dataset(dataset_id):
-    return requests.get(config.API_ENDPOINT + '/diffs/' + dataset_id).json()
+    response = requests.get(config.API_ENDPOINT + '/diffs/' + dataset_id)
+    return response.json(), response.status_code
 
 
 def create_diff(dataset_name, dataset_description, dataset_uri,
@@ -37,4 +38,4 @@ def create_diff(dataset_name, dataset_description, dataset_uri,
         'new_version_id': new_version_id
     }
     response = requests.post(config.API_ENDPOINT + '/diffs', data=data, files=files)
-    return response.text
+    return response.text, response.status_code

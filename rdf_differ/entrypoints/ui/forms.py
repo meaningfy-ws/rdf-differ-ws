@@ -14,9 +14,9 @@ from wtforms import StringField, SubmitField, FileField
 from wtforms.validators import Length, DataRequired, URL, Regexp
 
 
-class DiffGet(FlaskForm):
+class CreateDiffForm(FlaskForm):
     dataset_name = StringField('Dataset name', validators=[DataRequired(),
-                                                           Regexp(r'^[a-zA-Z0-9]*$',
+                                                           Regexp(r'^[\w\d_:-]*$',
                                                                   message='Dataset name cannot contain spaces'),
                                                            Length(min=2, max=50)])
     dataset_description = StringField('Dataset description', description='Optional description of the dataset.')
