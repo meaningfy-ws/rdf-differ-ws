@@ -19,7 +19,7 @@ services:
       - .:/usr/src/app
     ports:
       - ${UI_PORT}:${UI_PORT}
-    env_file: ui/.env
+    env_file: ui/.env.dev
 
   fuseki:
     container_name: fuseki
