@@ -8,7 +8,7 @@
 from werkzeug.datastructures import FileStorage
 from pathlib import Path
 
-from rdf_differ.entrypoints.api.views import create_diff
+from rdf_differ.entrypoints.api.handlers import create_diff
 
 
 def run_create(dataset, dataset_uri, old_path, new_path, old_version='old', new_version='new'):
@@ -28,32 +28,32 @@ def populate_fuseki():
         {
             'dataset': 'subdiv',
             'dataset_uri': 'http://publications.europa.eu/resource/authority/subdivision',
-            'old': Path.cwd() / 'tests/test_data/subdivisions_sh_ds/data/v1/subdivisions-skos.rdf',
-            'new': Path.cwd() / 'tests/test_data/subdivisions_sh_ds/data/v2/subdivisions-skos.rdf'
+            'old': Path(__file__).parents[1] / 'tests/test_data/subdivisions_sh_ds/data/v1/subdivisions-skos.rdf',
+            'new': Path(__file__).parents[1] / 'tests/test_data/subdivisions_sh_ds/data/v2/subdivisions-skos.rdf'
         },
         {
             'dataset': 'eurovoc-fragment',
             'dataset_uri': 'http://eurovoc.europa.eu/100141',
-            'old': Path.cwd() / 'tests/test_data/eurovoc/old.rdf',
-            'new': Path.cwd() / 'tests/test_data/eurovoc/new.rdf',
+            'old': Path(__file__).parents[1] / 'tests/test_data/eurovoc/old.rdf',
+            'new': Path(__file__).parents[1] / 'tests/test_data/eurovoc/new.rdf',
         },
         {
             'dataset': 'countries-fragment',
             'dataset_uri': 'http://publications.europa.eu/resource/authority/country',
-            'old': Path.cwd() / 'tests/test_data/country/old-countries-skos-ap-act.rdf',
-            'new': Path.cwd() / 'tests/test_data/country/new-countries-skos-ap-act.rdf',
+            'old': Path(__file__).parents[1] / 'tests/test_data/country/old-countries-skos-ap-act.rdf',
+            'new': Path(__file__).parents[1] / 'tests/test_data/country/new-countries-skos-ap-act.rdf',
         },
         {
             'dataset': 'cob-fragment',
             'dataset_uri': 'http://publications.europa.eu/resource/authority/corporate-body/',
-            'old': Path.cwd() / 'tests/test_data/cob/old-corporatebodies-skos-ap-act.rdf',
-            'new': Path.cwd() / 'tests/test_data/cob/new-corporatebodies-skos-ap-act.rdf',
+            'old': Path(__file__).parents[1] / 'tests/test_data/cob/old-corporatebodies-skos-ap-act.rdf',
+            'new': Path(__file__).parents[1] / 'tests/test_data/cob/new-corporatebodies-skos-ap-act.rdf',
         },
         {
             'dataset': 'treaty-fragment',
             'dataset_uri': 'http://publications.europa.eu/resource/authority/treaty/',
-            'old': Path.cwd() / 'tests/test_data/treaty/old-treaties-skos-ap-act.rdf',
-            'new': Path.cwd() / 'tests/test_data/treaty/new-treaties-skos-ap-act.rdf',
+            'old': Path(__file__).parents[1] / 'tests/test_data/treaty/old-treaties-skos-ap-act.rdf',
+            'new': Path(__file__).parents[1] / 'tests/test_data/treaty/new-treaties-skos-ap-act.rdf',
         },
     ]
 
