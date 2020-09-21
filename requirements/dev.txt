@@ -14,3 +14,10 @@ flake8
 myst-parser
 sphinx<3
 sphinxcontrib-apidoc
+
+
+# Flask requirements for testing
+Flask
+flask-wtf
+flask-bootstrap
+Flask-Wtf
