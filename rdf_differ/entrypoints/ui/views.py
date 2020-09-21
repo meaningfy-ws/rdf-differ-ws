@@ -12,7 +12,7 @@ UI pages
 from flask import render_template, redirect, flash, url_for
 
 from rdf_differ.entrypoints.ui import app
-from rdf_differ.entrypoints.ui.api import get_datasets, create_diff as api_create_diff, get_dataset
+from rdf_differ.entrypoints.ui.api_wrapper import get_datasets, create_diff as api_create_diff, get_dataset
 from rdf_differ.entrypoints.ui.forms import CreateDiffForm
 
 

@@ -11,4 +11,4 @@ Module description
 """
 import os
 
-API_ENDPOINT = os.environ.get('API_ENDPOINT', 'http://rdf_differ:3040')
+RDF_DIFF_API_ENDPOINT = os.environ.get('RDF_DIFF_API_ENDPOINT', 'http://rdf_differ:3040')
