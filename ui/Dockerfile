@@ -10,4 +10,4 @@ COPY . /usr/src/app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-CMD gunicorn --bind 0.0.0.0:${RDF_DIFFER_API_PORT} rdf_differ.entrypoints.api.run:app
+CMD flask run --host=0.0.0.0 --port=${UI_PORT}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% set active_page = "create_diff" %}
+
+{% block app_content %}
+    <h1>Create a dataset.</h1>
+    <div class="alert alert-primary" role="alert">
+        <p class="text-primary">The processing might take a while if you use big files.</p>
+    </div>
+    {{ wtf.quick_form(form) }}
+{% endblock %}
