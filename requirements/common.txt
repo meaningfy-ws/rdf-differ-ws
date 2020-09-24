@@ -5,4 +5,4 @@ requests
 connexion[swagger-ui]
 Flask
 
-git+https://github.com/meaningfy-ws/eds4jinja2
+eds4jinja2
