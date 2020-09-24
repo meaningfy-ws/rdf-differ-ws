@@ -22,6 +22,7 @@ from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
 from utils.file_utils import temporarily_save_files
+from utils.generate_utils import DIFF_TEMPLATE_LOCATION, generate_config_content
 
 
 def get_diffs() -> tuple:
@@ -83,7 +84,6 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
 
     if can_create:
         try:
-            print(old_version_file_content)
             with temporarily_save_files(old_version_file_content, new_version_file_content) as \
                     (temp_dir, old_version_file, new_version_file):
                 fuseki_adapter.create_diff(dataset=body.get('dataset_id'),
@@ -119,31 +119,20 @@ def delete_diff(dataset_id: str) -> tuple:
         raise NotFound(f'<{dataset_id}> does not exist.')  # 404
 
 
-def get_report(dataset_id: str, dataset_url: str) -> tuple:
+def get_report(dataset_url: str) -> tuple:
+    """ 
     """
-    """
-    # is there a better way to check if diff exists?
-    get_diff(dataset_id)  # here it can return 404
-
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
-            copytree(Path.cwd() / 'resources/eds_templates', temp_dir, dirs_exist_ok=True)
+            copytree(DIFF_TEMPLATE_LOCATION, temp_dir, dirs_exist_ok=True)
+
             with open(Path(temp_dir) / 'config.json', 'w') as config_file:
-                config = {
-                    "template": "main.html",
-                    "conf":
-                        {
-                            "default_endpoint": dataset_url,
-                            "title": "Dataset Diff Report",
-                            "type": "report"
-                        }
-                }
-                config_file.write(dumps(config))
+                config_content = generate_config_content(dataset_url)
+                config_file.write(dumps(config_content))
 
-            rp = ReportBuilder(target_path=temp_dir,
-                               output_path=temp_dir)
-            rp.make_document()
+            report_builder = ReportBuilder(target_path=temp_dir)
+            report_builder.make_document()
 
-            return send_from_directory(Path(str(temp_dir)) / 'output', 'main.html', as_attachment=True)
+            return send_from_directory(Path(str(temp_dir)) / 'output', 'main.html', as_attachment=True)  # 200
     except Exception as e:
         raise InternalServerError(str(e))  # 500

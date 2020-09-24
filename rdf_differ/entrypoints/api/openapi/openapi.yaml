@@ -124,20 +124,15 @@ paths:
         5XX:
           description: Unexpected Error.
 
-  /diffs/{dataset_id}/report:
+  /diffs/report:
     get:
-      operationId: rdf_differ.entrypoints.diffs.get_report
+      operationId: rdf_differ.entrypoints.api.handlers.get_report
       description: Get report for a dataset.
       parameters:
-        - in: path
-          name: dataset_id
-          required: true
-          description: Dataset id
-          schema:
-            type: string
         - in: query
           name: dataset_url
           required: true
+          allowEmptyValue: False
           description: URL to query on
           schema:
             type: string
@@ -150,8 +145,6 @@ paths:
               schema:
                 type: string
                 format: binary
-        404:
-          description: A dataset with the specified ID was not found.
         5XX:
           description: Unexpected Error.
 
