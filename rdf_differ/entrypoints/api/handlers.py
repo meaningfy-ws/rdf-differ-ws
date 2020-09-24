@@ -120,7 +120,11 @@ def delete_diff(dataset_id: str) -> tuple:
 
 
 def get_report(dataset_url: str) -> tuple:
-    """ 
+    """
+        Generate a dataset diff report
+    :param dataset_url: Dataset endpoint to get data for report population
+    :return: html report as attachment
+    :rtype: file, int
     """
     try:
         with tempfile.TemporaryDirectory() as temp_dir:

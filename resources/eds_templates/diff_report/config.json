@@ -1,0 +1,10 @@
+{
+    "template": "main.html",
+    "conf":
+    {
+        "default_endpoint" : "http://fuseki:3030/eurovoc-fragment/sparql",
+        "title": "Dataset Fingerprint Report (Diff)",
+        "type": "report",
+        "author": "Meaningfy"
+    }
+}

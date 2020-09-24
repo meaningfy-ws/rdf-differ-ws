@@ -1,19 +1,19 @@
 #!/usr/bin/python3
 
-# test_entrypoints_diffs.py
+# test_entrypoints_api_handlers.py
 # Date: 07/08/2020
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
-
 from unittest.mock import patch
 
 import pytest
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
+from eds4jinja2.builders.report_builder import ReportBuilder
 from werkzeug.exceptions import InternalServerError, Conflict, BadRequest, NotFound
 
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
-from rdf_differ.entrypoints.api.handlers import get_diffs, create_diff, get_diff, delete_diff
+from rdf_differ.entrypoints.api.handlers import get_diffs, create_diff, get_diff, delete_diff, get_report
 from tests.unit.conftest import helper_create_diff
 
 
@@ -162,6 +162,18 @@ def test_get_diff_500(mock_dataset_description, exception):
     assert "Unexpected Error." in str(e.value)
 
 
+
+@when('API endpoint is called with missing dataset')
+def api_endpoint_is_called_with_missing_dataset():
+    """API endpoint is called."""
+    raise NotImplementedError
+
+
+@then('the user is notified that the dataset doesn\'t exist')
+def the_user_is_notified_that_the_dataset_doesnt_exist():
+    """the user is notified that the dataset doesn't exist."""
+    raise NotImplementedError
+
 # TODO: update tests after refactoring. Add 5xx testing
 @patch.object(FusekiDiffAdapter, 'delete_dataset')
 def test_delete_diff_200(mock_delete_dataset):
@@ -181,3 +193,13 @@ def test_delete_diff_404(mock_delete_dataset):
         _ = delete_diff('dataset')
 
     assert "<dataset> does not exist." in str(e.value)
+
+
+@patch.object(ReportBuilder, 'make_document')
+def test_get_report_500(mock_error):
+    mock_error.side_effect = Exception('500 error')
+
+    with pytest.raises(Exception) as e:
+        _ = get_report('http://url.com')
+
+    assert '500 error' in str(e.value)

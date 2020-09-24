@@ -145,6 +145,8 @@ paths:
               schema:
                 type: string
                 format: binary
+        400:
+          description: dataset_url query param not present.
         5XX:
           description: Unexpected Error.
 
