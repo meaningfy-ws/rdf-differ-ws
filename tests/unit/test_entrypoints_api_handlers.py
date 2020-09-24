@@ -162,18 +162,6 @@ def test_get_diff_500(mock_dataset_description, exception):
     assert "Unexpected Error." in str(e.value)
 
 
-
-@when('API endpoint is called with missing dataset')
-def api_endpoint_is_called_with_missing_dataset():
-    """API endpoint is called."""
-    raise NotImplementedError
-
-
-@then('the user is notified that the dataset doesn\'t exist')
-def the_user_is_notified_that_the_dataset_doesnt_exist():
-    """the user is notified that the dataset doesn't exist."""
-    raise NotImplementedError
-
 # TODO: update tests after refactoring. Add 5xx testing
 @patch.object(FusekiDiffAdapter, 'delete_dataset')
 def test_delete_diff_200(mock_delete_dataset):
