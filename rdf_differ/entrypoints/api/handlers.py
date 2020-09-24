@@ -33,7 +33,7 @@ def get_diffs() -> tuple:
     fuseki_adapter = FusekiDiffAdapter(config.ENDPOINT, http_client=requests, sparql_client=SPARQLRunner())
     try:
         datasets = fuseki_adapter.list_datasets()
-        return [{dataset: fuseki_adapter.dataset_description(dataset)} for dataset in datasets], 200
+        return [fuseki_adapter.dataset_description(dataset) for dataset in datasets], 200
     except (FusekiException, ValueError, IndexError) as exception:
         raise InternalServerError(str(exception))  # 500
 
@@ -83,6 +83,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
 
     if can_create:
         try:
+            print(old_version_file_content)
             with temporarily_save_files(old_version_file_content, new_version_file_content) as \
                     (temp_dir, old_version_file, new_version_file):
                 fuseki_adapter.create_diff(dataset=body.get('dataset_id'),
@@ -97,8 +98,8 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
             return 'Request to create a new dataset diff successfully accepted for processing.', 200
         except ValueError as exception:
             raise BadRequest(str(exception))  # 400
-        except SubprocessFailure:
-            raise InternalServerError('Internal error while uploading the diffs.')  # 500
+        except SubprocessFailure as exception:
+            raise InternalServerError('Internal error while uploading the diffs.\n' + str(exception))  # 500
     else:
         raise Conflict('Dataset is not empty.')  # 409
 

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% set active_page = "view_dataset" %}
+
+{% block app_content %}
+    <h1>You're viewing dataset: {{ dataset.dataset_id }}</h1>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Description</th>
+            <th>{{ dataset.dataset_description }}</th>
+
+        </tr>
+        <tr>
+            <th>Dataset URI</th>
+            <th>{{ dataset.dataset_uri }}</th>
+
+        </tr>
+        <tr>
+
+            <th>Versions</th>
+            <th>{{ dataset.dataset_versions }}</th>
+
+        </tr>
+        <tr>
+            <th>Diff date</th>
+            <th>{{ dataset.diff_date }}</th>
+
+        </tr>
+        <tr>
+            <th>Version named graphs</th>
+            <th>{{ dataset.version_named_graphs }}</th>
+
+        </tr>
+        <tr>
+            <th>New version name</th>
+            <th>{{ dataset.new_version_id }}</th>
+
+        </tr>
+        <tr>
+            <th>Old version name</th>
+            <th>{{ dataset.old_version_id }}</th>
+
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

@@ -13,7 +13,7 @@ from werkzeug.exceptions import InternalServerError, Conflict, BadRequest, NotFo
 
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
-from rdf_differ.entrypoints.diffs import get_diffs, create_diff, get_diff, delete_diff
+from rdf_differ.entrypoints.api.handlers import get_diffs, create_diff, get_diff, delete_diff
 from tests.unit.conftest import helper_create_diff
 
 
@@ -34,12 +34,12 @@ def test_get_diffs_200(mock_list_datasets, mock_dataset_description):
 
     assert status == 200
     assert response == [
-        {'first_dataset': {
+        {
             'dataset_id': "first_dataset"
-        }},
-        {'second_dataset': {
+        },
+        {
             'dataset_id': "second_dataset"
-        }}
+        }
     ]
 
 

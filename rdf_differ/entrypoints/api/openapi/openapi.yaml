@@ -24,7 +24,7 @@ servers:
 paths:
   /diffs:
     get:
-      operationId: rdf_differ.entrypoints.diffs.get_diffs
+      operationId: rdf_differ.entrypoints.api.handlers.get_diffs
       description: List the existent datasets.
       responses:
         200:
@@ -38,7 +38,7 @@ paths:
         5XX:
           description: Unexpected Error.
     post:
-      operationId: rdf_differ.entrypoints.diffs.create_diff
+      operationId: rdf_differ.entrypoints.api.handlers.create_diff
       description: Calculate the diff of two dataset versions.
       requestBody:
         required: true
@@ -86,7 +86,7 @@ paths:
 
   /diffs/{dataset_id}:
     get:
-      operationId: rdf_differ.entrypoints.diffs.get_diff
+      operationId: rdf_differ.entrypoints.api.handlers.get_diff
       description: Get diffs for a dataset versions.
       parameters:
         - name: dataset_id
@@ -107,7 +107,7 @@ paths:
         5XX:
           description: Unexpected Error.
     delete:
-      operationId: rdf_differ.entrypoints.diffs.delete_diff
+      operationId: rdf_differ.entrypoints.api.handlers.delete_diff
       description: Delete the dataset and all its diffs.
       parameters:
         - name: dataset_id

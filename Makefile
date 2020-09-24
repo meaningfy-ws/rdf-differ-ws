@@ -43,7 +43,7 @@ stop-dev:
 	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev down
 
 populate-fuseki:
-	@ python rdf_differ/commands.py
+	@ python scripts/commands.py
 
 #-----------------------------------------------------------------------------
 # Production environment
