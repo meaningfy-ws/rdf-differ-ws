@@ -1,4 +1,4 @@
-name: run test
+name: test
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  main:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -15,7 +15,6 @@ jobs:
     env:
       OS: ${{ matrix.os }}
       PYTHON: '3.8'
-
     steps:
     - uses: actions/checkout@master
     - name: Set up Python
@@ -24,7 +23,7 @@ jobs:
         python-version: 3.8
     - name: Run adjacent services (Fuseki)
       run: |
-        make run-fuseki-dirty
+        make start-bootstrap-fuseki
     - name: Install dependencies
       run: |
         make install-dev
