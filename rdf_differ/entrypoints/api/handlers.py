@@ -22,7 +22,7 @@ from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
 from utils.file_utils import temporarily_save_files
-from utils.generate_utils import DIFF_TEMPLATE_LOCATION, generate_config_content
+from utils.generate_report_utils import DIFF_TEMPLATE_LOCATION, generate_config_content
 
 
 def get_diffs() -> tuple:

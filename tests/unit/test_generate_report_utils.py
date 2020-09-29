@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 
-# test_generate_utils.py
+# test_generate_report_utils.py
 # Date:  24/09/2020
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
-from utils.generate_utils import generate_config_content
+from utils.generate_report_utils import generate_config_content
 
 
 def test_generate_config_content():
