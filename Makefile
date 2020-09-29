@@ -34,7 +34,7 @@ build-dev:
 	@ echo -e '$(BUILD_PRINT)Building the dev container'
 	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev build
 
-run-dev:
+start-dev:
 	@ echo -e '$(BUILD_PRINT)Starting the dev services'
 	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev up -d
 
@@ -53,7 +53,7 @@ build-prod:
 	@ echo -e '$(BUILD_PRINT)Building the prod container'
 	@ docker-compose --file docker-compose.yml --env-file .env.prod build
 
-run-prod:
+start-prod:
 	@ echo -e '$(BUILD_PRINT)Starting the prod services'
 	@ docker-compose --file docker-compose.yml --env-file .env.prod up -d
 
@@ -65,7 +65,7 @@ stop-prod:
 # Fuseki related commands
 #-----------------------------------------------------------------------------
 
-run-fuseki:
+start-fuseki:
 	@ echo "$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')"
 	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev up --build -d fuseki
 
@@ -79,7 +79,7 @@ fuseki-create-test-dbs:
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
 
-run-fuseki-dirty: run-fuseki fuseki-create-test-dbs
+start-bootstrap-fuseki: start-fuseki fuseki-create-test-dbs
 
 #-----------------------------------------------------------------------------
 # Gherkin feature and acceptance test generation commands
@@ -107,4 +107,4 @@ $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_F
 # Default
 #-----------------------------------------------------------------------------
 all:
-	install test
+	install-dev test
