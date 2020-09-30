@@ -20,7 +20,7 @@ To create the containers run:
 ```bash
 make build-dev
 ```
-To run the docker containers for the `rdf-differ` `api` and `ui`, and `fuseki` container:
+To run the docker containers for the `rdf-differ` `api` and `ui`, and `fuseki`:
 ```bash
 make start-dev
 ```
