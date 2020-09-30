@@ -17,6 +17,5 @@ sphinxcontrib-apidoc
 
 
 # Flask requirements for testing
-Flask
 flask-bootstrap
 Flask-Wtf

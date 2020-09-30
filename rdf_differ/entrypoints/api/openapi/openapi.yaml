@@ -18,7 +18,7 @@ info:
   version: 1.0.1
 
 servers:
-  - url: 'http://localhost:3030/'
+  - url: "http://localhost:3030/"
     description: Default development server
 
 paths:
@@ -34,7 +34,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CalculatedDiffDescription'
+                  $ref: "#/components/schemas/CalculatedDiffDescription"
         5XX:
           description: Unexpected Error.
     post:
@@ -101,7 +101,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CalculatedDiffDescription'
+                $ref: "#/components/schemas/CalculatedDiffDescription"
         404:
           description: A dataset with the specified ID was not found.
         5XX:
@@ -121,6 +121,32 @@ paths:
           description: Dataset succesfully deteled.
         404:
           description: A dataset with the specified ID was not found.
+        5XX:
+          description: Unexpected Error.
+
+  /diffs/report:
+    get:
+      operationId: rdf_differ.entrypoints.api.handlers.get_report
+      description: Get report for a dataset.
+      parameters:
+        - in: query
+          name: dataset_url
+          required: true
+          allowEmptyValue: False
+          description: URL to query on
+          schema:
+            type: string
+            format: url
+      responses:
+        200:
+          description: Dataset diff report succesfully retreived.
+          content:
+            text/html:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: dataset_url query param not present.
         5XX:
           description: Unexpected Error.
 
@@ -154,7 +180,7 @@ components:
     DiffSubmission:
       description: A request to diff two versions of a dataset.
       oneOf:
-        - $ref: '#/components/schemas/BasicDiffDescription'
+        - $ref: "#/components/schemas/BasicDiffDescription"
         - type: object
           properties:
             new_version_file_content:
@@ -172,7 +198,7 @@ components:
     CalculatedDiffDescription:
       description: A description of diff in the triplestore.
       allOf:
-        - $ref: '#/components/schemas/BasicDiffDescription'
+        - $ref: "#/components/schemas/BasicDiffDescription"
         - type: object
           properties:
             query_url:

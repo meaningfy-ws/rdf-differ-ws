@@ -5,8 +5,15 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 
+import tempfile
+from json import dumps
+from pathlib import Path
+from shutil import copytree
+
 import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
+from eds4jinja2.builders.report_builder import ReportBuilder
+from flask import send_from_directory
 from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound
 
@@ -76,7 +83,6 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
 
     if can_create:
         try:
-            print(old_version_file_content)
             with temporarily_save_files(old_version_file_content, new_version_file_content) as \
                     (temp_dir, old_version_file, new_version_file):
                 fuseki_adapter.create_diff(dataset=body.get('dataset_id'),
@@ -87,6 +93,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
                                            old_version_file=old_version_file,
                                            new_version_file=new_version_file)
 
+            # TODO: return dataset url, in case that this call could take more time that usual api request.
             return 'Request to create a new dataset diff successfully accepted for processing.', 200
         except ValueError as exception:
             raise BadRequest(str(exception))  # 400
@@ -109,3 +116,36 @@ def delete_diff(dataset_id: str) -> tuple:
         return f'<{dataset_id}> created successfully.', 200
     except FusekiException:
         raise NotFound(f'<{dataset_id}> does not exist.')  # 404
+
+
+def get_report(dataset_url: str) -> tuple:
+    """
+        Generate a dataset diff report
+    :param dataset_url: Dataset endpoint to get data for report population
+    :return: html report as attachment
+    :rtype: file, int
+    """
+    try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            template_location = Path(__file__).parents[3] / 'resources/eds_templates/diff_report'
+            copytree(template_location, temp_dir, dirs_exist_ok=True)
+
+            with open(Path(temp_dir) / 'config.json', 'w') as config_file:
+                config_content = {
+                    "template": "main.html",
+                    "conf":
+                        {
+                            "default_endpoint": dataset_url,
+                            "title": "Dataset Diff Report",
+                            "type": "report"
+                        }
+                }
+
+                config_file.write(dumps(config_content))
+
+            report_builder = ReportBuilder(target_path=temp_dir)
+            report_builder.make_document()
+
+            return send_from_directory(Path(str(temp_dir)) / 'output', 'main.html', as_attachment=True)  # 200
+    except Exception as e:
+        raise InternalServerError(str(e))  # 500
