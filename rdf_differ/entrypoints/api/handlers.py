@@ -23,6 +23,10 @@ from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
 from utils.file_utils import temporarily_save_files
 
+"""
+The definition of the API endpoints
+"""
+
 
 def get_diffs() -> tuple:
     """

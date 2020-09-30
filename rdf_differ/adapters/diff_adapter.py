@@ -5,6 +5,13 @@
 # Author: Eugeniu Costetchi
 # Email: costezki.eugen@gmail.com
 
+"""
+Module for triple store adapters.
+
+Currently implemented triple store adapters:
+FusekiDiffAdapter - for the Fuseki triple store (more info here: https://jena.apache.org/documentation/fuseki2/)
+"""
+
 from abc import ABC, abstractmethod
 from json import loads
 from pathlib import Path

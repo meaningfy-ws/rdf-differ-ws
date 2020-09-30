@@ -6,7 +6,7 @@
 # Email: coslet.mihai@gmail.com
 
 """
-    Form classes for use in views.
+    Form classes to be used in views.
 """
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired

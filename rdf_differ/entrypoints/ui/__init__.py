@@ -5,9 +5,9 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 
-"""
-Module description
 
+"""
+Module for configuring the Flask server for UI
 """
 
 from flask import Flask

@@ -7,7 +7,6 @@
 
 """
 Service to consume RDF diff API.
-
 """
 import requests
 from werkzeug.datastructures import FileStorage

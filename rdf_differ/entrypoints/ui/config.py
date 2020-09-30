@@ -6,8 +6,7 @@
 # Email: coslet.mihai@gmail.com
 
 """
-Module description
-
+Configuration for the current Flask project.
 """
 import os
 

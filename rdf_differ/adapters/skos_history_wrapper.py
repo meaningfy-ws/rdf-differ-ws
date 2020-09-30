@@ -117,11 +117,19 @@ class SKOSHistoryRunner:
         return urljoin(self.endpoint, '/'.join([self.dataset, 'query']))
 
     def run(self):
+        """
+        Method to generate the required structure (for the SKOS History shell script), generate the config file, and
+        executing the shell script.
+        """
         self.generate_structure()
         config_location = self.generate_config()
         self.execute_subprocess(config_location)
 
     def generate_structure(self):
+        """
+        Method for creating the required folder structure (for the SKOS History shell script) using the data provided
+        at the SKOSHistoryRunner object creation.
+        """
         v1 = Path(self.basedir) / self.old_version_id
         v2 = Path(self.basedir) / self.new_version_id
 
@@ -132,6 +140,10 @@ class SKOSHistoryRunner:
         copy(self.new_version_file, v2 / self._get_full_filename())
 
     def generate_config(self) -> str:
+        """
+        Method for creating the config file (for the SKOS History shell script) using the data provided at the
+        SKOSHistoryRunner object creation.
+        """
         content = self.config_template.format(
             dataset=self.dataset,
             scheme_uri=self.scheme_uri,
@@ -149,10 +161,18 @@ class SKOSHistoryRunner:
 
         return str(location)
 
-    def _get_full_filename(self):
+    def _get_full_filename(self) -> str:
+        """
+        Helper method to generate full file name (name + extension)
+        :return: full filename
+        """
         return '{}{}'.format(self.filename, self.file_extension)
 
-    def _check_file_formats(self):
+    def _check_file_formats(self) -> str:
+        """
+        Helper method to check whether the formats of the files provided are the same.
+        :return: file format
+        """
         old_format = self.get_file_format(self.old_version_file)
         new_format = self.get_file_format(self.new_version_file)
 
@@ -162,11 +182,19 @@ class SKOSHistoryRunner:
         return old_format
 
     def _check_basedir(self):
+        """
+        Helper method to check whether the indicated directory for the structure generation is empty.
+        """
         if dir_exists(self.basedir) and not dir_is_empty(self.basedir):
             raise ValueError('Root path is not empty.')
 
     @classmethod
     def execute_subprocess(cls, config_location: Union[str, Path]) -> str:
+        """
+        Method to execute the shell script.
+        :param config_location: path - location of the config
+        :return: the script's output
+        """
         script_location = Path(__file__).parents[2] / 'resources/load_versions.sh'
 
         logging.info('Subprocess: run load_versions.sh start.')
@@ -186,6 +214,12 @@ class SKOSHistoryRunner:
 
     @staticmethod
     def get_file_format(file: str) -> str:
+        """
+        Helper method to check get the format of the provided file, and to check whether they are from the
+        acceptable file formats.
+        :param file: file location
+        :return: format of the file
+        """
         file_format = guess_format(str(file), INPUT_MIME_TYPES)
         if file_format is None:
             raise ValueError('Format of "{}" is not supported.'.format(file))

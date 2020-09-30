@@ -10,9 +10,9 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 
 class SPARQLRunner:
     """
-
+    Wrapper around the SPARQLWrapper python package.
+    Used for Dependency Injection.
     """
-
     def __init__(self, result_format: str = JSON):
         self.result_format = result_format
 
