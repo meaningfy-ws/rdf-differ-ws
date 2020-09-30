@@ -5,12 +5,7 @@
 # Author: Eugeniu Costetchi
 # Email: costezki.eugen@gmail.com
 
-import connexion
-
-connexion_app = connexion.FlaskApp(__name__, specification_dir='openapi')
-connexion_app.add_api('openapi.yaml')
-
-app = connexion_app.app
+from rdf_differ.entrypoints.api import app
 
 if __name__ == '__main__':
     app.run()

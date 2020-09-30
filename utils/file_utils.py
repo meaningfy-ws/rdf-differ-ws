@@ -54,6 +54,12 @@ def file_exists(path: Union[str, Path]) -> bool:
 
 @contextmanager
 def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
+    """
+    Context manager that accepts 2 files and saved them in a temporary directory that gets removed after the context
+    closes.
+    :param old_file: file to be saved in the temporary directory
+    :param new_file: file to be saved in the temporary directory
+    """
     if not old_file or not new_file:
         raise TypeError("Files cannot be of None type.")
 

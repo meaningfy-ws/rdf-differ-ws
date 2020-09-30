@@ -5,6 +5,10 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 
+"""
+Project wide configuration file.
+"""
+
 import os
 
 FILENAME = os.environ.get('FILENAME', 'file')
