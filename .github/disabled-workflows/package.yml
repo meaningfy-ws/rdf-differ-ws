@@ -11,9 +11,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Set env
+      - name: Define variables
         run: |
+          # Hard coded variable
+          echo "Dockerfile" > DOCKERFILE_NAME
+          echo "meaningfy" > DOCKERHUB_USER
+          echo "rdf-differ" > APP_NAME
+          echo "$(cat DOCKERHUB_USER)/$(cat APP_NAME)" > DKR_HUB_URL
+          #
           echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+          date -d "-4 hours" "+%Y-%m-%d_%HH%Ms%S" > DATE_TIME
+          # logically defined tags
+          echo "$(cat DKR_HUB_URL):latest" > TAG_LATEST
+          echo "$(cat DKR_HUB_URL):stable" > TAG_STABLE
+          echo "$(cat DKR_HUB_URL):$(cat RELEASE_VERSION)" > TAG_VERSION
+          echo "$(cat DKR_HUB_URL):$(cat RELEASE_VERSION)_$(cat DATE_TIME)" > TAG_BEST_PRACTICE
       - name: Show release version
         # now RELEASE_VERSION is an env variable
         run: |
@@ -36,6 +48,9 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
+          context: .
+          file: ./Dockerfile
+          build-args: --env-file .env.prod
           push: true
           tags: |
             meaningfy/rdf-differ:latest

@@ -1,0 +1,56 @@
+name: Docker build and push
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  main:
+    name: Build and push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set env
+        run: |
+          # Hard coded variable
+          echo "Dockerfile" > DOCKERFILE_NAME
+          echo "meaningfy" > DOCKERHUB_USER
+          echo "rdf-differ" > APP_NAME
+          echo "$(cat DOCKERHUB_USER)/$(cat APP_NAME)" > DKR_HUB_URL
+          #
+          echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+          date -d "-4 hours" "+%Y-%m-%d_%HH%Ms%S" > DATE_TIME
+          # logically defined tags
+          echo "$(cat DKR_HUB_URL):latest" > TAG_LATEST
+          echo "$(cat DKR_HUB_URL):stable" > TAG_STABLE
+          echo "$(cat DKR_HUB_URL):$(cat RELEASE_VERSION)" > TAG_VERSION
+          echo "$(cat DKR_HUB_URL):$(cat RELEASE_VERSION)_$(cat DATE_TIME)" > TAG_BEST_PRACTICE
+
+      - name: Show release version
+        run: |
+          echo " "
+          echo $RELEASE_VERSION
+          echo " "
+          echo "$(cat DATE_TIME) < DATE_TIME"
+          echo " "
+
+      - name: Build
+        run: |
+          docker build --file Dockerfile --tag $TAG_LATEST .
+          docker build --file Dockerfile --tag $TAG_VERSION .
+
+      - name: Logs / docker (inspect, history, version, info), uname
+        run: |
+          docker inspect latest
+          docker history latest --no-trunc
+          docker version
+          docker info
+          uname -a
+
+      - name: Publish on Docker hub
+        run: |
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username $(cat DOCKERHUB_USER) --password-stdin
+          docker push $(cat TAG_LATEST)
+          docker push $(cat TAG_VERSION)
