@@ -5,4 +5,5 @@ requests
 connexion[swagger-ui]
 Flask
 
-eds4jinja2
+# to always get the latest version of eds4jinja2
+git+https://github.com/meaningfy-ws/eds4jinja2

@@ -1,8 +1,8 @@
 version: '3.7'
 
 services:
-  rdf-differ:
-    container_name: rdf_differ
+  rdf-differ-api:
+    container_name: rdf-differ-api
     build: .
     volumes:
       - .:/usr/src/app
@@ -10,8 +10,8 @@ services:
       - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
     env_file: .env.prod
 
-  ui:
-    container_name: ui
+  rdf-differ-ui:
+    container_name: rdf-differ-ui
     build: ./ui
     volumes:
       - .:/usr/src/app

@@ -17,9 +17,5 @@ sphinxcontrib-apidoc
 
 
 # Flask requirements for testing
-Flask
 flask-bootstrap
 Flask-Wtf
-
-# to always get the freshest version of eds4jinja2
-git+https://github.com/meaningfy-ws/eds4jinja2

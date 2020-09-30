@@ -22,7 +22,6 @@ from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
 from utils.file_utils import temporarily_save_files
-from utils.generate_report_utils import DIFF_TEMPLATE_LOCATION, generate_config_content
 
 
 def get_diffs() -> tuple:
@@ -128,10 +127,20 @@ def get_report(dataset_url: str) -> tuple:
     """
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
-            copytree(DIFF_TEMPLATE_LOCATION, temp_dir, dirs_exist_ok=True)
+            template_location = Path(__file__).parents[3] / 'resources/eds_templates/diff_report'
+            copytree(template_location, temp_dir, dirs_exist_ok=True)
 
             with open(Path(temp_dir) / 'config.json', 'w') as config_file:
-                config_content = generate_config_content(dataset_url)
+                config_content = {
+                    "template": "main.html",
+                    "conf":
+                        {
+                            "default_endpoint": dataset_url,
+                            "title": "Dataset Diff Report",
+                            "type": "report"
+                        }
+                }
+
                 config_file.write(dumps(config_content))
 
             report_builder = ReportBuilder(target_path=temp_dir)
