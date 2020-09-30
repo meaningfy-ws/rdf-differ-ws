@@ -1,5 +1,8 @@
 name: Docker build and push
 
+# Very nice reference on buildign and pushing Docker container is available at
+# https://github.com/firepress-org/rclone-in-docker/blob/master/.github/workflows/ci_dockerfile_is_master.yml
+
 on:
   release:
     types: [published]
@@ -20,7 +23,8 @@ jobs:
           echo "rdf-differ" > APP_NAME
           echo "$(cat DOCKERHUB_USER)/$(cat APP_NAME)" > DKR_HUB_URL
           #
-          echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+          # echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+          echo "${GITHUB_REF#refs/*/}" > RELEASE_VERSION
           date -d "-4 hours" "+%Y-%m-%d_%HH%Ms%S" > DATE_TIME
           # logically defined tags
           echo "$(cat DKR_HUB_URL):latest" > TAG_LATEST
