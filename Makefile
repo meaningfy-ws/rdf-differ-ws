@@ -40,7 +40,7 @@ start-dev:
 
 stop-dev:
 	@ echo -e '$(BUILD_PRINT)Stopping the dev services'
-	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev down
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev stop
 
 populate-fuseki:
 	@ python scripts/commands.py
@@ -59,19 +59,23 @@ start-prod:
 
 stop-prod:
 	@ echo -e '$(BUILD_PRINT)Stopping the prod services'
-	@ docker-compose --file docker-compose.yml --env-file .env.prod down
+	@ docker-compose --file docker-compose.yml --env-file .env.prod stop
 
 #-----------------------------------------------------------------------------
 # Fuseki related commands
 #-----------------------------------------------------------------------------
 
+build-fuseki:
+	@ echo "$(BUILD_PRINT)Building Fuseki"
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev build fuseki
+
 start-fuseki:
 	@ echo "$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')"
-	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev up --build -d fuseki
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev up -d fuseki
 
 stop-fuseki:
 	@ echo "$(BUILD_PRINT)Stopping Fuseki"
-	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev down
+	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev stop fuseki
 
 fuseki-create-test-dbs:
 	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(FUSEKI_PORT),$(FUSEKI_PORT),unknown port)/$$/datasets"
@@ -85,8 +89,8 @@ start-bootstrap-fuseki: start-fuseki fuseki-create-test-dbs
 # Gherkin feature and acceptance test generation commands
 #-----------------------------------------------------------------------------
 
-FEATURES_FOLDER = test/features
-STEPS_FOLDER = test/steps
+FEATURES_FOLDER = tests/features
+STEPS_FOLDER = tests/steps
 FEATURE_FILES := $(wildcard $(FEATURES_FOLDER)/*.feature)
 EXISTENT_TEST_FILES = $(wildcard $(STEPS_FOLDER)/*.py)
 HYPOTHETICAL_TEST_FILES :=  $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(FEATURE_FILES:.feature=.py)))
