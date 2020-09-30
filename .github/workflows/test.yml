@@ -8,6 +8,7 @@ on:
 
 jobs:
   main:
+    name: run tests
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
