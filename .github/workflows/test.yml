@@ -20,7 +20,6 @@ jobs:
       DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USERNAME }}
       APP_NAME: rdf-differ
       DKR_HUB_URL: $DOCKERHUB_USER/$APP_NAME
-      RELEASE_VERSION: ${{GITHUB_REF#refs/*/}}
     steps:
     - uses: actions/checkout@master
 
@@ -32,7 +31,7 @@ jobs:
         echo "rdf-differ" > APP_NAME
         echo "$(cat DOCKERHUB_USER)/$(cat APP_NAME)" > DKR_HUB_URL
         #
-        #echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+        echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
         #echo "${GITHUB_REF#refs/*/}" > RELEASE_VERSION
         date -d "-4 hours" "+%Y-%m-%d_%HH%Ms%S" > DATE_TIME
         # logically defined tags
