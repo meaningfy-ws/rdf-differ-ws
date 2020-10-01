@@ -19,17 +19,15 @@ jobs:
       DOCKERFILE_NAME: Dockerfile
       DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USERNAME }}
       APP_NAME: rdf-differ
-      DKR_HUB_URL: $DOCKERHUB_USER/$APP_NAME
+
     steps:
     - uses: actions/checkout@master
 
-    - name: Set env
+    - name: Set additional env
       run: |
         # Hard coded variable
-        echo "Dockerfile" > DOCKERFILE_NAME
-        echo "meaningfy" > DOCKERHUB_USER
-        echo "rdf-differ" > APP_NAME
-        echo "$(cat DOCKERHUB_USER)/$(cat APP_NAME)" > DKR_HUB_URL
+        echo "DKR_HUB_URL=$DOCKERHUB_USER/$APP_NAME" >> $GITHUB_ENV
+        # echo "$(cat DOCKERHUB_USER)/$(cat APP_NAME)" > DKR_HUB_URL
         #
         echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
         #echo "${GITHUB_REF#refs/*/}" > RELEASE_VERSION
