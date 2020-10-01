@@ -18,13 +18,14 @@ jobs:
       PYTHON: '3.8'
       DOCKERFILE_NAME: Dockerfile
       APP_NAME: rdf-differ
+      DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USERNAME }}
     steps:
     - uses: actions/checkout@master
 
     - name: Set additional env
       run: |
         # Hard coded variable
-        echo "DOCKERHUB_USER=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_ENV
+        # echo "DOCKERHUB_USER=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_ENV
         echo "DKR_HUB_URL=$DOCKERHUB_USER/$APP_NAME" >> $GITHUB_ENV
         # echo "$(cat DOCKERHUB_USER)/$(cat APP_NAME)" > DKR_HUB_URL
         #
