@@ -20,7 +20,7 @@ jobs:
       DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USERNAME }}
       APP_NAME: rdf-differ
       DKR_HUB_URL: $DOCKERHUB_USER/$APP_NAME
-      RELEASE_VERSION: ${GITHUB_REF#refs/*/}
+      RELEASE_VERSION: ${{GITHUB_REF#refs/*/}}
     steps:
     - uses: actions/checkout@master
 
@@ -45,8 +45,8 @@ jobs:
       run: |
         echo $DOCKERFILE_NAME
         echo $RELEASE_VERSION
-        echo " "
-        echo "$(cat DATE_TIME) < DATE_TIME"
+        echo $DOCKERHUB_USER
+        echo "$DATE_TIME"
         echo "$DKR_HUB_URL"
         echo $DKR_HUB_URL
 
