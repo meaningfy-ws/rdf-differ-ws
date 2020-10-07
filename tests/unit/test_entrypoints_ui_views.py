@@ -129,7 +129,7 @@ def test_create_diff_incorrect_dataset_name(mock_create_diff, ui_client):
     soup = BeautifulSoup(response.data, 'html.parser')
     body = soup.get_text()
 
-    assert 'Dataset name cannot contain spaces' in body
+    assert 'Dataset name can contain only letters, numbers, _, :, and -' in body
 
     data['dataset_name'] = '&3fldsaj//'
     data['old_version_file_content'] = FileStorage(BytesIO(b'old content'), 'old.rdf')
@@ -141,4 +141,32 @@ def test_create_diff_incorrect_dataset_name(mock_create_diff, ui_client):
     soup = BeautifulSoup(response.data, 'html.parser')
     body = soup.get_text()
 
-    assert 'Dataset name cannot contain spaces' in body
+    assert 'Dataset name can contain only letters, numbers, _, :, and -' in body
+
+
+@patch('rdf_differ.entrypoints.ui.views.get_report')
+def test_download_report_success(mock_get_report, ui_client):
+    dataset_id = 'dataset'
+    mock_get_report.return_value = b'important report', 200
+
+    response = ui_client.get(f'/diff-report/{dataset_id}')
+    assert 'important report' in response.data.decode()
+
+
+@patch('rdf_differ.entrypoints.ui.views.get_datasets')
+@patch('rdf_differ.entrypoints.ui.views.get_report')
+def test_download_report_failure(mock_get_report, mock_get_datasets, ui_client):
+    dataset_id = 'dataset'
+    mock_get_report.side_effect = Exception('report error')
+    mock_get_datasets.return_value = [], 200
+
+    response = ui_client.get(f'/diff-report/{dataset_id}')
+    soup = BeautifulSoup(response.data, 'html.parser')
+
+    # check if redirected to index page
+    title = soup.find('h1')
+    assert 'List of calculated diffs' in title.get_text()
+
+    # check if error is displayed
+    error = soup.find('div', {'class': 'alert alert-danger'})
+    assert 'report error' in error.get_text()

@@ -17,7 +17,7 @@ from wtforms.validators import Length, DataRequired, URL, Regexp
 class CreateDiffForm(FlaskForm):
     dataset_name = StringField('Dataset name', validators=[DataRequired(),
                                                            Regexp(r'^[\w\d_:-]*$',
-                                                                  message='Dataset name cannot contain spaces'),
+                                                                  message='Dataset name can contain only letters, numbers, _, :, and -'),
                                                            Length(min=2, max=50)])
     dataset_description = StringField('Dataset description', description='Optional description of the dataset.')
     # TODO: find out if the URL validator is enough or we'll need to create a custom one for URIs
