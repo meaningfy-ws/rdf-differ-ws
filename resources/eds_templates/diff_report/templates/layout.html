@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    {% block title %}
-        <title>Diff report</title>
-    {% endblock %}
+    <title>{{ conf.title }}</title>
 
     <meta name="description" content="">
     <meta name=viewport content="width=device-width, initial-scale=1">
@@ -22,8 +20,8 @@
           rel="stylesheet"
           type="text/css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-          rel="stylesheet"
-          type="text/css">
+            rel="stylesheet"
+            type="text/css">
 
     <link href="https://code.jquery.com/ui/1.11.4/themes/redmond/jquery-ui.css" rel="stylesheet" type="text/css">
     <!-- build:css styles/main.css -->
@@ -43,13 +41,7 @@
     <div class="row"></div>
     <div class="row">
         <div class="starter column">
-            <h1 class="ui center aligned header" id="skip-toc">
-                {% if conf.title %}
-                    {{ conf.title }}
-                {% else %}
-                    RDF Diff proof of concept
-                {% endif %}
-            </h1>
+            <h1 class="ui center aligned header" id="skip-toc">{{ conf.title }}</h1>
             {% block content %}
                 < empty >
             {% endblock %}

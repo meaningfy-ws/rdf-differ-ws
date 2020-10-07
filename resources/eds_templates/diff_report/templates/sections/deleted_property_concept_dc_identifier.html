@@ -1,8 +1,8 @@
 {% import "macros.html" as mc %}
 
-<h2 class="ui header">Deleted property concept dc:identifier</h2>
+<h2 class="ui header">Deleted concept identifiers (DC)</h2>
 <section class="ui basic segment">
-    <p>The table below lists <strong>deleted property concept "dc:identifier"</strong>
+    <p>The table below lists the deleted concept <strong>dc:identifier</strong> values
     </p>
     {% set select_query =
     "prefix owl: <http://www.w3.org/2002/07/owl#> 
@@ -29,7 +29,7 @@ PREFIX dsv: <http://purl.org/iso25964/DataSet/Versioning#>
 PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
-SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) ?property (?value AS ?deletedValue)
+SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (?value AS ?deletedValue)
 WHERE {
   GRAPH ?versionHistoryGraph {
     VALUES ( ?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?language) {
@@ -79,7 +79,7 @@ ORDER BY ?instance ?value" %}
     {% call mc.render_fetch_results(content, error) %}
         {# TODO: need a function that adds a relative count column, so that we can see the percentage of classes #}
         {# {{ content["percentage"] = content["instances"]  / content["instances"].sum() }}#}
-        {{ mc.pandas_table(content, "Overview") }}
+        {{ mc.pandas_table(content, "Deleted identifiers (DC") }}
     {% endcall %}
 
 
