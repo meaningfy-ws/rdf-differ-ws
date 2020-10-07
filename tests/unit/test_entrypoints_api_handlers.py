@@ -183,9 +183,11 @@ def test_delete_diff_404(mock_delete_dataset):
     assert "<dataset> does not exist." in str(e.value)
 
 
+@patch('rdf_differ.entrypoints.api.handlers.get_diff')
 @patch.object(ReportBuilder, 'make_document')
-def test_get_report_500(mock_error):
-    mock_error.side_effect = Exception('500 error')
+def test_get_report_500(mock_make_document, mock_get_diff):
+    mock_make_document.side_effect = Exception('500 error')
+    mock_get_diff.return_value = {'query_url': 'http://somequery'}, 200
 
     with pytest.raises(Exception) as e:
         _ = get_report('http://url.com')

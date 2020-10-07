@@ -130,13 +130,12 @@ paths:
       description: Get report for a dataset.
       parameters:
         - in: query
-          name: dataset_url
+          name: dataset_id
           required: true
           allowEmptyValue: False
-          description: URL to query on
+          description: Dataset id
           schema:
             type: string
-            format: url
       responses:
         200:
           description: Dataset diff report succesfully retreived.
@@ -146,7 +145,7 @@ paths:
                 type: string
                 format: binary
         400:
-          description: dataset_url query param not present.
+          description: dataset_id query param not present.
         5XX:
           description: Unexpected Error.
 
