@@ -11,6 +11,8 @@ services:
     ports:
       - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
     env_file: compose/dev/api/.dev
+    networks:
+      - mydefault
 
   rdf-differ-ui:
     container_name: rdf-differ-ui
@@ -22,6 +24,8 @@ services:
     ports:
       - ${UI_PORT}:${UI_PORT}
     env_file: compose/dev/ui/.dev
+    networks:
+      - mydefault
 
   fuseki:
     container_name: fuseki
@@ -33,3 +37,9 @@ services:
       - JVM_ARGS=-Xmx2g
     ports:
       - ${FUSEKI_PORT}:${FUSEKI_PORT}
+    networks:
+      - mydefault
+
+networks:
+  mydefault:
+    name: globalnet
