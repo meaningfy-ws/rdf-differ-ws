@@ -1,0 +1,11 @@
+{
+    "template": "main.html",
+    "conf":
+    {
+        "default_endpoint" : "http://localhost:3030/cob/sparql",
+        "title": "RDF Diff report",
+        "type": "report",
+        "author": "Meaningfy",
+        "ns_file": "data/prefix.csv"
+    }
+}

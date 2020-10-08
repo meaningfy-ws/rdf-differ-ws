@@ -21,6 +21,7 @@ from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
+from rdf_differ.entrypoints.api.handlers_helpers import generate_report_builder_config
 from utils.file_utils import temporarily_save_files
 
 """
@@ -122,29 +123,22 @@ def delete_diff(dataset_id: str) -> tuple:
         raise NotFound(f'<{dataset_id}> does not exist.')  # 404
 
 
-def get_report(dataset_url: str) -> tuple:
+def get_report(dataset_id: str) -> tuple:
     """
         Generate a dataset diff report
-    :param dataset_url: Dataset endpoint to get data for report population
+    :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
     :return: html report as attachment
     :rtype: file, int
     """
+    dataset, _ = get_diff(dataset_id)  # potential 404
+
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
             template_location = Path(__file__).parents[3] / 'resources/eds_templates/diff_report'
             copytree(template_location, temp_dir, dirs_exist_ok=True)
 
             with open(Path(temp_dir) / 'config.json', 'w') as config_file:
-                config_content = {
-                    "template": "main.html",
-                    "conf":
-                        {
-                            "default_endpoint": dataset_url,
-                            "title": "Dataset Diff Report",
-                            "type": "report"
-                        }
-                }
-
+                config_content = generate_report_builder_config(dataset)
                 config_file.write(dumps(config_content))
 
             report_builder = ReportBuilder(target_path=temp_dir)

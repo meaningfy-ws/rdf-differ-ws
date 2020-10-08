@@ -31,8 +31,20 @@ def get_dataset(dataset_id: str) -> tuple:
     :return: dataset description (as specified in the rdf_differ.adapters.diff_adapter.py)
     :rtype: dict, int
     """
-    response = requests.get(config.RDF_DIFF_API_ENDPOINT + '/diffs/' + dataset_id)
+    response = requests.get(config.RDF_DIFF_API_ENDPOINT + f'/diffs/{dataset_id}')
     return response.json(), response.status_code
+
+
+def get_report(dataset_id: str) -> tuple:
+    """
+    Method to connect to the RDF diff api to get the dataset diff report
+    :param dataset_id: The dataset identifier.
+    :return: html report
+    :rtype: file, int
+    """
+    response = requests.get(url=config.RDF_DIFF_API_ENDPOINT + '/diffs/report',
+                            params={'dataset_id': dataset_id})
+    return response.content, response.status_code
 
 
 def create_diff(dataset_name: str, dataset_description: str, dataset_uri: str,

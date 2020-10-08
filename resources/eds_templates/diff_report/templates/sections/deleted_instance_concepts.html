@@ -2,7 +2,7 @@
 
 <h2 class="ui header">Deleted concepts</h2>
 <section class="ui basic segment">
-    <p>The table below lists <strong>deleted concepts</strong>
+    <p>The table below lists deleted concepts
     </p>
     {% set select_query =
     "prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -77,7 +77,7 @@ ORDER BY ?instance" %}
     {% call mc.render_fetch_results(content, error) %}
         {# TODO: need a function that adds a relative count column, so that we can see the percentage of classes #}
         {# {{ content["percentage"] = content["instances"]  / content["instances"].sum() }}#}
-        {{ mc.pandas_table(content, "Overview") }}
+        {{ mc.pandas_table(content, "Deleted concepts") }}
     {% endcall %}
 
 

@@ -10,19 +10,24 @@
             <th scope="col">New version name</th>
             <th scope="col">Old version name</th>
             <th scope="col">Dataset URI</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
         {% for dataset in datasets %}
             {% if dataset %}
-            <tr>
-                <th scope="row">
-                    <a href="{{ url_for('view_dataset', dataset_id=dataset.dataset_id[1:]) }}">{{ dataset.dataset_id }}</a>
-                </th>
-                <td>{{ dataset.new_version_id }}</td>
-                <td>{{ dataset.old_version_id }}</td>
-                <td><a href="{{ dataset.dataset_uri }}" target="_blank">{{ dataset.dataset_uri }}</a></td>
-            </tr>
+                <tr>
+                    <th scope="row">
+                        <a href="{{ url_for('view_dataset', dataset_id=dataset.dataset_id[1:]) }}">{{ dataset.dataset_id }}</a>
+                    </th>
+                    <td>{{ dataset.new_version_id }}</td>
+                    <td>{{ dataset.old_version_id }}</td>
+                    <td><a href="{{ dataset.dataset_uri }}" target="_blank">{{ dataset.dataset_uri }}</a></td>
+                    <td><a href="{{ url_for('download_report', dataset_id=dataset.dataset_id) }}"
+                           id="report-{{ dataset.dataset_id }}"
+                           class="btn btn-warning">Report</a>
+                    </td>
+                </tr>
             {% endif %}
         {% endfor %}
         </tbody>

@@ -1,8 +1,8 @@
 {% import "macros.html" as mc %}
 
-<h2 class="ui header">Added property concept hidden label</h2>
+<h2 class="ui header">Added concept hidden labels</h2>
 <section class="ui basic segment">
-    <p>The table below lists the <strong>added property concept scheme "hidden label"</strong>
+    <p>The table below lists the added concept <strong>skos:hiddenLabel</strong> values
     </p>
     {% set select_query =
     "prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -29,7 +29,7 @@ PREFIX dsv: <http://purl.org/iso25964/DataSet/Versioning#>
 PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
-SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) ?property (?value AS ?addedValue) ?languageTag
+SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (?value AS ?addedValue) ?languageTag
 WHERE {
   GRAPH ?versionHistoryGraph {
     VALUES ( ?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?language) {

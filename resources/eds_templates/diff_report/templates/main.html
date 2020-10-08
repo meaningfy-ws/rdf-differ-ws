@@ -1,74 +1,90 @@
 {% extends "layout.html" %}
 {% import "macros.html" as mc %}
 
-{% block title %}
-<title>{{ conf.title }}</title>
-{% endblock %}
-
 
 {% block content %}
     {# Read the and invert the namespace/prefix definitions for substitution #}
     {% set prefixes, error = from_file(conf.template_path+'/prefixes.json').fetch_tree() %}
     {% set inverted_prefixes = invert_dict(prefixes) %}
-    
+
+    <p>This report is automatically generated from the RDF data and aims at presenting the difference between
+        two versions of an authority table maintained in VocBench3 following VB3-SRC-AP application profile.</p>
+    <p>The report is primarily focused on the concept instances (skos:Concept), and does not cover other classes as they
+        may occur (e.g. skos:ConceptScheme, skosxl:Label, euvoc:XlNote etc.).</p>
+    <p>This is a beta version of the report and is subject to changes.</p>
+
     <h1>Concepts</h1>
     {% include "sections/added_instance_concepts.html" with context %}
     {% include "sections/deleted_instance_concepts.html" with context %}
-    <h1>Alt label</h1>
-    {% include "sections/added_property_concept_alt_label.html" with context %}
-    {% include "sections/deleted_property_concept_alt_label.html" with context %}
-    <h1>Hidden label</h1>
-    {% include "sections/added_property_concept_hidden_label.html" with context %}
-    {% include "sections/deleted_property_concept_hidden_label.html" with context %}
-    <h1>Concept pref label</h1>
-    {% include "sections/added_property_concept_pref_label.html" with context%}
-    {% include "sections/deleted_property_concept_pref_label.html" with context %}
-    <h1>Dc identifier</h1>
-    {% include "sections/added_property_concept_dc_identifier.html" with context %}
-    {% include "sections/deleted_property_concept_dc_identifier.html" with context %}
-    <h1>Dct identifier</h1>
-    {% include "sections/added_property_concept_dct_identifier.html" with context%}
-    {% include "sections/deleted_property_concept_dct_identifier.html" with context %}
-    <h1>Notation</h1>
-    {% include "sections/added_property_concept_notation.html" with context%}
-    {% include "sections/deleted_property_concept_notation.html" with context%}
-    <h1>SKOS in scheme</h1>
-    {% include "sections/added_property_concept_skos_in_scheme.html" with context%}
-    {% include "sections/deleted_property_concept_skos_in_scheme.html" with context%}
-    <h1>Owl version info</h1>
-    {% include "sections/added_property_concept_owl_versioninfo.html" with context%}
-    {% include "sections/deleted_property_concept_owl_versioninfo.html" with context%}
-    <h1>SKOS note</h1>
-    {% include "sections/added_property_concept_skos_note.html" with context%}
-    {% include "sections/deleted_property_concept_skos_note.html" with context%}
-    <h1>SKOS change note</h1>
-    {% include "sections/added_property_concept_skos_changeNote.html" with context%}
-    {% include "sections/deleted_property_concept_skos_changeNote.html" with context%}
-    <h1>SKOS definition</h1>
-    {% include "sections/added_property_concept_skos_definition.html" with context%}
-    {% include "sections/deleted_property_concept_skos_definition.html" with context%}
-    <h1>Editorial note</h1>
-    {% include "sections/added_property_concept_editorialNote.html" with context%}
-    {% include "sections/deleted_property_concept_editorialNote.html" with context%}
-    <h1>Example</h1>
-    {% include "sections/deleted_property_concept_example.html" with context%}
-    {% include "sections/deleted_property_concept_example.html" with context%}
-    <h1>History note</h1>
-    {% include "sections/added_property_concept_history_note.html" with context%}
-    {% include "sections/deleted_property_concept_history_note.html" with context%}
-    <h1>Scope note</h1>
-    {% include "sections/added_property_concept_scope_note.html" with context%}
-    {% include "sections/deleted_property_concept_scope_note.html" with context%}
-    <h1>OWL deprecated</h1>
+    <h1>Concept status</h1>
     {% include "sections/added_property_concept_owl_deprecated.html" with context%}
     {% include "sections/deleted_property_concept_owl_deprecated.html" with context%}
-    <h1>Label literal form</h1>
-    {% include "sections/added_reified_concept_alt_label_literal_form.html" with context%}
-    {% include "sections/deleted_reified_concept_alt_label_literal_form.html" with context%}
-    <h1>Notation value</h1>
-    {% include "sections/added_reified_concept_notation_value.html" with context%}
-    {% include "sections/deleted_reified_concept_notation_value.html" with context%}
-    <h1>Pref label literal form</h1>
+    <h1>Version info</h1>
+    {% include "sections/added_property_concept_owl_versioninfo.html" with context%}
+    {% include "sections/deleted_property_concept_owl_versioninfo.html" with context%}
+
+    <h1>Preferred labels</h1>
+    {% include "sections/added_property_concept_pref_label.html" with context%}
+    {% include "sections/deleted_property_concept_pref_label.html" with context %}
+{#    <h1>Reified preferred labels</h1>#}
     {% include "sections/added_reified_concept_pref_label_literal_form.html" with context%}
     {% include "sections/deleted_reified_concept_pref_label_literal_form.html" with context%}
+
+    <h1>Alternative labels</h1>
+    {% include "sections/added_property_concept_alt_label.html" with context %}
+    {% include "sections/deleted_property_concept_alt_label.html" with context %}
+{#    <h1>Label literal form</h1>#}
+    {% include "sections/added_reified_concept_alt_label_literal_form.html" with context%}
+    {% include "sections/deleted_reified_concept_alt_label_literal_form.html" with context%}
+
+{#    <h1>Hidden labels</h1>#}
+{#    {% include "sections/added_property_concept_hidden_label.html" with context %}#}
+{#    {% include "sections/deleted_property_concept_hidden_label.html" with context %}#}
+
+
+    <h1>Notations and identifiers</h1>
+    {% include "sections/added_property_concept_notation.html" with context%}
+    {% include "sections/deleted_property_concept_notation.html" with context%}
+
+    {% include "sections/added_reified_concept_notation_value.html" with context%}
+    {% include "sections/deleted_reified_concept_notation_value.html" with context%}
+
+    {% include "sections/added_property_concept_dc_identifier.html" with context %}
+    {% include "sections/deleted_property_concept_dc_identifier.html" with context %}
+{#    <h1>Dct identifier</h1>#}
+    {% include "sections/added_property_concept_dct_identifier.html" with context%}
+    {% include "sections/deleted_property_concept_dct_identifier.html" with context %}
+{#    <h1>Notation</h1>#}
+{#    <h1>Notation value</h1>#}
+
+    <h1>In scheme belonging</h1>
+    {% include "sections/added_property_concept_skos_in_scheme.html" with context%}
+    {% include "sections/deleted_property_concept_skos_in_scheme.html" with context%}
+
+    <h1>Definitions and scope notes</h1>
+{#    <h1>SKOS definition</h1>#}
+    {% include "sections/added_property_concept_skos_definition.html" with context%}
+    {% include "sections/deleted_property_concept_skos_definition.html" with context%}
+{#    <h1>Scope note</h1>#}
+    {% include "sections/added_property_concept_scope_note.html" with context%}
+    {% include "sections/deleted_property_concept_scope_note.html" with context%}
+
+    <h1>Other notes</h1>
+{#    <h1>SKOS change note</h1>#}
+    {% include "sections/added_property_concept_skos_changeNote.html" with context%}
+    {% include "sections/deleted_property_concept_skos_changeNote.html" with context%}
+
+{#    <h1>Editorial notes</h1>#}
+    {% include "sections/added_property_concept_editorialNote.html" with context%}
+    {% include "sections/deleted_property_concept_editorialNote.html" with context%}
+{#    <h1>Example</h1>#}
+    {% include "sections/deleted_property_concept_example.html" with context%}
+    {% include "sections/deleted_property_concept_example.html" with context%}
+{#    <h1>History note</h1>#}
+    {% include "sections/added_property_concept_history_note.html" with context%}
+    {% include "sections/deleted_property_concept_history_note.html" with context%}
+
+    {% include "sections/added_property_concept_skos_note.html" with context%}
+    {% include "sections/deleted_property_concept_skos_note.html" with context%}
+
 {% endblock %}

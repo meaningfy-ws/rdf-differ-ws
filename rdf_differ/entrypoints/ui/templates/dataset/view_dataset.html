@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% set active_page = "view_dataset" %}
 
 {% block app_content %}
@@ -9,28 +8,22 @@
         <tr>
             <th>Description</th>
             <th>{{ dataset.dataset_description }}</th>
-
         </tr>
         <tr>
             <th>Dataset URI</th>
             <th>{{ dataset.dataset_uri }}</th>
-
         </tr>
         <tr>
-
             <th>Versions</th>
             <th>{{ dataset.dataset_versions }}</th>
-
         </tr>
         <tr>
             <th>Diff date</th>
             <th>{{ dataset.diff_date }}</th>
-
         </tr>
         <tr>
             <th>Version named graphs</th>
             <th>{{ dataset.version_named_graphs }}</th>
-
         </tr>
         <tr>
             <th>New version name</th>
@@ -40,8 +33,9 @@
         <tr>
             <th>Old version name</th>
             <th>{{ dataset.old_version_id }}</th>
-
         </tr>
         </tbody>
     </table>
+    <a href="{{ url_for('download_report', dataset_id=dataset.dataset_id) }}" id="report"
+       class="btn btn-warning">Download Report</a>
 {% endblock %}

@@ -5,29 +5,31 @@ services:
     container_name: rdf-differ-api
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: compose/production/api/Dockerfile
     volumes:
       - .:/usr/src/app
     ports:
       - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
-    env_file: .env.dev
+    env_file: compose/production/api/.prod
 
   rdf-differ-ui:
     container_name: rdf-differ-ui
-    build: ./ui
+    build:
+      context: .
+      dockerfile: compose/production/ui/Dockerfile
     volumes:
       - .:/usr/src/app
     ports:
       - ${UI_PORT}:${UI_PORT}
-    env_file: ui/.env.dev
+    env_file: compose/dev/ui/.prod
 
   fuseki:
     container_name: fuseki
-    build: ./fuseki
+    build: compose/production/fuseki
     volumes:
       - ${PWD}/${FUSEKI_DATA_FOLDER}/fuseki:/fuseki
     environment:
-      - ADMIN_PASSWORD=admin
-      - JVM_ARGS=-Xmx2g
+      - ADMIN_PASSWORD=${FUSEKI_ADMIN_PASSWORD}
+      - JVM_ARGS=${FUSEKI_JVM_ARGS}
     ports:
       - ${FUSEKI_PORT}:${FUSEKI_PORT}

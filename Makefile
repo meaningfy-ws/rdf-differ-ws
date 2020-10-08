@@ -1,6 +1,6 @@
 .PHONY: test install lint start-services stop-services docker-stop-dev docker-start-dev docker-build-dev
 
-include .env.dev
+include compose/dev/api/.dev
 
 BUILD_PRINT = \e[1;34mSTEP: \e[0m
 
@@ -32,18 +32,15 @@ lint:
 
 build-dev:
 	@ echo -e '$(BUILD_PRINT)Building the dev container'
-	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev build
+	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev build
 
 start-dev:
 	@ echo -e '$(BUILD_PRINT)Starting the dev services'
-	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev up -d
+	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev up -d
 
 stop-dev:
 	@ echo -e '$(BUILD_PRINT)Stopping the dev services'
-	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev stop
-
-populate-fuseki:
-	@ python scripts/commands.py
+	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev stop
 
 #-----------------------------------------------------------------------------
 # Production environment
@@ -67,15 +64,15 @@ stop-prod:
 
 build-fuseki:
 	@ echo "$(BUILD_PRINT)Building Fuseki"
-	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev build fuseki
+	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev build fuseki
 
 start-fuseki:
 	@ echo "$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')"
-	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev up -d fuseki
+	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev up -d fuseki
 
 stop-fuseki:
 	@ echo "$(BUILD_PRINT)Stopping Fuseki"
-	@ docker-compose --file docker-compose.dev.yml --env-file .env.dev stop fuseki
+	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev stop fuseki
 
 fuseki-create-test-dbs:
 	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(FUSEKI_PORT),$(FUSEKI_PORT),unknown port)/$$/datasets"
@@ -84,6 +81,9 @@ fuseki-create-test-dbs:
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
 
 start-bootstrap-fuseki: start-fuseki fuseki-create-test-dbs
+
+populate-fuseki:
+	@ python scripts/commands.py
 
 #-----------------------------------------------------------------------------
 # Gherkin feature and acceptance test generation commands
