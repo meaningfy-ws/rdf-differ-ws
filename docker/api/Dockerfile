@@ -5,9 +5,9 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-COPY ../../.. /usr/src/app
+COPY . /usr/src/app
 
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt --use-feature=2020-resolver
+RUN pip install -r requirements/dev.txt --use-feature=2020-resolver
 
 CMD gunicorn --bind 0.0.0.0:${RDF_DIFFER_API_PORT} rdf_differ.entrypoints.api.run:app
