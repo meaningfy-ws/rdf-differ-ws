@@ -54,11 +54,11 @@ jobs:
 
     - name: Run adjacent services (Fuseki)
       run: |
-        make start-bootstrap-fuseki
+        make start-services
 
     - name: Install dependencies
       run: |
-        make install-dev
+        make install
 
     - name: Test with pytest
       run: |
