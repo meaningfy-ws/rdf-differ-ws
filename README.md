@@ -1,12 +1,14 @@
-![RDF differ test and lint](https://github.com/eu-vocabularies/rdf-differ/workflows/RDF%20differ%20test%20and%20lint/badge.svg)
+#  RDF Differ
+
+A service for calculating the difference between versions of a given RDF dataset. Current implementation is based on the [skos-history tool](https://github.com/eu-vocabularies/skos-history).
+See the [Wiki page of the original repository](https://github.com/jneubert/skos-history/wiki/Tutorial) for more technical details.
+
+![RDF differ test](https://github.com/eu-vocabularies/rdf-differ/workflows/RDF%20differ%20test%20and%20lint/badge.svg)
 [![codecov](https://codecov.io/gh/eu-vocabularies/rdf-differ/branch/master/graph/badge.svg)](https://codecov.io/gh/eu-vocabularies/rdf-differ)
 
-# rdf-differ
-A service for calculating the difference between versions of a given RDF dataset. 
+# Installation
 
-## to run the development environment *with docker*
-
-Make sure that you are running `Docker` and have the correct permissions set.
+Make sure that you are running `Docker` and have the correct permissions set. If not, run the following lines to install it. 
 
 ```bash
 sudo apt -y install docker.io docker-compose
@@ -15,91 +17,66 @@ sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
 ```
----
-To create the containers run:
+
+To build and the containers run:
 ```bash
-make build-dev
-```
-To run the docker containers for the `rdf-differ` `api` and `ui`, and `fuseki`:
-```bash
-make start-dev
+make build
 ```
 
-The default ports for accessing:
-
-service | URL | info
-------- | ------- | ----
-`fuseki`| [localhost:3030](http://localhost:3030) | username: `admin` password: `admin`
-`api` | [localhost:3040](http://localhost:3040) | _access [localhost:3040/ui](http://localhost:3040/ui) for the swagger interface_ 
-`ui` | [localhost:3050](http://localhost:3050)
-
-
-To stop the containers run:
-```bash
-make stop-dev
-```
-
-## to run only the triple store (`fuseki`)
-To build: 
-```bash
-make build-fuseki
-```
-
-To run: 
-```bash
-make start-fuseki
-```
-
-To stop fuseki:
-```bash
-make stop-fuseki
-``` 
-
-## to run the tests and linting
 Install test/dev dependencies:
+
 ```bash
-make install-dev
+make install
 ```
 
 To run the tests:
-> Make sure that fuseki is running: `make start-bootstrap-fuseki`. (This command will create 2 dummy datasets.)
+> Make sure that fuseki is running: `make fuseki-create-test-dbs`. (This command will create 2 dummy datasets.)
 ```bash
+make fuseki-create-test-dbs
 make test
 ```
 
-To run linting:
-```bash
-make lint
-```
+# Usage
 
-## to run *without docker*
-
-Install dev requirements:
+## Start services
+To run the docker containers for the `rdf-differ` `api` and `ui`, and `fuseki`:
 
 ```bash
-make install-dev
+make start-services
 ```
 
-Run dev servers:
-> Make sure the python dev environment is activated.
+The diffing services are split into:
 
-service | commands 
-------- | ------- 
-`api` | ```export FLASK_APP=rdf_differ.entrypoints.api.run``` <br> ```export FLASK_ENV=development``` <br> ```flask run --host=0.0.0.0 --port=3040```  
-`ui` | ```export FLASK_APP=rdf_differ.entrypoints.ui.run``` <br> ```export FLASK_ENV=development``` <br> ```flask run --host=0.0.0.0 --port=3050```  
+service | URL | info
+------- | ------- | ----
+`differ-api` | [localhost:4030](http://localhost:4030) | _access [localhost:4030/ui](http://localhost:4030/ui) for the swagger interface_ 
+`differ-ui` | [localhost:8030](http://localhost:8030)
 
+## Differ API
 
-## Miscellaneous
-Populate `fuseki` database with 5 datasets (`subdiv`, `eurovoc-fragment`, `countries-fragment`, `cob-fragment`, and `treaty-fragment` )
-> Make sure that fuseki is running: `make start-fuseki`
+> Go to this link [localhost:4030/ui](http://localhost:4010/ui) to access the online definition of the API.
+![list of diffs page](docs/images/api-swagger-2020-10.png)
+
+## Differ UI
+
+> To create a new diff you can access [http://localhost:8030/create-diff](http://localhost:8030/create-diff)
+![list of diffs page](docs/images/create-diff-2020-10.png)
+
+> To list the existent diffs you can access [http://localhost:8030](http://localhost:8030/)
+![list of diffs page](docs/images/list-diffs-202010.png)
+
+## Stop services
+To stop the containers run:
 ```bash
-make populate-fuseki
+make stop-services
 ```
 
-Generate feature steps:
-```bash
-make generate-tests-from-features
-```
+## Performance estimates
+
+Environment: AWS EC2 p2.medium and running the operations with Fuseki triple store.
+
+* Calculating the diff for two versions of a large NAL (used Corporate Bodies) ~ 58s
+* Generating the diff report for two versions of a large NAL (used Corporate Bodies)  ~  12 min
 
 # Contributing
 You are more than welcome to help expand and mature this project. We adhere to [Apache code of conduct](https://www.apache.org/foundation/policies/conduct), please follow it in all your interactions on the project.   
