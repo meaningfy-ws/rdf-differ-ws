@@ -3,40 +3,46 @@ version: '3.7'
 services:
   rdf-differ-api:
     container_name: rdf-differ-api
+    image: meaningfy/rdf-differ-api:latest
     build:
       context: ..
-      dockerfile: compose/dev/api/Dockerfile
+      dockerfile: ./docker/api/Dockerfile
     volumes:
-      - .:/usr/src/app
+      - ..:/usr/src/app
     ports:
       - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
-    env_file: compose/dev/api/.dev
+    env_file: .env
     networks:
       - mydefault
 
   rdf-differ-ui:
     container_name: rdf-differ-ui
+    image: meaningfy/rdf-differ-ui:latest
     build:
       context: ..
-      dockerfile: compose/dev/ui/Dockerfile
+      dockerfile: ./docker/ui/Dockerfile
     volumes:
-      - .:/usr/src/app
+      - ..:/usr/src/app
     ports:
-      - ${UI_PORT}:${UI_PORT}
-    env_file: compose/dev/ui/.dev
+      - ${RDF_DIFFER_UI_PORT}:${RDF_DIFFER_UI_PORT}
+    env_file: .env
     networks:
       - mydefault
 
   fuseki:
     container_name: fuseki
-    build: fuseki
+    image: meaningfy/fuseki:latest
+    build:
+      context: ..
+      dockerfile: ./docker/fuseki/Dockerfile
     volumes:
-      - ${PWD}/${FUSEKI_DATA_FOLDER}/fuseki:/fuseki
+      - ${PWD}/${RDF_DIFFER_FUSEKI_DATA_FOLDER}/fuseki:/fuseki
+    env_file: .env
     environment:
-      - ADMIN_PASSWORD=admin
-      - JVM_ARGS=-Xmx2g
+      - ADMIN_PASSWORD=${RDF_DIFFER_FUSEKI_ADMIN_PASSWORD}
+      - JVM_ARGS=${RDF_DIFFER_FUSEKI_JVM_ARGS}
     ports:
-      - ${FUSEKI_PORT}:${FUSEKI_PORT}
+      - ${RDF_DIFFER_FUSEKI_PORT}:${RDF_DIFFER_FUSEKI_PORT}
     networks:
       - mydefault
 

@@ -1,24 +1,43 @@
-.PHONY: test install lint start-services stop-services docker-stop-dev docker-start-dev docker-build-dev
-
-include compose/dev/api/.dev
+include docker/.env
 
 BUILD_PRINT = \e[1;34mSTEP: \e[0m
 
 #-----------------------------------------------------------------------------
-# Basic commands
+# Install dev environment
 #-----------------------------------------------------------------------------
 
-install-prod:
+install:
 	@ echo "$(BUILD_PRINT)Installing the production requirements"
-	@ pip install --upgrade pip
-	@ pip install -r requirements.txt
-
-install-dev:
-	@ echo "$(BUILD_PRINT)Installing the development requirements"
 	@ pip install --upgrade pip
 	@ pip install -r requirements/dev.txt
 
-test:
+#-----------------------------------------------------------------------------
+# Service commands
+#-----------------------------------------------------------------------------
+
+build:
+	@ echo -e '$(BUILD_PRINT)Building the RDF Differ micro-services'
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build
+
+start-services:
+	@ echo -e '$(BUILD_PRINT)Starting the RDF Differ micro-services'
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d
+
+stop-services:
+	@ echo -e '$(BUILD_PRINT)Stopping the dev services'
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env stop
+
+#-----------------------------------------------------------------------------
+# Test commands
+#-----------------------------------------------------------------------------
+
+fuseki-create-test-dbs:
+	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(RDF_DIFFER_FUSEKI_PORT),$(RDF_DIFFER_FUSEKI_PORT),unknown port)/$$/datasets"
+	@ sleep 5
+	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
+	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
+
+test: | start-services fuseki-create-test-dbs
 	@ echo "$(BUILD_PRINT)Running the tests"
 	@ pytest
 
@@ -26,64 +45,9 @@ lint:
 	@ echo "$(BUILD_PRINT)Linting the code"
 	@ flake8 || true
 
-#-----------------------------------------------------------------------------
-# Development environment
-#-----------------------------------------------------------------------------
-
-build-dev:
-	@ echo -e '$(BUILD_PRINT)Building the dev container'
-	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev build
-
-start-dev:
-	@ echo -e '$(BUILD_PRINT)Starting the dev services'
-	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev up -d
-
-stop-dev:
-	@ echo -e '$(BUILD_PRINT)Stopping the dev services'
-	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev stop
-
-#-----------------------------------------------------------------------------
-# Production environment
-#-----------------------------------------------------------------------------
-
-build-prod:
-	@ echo -e '$(BUILD_PRINT)Building the prod container'
-	@ docker-compose --file docker-compose.yml --env-file .env.prod build
-
-start-prod:
-	@ echo -e '$(BUILD_PRINT)Starting the prod services'
-	@ docker-compose --file docker-compose.yml --env-file .env.prod up -d
-
-stop-prod:
-	@ echo -e '$(BUILD_PRINT)Stopping the prod services'
-	@ docker-compose --file docker-compose.yml --env-file .env.prod stop
-
-#-----------------------------------------------------------------------------
-# Fuseki related commands
-#-----------------------------------------------------------------------------
-
-build-fuseki:
-	@ echo "$(BUILD_PRINT)Building Fuseki"
-	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev build fuseki
-
-start-fuseki:
-	@ echo "$(BUILD_PRINT)Starting Fuseki on port $(if $(FUSEKI_PORT),$(FUSEKI_PORT),'default port')"
-	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev up -d fuseki
-
-stop-fuseki:
-	@ echo "$(BUILD_PRINT)Stopping Fuseki"
-	@ docker-compose --file dev.yml --env-file compose/dev/api/.dev stop fuseki
-
-fuseki-create-test-dbs:
-	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(FUSEKI_PORT),$(FUSEKI_PORT),unknown port)/$$/datasets"
-	@ sleep 5
-	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
-	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(FUSEKI_PORT)/$$/datasets'
-
-start-bootstrap-fuseki: start-fuseki fuseki-create-test-dbs
-
-populate-fuseki:
-	@ python scripts/commands.py
+#
+#populate-fuseki:
+#	@ python scripts/commands.py
 
 #-----------------------------------------------------------------------------
 # Gherkin feature and acceptance test generation commands
@@ -106,9 +70,3 @@ $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_F
 	@ echo "$(BUILD_PRINT)Generating the testfile "$@"  from "$<" feature file"
 	@ pytest-bdd generate $< > $@
 	@ sed -i  's|features|../features|' $@
-
-#-----------------------------------------------------------------------------
-# Default
-#-----------------------------------------------------------------------------
-all:
-	install-dev test
