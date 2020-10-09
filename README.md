@@ -101,8 +101,13 @@ Generate feature steps:
 make generate-tests-from-features
 ```
 
-## Source code structure
+# Contributing
+You are more than welcome to help expand and mature this project. We adhere to [Apache code of conduct](https://www.apache.org/foundation/policies/conduct), please follow it in all your interactions on the project.   
 
-Please refer to [this](https://meaningfy.atlassian.net/l/c/bK0uVdG7) page.
+When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the maintainers of this repository before making a change.
 
+## Licence 
+This project is licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) licence. 
+
+Powered by [Meaningfy](https://github.com/meaningfy-ws).
 
