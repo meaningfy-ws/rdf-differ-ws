@@ -8,10 +8,6 @@ info:
     Current implementation is based on the [skos-history tool](https://github.com/eu-vocabularies/skos-history).
 
     See the [Wiki page of the original repository](https://github.com/jneubert/skos-history/wiki/Tutorial) for more details.
-  contact:
-    name: Eugeniu Costetchi
-    url: http://costezki.ro
-    email: costezki.eugen@gmail.com
   license:
     name: GNU General Public License Version 3 (GPLv3)
     url: https://www.gnu.org/licenses/gpl-3.0.en.html
