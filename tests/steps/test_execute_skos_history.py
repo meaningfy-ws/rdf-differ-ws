@@ -22,6 +22,7 @@ from pytest_bdd import (
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.config import RDF_DIFFER_ENDPOINT_SERVICE
 
 
 @pytest.fixture()
@@ -86,14 +87,14 @@ def the_user_runs_the_skos_history_calculator(config_location):
 @then('the DSV description is generated')
 def the_dsv_description_is_generated():
     """the DSV description is generated."""
-    assert FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/", http_client=requests,
+    assert FusekiDiffAdapter(triplestore_service_url=RDF_DIFFER_ENDPOINT_SERVICE, http_client=requests,
                              sparql_client=SPARQLRunner()).dataset_description('subdiv')
 
 
 @then('the dataset versions are loaded into the triplestore')
 def the_dataset_versions_are_loaded_into_the_triplestore(fake_sparql_runner):
     """the dataset versions are loaded into the triplestore."""
-    diff_description = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/", http_client=requests,
+    diff_description = FusekiDiffAdapter(triplestore_service_url=RDF_DIFFER_ENDPOINT_SERVICE, http_client=requests,
                                          sparql_client=SPARQLRunner()).dataset_description('subdiv')
 
     assert len(diff_description['dataset_versions']) == 2
@@ -104,7 +105,7 @@ def the_dataset_versions_are_loaded_into_the_triplestore(fake_sparql_runner):
 @then('the insertions and deletions graphs are created')
 def the_insertions_and_deletions_graphs_are_created():
     """the insertions and deletions graphs are created."""
-    fuseki_service = FusekiDiffAdapter(triplestore_service_url="http://localhost:3030/", http_client=requests,
+    fuseki_service = FusekiDiffAdapter(triplestore_service_url=RDF_DIFFER_ENDPOINT_SERVICE, http_client=requests,
                                        sparql_client=SPARQLRunner())
 
     insertions_count = fuseki_service.count_inserted_triples('subdiv')

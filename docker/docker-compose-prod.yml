@@ -4,7 +4,7 @@ services:
   rdf-differ-api:
     container_name: rdf-differ-api
     build:
-      context: .
+      context: ..
       dockerfile: compose/production/api/Dockerfile
     volumes:
       - .:/usr/src/app
@@ -15,7 +15,7 @@ services:
   rdf-differ-ui:
     container_name: rdf-differ-ui
     build:
-      context: .
+      context: ..
       dockerfile: compose/production/ui/Dockerfile
     volumes:
       - .:/usr/src/app
@@ -25,7 +25,7 @@ services:
 
   fuseki:
     container_name: fuseki
-    build: compose/production/fuseki
+    build: fuseki
     volumes:
       - ${PWD}/${FUSEKI_DATA_FOLDER}/fuseki:/fuseki
     environment:

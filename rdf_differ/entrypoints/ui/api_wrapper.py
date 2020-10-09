@@ -11,7 +11,7 @@ Service to consume RDF diff API.
 import requests
 from werkzeug.datastructures import FileStorage
 
-from rdf_differ.entrypoints.ui import config
+import rdf_differ.config
 
 
 def get_datasets() -> tuple:
@@ -20,7 +20,7 @@ def get_datasets() -> tuple:
     :return: the list of dataset diffs
     :rtype: list, int
     """
-    response = requests.get(config.RDF_DIFF_API_ENDPOINT + '/diffs')
+    response = requests.get(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs')
     return response.json(), response.status_code
 
 
@@ -31,7 +31,7 @@ def get_dataset(dataset_id: str) -> tuple:
     :return: dataset description (as specified in the rdf_differ.adapters.diff_adapter.py)
     :rtype: dict, int
     """
-    response = requests.get(config.RDF_DIFF_API_ENDPOINT + f'/diffs/{dataset_id}')
+    response = requests.get(rdf_differ.config.RDF_DIFFER_API_SERVICE + f'/diffs/{dataset_id}')
     return response.json(), response.status_code
 
 
@@ -42,7 +42,7 @@ def get_report(dataset_id: str) -> tuple:
     :return: html report
     :rtype: file, int
     """
-    response = requests.get(url=config.RDF_DIFF_API_ENDPOINT + '/diffs/report',
+    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs/report',
                             params={'dataset_id': dataset_id})
     return response.content, response.status_code
 
@@ -73,5 +73,5 @@ def create_diff(dataset_name: str, dataset_description: str, dataset_uri: str,
         'old_version_id': old_version_id,
         'new_version_id': new_version_id
     }
-    response = requests.post(config.RDF_DIFF_API_ENDPOINT + '/diffs', data=data, files=files)
+    response = requests.post(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs', data=data, files=files)
     return response.text, response.status_code

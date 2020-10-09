@@ -14,7 +14,3 @@ flake8
 myst-parser
 sphinx<3
 sphinxcontrib-apidoc
-
-# Flask for UI
-flask-bootstrap
-Flask-Wtf

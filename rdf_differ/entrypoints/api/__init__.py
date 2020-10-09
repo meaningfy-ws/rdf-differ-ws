@@ -11,7 +11,10 @@ Module for configuring and exposing the connexion api server using the Flask fra
 
 import connexion
 
+from rdf_differ.config import RDF_DIFFER_SECRET_KEY_API
+
 connexion_app = connexion.FlaskApp(__name__, specification_dir='openapi')
 connexion_app.add_api('openapi.yaml')
 
 app = connexion_app.app
+app.config['SECRET_KEY'] = RDF_DIFFER_SECRET_KEY_API

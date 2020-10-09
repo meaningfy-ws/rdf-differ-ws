@@ -1,13 +1,12 @@
 FROM python:3.8.5-buster
-
-WORKDIR /usr/src/app
-
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+EXPOSE $RDF_DIFFER_API_PORT
 
-COPY ../../.. /usr/src/app
+WORKDIR /usr/src/app
+COPY . /usr/src/app
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt --use-feature=2020-resolver
 
-CMD gunicorn --bind 0.0.0.0:${RDF_DIFFER_API_PORT} rdf_differ.entrypoints.api.run:app
+CMD gunicorn -w 2 --bind 0.0.0.0:${RDF_DIFFER_API_PORT} --reload rdf_differ.entrypoints.api.run:app

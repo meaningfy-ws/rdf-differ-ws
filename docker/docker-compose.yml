@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  rdf-differ-api:
+    container_name: rdf-differ-api
+    image: meaningfy/rdf-differ-api:latest
+    build:
+      context: ..
+      dockerfile: ./docker/api/Dockerfile
+    volumes:
+      - ..:/usr/src/app
+    ports:
+      - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
+    env_file: .env
+    networks:
+      - mydefault
+
+  rdf-differ-ui:
+    container_name: rdf-differ-ui
+    image: meaningfy/rdf-differ-ui:latest
+    build:
+      context: ..
+      dockerfile: ./docker/ui/Dockerfile
+    volumes:
+      - ..:/usr/src/app
+    ports:
+      - ${RDF_DIFFER_UI_PORT}:${RDF_DIFFER_UI_PORT}
+    env_file: .env
+    networks:
+      - mydefault
+
+  fuseki:
+    container_name: fuseki
+    image: meaningfy/fuseki:latest
+    build:
+      context: ..
+      dockerfile: ./docker/fuseki/Dockerfile
+    volumes:
+      - ${PWD}/${RDF_DIFFER_FUSEKI_DATA_FOLDER}/fuseki:/fuseki
+    env_file: .env
+    environment:
+      - ADMIN_PASSWORD=${RDF_DIFFER_FUSEKI_ADMIN_PASSWORD}
+      - JVM_ARGS=${RDF_DIFFER_FUSEKI_JVM_ARGS}
+    ports:
+      - ${RDF_DIFFER_FUSEKI_PORT}:${RDF_DIFFER_FUSEKI_PORT}
+    networks:
+      - mydefault
+
+networks:
+  mydefault:
+    name: globalnet

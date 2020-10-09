@@ -21,6 +21,7 @@ from pytest_bdd import (
 
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from rdf_differ.adapters.sparql import SPARQLRunner
+from rdf_differ.config import RDF_DIFFER_ENDPOINT_SERVICE
 from tests.conftest import helper_fuseki_service
 from utils.file_utils import dir_exists
 
@@ -41,7 +42,7 @@ def metadata(tmpdir, files):
     metadata = {
         'basedir': tmpdir.mkdir('basedir'),
         'filename': 'subdivisions-skos',
-        'endpoint': 'http://localhost:3030',
+        'endpoint': RDF_DIFFER_ENDPOINT_SERVICE ,
         'dataset': 'subdiv',
         'scheme_uri': 'http://publications.europa.eu/resource/authority/subdivision',
         'old_version_file': files[0],

@@ -181,7 +181,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         }
 
         response = self.http_client.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
-                                         auth=HTTPBasicAuth(config.FUSEKI_USERNAME, config.FUSEKI_PASSWORD),
+                                         auth=HTTPBasicAuth(config.RDF_DIFFER_FUSEKI_USERNAME, config.RDF_DIFFER_FUSEKI_PASSWORD),
                                          data=data)
 
         if response.status_code == 409:
@@ -198,7 +198,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :return: true if dataset was deleted
         """
         response = self.http_client.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
-                                           auth=HTTPBasicAuth(config.FUSEKI_USERNAME, config.FUSEKI_PASSWORD))
+                                           auth=HTTPBasicAuth(config.RDF_DIFFER_FUSEKI_USERNAME, config.RDF_DIFFER_FUSEKI_PASSWORD))
 
         if response.status_code == 404:
             # TODO: change exception if better one found
@@ -233,7 +233,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :rtype: list
         """
         response = self.http_client.get(urljoin(self.triplestore_service_url, "/$/datasets"),
-                                        auth=HTTPBasicAuth(config.FUSEKI_USERNAME, config.FUSEKI_PASSWORD))
+                                        auth=HTTPBasicAuth(config.RDF_DIFFER_FUSEKI_USERNAME, config.RDF_DIFFER_FUSEKI_PASSWORD))
 
         # investigate what codes can fuseki return for this endpoint
         if response.status_code != 200:
