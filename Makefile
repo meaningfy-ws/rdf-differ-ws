@@ -27,17 +27,29 @@ stop-services:
 	@ echo -e '$(BUILD_PRINT)Stopping the dev services'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env stop
 
+
+#-----------------------------------------------------------------------------
+# Fuseki control for github actions
+#-----------------------------------------------------------------------------
+build-test-fuseki:
+	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build fuseki
+
+start-test-fuseki:
+	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d fuseki
+
 #-----------------------------------------------------------------------------
 # Test commands
 #-----------------------------------------------------------------------------
 
-fuseki-create-test-dbs:
+fuseki-create-test-dbs: | build-test-fuseki start-test-fuseki
 	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(RDF_DIFFER_FUSEKI_PORT),$(RDF_DIFFER_FUSEKI_PORT),unknown port)/$$/datasets"
 	@ sleep 5
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
 
-test: | start-services fuseki-create-test-dbs
+test:
 	@ echo "$(BUILD_PRINT)Running the tests"
 	@ pytest
 
@@ -45,9 +57,6 @@ lint:
 	@ echo "$(BUILD_PRINT)Linting the code"
 	@ flake8 || true
 
-#
-#populate-fuseki:
-#	@ python scripts/commands.py
 
 #-----------------------------------------------------------------------------
 # Gherkin feature and acceptance test generation commands

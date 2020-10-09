@@ -54,7 +54,7 @@ jobs:
 
     - name: Run adjacent services (Fuseki)
       run: |
-        make start-services
+        make fuseki-create-test-dbs
 
     - name: Install dependencies
       run: |
