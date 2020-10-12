@@ -8,7 +8,7 @@ on:
 
 jobs:
   main:
-    name: run tests
+    name: main
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -16,34 +16,8 @@ jobs:
     env:
       OS: ${{ matrix.os }}
       PYTHON: '3.8'
-      DOCKERFILE_NAME: Dockerfile
-      APP_NAME: rdf-differ
-      DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USERNAME }}
     steps:
       - uses: actions/checkout@master
-
-      - name: Set basic env
-        run: |
-          # Hard coded variable
-          # echo "{name}={value}" >> $GITHUB_ENV | echo "action_state=yellow" >> $GITHUB_ENV
-          echo "DOCKERFILE_NAME=Dockerfile" >> $GITHUB_ENV
-          echo "DKR_HUB_URL=meaningfy/rdf-differ" >> $GITHUB_ENV
-          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          echo "DATE_TIME=$(date -d "-4 hours" "+%Y-%m-%d_%HH%Ms%S")" >> $GITHUB_ENV
-
-      - name: Set tagset env
-        run: |
-          # logically defined tags
-          echo "TAG_LATEST=$DKR_HUB_URL:latest" >> $GITHUB_ENV
-          echo "TAG_STABLE=$DKR_HUB_URL:stable" >> $GITHUB_ENV
-          echo "TAG_VERSION=$DKR_HUB_URL:$RELEASE_VERSION" >> $GITHUB_ENV
-          echo "TAG_BEST_PRACTICE=$DKR_HUB_URL:$RELEASE_VERSION_$DATE_TIME" >> $GITHUB_ENV
-      - name: Show release version
-        run: |
-          echo $GITHUB_REF
-          echo $TAG_LATEST
-          echo $TAG_VERSION
-          echo $TAG_BEST_PRACTICE
 
       - name: Set up Python
         uses: actions/setup-python@master
