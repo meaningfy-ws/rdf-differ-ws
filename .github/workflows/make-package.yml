@@ -35,10 +35,11 @@ jobs:
       - name: Show release version
         run: |
           echo " "
-          echo $RELEASE_VERSION
+          echo $DOCKERFILE_NAME
           echo " "
-          echo "$(cat DATE_TIME) < DATE_TIME"
+          echo $(cat DATE_TIME)
           echo " "
+          echo "$(cat DKR_HUB_URL)"
 
       - name: Build
         run: |
