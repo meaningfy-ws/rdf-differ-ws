@@ -50,4 +50,6 @@ jobs:
         run: |
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
           docker push $TAG_LATEST_UI
+          docker push $TAG_VERSION_UI
           docker push $TAG_LATEST_API
+          docker push $TAG_VERSION_API
