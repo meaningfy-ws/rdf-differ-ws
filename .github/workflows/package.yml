@@ -1,0 +1,53 @@
+name: package and deploy
+
+# Very nice reference on buildign and pushing Docker container is available at
+# https://github.com/firepress-org/rclone-in-docker/blob/master/.github/workflows/ci_dockerfile_is_master.yml
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  main:
+    name: main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set basic env
+        run: |
+          echo "DOCKERFILE_NAME=Dockerfile" >> $GITHUB_ENV
+          echo "DKR_HUB_URL_UI=meaningfy/rdf-differ-ui" >> $GITHUB_ENV
+          echo "DKR_HUB_URL_API=meaningfy/rdf-differ-api" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          echo "DATE_TIME=$(date -d "-4 hours" "+%Y-%m-%d_%HH%Ms%S")" >> $GITHUB_ENV
+
+      - name: Set tagset env
+        run: |
+          # logically defined tags
+          echo "TAG_LATEST_UI=$DKR_HUB_URL_UI:latest" >> $GITHUB_ENV
+          echo "TAG_LATEST_API=$DKR_HUB_URL_API:latest" >> $GITHUB_ENV
+          echo "TAG_VERSION_UI=$DKR_HUB_URL_UI:$RELEASE_VERSION" >> $GITHUB_ENV
+          echo "TAG_VERSION_API=$DKR_HUB_URL_API:$RELEASE_VERSION" >> $GITHUB_ENV
+
+      - name: Build
+        run: |
+          docker build --tag $TAG_LATEST_UI --tag $TAG_VERSION_UI --file ./docker/ui/Dockerfile  .
+          docker build --tag $TAG_LATEST_API --tag $TAG_VERSION_API --file ./docker/api/Dockerfile  .
+
+      - name: Logs / docker (inspect, history, version, info), uname
+        run: |
+          docker inspect $TAG_LATEST_UI
+          docker history $TAG_LATEST_UI --human --no-trunc
+          docker inspect $TAG_LATEST_API
+          docker history $TAG_LATEST_API --human --no-trunc
+          docker version
+          docker info
+          uname -a
+
+      - name: Publish on Docker hub
+        run: |
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker push $TAG_LATEST_UI
+          docker push $TAG_LATEST_API

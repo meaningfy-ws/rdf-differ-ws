@@ -2,13 +2,13 @@ name: test
 
 on:
   push:
-    branches:  [ '*' ]
+    branches:  [ '**' ]
   pull_request:
     branches: [ master ]
 
 jobs:
   main:
-    name: run tests
+    name: main
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -16,60 +16,32 @@ jobs:
     env:
       OS: ${{ matrix.os }}
       PYTHON: '3.8'
-      DOCKERFILE_NAME: Dockerfile
-      APP_NAME: rdf-differ
-      DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USERNAME }}
     steps:
-    - uses: actions/checkout@master
+      - uses: actions/checkout@master
 
-    - name: Set additional env
-      run: |
-        # Hard coded variable
-        # echo "DOCKERHUB_USER=${{ secrets.DOCKERHUB_USERNAME }}" >> $GITHUB_ENV
-        echo "DKR_HUB_URL=$DOCKERHUB_USER/$APP_NAME" >> $GITHUB_ENV
-        # echo "$(cat DOCKERHUB_USER)/$(cat APP_NAME)" > DKR_HUB_URL
-        #
-        echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
-        #echo "${GITHUB_REF#refs/*/}" > RELEASE_VERSION
-        date -d "-4 hours" "+%Y-%m-%d_%HH%Ms%S" > DATE_TIME
-        # logically defined tags
-        echo "$(cat DKR_HUB_URL):latest" > TAG_LATEST
-        echo "$(cat DKR_HUB_URL):stable" > TAG_STABLE
-        echo "$(cat DKR_HUB_URL):$(cat RELEASE_VERSION)" > TAG_VERSION
-        echo "$(cat DKR_HUB_URL):$(cat RELEASE_VERSION)_$(cat DATE_TIME)" > TAG_BEST_PRACTICE
+      - name: Set up Python
+        uses: actions/setup-python@master
+        with:
+          python-version: 3.8
 
-    - name: Show release version
-      run: |
-        echo $DOCKERFILE_NAME
-        echo $RELEASE_VERSION
-        echo $DOCKERHUB_USER
-        echo "$DATE_TIME"
-        echo "$DKR_HUB_URL"
-        echo $DKR_HUB_URL
+      - name: Run adjacent services (Fuseki)
+        run: |
+          make fuseki-create-test-dbs
 
-    - name: Set up Python
-      uses: actions/setup-python@master
-      with:
-        python-version: 3.8
+      - name: Install dependencies
+        run: |
+          make install
 
-    - name: Run adjacent services (Fuseki)
-      run: |
-        make fuseki-create-test-dbs
+      - name: Test with pytest
+        run: |
+          make test
 
-    - name: Install dependencies
-      run: |
-        make install
-
-    - name: Test with pytest
-      run: |
-        make test
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: coverage.xml
-        flags: unittests
-        env_vars: OS,PYTHON
-        name: codecov-umbrella
-        fail_ci_if_error: true
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: coverage.xml
+          flags: unittests
+          env_vars: OS,PYTHON
+          name: codecov-umbrella
+          fail_ci_if_error: true
