@@ -17,7 +17,6 @@ jobs:
 
       - name: Set basic env
         run: |
-          echo "DOCKERFILE_NAME=Dockerfile" >> $GITHUB_ENV
           echo "DKR_HUB_URL_UI=meaningfy/rdf-differ-ui" >> $GITHUB_ENV
           echo "DKR_HUB_URL_API=meaningfy/rdf-differ-api" >> $GITHUB_ENV
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
