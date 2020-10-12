@@ -40,7 +40,7 @@ jobs:
           echo "TAG_BEST_PRACTICE=$DKR_HUB_URL:$RELEASE_VERSION_$DATE_TIME" >> $GITHUB_ENV
       - name: Show release version
         run: |
-          echo " "
+          echo $GITHUB_REF
           echo $TAG_LATEST
           echo $TAG_VERSION
           echo $TAG_BEST_PRACTICE
