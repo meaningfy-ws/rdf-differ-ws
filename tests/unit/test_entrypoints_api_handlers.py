@@ -169,7 +169,7 @@ def test_delete_diff_200(mock_delete_dataset):
 
     response, status = delete_diff('dataset')
 
-    assert '<dataset> created successfully.' in response
+    assert '<dataset> deleted successfully.' in response
     assert status == 200
 
 
