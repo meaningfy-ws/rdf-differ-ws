@@ -131,7 +131,9 @@ dmypy.json
 
 # projest related
 #/fuseki
-/data-dev
+data-dev/
+fuseki-data/
+
 cucumber_report.json
 junit_report.xml
 *.ldb
