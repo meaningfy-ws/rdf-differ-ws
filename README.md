@@ -108,18 +108,18 @@ The table below presents the patterns of change likely to occur in the context o
 | Movement (cross instance) | 0         | i1 p v  -->  i2 p v  | 0                                 | i1 p/op v  -->  i2 p/op v | 0                                 | 0                  | x                       | x                        |
 | Movement (cross property) | 0         | i p1 v  -->  i p2 v  | 0                                 | i p1/op v  -->  i p2/op v | 0                                 | 0                  | x                       | x                        |
 
-The state transition patterns presented in teh table above can be translated to SPARQL querries. The last two columns, referring to the quantification assumptions, are useful precisely for this purpose indicating what filters shall be used in the SPARQL query.  
+The state transition patterns presented in the table above can be translated to SPARQL queries. The last two columns, referring to the quantification assumptions, are useful precisely for this purpose indicating what filters shall be used in the SPARQL query.  
 
 
-Before we introduce the quantification assumptions, we need to mention that the current diffing is performed by subtracting teh new version of teh dataset from the old one resulting in the set of deletions between the two and, conversely, subtracting the old version of teh dataset from the new one resulting in a set of insertions between the two. Therefor we conceptualise four content graphs: _OldVersion_, _NewVersion_, _Insertions_ and _Deletions_. Below is teh table that summarises the quantification assumptions as conditions that apply to either left or right side of the transition operator and involve one of the four graphs introduced here.  
+Before we introduce the quantification assumptions, we need to mention that the current diffing is performed by subtracting teh new version of the dataset from the old one resulting in the set of deletions between the two and, conversely, subtracting the old version of the dataset from the new one resulting in a set of insertions between the two. Therefore we conceptualise four content graphs: _OldVersion_, _NewVersion_, _Insertions_ and _Deletions_. Below is the table that summarises the quantification assumptions as conditions that apply to either left or right side of the transition operator and involve one of the four graphs introduced here.  
 
 
-| Conditions on the left side of the transition operator                                                                                                                              | Consditions on the right side of the transition operator                                                                                                                            |
+| Conditions on the left side of the transition operator                                                                                                                              | Conditions on the right side of the transition operator                                                                                                                            |
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| does NOT exists in the Insertion graph 				| exists in the Insertion graph 	|
-| does NOT exists in the NewVersion graph [redundant]	| exists in the NewVersion graph [redundant]		|
-| exist in the Deletions graph						| does NOT exist in the Deletions graph [redundant]		|
-| exist in the OldVersion graph [redundant] 			| does NOT exist in the OldVersion graph 	|
+| does NOT exist in the Insertion graph 				| exists in the Insertion graph 	|
+| does NOT exist in the NewVersion graph [redundant]	| exists in the NewVersion graph [redundant]		|
+| exists in the Deletions graph						| does NOT exist in the Deletions graph [redundant]		|
+| exists in the OldVersion graph [redundant] 			| does NOT exist in the OldVersion graph 	|
 
 
 # Contributing
@@ -131,4 +131,3 @@ When contributing to this repository, please first discuss the change you wish t
 This project is licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) licence. 
 
 Powered by [Meaningfy](https://github.com/meaningfy-ws).
-
