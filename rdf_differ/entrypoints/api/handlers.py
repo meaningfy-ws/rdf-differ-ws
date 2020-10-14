@@ -118,7 +118,7 @@ def delete_diff(dataset_id: str) -> tuple:
     try:
         FusekiDiffAdapter(config.RDF_DIFFER_ENDPOINT_SERVICE, http_client=requests, sparql_client=SPARQLRunner()).delete_dataset(
             dataset_id)
-        return f'<{dataset_id}> created successfully.', 200
+        return f'<{dataset_id}> deleted successfully.', 200
     except FusekiException:
         raise NotFound(f'<{dataset_id}> does not exist.')  # 404
 
