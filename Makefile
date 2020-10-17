@@ -57,6 +57,14 @@ lint:
 	@ echo "$(BUILD_PRINT)Linting the code"
 	@ flake8 || true
 
+#-----------------------------------------------------------------------------
+# Run UI dev environment
+#-----------------------------------------------------------------------------
+
+run-ui-dev:
+	@ export FLASK_APP=rdf_differ.entrypoints.ui.run
+	@ export FLASK_ENV=development
+	@ flask run
 
 #-----------------------------------------------------------------------------
 # Gherkin feature and acceptance test generation commands
@@ -79,3 +87,5 @@ $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_F
 	@ echo "$(BUILD_PRINT)Generating the testfile "$@"  from "$<" feature file"
 	@ pytest-bdd generate $< > $@
 	@ sed -i  's|features|../features|' $@
+
+
