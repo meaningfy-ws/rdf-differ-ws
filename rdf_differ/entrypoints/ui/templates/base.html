@@ -32,6 +32,10 @@
         .btn {
             text-transform: none;
         }
+        .toast{
+            background-color: #ef9a9a;
+            color: black;
+        }
     </style>
 
 </head>
@@ -64,14 +68,40 @@
             {% with errors = get_flashed_messages(category_filter=["error"]) %}
                 {% if errors %}
                     {% for message in errors %}
-                        <div class="alert alert-danger" role="alert">{{ message }}</div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="card red lighten-3">
+                                    <div class="row">
+                                        <div class="col s12 m10">
+                                            <div class="card-content black-text">
+                                                <i class="material-icons left">info_outline</i>
+                                                <p>{{ message }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
             {% with messages = get_flashed_messages(category_filter=["success"]) %}
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="alert alert-info" role="alert">{{ message }}</div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="card blue lighten-3">
+                                    <div class="row">
+                                        <div class="col s12 m10">
+                                            <div class="card-content black-text">
+                                                <i class="material-icons left">info_outline</i>
+                                                <p>{{ message }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
@@ -96,5 +126,4 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
 

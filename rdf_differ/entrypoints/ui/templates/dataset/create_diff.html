@@ -1,6 +1,46 @@
 {% extends "base.html" %}
 {% set active_page = "create_diff" %}
 
+{% macro render_text_input_field(field) %}
+    <div class="row">
+        <div class="col s12">
+            <div class="input-field">
+                {{ field.label }}
+                {{ field(**kwargs)|safe }}
+
+                {% if field.errors %}
+
+                    {% for error in field.errors %}
+                        <p class="red-text">{{ error }}</p>
+                    {% endfor %}
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_upload_input_field(field) %}
+            <div class="row">
+                <div class="col s12">
+                    <label>Upload old dataset file</label>
+                    <div class="file-field input-field">
+                        <div class="btn blue lighten-1">
+
+                            <span><i class="material-icons left">cloud_upload</i>Browse</span>
+                             {{ field(**kwargs)|safe }}
+                        </div>
+
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text"
+                                   placeholder="Upload file"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endmacro %}
+
+
 {% block app_content %}
     <h1>Create a dataset</h1>
     <div class="row">
@@ -20,80 +60,15 @@
     <div class="row">
         <form class="col s12 z-depth-3 form" method="POST" enctype="multipart/form-data" role="form" action="">
             {{ form.csrf_token }}
-            <div class="row">
-                <div class="col s12">
-                    <div class="input-field">
-                        {{ form.dataset_name }}
-                        <label for="dataset_name">{{ form.dataset_name.label.text }}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <div class="input-field">
-                        {{ form.dataset_description }}
-                        <label for="dataset_description">{{ form.dataset_description.label.text }}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <div class="input-field">
-                         {{ form.dataset_uri }}
-                        <label for="dataset_uri">{{ form.dataset_uri.label.text }}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <label>Upload old dataset file</label>
-                    <div class="file-field input-field">
-                        <div class="btn blue lighten-1">
 
-                            <span><i class="material-icons left">cloud_upload</i>Browse</span>
-                            {{ form.old_version_file_content }}
-                        </div>
+            {{ render_text_input_field(form.dataset_name) }}
+            {{ render_text_input_field(form.dataset_description) }}
+            {{ render_text_input_field(form.dataset_uri) }}
+            {{ render_upload_input_field(form.old_version_file_content) }}
+            {{ render_text_input_field(form.old_version_id) }}
+            {{ render_upload_input_field(form.new_version_file_content) }}
 
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text"
-                                   placeholder="Upload file"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <div class="input-field">
-                            {{ form.old_version_id }}
-                        <label for="old_version_id">{{ form.old_version_id.label.text }}</label>
-                    </div>
-                </div>
-            </div>
-                        <div class="row">
-                <div class="col s12">
-                    <label>Upload new dataset file</label>
-                    <div class="file-field input-field">
-                        <div class="btn blue lighten-1">
-
-                            <span><i class="material-icons left">cloud_upload</i>Browse</span>
-                            {{ form.new_version_file_content }}
-                        </div>
-
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text"
-                                   placeholder="Upload file"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <div class="input-field">
-                            {{ form.new_version_id }}
-                        <label for="new_version_id">{{ form.new_version_id.label.text }}</label>
-                    </div>
-                </div>
-            </div>
+            {{ render_text_input_field(form.new_version_id) }}
           <div class="row">
                 <div class="col s12 right-align">
                 {{ form.submit(class_='btn btn-file blue darken-2') }}
