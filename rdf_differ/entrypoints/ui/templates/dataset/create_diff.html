@@ -1,11 +1,106 @@
 {% extends "base.html" %}
-{% import 'bootstrap/wtf.html' as wtf %}
 {% set active_page = "create_diff" %}
 
 {% block app_content %}
-    <h1>Create a dataset.</h1>
-    <div class="alert alert-primary" role="alert">
-        <p class="text-primary">The processing might take a while if you use big files.</p>
+    <h1>Create a dataset</h1>
+    <div class="row">
+        <div class="col s12">
+            <div class="card blue lighten-3">
+                <div class="row">
+                    <div class="col s12 m10">
+                        <div class="card-content black-text">
+                            <i class="material-icons left">info_outline</i>
+                            <p>The processing might take a while if you use big files</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    {{ wtf.quick_form(form) }}
+    <div class="row">
+        <form class="col s12 z-depth-3 form" method="POST" enctype="multipart/form-data" role="form" action="">
+            {{ form.csrf_token }}
+            <div class="row">
+                <div class="col s12">
+                    <div class="input-field">
+                        {{ form.dataset_name }}
+                        <label for="dataset_name">{{ form.dataset_name.label.text }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <div class="input-field">
+                        {{ form.dataset_description }}
+                        <label for="dataset_description">{{ form.dataset_description.label.text }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <div class="input-field">
+                         {{ form.dataset_uri }}
+                        <label for="dataset_uri">{{ form.dataset_uri.label.text }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <label>Upload old dataset file</label>
+                    <div class="file-field input-field">
+                        <div class="btn blue lighten-1">
+
+                            <span><i class="material-icons left">cloud_upload</i>Browse</span>
+                            {{ form.old_version_file_content }}
+                        </div>
+
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text"
+                                   placeholder="Upload file"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <div class="input-field">
+                            {{ form.old_version_id }}
+                        <label for="old_version_id">{{ form.old_version_id.label.text }}</label>
+                    </div>
+                </div>
+            </div>
+                        <div class="row">
+                <div class="col s12">
+                    <label>Upload new dataset file</label>
+                    <div class="file-field input-field">
+                        <div class="btn blue lighten-1">
+
+                            <span><i class="material-icons left">cloud_upload</i>Browse</span>
+                            {{ form.new_version_file_content }}
+                        </div>
+
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text"
+                                   placeholder="Upload file"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <div class="input-field">
+                            {{ form.new_version_id }}
+                        <label for="new_version_id">{{ form.new_version_id.label.text }}</label>
+                    </div>
+                </div>
+            </div>
+          <div class="row">
+                <div class="col s12 right-align">
+                {{ form.submit(class_='btn btn-file blue darken-2') }}
+                </div>
+          </div>
+
+        </form>
+    </div>
+
 {% endblock %}

@@ -2,8 +2,10 @@
 {% set active_page = "view_dataset" %}
 
 {% block app_content %}
-    <h1>You're viewing dataset: {{ dataset.dataset_id }}</h1>
-    <table class="table">
+    <h1>Details: {{ dataset.dataset_id }}</h1>
+    <br>
+    <div class="row">
+    <table class="table striped">
         <tbody>
         <tr>
             <th>Description</th>
@@ -15,7 +17,7 @@
         </tr>
         <tr>
             <th>Versions</th>
-            <th>{{ dataset.dataset_versions }}</th>
+            <th>{{ dataset.dataset_versions|join(" & ") }}</th>
         </tr>
         <tr>
             <th>Diff date</th>
@@ -23,7 +25,7 @@
         </tr>
         <tr>
             <th>Version named graphs</th>
-            <th>{{ dataset.version_named_graphs }}</th>
+            <th>{{ dataset.version_named_graphs|join(' & ') }}</th>
         </tr>
         <tr>
             <th>New version name</th>
@@ -36,6 +38,15 @@
         </tr>
         </tbody>
     </table>
-    <a href="{{ url_for('download_report', dataset_id=dataset.dataset_id) }}" id="report"
-       class="btn btn-warning">Download Report</a>
+        </div>
+     <br>
+    <div class="row">
+        <div class="col s12 center-align">
+            <a href="{{ url_for('download_report', dataset_id=dataset.dataset_id) }}" id="report"
+               class="btn btn-file blue darken-2">Generate report<i class="material-icons right">file_download</i></a>
+        </div>
+    </div>
+
+
+
 {% endblock %}
