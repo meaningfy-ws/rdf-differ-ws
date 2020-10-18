@@ -1,58 +1,129 @@
-{% extends "bootstrap/base.html" %}
-{% set navigation_bar = [
-    ('/', 'index', 'List of diffs'),
-    ('/diffs', 'create_diff', 'Create Diff'),
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Meaningfy - RDF Differ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="Meaningfy" content="RDF-Differ">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+
+        .footer-container {
+            padding-bottom: 2em;
+        }
+
+        .form {
+            padding: 2em !important;
+            margin-bottom: 5em;
+        }
+
+        .btn {
+            text-transform: none;
+        }
+        .toast{
+            background-color: #ef9a9a;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+<header>
+    {% set navigation_bar = [
+    ('/', 'index', 'List diffs'),
+    ('/diffs', 'create_diff', 'Create diff'),
 ] -%}
 
-{% block title %}
-    {% if title %}{{ title }} - Meaningfy{% else %}Welcome to Meaningfy{% endif %}
-{% endblock %}
-
-{% set active_page = active_page|default('index') -%}
-{% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #DCDCDC">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="{{ url_for('index') }}">Meaningfy</a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="nav navbar-nav mr-auto">
+    {% set active_page = active_page|default('index') -%}
+    {% block navbar %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light amber accent-2">
+            <div class="container">
+                <a href="{{ url_for('index') }}" style="color: #1e1e1e">RDF Differ</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
                     {% for href, id, caption in navigation_bar %}
                         <li class="nav-item{% if id == active_page %} active{% endif %}">
-                            <a class="nav-link" href="{{ url_for(id)|e }}">{{ caption|e }}</a>
+                            <a class="nav-link" style="color: #1e1e1e" href="{{ url_for(id)|e }}">{{ caption|e }}</a>
                         </li>
                     {% endfor %}
                 </ul>
             </div>
-        </div>
-    </nav>
-{% endblock %}
-
-{% block content %}
-    <div class="container">
-        {% with errors = get_flashed_messages(category_filter=["error"]) %}
-            {% if errors %}
-                {% for message in errors %}
-                    <div class="alert alert-danger" role="alert">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {% with messages = get_flashed_messages(category_filter=["success"]) %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-info" role="alert">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        {% block app_content %}
-        {% endblock %}
-    </div>
-    <footer class="footer">
-        <br>
+        </nav>
+    {% endblock %}
+</header>
+<main>
+    {% block content %}
         <div class="container">
-            <span class="text-muted">Powered by <a
-                    href="https://github.com/meaningfy-ws">Meaningfy</a>.</span>
+            {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                {% if errors %}
+                    {% for message in errors %}
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="card red lighten-3">
+                                    <div class="row">
+                                        <div class="col s12 m10">
+                                            <div class="card-content black-text">
+                                                <i class="material-icons left">info_outline</i>
+                                                <p>{{ message }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% with messages = get_flashed_messages(category_filter=["success"]) %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="card blue lighten-3">
+                                    <div class="row">
+                                        <div class="col s12 m10">
+                                            <div class="card-content black-text">
+                                                <i class="material-icons left">info_outline</i>
+                                                <p>{{ message }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block app_content %}
+            {% endblock %}
         </div>
-    </footer>
-{% endblock %}
+    {% endblock %}
+</main>
+
+<footer class="page-footer blue-grey lighten-2">
+
+    <div class="container center black-text footer-container">
+        Powered by
+        <a class="white-text" href="https://github.com/meaningfy-ws">Meaningfy</a>
+    </div>
+
+</footer>
+</body>
+</html>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+

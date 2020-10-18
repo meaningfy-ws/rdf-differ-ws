@@ -1,11 +1,81 @@
 {% extends "base.html" %}
-{% import 'bootstrap/wtf.html' as wtf %}
 {% set active_page = "create_diff" %}
 
-{% block app_content %}
-    <h1>Create a dataset.</h1>
-    <div class="alert alert-primary" role="alert">
-        <p class="text-primary">The processing might take a while if you use big files.</p>
+{% macro render_text_input_field(field) %}
+    <div class="row">
+        <div class="col s12">
+            <div class="input-field">
+                {{ field.label }}
+                {{ field(**kwargs)|safe }}
+
+                {% if field.errors %}
+
+                    {% for error in field.errors %}
+                        <p class="red-text">{{ error }}</p>
+                    {% endfor %}
+
+                {% endif %}
+            </div>
+        </div>
     </div>
-    {{ wtf.quick_form(form) }}
+{% endmacro %}
+
+{% macro render_upload_input_field(field) %}
+            <div class="row">
+                <div class="col s12">
+                    <label>Upload old dataset file</label>
+                    <div class="file-field input-field">
+                        <div class="btn blue lighten-1">
+
+                            <span><i class="material-icons left">cloud_upload</i>Browse</span>
+                             {{ field(**kwargs)|safe }}
+                        </div>
+
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text"
+                                   placeholder="Upload file"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endmacro %}
+
+
+{% block app_content %}
+    <h1>Create a dataset</h1>
+    <div class="row">
+        <div class="col s12">
+            <div class="card blue lighten-3">
+                <div class="row">
+                    <div class="col s12 m10">
+                        <div class="card-content black-text">
+                            <i class="material-icons left">info_outline</i>
+                            <p>The processing might take a while if you use big files</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <form class="col s12 z-depth-3 form" method="POST" enctype="multipart/form-data" role="form" action="">
+            {{ form.csrf_token }}
+
+            {{ render_text_input_field(form.dataset_name) }}
+            {{ render_text_input_field(form.dataset_description) }}
+            {{ render_text_input_field(form.dataset_uri) }}
+            {{ render_upload_input_field(form.old_version_file_content) }}
+            {{ render_text_input_field(form.old_version_id) }}
+            {{ render_upload_input_field(form.new_version_file_content) }}
+
+            {{ render_text_input_field(form.new_version_id) }}
+          <div class="row">
+                <div class="col s12 right-align">
+                {{ form.submit(class_='btn btn-file blue darken-2') }}
+                </div>
+          </div>
+
+        </form>
+    </div>
+
 {% endblock %}

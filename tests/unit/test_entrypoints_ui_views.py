@@ -53,7 +53,7 @@ def test_get_dataset(mock_get_dataset, ui_client):
     soup = BeautifulSoup(response.data, 'html.parser')
 
     title = soup.find('h1')
-    assert 'You\'re viewing dataset: /dataset_one' in title.get_text()
+    assert 'Details: /dataset_one' in title.get_text()
 
     table_body = soup.find('tbody')
     rows = table_body.find_all('tr')
@@ -106,7 +106,7 @@ def test_create_diff_success(mock_create_diff, mock_get_dataset, ui_client):
     title = soup.find('h1')
 
     assert response.status_code == 200
-    assert 'You\'re viewing dataset: /dataset_name' in title.get_text()
+    assert 'Details: /dataset_name' in title.get_text()
 
 
 @patch('rdf_differ.entrypoints.ui.views.api_create_diff')
@@ -168,5 +168,5 @@ def test_download_report_failure(mock_get_report, mock_get_datasets, ui_client):
     assert 'List of calculated diffs' in title.get_text()
 
     # check if error is displayed
-    error = soup.find('div', {'class': 'alert alert-danger'})
+    error = soup.find('div', {'class': 'card red lighten-3'})
     assert 'report error' in error.get_text()
