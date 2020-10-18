@@ -168,5 +168,5 @@ def test_download_report_failure(mock_get_report, mock_get_datasets, ui_client):
     assert 'List of calculated diffs' in title.get_text()
 
     # check if error is displayed
-    error = soup.find('div', {'class': 'alert alert-danger'})
+    error = soup.find('div', {'class': 'card red lighten-3'})
     assert 'report error' in error.get_text()
