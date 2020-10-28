@@ -9,9 +9,11 @@
     <meta name=viewport content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <!-- build:css styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <!-- Fromantic-UI instead of sEmantic UI -->
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">-->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7/semantic.min.css">
+
     <!-- endbower -->
     <!-- endbuild -->
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet'
@@ -19,13 +21,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/stylesheets/jquery.tocify.min.css"
           rel="stylesheet"
           type="text/css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-            rel="stylesheet"
-            type="text/css">
+    <!--    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"-->
+    <!--            rel="stylesheet"-->
+    <!--            type="text/css">-->
 
     <link href="https://code.jquery.com/ui/1.11.4/themes/redmond/jquery-ui.css" rel="stylesheet" type="text/css">
     <!-- build:css styles/main.css -->
-    {#    <link rel="stylesheet" href="main.css">#}
+    {#
+    <link rel="stylesheet" href="main.css">
+    #}
     <!-- endbuild -->
 </head>
 
@@ -36,35 +40,38 @@
 </nav>
 -->
 <br>
-<div id="toc"></div>
+
 <main class="ui page grid">
-    <div class="row"></div>
-    <div class="row">
-        <div class="starter column">
-            <h1 class="ui center aligned header" id="skip-toc">{{ conf.title }}</h1>
-            {% block content %}
+    <div class="four wide column">
+        <div id="toc"></div>
+    </div>
+
+    <div class="twelve wide column">
+        <div class="row"></div>
+        <div class="row">
+            <div class="starter column">
+                <h1 class="ui center aligned header" id="skip-toc">{{ conf.title }}</h1>
+                {% block content %}
                 < empty >
-            {% endblock %}
+                {% endblock %}
+            </div>
         </div>
     </div>
 </main>
 
 
-<!-- build:js scripts/vendor.js -->
-<!-- bower:js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
-<!-- endbower -->
-<!-- endbuild -->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7/semantic.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js"></script>
 
 <script>
     $(function () {
         $("#toc").tocify({
             selectors: "h1,h2",
-            theme: "jqueryui",
+            theme: "none",
             hashGenerator: "pretty",
             ignoreSelector: "#skip-toc",
             highlightOnScroll: "true",
