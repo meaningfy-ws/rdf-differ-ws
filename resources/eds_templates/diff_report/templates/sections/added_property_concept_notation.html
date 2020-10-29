@@ -5,8 +5,7 @@
     <p>The table below lists the added concept <strong>skos:notation</strong> values
     </p>
     {% set select_query =
-    "
-prefix owl: <http://www.w3.org/2002/07/owl#>
+    "prefix owl: <http://www.w3.org/2002/07/owl#>
 prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -32,16 +31,10 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (?value AS ?addedValue)
 WHERE {
+  VALUES (?versionHistoryGraph ?oldVersion ?newVersion ?class ?property) {
+      (undef undef undef skos:Concept skos:notation)
+  }
   GRAPH ?versionHistoryGraph {
-    VALUES ( ?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?language) {
-	  ( undef
-        undef
-        undef
-        skos:Concept
-        skos:notation
-        'en'
-      )
-    }
     ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
     ?versionset dsv:currentVersionRecord/dc:identifier ?latestVersion .
     BIND(coalesce(?oldVersion, ?previousVersion) AS ?oldVersionSelected)
@@ -59,12 +52,7 @@ WHERE {
       sh:usingNamedGraph/sd:name ?insertionsGraph .
   }
   GRAPH ?insertionsGraph {
-    [] ?property ?value .
-  }
-  FILTER NOT EXISTS {
-    GRAPH ?deletionsGraph {
-      [] ?property ?value .
-    }
+    ?instance ?property ?value .
   }
   GRAPH ?newVersionGraph {
     ?instance a ?class .
