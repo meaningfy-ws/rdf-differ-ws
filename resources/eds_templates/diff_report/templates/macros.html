@@ -6,7 +6,7 @@
             <div class="header">
                 Error
             </div>
-            <p>{{ message }}</p>
+            <p>{{ message|e }}</p>
         </div>
     </div>
 {%- endmacro %}
@@ -27,28 +27,32 @@
 
 {% macro pandas_table(df, caption, column_labels={}) -%}
     {% if (df is defined) and (df is not none) %}
-        <table class="ui celled table">
-            <thead class="center aligned collapsing">
-            {% for column in df.columns %}
-                {% if column in column_labels %}
-                    <th>{{ column_labels[column] }}</th>
-                {% else %}
-                    <th>{{ column }}</th>
-                {% endif %}
-            {% endfor %}
+        <table class="display">
+            <thead class="center aligned">
+            <tr>
+                {% for column in df.columns %}
+                    {% if column in column_labels %}
+                        <th>{{ column_labels[column] }}</th>
+                    {% else %}
+                        <th>{{ column }}</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
             </thead>
+            <tbody>
             {% for idx, row in df.iterrows() %}
-                <tr class="left aligned collapsing">
+                <tr>
                     {% for colname in df.columns %}
                         {# handle decimal format: float, float64, float32 #}
                         {% if 'float' in (df.dtypes[colname] | string) %}
-                            <td>{{ row[colname] | round(precision=2) }}</td>
+                            <td class="left aligned collapsing">{{ row[colname] | round(precision=2) }}</td>
                         {% else %}
                             <td>{{ row[colname] }}</td>
                         {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}
+            </tbody>
             <caption>{{ caption }}</caption>
         </table>
     {% else %}

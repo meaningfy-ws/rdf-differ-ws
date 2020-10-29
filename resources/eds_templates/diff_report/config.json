@@ -2,7 +2,7 @@
     "template": "main.html",
     "conf":
     {
-        "default_endpoint" : "http://localhost:3030/cob/sparql",
+        "default_endpoint" : "http://localhost:3030/report1/sparql",
         "title": "RDF Diff report",
         "type": "report",
         "author": "Meaningfy",
