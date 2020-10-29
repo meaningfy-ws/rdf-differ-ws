@@ -31,17 +31,10 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (?value AS ?addedValue)
 WHERE {
+  VALUES (?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?objProperty) {
+    (undef undef undef skos:Concept skos:notation rdf:value)
+  }
   GRAPH ?versionHistoryGraph {
-    VALUES ( ?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?objProperty ?language) {
-      ( undef 
-        undef 
-        undef 
-        skos:Concept 
-        skos:notation
-        rdf:value
-        'en'
-      )
-    }
     ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
     ?versionset dsv:currentVersionRecord/dc:identifier ?latestVersion .
     BIND(coalesce(?oldVersion, ?previousVersion) AS ?oldVersionSelected)
@@ -59,13 +52,8 @@ WHERE {
       sh:usingNamedGraph/sd:name ?insertionsGraph .
   }
   GRAPH ?insertionsGraph {
-    [] skos:notation/rdf:value ?value .
+    ?instance skos:notation/rdf:value ?value .
   }
-  FILTER NOT EXISTS {
-    GRAPH ?deletionsGraph {
-    [] skos:notation/rdf:value ?value .
-    }
-  }  
   GRAPH ?newVersionGraph {
     ?instance a ?class .
     ?instance skos:notation/rdf:value ?value .

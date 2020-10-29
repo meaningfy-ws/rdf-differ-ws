@@ -1,8 +1,8 @@
 {% import "macros.html" as mc %}
 
-<h2 class="ui header">Added concept change notes</h2>
+<h2 class="ui header">Added concept reified preferred labels</h2>
 <section class="ui basic segment">
-    <p>The table below lists the added concept <strong>skos:changeNote</strong> values
+    <p>The table below lists the added concept <strong>skosxl:prefLabel</strong> values
     </p>
     {% set select_query =
     "prefix owl: <http://www.w3.org/2002/07/owl#> 
@@ -31,16 +31,10 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (?value AS ?addedValue)
 WHERE {
+  VALUES (?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?objProperty) {
+    (undef undef undef skos:Concept skosxl:prefLabel skosxl:literalForm)
+  }
   GRAPH ?versionHistoryGraph {
-    VALUES ( ?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?language) {
-      ( undef 
-        undef 
-        undef 
-        skos:Concept  
-        skos:changeNote 
-        'en'
-      )
-    }
     ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
     ?versionset dsv:currentVersionRecord/dc:identifier ?latestVersion .
     BIND(coalesce(?oldVersion, ?previousVersion) AS ?oldVersionSelected)
@@ -58,16 +52,11 @@ WHERE {
       sh:usingNamedGraph/sd:name ?insertionsGraph .
   }
   GRAPH ?insertionsGraph {
-    [] ?property ?value .
+    ?instance ?property [?objProperty ?value] .
   }
-  FILTER NOT EXISTS {
-    GRAPH ?deletionsGraph {
-      [] ?property ?value .
-    }
-  }  
   GRAPH ?newVersionGraph {
     ?instance a ?class .
-    ?instance ?property ?value .
+    ?instance ?property [?objProperty ?value] .
     optional {
       ?instance skos:prefLabel ?prefLabel .
       FILTER (lang(?prefLabel) = 'en')
@@ -79,7 +68,7 @@ ORDER BY ?instance ?value" %}
     {% call mc.render_fetch_results(content, error) %}
         {# TODO: need a function that adds a relative count column, so that we can see the percentage of classes #}
         {# {{ content["percentage"] = content["instances"]  / content["instances"].sum() }}#}
-        {{ mc.pandas_table(content, "Added change notes") }}
+        {{ mc.pandas_table(content, "Added reified preferred labels") }}
     {% endcall %}
 
 
