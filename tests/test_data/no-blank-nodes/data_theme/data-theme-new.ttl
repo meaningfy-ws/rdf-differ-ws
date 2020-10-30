@@ -1,0 +1,4168 @@
+# baseURI: file:/home/mihai/code/meaningfy/topbraid-composer/workspaces/country/new-data-theme_2020-10-29_13-39-27.nt
+
+@prefix : <file:/home/mihai/code/meaningfy/topbraid-composer/workspaces/country/new-data-theme_2020-10-29_13-39-27.nt#> .
+@prefix context: <http://publications.europa.eu/resource/authority/use-context/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix label: <http://publications.europa.eu/resource/authority/label-type/> .
+@prefix lemon: <http://lemon-model.net/lemon#> .
+@prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix p1: <http://inexistent/domain/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix status: <http://publications.europa.eu/resource/authority/concept-status/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<file:///home/mihai/code/meaningfy/topbraid-composer/workspaces/country/new-data-theme_2020-10-29_13-39-27.nt>
+  rdf:type owl:Ontology ;
+  owl:imports <http://publications.europa.eu/ontology/euvoc> ;
+.
+<http://publications.europa.eu/resource/authority/data-theme>
+  rdf:type skos:ConceptScheme ;
+  <http://publications.europa.eu/ontology/authority/prefLabel> "Data theme"@en ;
+  <http://publications.europa.eu/ontology/authority/table.id> "data-theme" ;
+  <http://publications.europa.eu/ontology/authority/table.version.number> "20200923-0" ;
+  dct:identifier "http://publications.europa.eu/resource/authority/data-theme" ;
+  rdfs:comment "Data theme"^^rdfs:Literal ;
+  rdfs:label "Data theme"@en ;
+  owl:versionIRI <http://publications.europa.eu/resource/authority/data-theme/20200923-0> ;
+  owl:versionInfo "20200923-0" ;
+  skos:prefLabel "Data theme"@en ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:status status:CURRENT ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Data theme"@en ;
+      skosxl:literalForm "Data theme"@en ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/AGRI>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "AGRI" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "AGRI" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering such domains as agriculture, fisheries, forestry or food. Agriculture is the science and art of cultivating plants and livestock. Fisheries are activities leading to harvesting of fish; may involve capture of wild fish or raising of fish through aquaculture. Forestry is the science and craft of creating, managing, using, conserving and repairing forests, woodlands and associated resources for human and environmental benefits. Food is any substance consumed to provide nutritional support for an organism. Dataset examples: Agricultural and Vegetable Catalogue; The Community Fishing Fleet Register; Pan-European Map of Forest Biomass Increment; Food composition database for nutrient intake: selected vitamins and minerals in selected European countries."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "AGRI" ;
+  dc:identifier "AGRI" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering such domains as agriculture, fisheries, forestry or food. Agriculture is the science and art of cultivating plants and livestock. Fisheries are activities leading to harvesting of fish; may involve capture of wild fish or raising of fish through aquaculture. Forestry is the science and craft of creating, managing, using, conserving and repairing forests, woodlands and associated resources for human and environmental benefits. Food is any substance consumed to provide nutritional support for an organism. Dataset examples: Agricultural and Vegetable Catalogue; The Community Fishing Fleet Register; Pan-European Map of Forest Biomass Increment; Food composition database for nutrient intake: selected vitamins and minerals in selected European countries."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Agricoltura, pesca, silvicoltura e prodotti alimentari"@it ;
+  skos:prefLabel "Agricultura, pesca, silvicultura e alimentação"@pt ;
+  skos:prefLabel "Agricultura, pesca, silvicultura y alimentación"@es ;
+  skos:prefLabel "Agriculture, fisheries, forestry and food"@en ;
+  skos:prefLabel "Agriculture, pêche, sylviculture et alimentation"@fr ;
+  skos:prefLabel "Agricultură, pescuit, silvicultură şi hrană"@ro ;
+  skos:prefLabel "Agrikoltura, sajd, forestrija u ikel"@mt ;
+  skos:prefLabel "Jordbruk, fiske, skogsbruk och livsmedel"@sv ;
+  skos:prefLabel "Jordbruk, fiskeri, skogbruk og mat"@nb ;
+  skos:prefLabel "Jordbruk, fiskeri, skogbruk og mat"@nn ;
+  skos:prefLabel "Jordbruk, fiskeri, skogbruk og mat"@no ;
+  skos:prefLabel "Kmetijstvo, ribištvo, gozdarstvo in prehrana"@sl ;
+  skos:prefLabel "Landbouw, visserij, bosbouw en voeding"@nl ;
+  skos:prefLabel "Landbrug, fiskeri, skovbrug og fødevarer"@da ;
+  skos:prefLabel "Landwirtschaft, Fischerei, Forstwirtschaft und Nahrungsmittel"@de ;
+  skos:prefLabel "Lauksaimniecība, zivsaimniecība, mežsaimniecība un pārtika"@lv ;
+  skos:prefLabel "Maatalous, kalastus, metsätalous ja elintarvikkeet"@fi ;
+  skos:prefLabel "Mezőgazdaság, halászat, erdészet és élelmiszer"@hu ;
+  skos:prefLabel "Poljoprivreda, ribarstvo, šumarstvo i hrana"@hr ;
+  skos:prefLabel "Poľnohospodárstvo, rybné hospodárstvo, lesníctvo a potravinárstvo"@sk ;
+  skos:prefLabel "Põllumajandus, kalandus, metsandus ja toiduained"@et ;
+  skos:prefLabel "Rolnictwo, rybołówstwo, leśnictwo i żywność"@pl ;
+  skos:prefLabel "Talmhaíocht, iascach, foraoiseacht agus bia"@ga ;
+  skos:prefLabel "Zemědělství, rybolov, lesnictví a výživa"@cs ;
+  skos:prefLabel "Žemės ūkis, žuvininkystė, miškininkystė ir maistas"@lt ;
+  skos:prefLabel "Γεωργία, αλιεία, δασοκομία και τρόφιμα"@el ;
+  skos:prefLabel "Селско стопанство, рибарство, горско стопанство и храни"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Agricoltura, pesca, silvicoltura e prodotti alimentari"@it ;
+      skosxl:literalForm "Agricoltura, pesca, silvicoltura e prodotti alimentari"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Agricultura, pesca, silvicultura e alimentação"@pt ;
+      skosxl:literalForm "Agricultura, pesca, silvicultura e alimentação"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Agricultura, pesca, silvicultura y alimentación"@es ;
+      skosxl:literalForm "Agricultura, pesca, silvicultura y alimentación"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Agriculture, fisheries, forestry and food"@en ;
+      skosxl:literalForm "Agriculture, fisheries, forestry and food"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Agriculture, pêche, sylviculture et alimentation"@fr ;
+      skosxl:literalForm "Agriculture, pêche, sylviculture et alimentation"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Agricultură, pescuit, silvicultură şi hrană"@ro ;
+      skosxl:literalForm "Agricultură, pescuit, silvicultură şi hrană"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Agrikoltura, sajd, forestrija u ikel"@mt ;
+      skosxl:literalForm "Agrikoltura, sajd, forestrija u ikel"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Jordbruk, fiske, skogsbruk och livsmedel"@sv ;
+      skosxl:literalForm "Jordbruk, fiske, skogsbruk och livsmedel"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Jordbruk, fiskeri, skogbruk og mat"@nb ;
+      skosxl:literalForm "Jordbruk, fiskeri, skogbruk og mat"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Jordbruk, fiskeri, skogbruk og mat"@nn ;
+      skosxl:literalForm "Jordbruk, fiskeri, skogbruk og mat"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Jordbruk, fiskeri, skogbruk og mat"@no ;
+      skosxl:literalForm "Jordbruk, fiskeri, skogbruk og mat"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Kmetijstvo, ribištvo, gozdarstvo in prehrana"@sl ;
+      skosxl:literalForm "Kmetijstvo, ribištvo, gozdarstvo in prehrana"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Landbouw, visserij, bosbouw en voeding"@nl ;
+      skosxl:literalForm "Landbouw, visserij, bosbouw en voeding"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Landbrug, fiskeri, skovbrug og fødevarer"@da ;
+      skosxl:literalForm "Landbrug, fiskeri, skovbrug og fødevarer"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Landwirtschaft, Fischerei, Forstwirtschaft und Nahrungsmittel"@de ;
+      skosxl:literalForm "Landwirtschaft, Fischerei, Forstwirtschaft und Nahrungsmittel"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Lauksaimniecība, zivsaimniecība, mežsaimniecība un pārtika"@lv ;
+      skosxl:literalForm "Lauksaimniecība, zivsaimniecība, mežsaimniecība un pārtika"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Maatalous, kalastus, metsätalous ja elintarvikkeet"@fi ;
+      skosxl:literalForm "Maatalous, kalastus, metsätalous ja elintarvikkeet"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Mezőgazdaság, halászat, erdészet és élelmiszer"@hu ;
+      skosxl:literalForm "Mezőgazdaság, halászat, erdészet és élelmiszer"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Poljoprivreda, ribarstvo, šumarstvo i hrana"@hr ;
+      skosxl:literalForm "Poljoprivreda, ribarstvo, šumarstvo i hrana"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Poľnohospodárstvo, rybné hospodárstvo, lesníctvo a potravinárstvo"@sk ;
+      skosxl:literalForm "Poľnohospodárstvo, rybné hospodárstvo, lesníctvo a potravinárstvo"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Põllumajandus, kalandus, metsandus ja toiduained"@et ;
+      skosxl:literalForm "Põllumajandus, kalandus, metsandus ja toiduained"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Rolnictwo, rybołówstwo, leśnictwo i żywność"@pl ;
+      skosxl:literalForm "Rolnictwo, rybołówstwo, leśnictwo i żywność"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Talmhaíocht, iascach, foraoiseacht agus bia"@ga ;
+      skosxl:literalForm "Talmhaíocht, iascach, foraoiseacht agus bia"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Zemědělství, rybolov, lesnictví a výživa"@cs ;
+      skosxl:literalForm "Zemědělství, rybolov, lesnictví a výživa"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Žemės ūkis, žuvininkystė, miškininkystė ir maistas"@lt ;
+      skosxl:literalForm "Žemės ūkis, žuvininkystė, miškininkystė ir maistas"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Γεωργία, αλιεία, δασοκομία και τρόφιμα"@el ;
+      skosxl:literalForm "Γεωργία, αλιεία, δασοκομία και τρόφιμα"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Селско стопанство, рибарство, горско стопанство и храни"@bg ;
+      skosxl:literalForm "Селско стопанство, рибарство, горско стопанство и храни"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/ECON>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "ECON" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "ECON" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering such domains as economy or finance. Economy is the area of the production, distribution and trade, as well as consumption of goods and services by different agents. In its broadest sense, the economy is defined as a social domain that emphasize the practices, discourses and material expressions associated with the production, use, and management of resources. Finance is the study of money and how it is used. Specifically, it deals with the questions of how an individual, company or government acquires the money needed and how they then spend or invest that money. Dataset examples: Tenders Electronic Daily (TED) - public procurement notices from the EU and beyond; General government deficit (-) and surplus (+) - quarterly data."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "ECON" ;
+  dc:identifier "ECON" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering such domains as economy or finance. Economy is the area of the production, distribution and trade, as well as consumption of goods and services by different agents. In its broadest sense, the economy is defined as a social domain that emphasize the practices, discourses and material expressions associated with the production, use, and management of resources. Finance is the study of money and how it is used. Specifically, it deals with the questions of how an individual, company or government acquires the money needed and how they then spend or invest that money. Dataset examples: Tenders Electronic Daily (TED) - public procurement notices from the EU and beyond; General government deficit (-) and surplus (+) - quarterly data."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Economia e finanze"@it ;
+  skos:prefLabel "Economia e finanças"@pt ;
+  skos:prefLabel "Economie en financiën"@nl ;
+  skos:prefLabel "Economie şi finanţe"@ro ;
+  skos:prefLabel "Economy and finance"@en ;
+  skos:prefLabel "Economía y finanzas"@es ;
+  skos:prefLabel "Ekonomi och finans"@sv ;
+  skos:prefLabel "Ekonomija i financije"@hr ;
+  skos:prefLabel "Ekonomija u finanzi"@mt ;
+  skos:prefLabel "Ekonomika ir finansai"@lt ;
+  skos:prefLabel "Ekonomika un finanses"@lv ;
+  skos:prefLabel "Gazdaság és pénzügy"@hu ;
+  skos:prefLabel "Geilleagar agus airgeadas"@ga ;
+  skos:prefLabel "Gospodarka i finanse"@pl ;
+  skos:prefLabel "Gospodarstvo in finance"@sl ;
+  skos:prefLabel "Hospodárstvo a financie"@sk ;
+  skos:prefLabel "Hospodářství a finance"@cs ;
+  skos:prefLabel "Majandus ja rahandus"@et ;
+  skos:prefLabel "Talous ja raha-asiat"@fi ;
+  skos:prefLabel "Wirtschaft und Finanzen"@de ;
+  skos:prefLabel "Économie et finances"@fr ;
+  skos:prefLabel "Økonomi og finans"@nb ;
+  skos:prefLabel "Økonomi og finans"@nn ;
+  skos:prefLabel "Økonomi og finans"@no ;
+  skos:prefLabel "Økonomi og finanser"@da ;
+  skos:prefLabel "Οικονομία και χρηματοοικονομικά θέματα"@el ;
+  skos:prefLabel "Икономика и финанси"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Economia e finanze"@it ;
+      skosxl:literalForm "Economia e finanze"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Economia e finanças"@pt ;
+      skosxl:literalForm "Economia e finanças"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Economie en financiën"@nl ;
+      skosxl:literalForm "Economie en financiën"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Economie şi finanţe"@ro ;
+      skosxl:literalForm "Economie şi finanţe"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Economy and finance"@en ;
+      skosxl:literalForm "Economy and finance"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Economía y finanzas"@es ;
+      skosxl:literalForm "Economía y finanzas"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ekonomi och finans"@sv ;
+      skosxl:literalForm "Ekonomi och finans"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ekonomija i financije"@hr ;
+      skosxl:literalForm "Ekonomija i financije"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ekonomija u finanzi"@mt ;
+      skosxl:literalForm "Ekonomija u finanzi"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ekonomika ir finansai"@lt ;
+      skosxl:literalForm "Ekonomika ir finansai"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ekonomika un finanses"@lv ;
+      skosxl:literalForm "Ekonomika un finanses"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Gazdaság és pénzügy"@hu ;
+      skosxl:literalForm "Gazdaság és pénzügy"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Geilleagar agus airgeadas"@ga ;
+      skosxl:literalForm "Geilleagar agus airgeadas"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Gospodarka i finanse"@pl ;
+      skosxl:literalForm "Gospodarka i finanse"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Gospodarstvo in finance"@sl ;
+      skosxl:literalForm "Gospodarstvo in finance"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Hospodárstvo a financie"@sk ;
+      skosxl:literalForm "Hospodárstvo a financie"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Hospodářství a finance"@cs ;
+      skosxl:literalForm "Hospodářství a finance"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Majandus ja rahandus"@et ;
+      skosxl:literalForm "Majandus ja rahandus"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Talous ja raha-asiat"@fi ;
+      skosxl:literalForm "Talous ja raha-asiat"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Wirtschaft und Finanzen"@de ;
+      skosxl:literalForm "Wirtschaft und Finanzen"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Économie et finances"@fr ;
+      skosxl:literalForm "Économie et finances"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Økonomi og finans"@nb ;
+      skosxl:literalForm "Økonomi og finans"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Økonomi og finans"@nn ;
+      skosxl:literalForm "Økonomi og finans"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Økonomi og finans"@no ;
+      skosxl:literalForm "Økonomi og finans"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Økonomi og finanser"@da ;
+      skosxl:literalForm "Økonomi og finanser"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Οικονομία και χρηματοοικονομικά θέματα"@el ;
+      skosxl:literalForm "Οικονομία και χρηματοοικονομικά θέματα"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Икономика и финанси"@bg ;
+      skosxl:literalForm "Икономика и финанси"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/EDUC>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "EDUC" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "EDUC" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering such domains as education, culture or sport. Education is the process of facilitating learning, or the acquisition of knowledge, skills, values, beliefs and habits. Culture encompasses the social behavior and norms found in human societies, as well as the knowledge, beliefs, arts, laws, customs, capabilities and habits of the individuals in these groups. Sport includes all forms of competitive physical activity or games which maintain or improve physical ability and skills while providing enjoyment to participants, and in some cases, entertainment for spectators. Dataset examples: European Skills, Competences, Qualifications and Occupations (ESCO); EU Member States and international human rights obligations; Participation in any cultural or sport activities in the last 12 months by sex, age and educational attainment level."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "EDUC" ;
+  dc:identifier "EDUC" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering such domains as education, culture or sport. Education is the process of facilitating learning, or the acquisition of knowledge, skills, values, beliefs and habits. Culture encompasses the social behavior and norms found in human societies, as well as the knowledge, beliefs, arts, laws, customs, capabilities and habits of the individuals in these groups. Sport includes all forms of competitive physical activity or games which maintain or improve physical ability and skills while providing enjoyment to participants, and in some cases, entertainment for spectators. Dataset examples: European Skills, Competences, Qualifications and Occupations (ESCO); EU Member States and international human rights obligations; Participation in any cultural or sport activities in the last 12 months by sex, age and educational attainment level."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Bildung, Kultur und Sport"@de ;
+  skos:prefLabel "Educación, cultura y deportes"@es ;
+  skos:prefLabel "Education, culture and sport"@en ;
+  skos:prefLabel "Educação, cultura e desporto"@pt ;
+  skos:prefLabel "Educaţie, cultură şi sport"@ro ;
+  skos:prefLabel "Edukacja, kultura i sport"@pl ;
+  skos:prefLabel "Edukazzjoni, kultura u sport"@mt ;
+  skos:prefLabel "Haridus, kultuur ja sport"@et ;
+  skos:prefLabel "Istruzione, cultura e sport"@it ;
+  skos:prefLabel "Izglītība, kultūra un sports"@lv ;
+  skos:prefLabel "Izobraževanje, kultura in šport"@sl ;
+  skos:prefLabel "Koulutus, kulttuuri ja urheilu"@fi ;
+  skos:prefLabel "Obrazovanje, kultura i sport"@hr ;
+  skos:prefLabel "Oideachas, cultúr agus spórt"@ga ;
+  skos:prefLabel "Oktatás, kultúra és sport"@hu ;
+  skos:prefLabel "Onderwijs, cultuur en sport"@nl ;
+  skos:prefLabel "Uddannelse, kultur og sport"@da ;
+  skos:prefLabel "Utbildning, kultur och sport"@sv ;
+  skos:prefLabel "Utdanning, kultur og sport"@nb ;
+  skos:prefLabel "Utdanning, kultur og sport"@nn ;
+  skos:prefLabel "Utdanning, kultur og sport"@no ;
+  skos:prefLabel "Vzdelávanie, kultúra a šport"@sk ;
+  skos:prefLabel "Vzdělávání, kultura a sport"@cs ;
+  skos:prefLabel "Éducation, culture et sport"@fr ;
+  skos:prefLabel "Švietimas, kultūra ir sportas"@lt ;
+  skos:prefLabel "Παιδεία, πολιτιστικά θέματα και αθλητισμός"@el ;
+  skos:prefLabel "Образование, култура и спорт"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Bildung, Kultur und Sport"@de ;
+      skosxl:literalForm "Bildung, Kultur und Sport"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Educación, cultura y deportes"@es ;
+      skosxl:literalForm "Educación, cultura y deportes"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Education, culture and sport"@en ;
+      skosxl:literalForm "Education, culture and sport"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Educação, cultura e desporto"@pt ;
+      skosxl:literalForm "Educação, cultura e desporto"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Educaţie, cultură şi sport"@ro ;
+      skosxl:literalForm "Educaţie, cultură şi sport"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Edukacja, kultura i sport"@pl ;
+      skosxl:literalForm "Edukacja, kultura i sport"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Edukazzjoni, kultura u sport"@mt ;
+      skosxl:literalForm "Edukazzjoni, kultura u sport"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Haridus, kultuur ja sport"@et ;
+      skosxl:literalForm "Haridus, kultuur ja sport"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Istruzione, cultura e sport"@it ;
+      skosxl:literalForm "Istruzione, cultura e sport"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Izglītība, kultūra un sports"@lv ;
+      skosxl:literalForm "Izglītība, kultūra un sports"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Izobraževanje, kultura in šport"@sl ;
+      skosxl:literalForm "Izobraževanje, kultura in šport"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Koulutus, kulttuuri ja urheilu"@fi ;
+      skosxl:literalForm "Koulutus, kulttuuri ja urheilu"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Obrazovanje, kultura i sport"@hr ;
+      skosxl:literalForm "Obrazovanje, kultura i sport"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Oideachas, cultúr agus spórt"@ga ;
+      skosxl:literalForm "Oideachas, cultúr agus spórt"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Oktatás, kultúra és sport"@hu ;
+      skosxl:literalForm "Oktatás, kultúra és sport"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Onderwijs, cultuur en sport"@nl ;
+      skosxl:literalForm "Onderwijs, cultuur en sport"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Uddannelse, kultur og sport"@da ;
+      skosxl:literalForm "Uddannelse, kultur og sport"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Utbildning, kultur och sport"@sv ;
+      skosxl:literalForm "Utbildning, kultur och sport"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Utdanning, kultur og sport"@nb ;
+      skosxl:literalForm "Utdanning, kultur og sport"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Utdanning, kultur og sport"@nn ;
+      skosxl:literalForm "Utdanning, kultur og sport"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Utdanning, kultur og sport"@no ;
+      skosxl:literalForm "Utdanning, kultur og sport"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vzdelávanie, kultúra a šport"@sk ;
+      skosxl:literalForm "Vzdelávanie, kultúra a šport"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vzdělávání, kultura a sport"@cs ;
+      skosxl:literalForm "Vzdělávání, kultura a sport"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Éducation, culture et sport"@fr ;
+      skosxl:literalForm "Éducation, culture et sport"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Švietimas, kultūra ir sportas"@lt ;
+      skosxl:literalForm "Švietimas, kultūra ir sportas"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Παιδεία, πολιτιστικά θέματα και αθλητισμός"@el ;
+      skosxl:literalForm "Παιδεία, πολιτιστικά θέματα και αθλητισμός"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Образование, култура и спорт"@bg ;
+      skosxl:literalForm "Образование, култура и спорт"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/ENER>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "ENER" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "ENER" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering the domain of energy. Energy is the quantitative property that must be transferred to an object in order to perform work on, or to heat, the object. Living organisms require energy to stay alive; human civilisation requires energy to function. Dataset examples: European gas market reports; Electricity prices by type of user."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "ENER" ;
+  dc:identifier "ENER" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering the domain of energy. Energy is the quantitative property that must be transferred to an object in order to perform work on, or to heat, the object. Living organisms require energy to stay alive; human civilisation requires energy to function. Dataset examples: European gas market reports; Electricity prices by type of user."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Energeetika"@et ;
+  skos:prefLabel "Energetika"@hr ;
+  skos:prefLabel "Energetika"@lt ;
+  skos:prefLabel "Energetika"@sk ;
+  skos:prefLabel "Energetika"@sl ;
+  skos:prefLabel "Energi"@da ;
+  skos:prefLabel "Energi"@nb ;
+  skos:prefLabel "Energi"@nn ;
+  skos:prefLabel "Energi"@no ;
+  skos:prefLabel "Energi"@sv ;
+  skos:prefLabel "Energia"@fi ;
+  skos:prefLabel "Energia"@hu ;
+  skos:prefLabel "Energia"@it ;
+  skos:prefLabel "Energia"@pl ;
+  skos:prefLabel "Energia"@pt ;
+  skos:prefLabel "Energie"@cs ;
+  skos:prefLabel "Energie"@de ;
+  skos:prefLabel "Energie"@nl ;
+  skos:prefLabel "Energie"@ro ;
+  skos:prefLabel "Energy"@en ;
+  skos:prefLabel "Energía"@es ;
+  skos:prefLabel "Enerġija"@mt ;
+  skos:prefLabel "Enerģētika"@lv ;
+  skos:prefLabel "Fuinneamh"@ga ;
+  skos:prefLabel "Énergie"@fr ;
+  skos:prefLabel "Ενέργεια"@el ;
+  skos:prefLabel "Енергетика"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energeetika"@et ;
+      skosxl:literalForm "Energeetika"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energetika"@hr ;
+      skosxl:literalForm "Energetika"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energetika"@lt ;
+      skosxl:literalForm "Energetika"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energetika"@sk ;
+      skosxl:literalForm "Energetika"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energetika"@sl ;
+      skosxl:literalForm "Energetika"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energi"@da ;
+      skosxl:literalForm "Energi"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energi"@nb ;
+      skosxl:literalForm "Energi"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energi"@nn ;
+      skosxl:literalForm "Energi"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energi"@no ;
+      skosxl:literalForm "Energi"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energi"@sv ;
+      skosxl:literalForm "Energi"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energia"@fi ;
+      skosxl:literalForm "Energia"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energia"@hu ;
+      skosxl:literalForm "Energia"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energia"@it ;
+      skosxl:literalForm "Energia"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energia"@pl ;
+      skosxl:literalForm "Energia"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energia"@pt ;
+      skosxl:literalForm "Energia"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energie"@cs ;
+      skosxl:literalForm "Energie"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energie"@de ;
+      skosxl:literalForm "Energie"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energie"@nl ;
+      skosxl:literalForm "Energie"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energie"@ro ;
+      skosxl:literalForm "Energie"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energy"@en ;
+      skosxl:literalForm "Energy"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Energía"@es ;
+      skosxl:literalForm "Energía"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Enerġija"@mt ;
+      skosxl:literalForm "Enerġija"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Enerģētika"@lv ;
+      skosxl:literalForm "Enerģētika"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Fuinneamh"@ga ;
+      skosxl:literalForm "Fuinneamh"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Énergie"@fr ;
+      skosxl:literalForm "Énergie"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ενέργεια"@el ;
+      skosxl:literalForm "Ενέργεια"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Енергетика"@bg ;
+      skosxl:literalForm "Енергетика"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/ENVI>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "ENVI" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "ENVI" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering the domain of environment. The natural environment encompasses the interaction of all living species, climate, weather and natural resources that affect human survival and economic activity. Dataset examples: Attitudes of European citizens towards the environment; Pollutant emissions from transport."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "ENVI" ;
+  dc:identifier "ENVI" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering the domain of environment. The natural environment encompasses the interaction of all living species, climate, weather and natural resources that affect human survival and economic activity. Dataset examples: Attitudes of European citizens towards the environment; Pollutant emissions from transport."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Ambiente"@it ;
+  skos:prefLabel "Ambiente"@pt ;
+  skos:prefLabel "Ambjent"@mt ;
+  skos:prefLabel "Aplinka"@lt ;
+  skos:prefLabel "Comhshaol"@ga ;
+  skos:prefLabel "Environment"@en ;
+  skos:prefLabel "Environnement"@fr ;
+  skos:prefLabel "Keskkond"@et ;
+  skos:prefLabel "Környezet"@hu ;
+  skos:prefLabel "Medio ambiente"@es ;
+  skos:prefLabel "Mediu"@ro ;
+  skos:prefLabel "Milieu"@nl ;
+  skos:prefLabel "Miljö"@sv ;
+  skos:prefLabel "Miljø"@da ;
+  skos:prefLabel "Miljø"@nb ;
+  skos:prefLabel "Miljø"@nn ;
+  skos:prefLabel "Miljø"@no ;
+  skos:prefLabel "Okoliš"@hr ;
+  skos:prefLabel "Okolje"@sl ;
+  skos:prefLabel "Umwelt"@de ;
+  skos:prefLabel "Vide"@lv ;
+  skos:prefLabel "Ympäristö"@fi ;
+  skos:prefLabel "Środowisko"@pl ;
+  skos:prefLabel "Životné prostredie"@sk ;
+  skos:prefLabel "Životní prostředí"@cs ;
+  skos:prefLabel "Περιβάλλον"@el ;
+  skos:prefLabel "Околна среда"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ambiente"@it ;
+      skosxl:literalForm "Ambiente"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ambiente"@pt ;
+      skosxl:literalForm "Ambiente"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ambjent"@mt ;
+      skosxl:literalForm "Ambjent"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Aplinka"@lt ;
+      skosxl:literalForm "Aplinka"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Comhshaol"@ga ;
+      skosxl:literalForm "Comhshaol"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Environment"@en ;
+      skosxl:literalForm "Environment"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Environnement"@fr ;
+      skosxl:literalForm "Environnement"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Keskkond"@et ;
+      skosxl:literalForm "Keskkond"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Környezet"@hu ;
+      skosxl:literalForm "Környezet"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Medio ambiente"@es ;
+      skosxl:literalForm "Medio ambiente"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Mediu"@ro ;
+      skosxl:literalForm "Mediu"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Milieu"@nl ;
+      skosxl:literalForm "Milieu"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Miljö"@sv ;
+      skosxl:literalForm "Miljö"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Miljø"@da ;
+      skosxl:literalForm "Miljø"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Miljø"@nb ;
+      skosxl:literalForm "Miljø"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Miljø"@nn ;
+      skosxl:literalForm "Miljø"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Miljø"@no ;
+      skosxl:literalForm "Miljø"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Okoliš"@hr ;
+      skosxl:literalForm "Okoliš"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Okolje"@sl ;
+      skosxl:literalForm "Okolje"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Umwelt"@de ;
+      skosxl:literalForm "Umwelt"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vide"@lv ;
+      skosxl:literalForm "Vide"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ympäristö"@fi ;
+      skosxl:literalForm "Ympäristö"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Środowisko"@pl ;
+      skosxl:literalForm "Środowisko"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Životné prostredie"@sk ;
+      skosxl:literalForm "Životné prostredie"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Životní prostředí"@cs ;
+      skosxl:literalForm "Životní prostředí"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Περιβάλλον"@el ;
+      skosxl:literalForm "Περιβάλλον"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Околна среда"@bg ;
+      skosxl:literalForm "Околна среда"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/GOVE>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "GOVE" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "GOVE" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering such domains as government or public sector. A government is the system or group of people governing an organised community, often a state. The public sector is the part of the economy composed of both public services and public enterprises. Public sector services and enterprises can be controlled by central government, regional or local authorities. Organisations that are not part of the public sector are either a part of the private sector or voluntary sector. Dataset examples: Candidate countries and potential candidates: Government statistics; Transparency Register."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "GOVE" ;
+  dc:identifier "GOVE" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering such domains as government or public sector. A government is the system or group of people governing an organised community, often a state. The public sector is the part of the economy composed of both public services and public enterprises. Public sector services and enterprises can be controlled by central government, regional or local authorities. Organisations that are not part of the public sector are either a part of the private sector or voluntary sector. Dataset examples: Candidate countries and potential candidates: Government statistics; Transparency Register."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Forvaltning og offentleg sektor"@nn ;
+  skos:prefLabel "Forvaltning og offentlig sektor"@nb ;
+  skos:prefLabel "Forvaltning og offentlig sektor"@no ;
+  skos:prefLabel "Gobierno y sector público"@es ;
+  skos:prefLabel "Gouvernement et secteur public"@fr ;
+  skos:prefLabel "Government and public sector"@en ;
+  skos:prefLabel "Governo e setor público"@pt ;
+  skos:prefLabel "Governo e settore pubblico"@it ;
+  skos:prefLabel "Guvern şi sector public"@ro ;
+  skos:prefLabel "Gvern u settur pubbliku"@mt ;
+  skos:prefLabel "Kormányzat és közszféra"@hu ;
+  skos:prefLabel "Overheid en publieke sector"@nl ;
+  skos:prefLabel "Regeringen och den offentliga sektorn"@sv ;
+  skos:prefLabel "Regeringen og den offentlige sektor"@da ;
+  skos:prefLabel "Regierung und öffentlicher Sektor"@de ;
+  skos:prefLabel "Rialtas agus earnáil phoiblí"@ga ;
+  skos:prefLabel "Rząd i sektor publiczny"@pl ;
+  skos:prefLabel "Valdība un sabiedriskais sektors"@lv ;
+  skos:prefLabel "Valitsus ja avalik sektor"@et ;
+  skos:prefLabel "Valtioneuvosto ja julkinen sektori"@fi ;
+  skos:prefLabel "Vlada i javni sektor"@hr ;
+  skos:prefLabel "Vlada in javni sektor"@sl ;
+  skos:prefLabel "Vláda a verejný sektor"@sk ;
+  skos:prefLabel "Vláda a veřejný sektor"@cs ;
+  skos:prefLabel "Vyriausybė ir viešasis sektorius"@lt ;
+  skos:prefLabel "Κυβέρνηση και δημόσιος τομέας"@el ;
+  skos:prefLabel "Правителство и публичен сектор"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Forvaltning og offentleg sektor"@nn ;
+      skosxl:literalForm "Forvaltning og offentleg sektor"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Forvaltning og offentlig sektor"@nb ;
+      skosxl:literalForm "Forvaltning og offentlig sektor"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Forvaltning og offentlig sektor"@no ;
+      skosxl:literalForm "Forvaltning og offentlig sektor"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Gobierno y sector público"@es ;
+      skosxl:literalForm "Gobierno y sector público"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Gouvernement et secteur public"@fr ;
+      skosxl:literalForm "Gouvernement et secteur public"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Government and public sector"@en ;
+      skosxl:literalForm "Government and public sector"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Governo e setor público"@pt ;
+      skosxl:literalForm "Governo e setor público"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Governo e settore pubblico"@it ;
+      skosxl:literalForm "Governo e settore pubblico"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Guvern şi sector public"@ro ;
+      skosxl:literalForm "Guvern şi sector public"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Gvern u settur pubbliku"@mt ;
+      skosxl:literalForm "Gvern u settur pubbliku"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Kormányzat és közszféra"@hu ;
+      skosxl:literalForm "Kormányzat és közszféra"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Overheid en publieke sector"@nl ;
+      skosxl:literalForm "Overheid en publieke sector"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regeringen och den offentliga sektorn"@sv ;
+      skosxl:literalForm "Regeringen och den offentliga sektorn"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regeringen og den offentlige sektor"@da ;
+      skosxl:literalForm "Regeringen og den offentlige sektor"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regierung und öffentlicher Sektor"@de ;
+      skosxl:literalForm "Regierung und öffentlicher Sektor"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Rialtas agus earnáil phoiblí"@ga ;
+      skosxl:literalForm "Rialtas agus earnáil phoiblí"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Rząd i sektor publiczny"@pl ;
+      skosxl:literalForm "Rząd i sektor publiczny"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Valdība un sabiedriskais sektors"@lv ;
+      skosxl:literalForm "Valdība un sabiedriskais sektors"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Valitsus ja avalik sektor"@et ;
+      skosxl:literalForm "Valitsus ja avalik sektor"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Valtioneuvosto ja julkinen sektori"@fi ;
+      skosxl:literalForm "Valtioneuvosto ja julkinen sektori"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vlada i javni sektor"@hr ;
+      skosxl:literalForm "Vlada i javni sektor"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vlada in javni sektor"@sl ;
+      skosxl:literalForm "Vlada in javni sektor"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vláda a verejný sektor"@sk ;
+      skosxl:literalForm "Vláda a verejný sektor"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vláda a veřejný sektor"@cs ;
+      skosxl:literalForm "Vláda a veřejný sektor"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vyriausybė ir viešasis sektorius"@lt ;
+      skosxl:literalForm "Vyriausybė ir viešasis sektorius"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Κυβέρνηση και δημόσιος τομέας"@el ;
+      skosxl:literalForm "Κυβέρνηση και δημόσιος τομέας"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Правителство и публичен сектор"@bg ;
+      skosxl:literalForm "Правителство и публичен сектор"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/HEAL>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "HEAL" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "HEAL" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering the domain of health. Health is a state of physical, mental and social well-being in which disease and infirmity are absent. Dataset examples: COVID-19 Coronavirus data; European Cancer Information System."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "HEAL" ;
+  dc:identifier "HEAL" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering the domain of health. Health is a state of physical, mental and social well-being in which disease and infirmity are absent. Dataset examples: COVID-19 Coronavirus data; European Cancer Information System."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Egészségügy"@hu ;
+  skos:prefLabel "Gesundheit"@de ;
+  skos:prefLabel "Gezondheid"@nl ;
+  skos:prefLabel "Health"@en ;
+  skos:prefLabel "Helse"@nb ;
+  skos:prefLabel "Helse"@nn ;
+  skos:prefLabel "Helse"@no ;
+  skos:prefLabel "Hälsa"@sv ;
+  skos:prefLabel "Salud"@es ;
+  skos:prefLabel "Salute"@it ;
+  skos:prefLabel "Santé"@fr ;
+  skos:prefLabel "Saúde"@pt ;
+  skos:prefLabel "Saħħa"@mt ;
+  skos:prefLabel "Sláinte"@ga ;
+  skos:prefLabel "Sundhed"@da ;
+  skos:prefLabel "Sveikata"@lt ;
+  skos:prefLabel "Sănătate"@ro ;
+  skos:prefLabel "Terveys"@fi ;
+  skos:prefLabel "Tervis"@et ;
+  skos:prefLabel "Veselība"@lv ;
+  skos:prefLabel "Zdravje"@sl ;
+  skos:prefLabel "Zdravlje"@hr ;
+  skos:prefLabel "Zdravotníctvo"@sk ;
+  skos:prefLabel "Zdraví"@cs ;
+  skos:prefLabel "Zdrowie"@pl ;
+  skos:prefLabel "Υγεία"@el ;
+  skos:prefLabel "Здраве"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Egészségügy"@hu ;
+      skosxl:literalForm "Egészségügy"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Gesundheit"@de ;
+      skosxl:literalForm "Gesundheit"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Gezondheid"@nl ;
+      skosxl:literalForm "Gezondheid"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Health"@en ;
+      skosxl:literalForm "Health"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Helse"@nb ;
+      skosxl:literalForm "Helse"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Helse"@nn ;
+      skosxl:literalForm "Helse"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Helse"@no ;
+      skosxl:literalForm "Helse"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Hälsa"@sv ;
+      skosxl:literalForm "Hälsa"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Salud"@es ;
+      skosxl:literalForm "Salud"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Salute"@it ;
+      skosxl:literalForm "Salute"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Santé"@fr ;
+      skosxl:literalForm "Santé"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Saúde"@pt ;
+      skosxl:literalForm "Saúde"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Saħħa"@mt ;
+      skosxl:literalForm "Saħħa"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Sláinte"@ga ;
+      skosxl:literalForm "Sláinte"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Sundhed"@da ;
+      skosxl:literalForm "Sundhed"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Sveikata"@lt ;
+      skosxl:literalForm "Sveikata"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Sănătate"@ro ;
+      skosxl:literalForm "Sănătate"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Terveys"@fi ;
+      skosxl:literalForm "Terveys"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Tervis"@et ;
+      skosxl:literalForm "Tervis"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Veselība"@lv ;
+      skosxl:literalForm "Veselība"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Zdravje"@sl ;
+      skosxl:literalForm "Zdravje"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Zdravlje"@hr ;
+      skosxl:literalForm "Zdravlje"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Zdravotníctvo"@sk ;
+      skosxl:literalForm "Zdravotníctvo"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Zdraví"@cs ;
+      skosxl:literalForm "Zdraví"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Zdrowie"@pl ;
+      skosxl:literalForm "Zdrowie"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Υγεία"@el ;
+      skosxl:literalForm "Υγεία"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Здраве"@bg ;
+      skosxl:literalForm "Здраве"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/INTR>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "INTR" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "INTR" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering the domain of international issues. An issue – important topic or problem for debate or discussion – is international when the participants represent at least two countries. Dataset examples: Consolidated list of persons, groups and entities subject to EU financial sanctions; European Commission — DG DEVCO – development and humanitarian assistance to Afghanistan."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "INTR" ;
+  dc:identifier "INTR" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering the domain of international issues. An issue – important topic or problem for debate or discussion – is international when the participants represent at least two countries. Dataset examples: Consolidated list of persons, groups and entities subject to EU financial sanctions; European Commission — DG DEVCO – development and humanitarian assistance to Afghanistan."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Asuntos internacionales"@es ;
+  skos:prefLabel "Chestiuni internaționale"@ro ;
+  skos:prefLabel "Internasjonale tema"@nn ;
+  skos:prefLabel "Internasjonale temaer"@nb ;
+  skos:prefLabel "Internasjonale temaer"@no ;
+  skos:prefLabel "International issues"@en ;
+  skos:prefLabel "Internationale Themen"@de ;
+  skos:prefLabel "Internationale spørgsmål"@da ;
+  skos:prefLabel "Internationale vraagstukken"@nl ;
+  skos:prefLabel "Internationella frågor"@sv ;
+  skos:prefLabel "Kansainväliset kysymykset"@fi ;
+  skos:prefLabel "Kwestie międzynarodowe"@pl ;
+  skos:prefLabel "Kwistjonijiet internazzjonali"@mt ;
+  skos:prefLabel "Mednarodna vprašanja"@sl ;
+  skos:prefLabel "Medzinárodné otázky"@sk ;
+  skos:prefLabel "Mezinárodní otázky"@cs ;
+  skos:prefLabel "Međunarodni pitanja"@hr ;
+  skos:prefLabel "Nemzetközi ügyek"@hu ;
+  skos:prefLabel "Questions internationales"@fr ;
+  skos:prefLabel "Questões internacionais"@pt ;
+  skos:prefLabel "Rahvusvahelised küsimused"@et ;
+  skos:prefLabel "Saincheisteanna idirnáisiúnta"@ga ;
+  skos:prefLabel "Starptautiski jautājumi"@lv ;
+  skos:prefLabel "Tarptautiniai klausimai"@lt ;
+  skos:prefLabel "Tematiche internazionali"@it ;
+  skos:prefLabel "Διεθνή θέματα"@el ;
+  skos:prefLabel "Международни въпроси"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Asuntos internacionales"@es ;
+      skosxl:literalForm "Asuntos internacionales"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Chestiuni internaționale"@ro ;
+      skosxl:literalForm "Chestiuni internaționale"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Internasjonale tema"@nn ;
+      skosxl:literalForm "Internasjonale tema"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Internasjonale temaer"@nb ;
+      skosxl:literalForm "Internasjonale temaer"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Internasjonale temaer"@no ;
+      skosxl:literalForm "Internasjonale temaer"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "International issues"@en ;
+      skosxl:literalForm "International issues"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Internationale Themen"@de ;
+      skosxl:literalForm "Internationale Themen"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Internationale spørgsmål"@da ;
+      skosxl:literalForm "Internationale spørgsmål"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Internationale vraagstukken"@nl ;
+      skosxl:literalForm "Internationale vraagstukken"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Internationella frågor"@sv ;
+      skosxl:literalForm "Internationella frågor"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Kansainväliset kysymykset"@fi ;
+      skosxl:literalForm "Kansainväliset kysymykset"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Kwestie międzynarodowe"@pl ;
+      skosxl:literalForm "Kwestie międzynarodowe"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Kwistjonijiet internazzjonali"@mt ;
+      skosxl:literalForm "Kwistjonijiet internazzjonali"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Mednarodna vprašanja"@sl ;
+      skosxl:literalForm "Mednarodna vprašanja"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Medzinárodné otázky"@sk ;
+      skosxl:literalForm "Medzinárodné otázky"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Mezinárodní otázky"@cs ;
+      skosxl:literalForm "Mezinárodní otázky"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Međunarodni pitanja"@hr ;
+      skosxl:literalForm "Međunarodni pitanja"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Nemzetközi ügyek"@hu ;
+      skosxl:literalForm "Nemzetközi ügyek"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Questions internationales"@fr ;
+      skosxl:literalForm "Questions internationales"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Questões internacionais"@pt ;
+      skosxl:literalForm "Questões internacionais"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Rahvusvahelised küsimused"@et ;
+      skosxl:literalForm "Rahvusvahelised küsimused"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Saincheisteanna idirnáisiúnta"@ga ;
+      skosxl:literalForm "Saincheisteanna idirnáisiúnta"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Starptautiski jautājumi"@lv ;
+      skosxl:literalForm "Starptautiski jautājumi"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Tarptautiniai klausimai"@lt ;
+      skosxl:literalForm "Tarptautiniai klausimai"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Tematiche internazionali"@it ;
+      skosxl:literalForm "Tematiche internazionali"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Διεθνή θέματα"@el ;
+      skosxl:literalForm "Διεθνή θέματα"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Международни въпроси"@bg ;
+      skosxl:literalForm "Международни въпроси"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/JUST>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "JUST" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "JUST" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering such domains as justice, legal system or public safety. Justice includes both the attainment of that which is just and the philosophical discussion of that which is just; here it mainly means the procedural justice as found in the study and application of the law. The contemporary legal systems of the world are generally based on one of four basic systems: civil law, common law, statutory law, religious law or combinations of these. Public safety is the function of governments which ensures the protection of citizens, persons in their territory, organisations and institutions against threats to their well-being – and to the prosperity of their communities. Dataset examples: EU case-law; Information on Member States Law; European Data Protection Supervisor register of processing operations."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "JUST" ;
+  dc:identifier "JUST" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering such domains as justice, legal system or public safety. Justice includes both the attainment of that which is just and the philosophical discussion of that which is just; here it mainly means the procedural justice as found in the study and application of the law. The contemporary legal systems of the world are generally based on one of four basic systems: civil law, common law, statutory law, religious law or combinations of these. Public safety is the function of governments which ensures the protection of citizens, persons in their territory, organisations and institutions against threats to their well-being – and to the prosperity of their communities. Dataset examples: EU case-law; Information on Member States Law; European Data Protection Supervisor register of processing operations."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Ceartas, córas dlí agus sábháilteacht an phobail"@ga ;
+  skos:prefLabel "Giustizia, sistema giuridico e sicurezza pubblica"@it ;
+  skos:prefLabel "Igazságügy, jogrendszer és közbiztonság"@hu ;
+  skos:prefLabel "Justice, legal system and public safety"@en ;
+  skos:prefLabel "Justice, système juridique et sécurité publique"@fr ;
+  skos:prefLabel "Justicia, sistema judicial y seguridad pública"@es ;
+  skos:prefLabel "Justis, rettssystem og allmenn sikkerhet"@nb ;
+  skos:prefLabel "Justis, rettssystem og allmenn sikkerhet"@no ;
+  skos:prefLabel "Justis, rettssystem og allmenn tryggleik"@nn ;
+  skos:prefLabel "Justitie, rechtsstelsel en openbare veiligheid"@nl ;
+  skos:prefLabel "Justiz, Rechtssystem und öffentliche Sicherheit"@de ;
+  skos:prefLabel "Justiça, sistema judiciário e segurança pública"@pt ;
+  skos:prefLabel "Justiție, sistem juridic și siguranță publică"@ro ;
+  skos:prefLabel "Oikeus, oikeusjärjestelmä ja yleinen turvallisuus"@fi ;
+  skos:prefLabel "Pravosodje, pravni sistem in javna varnost"@sl ;
+  skos:prefLabel "Pravosuđe, pravni sustav i javna sigurnost"@hr ;
+  skos:prefLabel "Retfærdighed, retssystem og offentlig sikkerhed"@da ;
+  skos:prefLabel "Rättvisa, rättsliga system och allmän säkerhet"@sv ;
+  skos:prefLabel "Spravedlnost, právní systém a veřejná bezpečnost"@cs ;
+  skos:prefLabel "Spravodlivosť, právny systém a verejná bezpečnosť"@sk ;
+  skos:prefLabel "Sprawiedliwość, ustrój sądów i bezpieczeństwo publiczne"@pl ;
+  skos:prefLabel "Teisingumas, teisės sistema ir visuomenės sauga"@lt ;
+  skos:prefLabel "Tieslietas, tiesību sistēma un sabiedrības drošība"@lv ;
+  skos:prefLabel "Õigusemõistmine, õigussüsteem ja avalik turvalisus"@et ;
+  skos:prefLabel "Ġustizzja, sistema legali u sigurtà pubblika"@mt ;
+  skos:prefLabel "Δικαιoσύνη, νομικό σύστημα και δημόσια ασφάλεια"@el ;
+  skos:prefLabel "Правосъдие, съдебна система и обществена безопасност"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ceartas, córas dlí agus sábháilteacht an phobail"@ga ;
+      skosxl:literalForm "Ceartas, córas dlí agus sábháilteacht an phobail"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Giustizia, sistema giuridico e sicurezza pubblica"@it ;
+      skosxl:literalForm "Giustizia, sistema giuridico e sicurezza pubblica"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Igazságügy, jogrendszer és közbiztonság"@hu ;
+      skosxl:literalForm "Igazságügy, jogrendszer és közbiztonság"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Justice, legal system and public safety"@en ;
+      skosxl:literalForm "Justice, legal system and public safety"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Justice, système juridique et sécurité publique"@fr ;
+      skosxl:literalForm "Justice, système juridique et sécurité publique"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Justicia, sistema judicial y seguridad pública"@es ;
+      skosxl:literalForm "Justicia, sistema judicial y seguridad pública"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Justis, rettssystem og allmenn sikkerhet"@nb ;
+      skosxl:literalForm "Justis, rettssystem og allmenn sikkerhet"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Justis, rettssystem og allmenn sikkerhet"@no ;
+      skosxl:literalForm "Justis, rettssystem og allmenn sikkerhet"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Justis, rettssystem og allmenn tryggleik"@nn ;
+      skosxl:literalForm "Justis, rettssystem og allmenn tryggleik"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Justitie, rechtsstelsel en openbare veiligheid"@nl ;
+      skosxl:literalForm "Justitie, rechtsstelsel en openbare veiligheid"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Justiz, Rechtssystem und öffentliche Sicherheit"@de ;
+      skosxl:literalForm "Justiz, Rechtssystem und öffentliche Sicherheit"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Justiça, sistema judiciário e segurança pública"@pt ;
+      skosxl:literalForm "Justiça, sistema judiciário e segurança pública"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Justiție, sistem juridic și siguranță publică"@ro ;
+      skosxl:literalForm "Justiție, sistem juridic și siguranță publică"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Oikeus, oikeusjärjestelmä ja yleinen turvallisuus"@fi ;
+      skosxl:literalForm "Oikeus, oikeusjärjestelmä ja yleinen turvallisuus"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Pravosodje, pravni sistem in javna varnost"@sl ;
+      skosxl:literalForm "Pravosodje, pravni sistem in javna varnost"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Pravosuđe, pravni sustav i javna sigurnost"@hr ;
+      skosxl:literalForm "Pravosuđe, pravni sustav i javna sigurnost"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Retfærdighed, retssystem og offentlig sikkerhed"@da ;
+      skosxl:literalForm "Retfærdighed, retssystem og offentlig sikkerhed"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Rättvisa, rättsliga system och allmän säkerhet"@sv ;
+      skosxl:literalForm "Rättvisa, rättsliga system och allmän säkerhet"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Spravedlnost, právní systém a veřejná bezpečnost"@cs ;
+      skosxl:literalForm "Spravedlnost, právní systém a veřejná bezpečnost"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Spravodlivosť, právny systém a verejná bezpečnosť"@sk ;
+      skosxl:literalForm "Spravodlivosť, právny systém a verejná bezpečnosť"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Sprawiedliwość, ustrój sądów i bezpieczeństwo publiczne"@pl ;
+      skosxl:literalForm "Sprawiedliwość, ustrój sądów i bezpieczeństwo publiczne"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Teisingumas, teisės sistema ir visuomenės sauga"@lt ;
+      skosxl:literalForm "Teisingumas, teisės sistema ir visuomenės sauga"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Tieslietas, tiesību sistēma un sabiedrības drošība"@lv ;
+      skosxl:literalForm "Tieslietas, tiesību sistēma un sabiedrības drošība"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Õigusemõistmine, õigussüsteem ja avalik turvalisus"@et ;
+      skosxl:literalForm "Õigusemõistmine, õigussüsteem ja avalik turvalisus"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ġustizzja, sistema legali u sigurtà pubblika"@mt ;
+      skosxl:literalForm "Ġustizzja, sistema legali u sigurtà pubblika"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Δικαιoσύνη, νομικό σύστημα και δημόσια ασφάλεια"@el ;
+      skosxl:literalForm "Δικαιoσύνη, νομικό σύστημα και δημόσια ασφάλεια"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Правосъдие, съдебна система и обществена безопасност"@bg ;
+      skosxl:literalForm "Правосъдие, съдебна система и обществена безопасност"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/OP_DATPRO>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  <http://publications.europa.eu/ontology/authority/op-code> "OP_DATPRO" ;
+  euvoc:status status:CURRENT ;
+  <http://publications.europa.eu/resource/authority/op-code> "OP_DATPRO" ;
+  dc:identifier "OP_DATPRO" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Alustavat tiedot"@fi ;
+  skos:prefLabel "Dados provisórios"@pt ;
+  skos:prefLabel "Dane tymczasowe"@pl ;
+  skos:prefLabel "Date provizorii"@ro ;
+  skos:prefLabel "Dati provvisori"@it ;
+  skos:prefLabel "Datos provisionales"@es ;
+  skos:prefLabel "Dejta provviżorja"@mt ;
+  skos:prefLabel "Données provisoires"@fr ;
+  skos:prefLabel "Esialgsed andmed"@et ;
+  skos:prefLabel "Ideiglenes adatok"@hu ;
+  skos:prefLabel "Laikinieji duomenys"@lt ;
+  skos:prefLabel "Midlertidige data"@da ;
+  skos:prefLabel "Predbežné údaje"@sk ;
+  skos:prefLabel "Privremeni podaci"@hr ;
+  skos:prefLabel "Provisional data"@en ;
+  skos:prefLabel "Provizoriski dati"@lv ;
+  skos:prefLabel "Předběžné údaje"@cs ;
+  skos:prefLabel "Sonraí sealadacha"@ga ;
+  skos:prefLabel "Tillfälliga uppgifter"@sv ;
+  skos:prefLabel "Voorlopige gegevens"@nl ;
+  skos:prefLabel "Vorläufige Daten"@de ;
+  skos:prefLabel "Začasni podatki"@sl ;
+  skos:prefLabel "Προσωρινά δεδομένα"@el ;
+  skos:prefLabel "НЕОКОНЧАТЕЛНИ ДАННИ"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Alustavat tiedot"@fi ;
+      skosxl:literalForm "Alustavat tiedot"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Dados provisórios"@pt ;
+      skosxl:literalForm "Dados provisórios"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Dane tymczasowe"@pl ;
+      skosxl:literalForm "Dane tymczasowe"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Date provizorii"@ro ;
+      skosxl:literalForm "Date provizorii"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Dati provvisori"@it ;
+      skosxl:literalForm "Dati provvisori"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Datos provisionales"@es ;
+      skosxl:literalForm "Datos provisionales"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Dejta provviżorja"@mt ;
+      skosxl:literalForm "Dejta provviżorja"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Données provisoires"@fr ;
+      skosxl:literalForm "Données provisoires"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Esialgsed andmed"@et ;
+      skosxl:literalForm "Esialgsed andmed"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ideiglenes adatok"@hu ;
+      skosxl:literalForm "Ideiglenes adatok"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Laikinieji duomenys"@lt ;
+      skosxl:literalForm "Laikinieji duomenys"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Midlertidige data"@da ;
+      skosxl:literalForm "Midlertidige data"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Predbežné údaje"@sk ;
+      skosxl:literalForm "Predbežné údaje"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Privremeni podaci"@hr ;
+      skosxl:literalForm "Privremeni podaci"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Provisional data"@en ;
+      skosxl:literalForm "Provisional data"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Provizoriski dati"@lv ;
+      skosxl:literalForm "Provizoriski dati"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Předběžné údaje"@cs ;
+      skosxl:literalForm "Předběžné údaje"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Sonraí sealadacha"@ga ;
+      skosxl:literalForm "Sonraí sealadacha"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Tillfälliga uppgifter"@sv ;
+      skosxl:literalForm "Tillfälliga uppgifter"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Voorlopige gegevens"@nl ;
+      skosxl:literalForm "Voorlopige gegevens"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vorläufige Daten"@de ;
+      skosxl:literalForm "Vorläufige Daten"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Začasni podatki"@sl ;
+      skosxl:literalForm "Začasni podatki"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Προσωρινά δεδομένα"@el ;
+      skosxl:literalForm "Προσωρινά δεδομένα"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "НЕОКОНЧАТЕЛНИ ДАННИ"@bg ;
+      skosxl:literalForm "НЕОКОНЧАТЕЛНИ ДАННИ"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/REGI>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "REGI" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "REGI" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering such domains as regions or cities. In the field of political geography, regions tend to be based on political units such as sovereign states; subnational units such as administrative regions, provinces, states, counties, townships, territories, etc.; and multinational groupings. A city is a large human settlement. Dataset examples: NUTS - Nomenclature of territorial units for statistics classification; UDP - GDP per capita by metro regions, 2000 - 2060."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "REGI" ;
+  dc:identifier "REGI" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering such domains as regions or cities. In the field of political geography, regions tend to be based on political units such as sovereign states; subnational units such as administrative regions, provinces, states, counties, townships, territories, etc.; and multinational groupings. A city is a large human settlement. Dataset examples: NUTS - Nomenclature of territorial units for statistics classification; UDP - GDP per capita by metro regions, 2000 - 2060."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Alueet ja kaupungit"@fi ;
+  skos:prefLabel "Piirkonnad ja linnad"@et ;
+  skos:prefLabel "Regije i gradovi"@hr ;
+  skos:prefLabel "Regije in mesta"@sl ;
+  skos:prefLabel "Regio's en steden"@nl ;
+  skos:prefLabel "Regionai ir miestai"@lt ;
+  skos:prefLabel "Regionar og byar"@nn ;
+  skos:prefLabel "Regionen und Städte"@de ;
+  skos:prefLabel "Regioner och städer"@sv ;
+  skos:prefLabel "Regioner og byer"@da ;
+  skos:prefLabel "Regioner og byer"@nb ;
+  skos:prefLabel "Regioner og byer"@no ;
+  skos:prefLabel "Regiones y ciudades"@es ;
+  skos:prefLabel "Regioni e città"@it ;
+  skos:prefLabel "Regions and cities"@en ;
+  skos:prefLabel "Regiony a města"@cs ;
+  skos:prefLabel "Regiony i miasta"@pl ;
+  skos:prefLabel "Regiuni şi orașe"@ro ;
+  skos:prefLabel "Regióny a mestá"@sk ;
+  skos:prefLabel "Regiões e cidades"@pt ;
+  skos:prefLabel "Reġjuni u bliet"@mt ;
+  skos:prefLabel "Reģioni un pilsētas"@lv ;
+  skos:prefLabel "Régions et villes"@fr ;
+  skos:prefLabel "Régiók és városok"@hu ;
+  skos:prefLabel "Réigiúin agus cathracha"@ga ;
+  skos:prefLabel "Περιφέρειες και πόλεις"@el ;
+  skos:prefLabel "Региони и градове"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Alueet ja kaupungit"@fi ;
+      skosxl:literalForm "Alueet ja kaupungit"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Piirkonnad ja linnad"@et ;
+      skosxl:literalForm "Piirkonnad ja linnad"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regije i gradovi"@hr ;
+      skosxl:literalForm "Regije i gradovi"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regije in mesta"@sl ;
+      skosxl:literalForm "Regije in mesta"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regio's en steden"@nl ;
+      skosxl:literalForm "Regio's en steden"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regionai ir miestai"@lt ;
+      skosxl:literalForm "Regionai ir miestai"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regionar og byar"@nn ;
+      skosxl:literalForm "Regionar og byar"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regionen und Städte"@de ;
+      skosxl:literalForm "Regionen und Städte"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regioner och städer"@sv ;
+      skosxl:literalForm "Regioner och städer"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regioner og byer"@da ;
+      skosxl:literalForm "Regioner og byer"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regioner og byer"@nb ;
+      skosxl:literalForm "Regioner og byer"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regioner og byer"@no ;
+      skosxl:literalForm "Regioner og byer"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regiones y ciudades"@es ;
+      skosxl:literalForm "Regiones y ciudades"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regioni e città"@it ;
+      skosxl:literalForm "Regioni e città"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regions and cities"@en ;
+      skosxl:literalForm "Regions and cities"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regiony a města"@cs ;
+      skosxl:literalForm "Regiony a města"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regiony i miasta"@pl ;
+      skosxl:literalForm "Regiony i miasta"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regiuni şi orașe"@ro ;
+      skosxl:literalForm "Regiuni şi orașe"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regióny a mestá"@sk ;
+      skosxl:literalForm "Regióny a mestá"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Regiões e cidades"@pt ;
+      skosxl:literalForm "Regiões e cidades"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Reġjuni u bliet"@mt ;
+      skosxl:literalForm "Reġjuni u bliet"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Reģioni un pilsētas"@lv ;
+      skosxl:literalForm "Reģioni un pilsētas"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Régions et villes"@fr ;
+      skosxl:literalForm "Régions et villes"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Régiók és városok"@hu ;
+      skosxl:literalForm "Régiók és városok"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Réigiúin agus cathracha"@ga ;
+      skosxl:literalForm "Réigiúin agus cathracha"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Περιφέρειες και πόλεις"@el ;
+      skosxl:literalForm "Περιφέρειες και πόλεις"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Региони и градове"@bg ;
+      skosxl:literalForm "Региони и градове"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/SOCI>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "SOCI" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "SOCI" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering such domains as population or society. Population is a collection of humans and their entire race; it is the number of people in a city or town, region, country or world. A society is a group of individuals involved in persistent social interaction, or a large social group sharing the same spatial or social territory, typically subject to the same political authority and dominant cultural expectations. Dataset examples: Population density by NUTS 2 region; Violence against Women: An EU-wide survey."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "SOCI" ;
+  dc:identifier "SOCI" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering such domains as population or society. Population is a collection of humans and their entire race; it is the number of people in a city or town, region, country or world. A society is a group of individuals involved in persistent social interaction, or a large social group sharing the same spatial or social territory, typically subject to the same political authority and dominant cultural expectations. Dataset examples: Population density by NUTS 2 region; Violence against Women: An EU-wide survey."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Befolkning och samhälle"@sv ;
+  skos:prefLabel "Befolkning og samfund"@da ;
+  skos:prefLabel "Befolkning og samfunn"@nb ;
+  skos:prefLabel "Befolkning og samfunn"@nn ;
+  skos:prefLabel "Befolkning og samfunn"@no ;
+  skos:prefLabel "Bevolking en samenleving"@nl ;
+  skos:prefLabel "Bevölkerung und Gesellschaft"@de ;
+  skos:prefLabel "Daonra agus sochaí"@ga ;
+  skos:prefLabel "Elanikkond ja ühiskond"@et ;
+  skos:prefLabel "Gyventojų skaičius ir visuomenė"@lt ;
+  skos:prefLabel "Iedzīvotāji un sabiedrība"@lv ;
+  skos:prefLabel "Ludność i społeczeństwo"@pl ;
+  skos:prefLabel "Népesség és társadalom"@hu ;
+  skos:prefLabel "Obyvateľstvo a spoločnosť"@sk ;
+  skos:prefLabel "Población y sociedad"@es ;
+  skos:prefLabel "Popolazione e società"@it ;
+  skos:prefLabel "Popolazzjoni u soċjetà"@mt ;
+  skos:prefLabel "Populace a společnost"@cs ;
+  skos:prefLabel "Population and society"@en ;
+  skos:prefLabel "Population et société"@fr ;
+  skos:prefLabel "População e sociedade"@pt ;
+  skos:prefLabel "Populaţie şi societate"@ro ;
+  skos:prefLabel "Prebivalstvo in družba"@sl ;
+  skos:prefLabel "Stanovništvo i društvo"@hr ;
+  skos:prefLabel "Väestö ja yhteiskunta"@fi ;
+  skos:prefLabel "Πληθυσμός και κοινωνία"@el ;
+  skos:prefLabel "Население и общество"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Befolkning och samhälle"@sv ;
+      skosxl:literalForm "Befolkning och samhälle"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Befolkning og samfund"@da ;
+      skosxl:literalForm "Befolkning og samfund"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Befolkning og samfunn"@nb ;
+      skosxl:literalForm "Befolkning og samfunn"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Befolkning og samfunn"@nn ;
+      skosxl:literalForm "Befolkning og samfunn"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Befolkning og samfunn"@no ;
+      skosxl:literalForm "Befolkning og samfunn"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Bevolking en samenleving"@nl ;
+      skosxl:literalForm "Bevolking en samenleving"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Bevölkerung und Gesellschaft"@de ;
+      skosxl:literalForm "Bevölkerung und Gesellschaft"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Daonra agus sochaí"@ga ;
+      skosxl:literalForm "Daonra agus sochaí"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Elanikkond ja ühiskond"@et ;
+      skosxl:literalForm "Elanikkond ja ühiskond"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Gyventojų skaičius ir visuomenė"@lt ;
+      skosxl:literalForm "Gyventojų skaičius ir visuomenė"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Iedzīvotāji un sabiedrība"@lv ;
+      skosxl:literalForm "Iedzīvotāji un sabiedrība"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ludność i społeczeństwo"@pl ;
+      skosxl:literalForm "Ludność i społeczeństwo"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Népesség és társadalom"@hu ;
+      skosxl:literalForm "Népesség és társadalom"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Obyvateľstvo a spoločnosť"@sk ;
+      skosxl:literalForm "Obyvateľstvo a spoločnosť"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Población y sociedad"@es ;
+      skosxl:literalForm "Población y sociedad"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Popolazione e società"@it ;
+      skosxl:literalForm "Popolazione e società"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Popolazzjoni u soċjetà"@mt ;
+      skosxl:literalForm "Popolazzjoni u soċjetà"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Populace a společnost"@cs ;
+      skosxl:literalForm "Populace a společnost"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Population and society"@en ;
+      skosxl:literalForm "Population and society"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Population et société"@fr ;
+      skosxl:literalForm "Population et société"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "População e sociedade"@pt ;
+      skosxl:literalForm "População e sociedade"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Populaţie şi societate"@ro ;
+      skosxl:literalForm "Populaţie şi societate"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Prebivalstvo in družba"@sl ;
+      skosxl:literalForm "Prebivalstvo in družba"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Stanovništvo i društvo"@hr ;
+      skosxl:literalForm "Stanovništvo i društvo"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Väestö ja yhteiskunta"@fi ;
+      skosxl:literalForm "Väestö ja yhteiskunta"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Πληθυσμός και κοινωνία"@el ;
+      skosxl:literalForm "Πληθυσμός και κοινωνία"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Население и общество"@bg ;
+      skosxl:literalForm "Население и общество"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/TECH>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "TECH" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "TECH" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering such domains as science or technology. Science is a systematic enterprise that builds and organises knowledge in the form of testable explanations and predictions. Modern science is typically divided into three major branches that consist of the natural sciences, which study nature in the broadest sense; the social sciences, which study individuals and societies; and the formal sciences, which study abstract concepts. Technology is the sum of techniques, skills, methods and processes used in the production of goods or services or in the accomplishment of objectives, such as scientific investigation. Dataset examples: CORDIS - EU research projects under Horizon 2020 (2014-2020); Take-up of mobile broadband (subscriptions/100 people)."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "TECH" ;
+  dc:identifier "TECH" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering such domains as science or technology. Science is a systematic enterprise that builds and organises knowledge in the form of testable explanations and predictions. Modern science is typically divided into three major branches that consist of the natural sciences, which study nature in the broadest sense; the social sciences, which study individuals and societies; and the formal sciences, which study abstract concepts. Technology is the sum of techniques, skills, methods and processes used in the production of goods or services or in the accomplishment of objectives, such as scientific investigation. Dataset examples: CORDIS - EU research projects under Horizon 2020 (2014-2020); Take-up of mobile broadband (subscriptions/100 people)."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Ciencia y tecnología"@es ;
+  skos:prefLabel "Ciência e tecnologia"@pt ;
+  skos:prefLabel "Eolaíocht agus teicneolaíocht"@ga ;
+  skos:prefLabel "Mokslas ir technologijos"@lt ;
+  skos:prefLabel "Nauka i technologia"@pl ;
+  skos:prefLabel "Science and technology"@en ;
+  skos:prefLabel "Science et technologie"@fr ;
+  skos:prefLabel "Scienza e tecnologia"@it ;
+  skos:prefLabel "Teadus ja tehnoloogia"@et ;
+  skos:prefLabel "Tiede ja teknologia"@fi ;
+  skos:prefLabel "Tudomány és technológia"@hu ;
+  skos:prefLabel "Veda a technika"@sk ;
+  skos:prefLabel "Vetenskap och teknik"@sv ;
+  skos:prefLabel "Videnskab og teknologi"@da ;
+  skos:prefLabel "Vitenskap og teknologi"@nb ;
+  skos:prefLabel "Vitenskap og teknologi"@no ;
+  skos:prefLabel "Vitskap og teknologi"@nn ;
+  skos:prefLabel "Věda a technika"@cs ;
+  skos:prefLabel "Wetenschap en technologie"@nl ;
+  skos:prefLabel "Wissenschaft und Technologie"@de ;
+  skos:prefLabel "Xjenza u teknoloġija"@mt ;
+  skos:prefLabel "Zinātne un tehnoloģija"@lv ;
+  skos:prefLabel "Znanost i tehnologija"@hr ;
+  skos:prefLabel "Znanost in tehnologija"@sl ;
+  skos:prefLabel "Ştiinţă şi tehnologie"@ro ;
+  skos:prefLabel "Επιστήμη και τεχνολογία"@el ;
+  skos:prefLabel "Наука и tехнологии"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ciencia y tecnología"@es ;
+      skosxl:literalForm "Ciencia y tecnología"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ciência e tecnologia"@pt ;
+      skosxl:literalForm "Ciência e tecnologia"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Eolaíocht agus teicneolaíocht"@ga ;
+      skosxl:literalForm "Eolaíocht agus teicneolaíocht"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Mokslas ir technologijos"@lt ;
+      skosxl:literalForm "Mokslas ir technologijos"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Nauka i technologia"@pl ;
+      skosxl:literalForm "Nauka i technologia"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Science and technology"@en ;
+      skosxl:literalForm "Science and technology"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Science et technologie"@fr ;
+      skosxl:literalForm "Science et technologie"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Scienza e tecnologia"@it ;
+      skosxl:literalForm "Scienza e tecnologia"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Teadus ja tehnoloogia"@et ;
+      skosxl:literalForm "Teadus ja tehnoloogia"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Tiede ja teknologia"@fi ;
+      skosxl:literalForm "Tiede ja teknologia"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Tudomány és technológia"@hu ;
+      skosxl:literalForm "Tudomány és technológia"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Veda a technika"@sk ;
+      skosxl:literalForm "Veda a technika"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vetenskap och teknik"@sv ;
+      skosxl:literalForm "Vetenskap och teknik"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Videnskab og teknologi"@da ;
+      skosxl:literalForm "Videnskab og teknologi"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vitenskap og teknologi"@nb ;
+      skosxl:literalForm "Vitenskap og teknologi"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vitenskap og teknologi"@no ;
+      skosxl:literalForm "Vitenskap og teknologi"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vitskap og teknologi"@nn ;
+      skosxl:literalForm "Vitskap og teknologi"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Věda a technika"@cs ;
+      skosxl:literalForm "Věda a technika"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Wetenschap en technologie"@nl ;
+      skosxl:literalForm "Wetenschap en technologie"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Wissenschaft und Technologie"@de ;
+      skosxl:literalForm "Wissenschaft und Technologie"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Xjenza u teknoloġija"@mt ;
+      skosxl:literalForm "Xjenza u teknoloġija"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Zinātne un tehnoloģija"@lv ;
+      skosxl:literalForm "Zinātne un tehnoloģija"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Znanost i tehnologija"@hr ;
+      skosxl:literalForm "Znanost i tehnologija"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Znanost in tehnologija"@sl ;
+      skosxl:literalForm "Znanost in tehnologija"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Ştiinţă şi tehnologie"@ro ;
+      skosxl:literalForm "Ştiinţă şi tehnologie"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Επιστήμη και τεχνολογία"@el ;
+      skosxl:literalForm "Επιστήμη και τεχνολογία"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Наука и tехнологии"@bg ;
+      skosxl:literalForm "Наука и tехнологии"@bg ;
+    ] ;
+.
+<http://publications.europa.eu/resource/authority/data-theme/TRAN>
+  rdf:type euvoc:DataTheme ;
+  rdf:type skos:Concept ;
+  lemon:context context:DCAT_AP ;
+  lemon:context context:IMMC ;
+  lemon:context context:ODP ;
+  <http://publications.europa.eu/ontology/authority/authority-code> "TRAN" ;
+  <http://publications.europa.eu/ontology/authority/deprecated> "false" ;
+  <http://publications.europa.eu/ontology/authority/op-code> "TRAN" ;
+  <http://publications.europa.eu/ontology/authority/start.use> "2015-10-01" ;
+  euvoc:startDate "2015-10-01"^^xsd:date ;
+  euvoc:status status:CURRENT ;
+  euvoc:xlDefinition [
+      rdf:type euvoc:XlNote ;
+      euvoc:startDate "2020-04-16"^^xsd:date ;
+      euvoc:xlNote "This concept identifies datasets covering the domain of transport. Transport is the movement of humans, animals and goods from one location to another. Modes of transport include air, land (rail and road), water, cable, pipeline and space. Dataset examples: Total length of motorways; Airport traffic data by reporting airport and airlines."@en ;
+      dct:source "OP"@en ;
+    ] ;
+  <http://publications.europa.eu/resource/authority/op-code> "TRAN" ;
+  dc:identifier "TRAN" ;
+  dct:created "2015-10-01"^^xsd:date ;
+  dct:dateAccepted "2015-10-09"^^xsd:date ;
+  dct:dateSubmitted "2015-10-09"^^xsd:date ;
+  owl:versionInfo "20200923-0" ;
+  skos:definition "This concept identifies datasets covering the domain of transport. Transport is the movement of humans, animals and goods from one location to another. Modes of transport include air, land (rail and road), water, cable, pipeline and space. Dataset examples: Total length of motorways; Airport traffic data by reporting airport and airlines."@en ;
+  skos:inScheme <http://publications.europa.eu/resource/authority/data-theme> ;
+  skos:prefLabel "Doprava"@cs ;
+  skos:prefLabel "Doprava"@sk ;
+  skos:prefLabel "Iompar"@ga ;
+  skos:prefLabel "Közlekedés"@hu ;
+  skos:prefLabel "Liikenne"@fi ;
+  skos:prefLabel "Promet"@hr ;
+  skos:prefLabel "Transport"@da ;
+  skos:prefLabel "Transport"@en ;
+  skos:prefLabel "Transport"@et ;
+  skos:prefLabel "Transport"@nb ;
+  skos:prefLabel "Transport"@nn ;
+  skos:prefLabel "Transport"@no ;
+  skos:prefLabel "Transport"@pl ;
+  skos:prefLabel "Transport"@ro ;
+  skos:prefLabel "Transport"@sl ;
+  skos:prefLabel "Transport"@sv ;
+  skos:prefLabel "Transportas"@lt ;
+  skos:prefLabel "Transporte"@es ;
+  skos:prefLabel "Transportes"@pt ;
+  skos:prefLabel "Transports"@fr ;
+  skos:prefLabel "Transports"@lv ;
+  skos:prefLabel "Trasport"@mt ;
+  skos:prefLabel "Trasporti"@it ;
+  skos:prefLabel "Verkehr"@de ;
+  skos:prefLabel "Vervoer"@nl ;
+  skos:prefLabel "Μεταφορές"@el ;
+  skos:prefLabel "Транспорт"@bg ;
+  skos:topConceptOf <http://publications.europa.eu/resource/authority/data-theme> ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Doprava"@cs ;
+      skosxl:literalForm "Doprava"@cs ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Doprava"@sk ;
+      skosxl:literalForm "Doprava"@sk ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Iompar"@ga ;
+      skosxl:literalForm "Iompar"@ga ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Közlekedés"@hu ;
+      skosxl:literalForm "Közlekedés"@hu ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Liikenne"@fi ;
+      skosxl:literalForm "Liikenne"@fi ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Promet"@hr ;
+      skosxl:literalForm "Promet"@hr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transport"@da ;
+      skosxl:literalForm "Transport"@da ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transport"@en ;
+      skosxl:literalForm "Transport"@en ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transport"@et ;
+      skosxl:literalForm "Transport"@et ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transport"@nb ;
+      skosxl:literalForm "Transport"@nb ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transport"@nn ;
+      skosxl:literalForm "Transport"@nn ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transport"@no ;
+      skosxl:literalForm "Transport"@no ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transport"@pl ;
+      skosxl:literalForm "Transport"@pl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transport"@ro ;
+      skosxl:literalForm "Transport"@ro ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transport"@sl ;
+      skosxl:literalForm "Transport"@sl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transport"@sv ;
+      skosxl:literalForm "Transport"@sv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transportas"@lt ;
+      skosxl:literalForm "Transportas"@lt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transporte"@es ;
+      skosxl:literalForm "Transporte"@es ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transportes"@pt ;
+      skosxl:literalForm "Transportes"@pt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transports"@fr ;
+      skosxl:literalForm "Transports"@fr ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Transports"@lv ;
+      skosxl:literalForm "Transports"@lv ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Trasport"@mt ;
+      skosxl:literalForm "Trasport"@mt ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Trasporti"@it ;
+      skosxl:literalForm "Trasporti"@it ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Verkehr"@de ;
+      skosxl:literalForm "Verkehr"@de ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Vervoer"@nl ;
+      skosxl:literalForm "Vervoer"@nl ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Μεταφορές"@el ;
+      skosxl:literalForm "Μεταφορές"@el ;
+    ] ;
+  skosxl:prefLabel [
+      rdf:type skosxl:Label ;
+      euvoc:startDate "2015-10-01"^^xsd:date ;
+      euvoc:status status:CURRENT ;
+      dct:created "2015-10-01"^^xsd:date ;
+      dct:type label:STANDARDLABEL ;
+      rdfs:label "Транспорт"@bg ;
+      skosxl:literalForm "Транспорт"@bg ;
+    ] ;
+.
