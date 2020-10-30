@@ -29,19 +29,12 @@ PREFIX dsv: <http://purl.org/iso25964/DataSet/Versioning#>
 PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
-SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel)  (?value AS ?deletedValue)
+SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (str(?value) AS ?deletedValue) ?languageTag
 WHERE {
+  VALUES (?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?objProperty) {
+    (undef undef undef skos:Concept skosxl:prefLabel skosxl:literalForm)
+  }
   GRAPH ?versionHistoryGraph {
-    VALUES ( ?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?objProperty ?language) {
-      ( undef 
-        undef 
-        undef 
-        skos:Concept  
-        skosxl:prefLabel 
-        skosxl:literalForm
-        'en'
-      )
-    }
     ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
     ?versionset dsv:currentVersionRecord/dc:identifier ?latestVersion .
     BIND(coalesce(?oldVersion, ?previousVersion) AS ?oldVersionSelected)
@@ -59,16 +52,12 @@ WHERE {
       sh:usingNamedGraph/sd:name ?insertionsGraph .
   }
   GRAPH ?deletionsGraph {
-    [] skosxl:prefLabel/skosxl:literalForm ?value .
+    ?instance ?property [?objProperty ?value] .
   }
-  FILTER NOT EXISTS {
-    GRAPH ?insertionsGraph {
-    [] skosxl:prefLabel/skosxl:literalForm ?value .
-    }
-  }  
   GRAPH ?oldVersionGraph {
     ?instance a ?class .
-    ?instance skosxl:prefLabel/skosxl:literalForm ?value .
+    ?instance ?property [?objProperty ?value] .
+    BIND(lang(?value) as ?languageTag)
     optional {
       ?instance skos:prefLabel ?prefLabel .
       FILTER (lang(?prefLabel) = 'en')

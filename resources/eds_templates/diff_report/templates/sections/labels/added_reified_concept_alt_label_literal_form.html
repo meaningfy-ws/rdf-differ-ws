@@ -52,11 +52,11 @@ WHERE {
       sh:usingNamedGraph/sd:name ?insertionsGraph .
   }
   GRAPH ?insertionsGraph {
-    ?instance skosxl:altLabel/skosxl:literalForm ?value .
+    ?instance ?property [?objProperty ?value] .
   }
   GRAPH ?newVersionGraph {
     ?instance a ?class .
-    ?instance skosxl:altLabel/skosxl:literalForm ?value .
+    ?instance ?property [?objProperty ?value] .
     BIND(lang(?value) as ?languageTag)
     optional {
       ?instance skos:prefLabel ?prefLabel .
