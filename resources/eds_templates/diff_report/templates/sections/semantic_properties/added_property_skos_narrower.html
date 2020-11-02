@@ -1,0 +1,82 @@
+{% import "macros.html" as mc %}
+
+<h2 class="ui header">Added concept SKOS narrower</h2>
+<section class="ui basic segment">
+    <p>The table below lists the added concept <strong>skos:narrower</strong> values
+    </p>
+    {% set select_query =
+    "prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix vb: <http://art.uniroma2.it/ontologies/vocbench#>
+prefix eurovoc: <http://eurovoc.europa.eu/>
+prefix euvoc: <http://publications.europa.eu/ontology/euvoc#>
+prefix label: <http://publications.europa.eu/resource/authority/label-type/>
+prefix status: <http://publications.europa.eu/resource/authority/concept-status/>
+prefix align: <http://knowledgeweb.semanticweb.org/heterogeneity/alignment#>
+prefix skos: <http://www.w3.org/2004/02/skos/core#>
+prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix dc: <http://purl.org/dc/elements/1.1/>
+prefix prov: <http://www.w3.org/ns/prov#>
+prefix lemon: <http://lemon-model.net/lemon#>
+prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#>
+prefix lexvo: <http://lexvo.org/ontology#>
+prefix oldevo: <http://eurovoc.europa.eu/schema#>
+prefix thes: <http://purl.org/iso25964/skos-thes#>
+PREFIX dsv: <http://purl.org/iso25964/DataSet/Versioning#>
+PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
+PREFIX sh: <http://purl.org/skos-history/>
+PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
+SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (?value AS ?addedValue) (str(?valuePrefLabel) AS ?valueLabel)
+WHERE {
+  VALUES (?versionHistoryGraph ?oldVersion ?newVersion ?class ?property) {
+      (undef undef undef skos:Concept skos:narrower)
+  }
+  GRAPH ?versionHistoryGraph {
+    ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
+    ?versionset dsv:currentVersionRecord/dc:identifier ?latestVersion .
+    BIND(coalesce(?oldVersion, ?previousVersion) AS ?oldVersionSelected)
+    BIND(coalesce(?newVersion, ?latestVersion) AS ?newVersionSelected)
+    ?delta a sh:SchemeDelta ;
+      sh:deltaFrom/dc:identifier ?oldVersionSelected ;
+      sh:deltaTo/dc:identifier ?newVersionSelected ;
+      sh:deltaFrom/sh:usingNamedGraph/sd:name ?oldVersionGraph ;
+      sh:deltaTo/sh:usingNamedGraph/sd:name ?newVersionGraph ;
+      dct:hasPart ?insertions ;
+      dct:hasPart ?deletions .
+    ?deletions a sh:SchemeDeltaDeletions ;
+      sh:usingNamedGraph/sd:name ?deletionsGraph .
+    ?insertions a sh:SchemeDeltaInsertions ;
+      sh:usingNamedGraph/sd:name ?insertionsGraph .
+  }
+  GRAPH ?insertionsGraph {
+    ?instance ?property ?value .
+  }
+  GRAPH ?newVersionGraph {
+    ?instance a ?class .
+    ?instance ?property ?value .
+    optional {
+      ?instance skos:prefLabel ?prefLabel .
+      FILTER (lang(?prefLabel) = 'en')
+    }
+    optional {
+      ?value skos:prefLabel ?valuePrefLabel
+      FILTER (lang(?valuePrefLabel) = 'en')
+    }
+  }
+}
+ORDER BY ?instance ?value" %}
+    {% set content, error = from_endpoint(conf.default_endpoint).with_query(select_query).fetch_tabular() %}
+    {% call mc.render_fetch_results(content, error) %}
+        {# TODO: need a function that adds a relative count column, so that we can see the percentage of classes #}
+        {# {{ content["percentage"] = content["instances"]  / content["instances"].sum() }}#}
+        {{ mc.pandas_table(content, "Added identifiers (DC)") }}
+    {% endcall %}
+
+
+    {# TODO: class instiatiation overlaps and # shared instances   #}
+    {# TODO: need for an agregation function over selected columns in a dataframe #}
+
+</section>
