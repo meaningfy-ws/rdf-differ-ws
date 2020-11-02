@@ -70,7 +70,7 @@ def test_skos_history_folder_setup_basedir_exist_is_not_empty(tmpdir):
 def test_skos_history_execute_subprocess(tmpdir):
     skos_runner = helper_create_skos_runner()
     # get absolute path as script is wonky when relative path is used
-    test_data_location = Path(__file__).parent.parent / 'test_data/subdivisions_sh_ds/data'
+    test_data_location = Path(__file__).parent.parent / 'test_data/original/subdivisions_sh_ds/data'
     config_content = f"""#!/bin/bash
 DATASET=ds-subdivision
 SCHEMEURI="http://publications.europa.eu/resource/authority/subdivision"
