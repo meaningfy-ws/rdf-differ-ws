@@ -17,10 +17,6 @@
     {% include "sections/added_instance_concepts.html" with context %}
     {% include "sections/deleted_instance_concepts.html" with context %}
 
-    <h1>Version info</h1>
-    {% include "sections/miscellaneous/added_property_concept_owl_version_info.html" with context %}
-    {% include "sections/miscellaneous/deleted_property_concept_owl_version_info.html" with context %}
-
     <h1>Preferred labels</h1>
     {% include "sections/labels/added_property_concept_pref_label.html" with context %}
     {% include "sections/labels/deleted_property_concept_pref_label.html" with context %}
@@ -57,10 +53,6 @@
     {% include "sections/notes/added_property_concept_example.html" with context %}
     {% include "sections/notes/deleted_property_concept_example.html" with context %}
 
-    <h1>Other notes</h1>
-    {% include "sections/notes/added_property_concept_skos_change_note.html" with context %}
-    {% include "sections/notes/deleted_property_concept_skos_change_note.html" with context %}
-
     <h1>Semantic Properties</h1>
     {% include "sections/semantic_properties/added_property_skos_broader.html" with context %}
     {% include "sections/semantic_properties/deleted_property_skos_broader.html" with context %}
@@ -86,6 +78,8 @@
     {% include "sections/concept_evolution/deleted_property_euvoc_end_date.html" with context %}
 
     <h1>Notes</h1>
+    {% include "sections/notes/added_property_concept_skos_change_note.html" with context %}
+    {% include "sections/notes/deleted_property_concept_skos_change_note.html" with context %}
     {% include "sections/notes/added_property_concept_editorial_note.html" with context %}
     {% include "sections/notes/deleted_property_concept_editorial_note.html" with context %}
     {% include "sections/notes/added_property_concept_history_note.html" with context %}
@@ -94,6 +88,8 @@
     {% include "sections/notes/deleted_property_concept_skos_note.html" with context %}
 
     <h1>Miscellaneous Properties</h1>
+    {% include "sections/miscellaneous/added_property_concept_owl_version_info.html" with context %}
+    {% include "sections/miscellaneous/deleted_property_concept_owl_version_info.html" with context %}
     {% include "sections/miscellaneous/added_property_lemon_context.html" with context %}
     {% include "sections/miscellaneous/deleted_property_lemon_context.html" with context %}
 {% endblock %}

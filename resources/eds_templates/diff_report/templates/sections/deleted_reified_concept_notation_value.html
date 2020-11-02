@@ -29,7 +29,7 @@ PREFIX dsv: <http://purl.org/iso25964/DataSet/Versioning#>
 PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
-SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (str(?value) AS ?deletedValue) ?languageTag
+SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (?value AS ?deletedValue)
 WHERE {
   VALUES (?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?objProperty) {
     (undef undef undef skos:Concept skos:notation rdf:value)
@@ -57,7 +57,6 @@ WHERE {
   GRAPH ?oldVersionGraph {
     ?instance a ?class .
     ?instance ?property [?objProperty ?value] .
-    BIND(lang(?value) as ?languageTag)
     optional {
       ?instance skos:prefLabel ?prefLabel .
       FILTER (lang(?prefLabel) = 'en')
