@@ -78,9 +78,6 @@ Environment: AWS EC2 p2.medium and running the operations with Fuseki triple sto
 * Calculating the diff for two versions of a large NAL (used Corporate Bodies) ~ 58s
 * Generating the diff report for two versions of a large NAL (used Corporate Bodies)  ~  12 min
 
-### RDF converter
-For big files (more than 200mb) the `rdflib` provided `parse_and_serialize` through the `convert_test_data` from `utils/rdf_converter.py` the `python` process can consume upwards of `1.1GB` of memory.
-
 # Change type inventory
 
 This section provides a change type inventory along with the patterns captured by each change type. We model the change as state transition operator between old (on the left) and teh new (on the right). The transition operator is denoted by the arrow symbol (-->). On each sides of the transition operator, we use a compact notation following SPARQL triple patterns. 
