@@ -35,8 +35,8 @@ def basedir(tmpdir):
     old_version_file = old_version_id.join('subdivisions-skos.rdf')
     new_version_file = new_version_id.join('subdivisions-skos.rdf')
 
-    shutil.copy(Path('tests/test_data/subdivisions_sh_ds/data/v1/subdivisions-skos.rdf'), old_version_file)
-    shutil.copy(Path('tests/test_data/subdivisions_sh_ds/data/v2/subdivisions-skos.rdf'), new_version_file)
+    shutil.copy(Path('tests/test_data/original/subdivisions_sh_ds/data/v1/subdivisions-skos.rdf'), old_version_file)
+    shutil.copy(Path('tests/test_data/original/subdivisions_sh_ds/data/v2/subdivisions-skos.rdf'), new_version_file)
 
     return basedir
 

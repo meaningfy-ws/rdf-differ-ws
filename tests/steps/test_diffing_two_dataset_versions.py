@@ -30,9 +30,9 @@ from utils.file_utils import dir_exists
 def files(tmpdir):
     """alpha and beta RDF files."""
     old_version_file = tmpdir.join('old_version.rdf')
-    shutil.copy(Path('tests/test_data/subdivisions_sh_ds/data/v1/subdivisions-skos.rdf'), old_version_file)
+    shutil.copy(Path('tests/test_data/original/subdivisions_sh_ds/data/v1/subdivisions-skos.rdf'), old_version_file)
     new_version_file = tmpdir.join('new_version.rdf')
-    shutil.copy(Path('tests/test_data/subdivisions_sh_ds/data/v2/subdivisions-skos.rdf'), new_version_file)
+    shutil.copy(Path('tests/test_data/original/subdivisions_sh_ds/data/v2/subdivisions-skos.rdf'), new_version_file)
     return old_version_file, new_version_file
 
 
