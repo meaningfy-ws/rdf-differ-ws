@@ -63,7 +63,10 @@ WHERE {
       FILTER (lang(?prefLabel) = 'en')
     }
     optional {
-      ?instance ?property [dct:type ?propertyType] .
+      ?instance ?property [
+        dct:type ?propertyType;
+        ?objProperty ?value
+      ] .
     }
   }
 }
