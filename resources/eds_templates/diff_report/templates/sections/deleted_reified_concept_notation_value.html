@@ -2,7 +2,7 @@
 
 <h2 class="ui header">Deleted concept reified notations</h2>
 <section class="ui basic segment">
-    <p>The table below lists the deleted concept <strong>skos:notation</strong> values
+    <p>The table below lists the deleted concept <strong>skos:notation/rdf:value</strong> values
     </p>
     {% set select_query =
     "prefix owl: <http://www.w3.org/2002/07/owl#> 
@@ -32,7 +32,7 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (str(?value) AS ?deletedValue) ?languageTag
 WHERE {
   VALUES (?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?objProperty) {
-    (undef undef undef skos:Concept skosxl:prefLabel skosxl:literalForm)
+    (undef undef undef skos:Concept skos:notation rdf:value)
   }
   GRAPH ?versionHistoryGraph {
     ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
