@@ -1,8 +1,7 @@
 {% import "macros.html" as mc %}
 
-<h2 class="ui header">Deleted concept identifiers (DC)</h2>
-<section class="ui basic segment">
-    <p>The table below lists the deleted concept <strong>dc:identifier</strong> values
+<h2 class="ui header">Added concept notes</h2>
+    <p>The table below lists the added concept <strong>skos:note</strong> values
     </p>
     {% set select_query =
     "prefix owl: <http://www.w3.org/2002/07/owl#> 
@@ -29,10 +28,10 @@ PREFIX dsv: <http://purl.org/iso25964/DataSet/Versioning#>
 PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
-SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (?value AS ?deletedValue)
+SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (str(?value) AS ?addedValue) ?languageTag
 WHERE {
   VALUES (?versionHistoryGraph ?oldVersion ?newVersion ?class ?property) {
-      (undef undef undef skos:Concept dc:identifier)
+      (undef undef undef skos:Concept skos:note)
   }
   GRAPH ?versionHistoryGraph {
     ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
@@ -51,12 +50,13 @@ WHERE {
     ?insertions a sh:SchemeDeltaInsertions ;
       sh:usingNamedGraph/sd:name ?insertionsGraph .
   }
-  GRAPH ?deletionsGraph {
+  GRAPH ?insertionsGraph {
     ?instance ?property ?value .
   }
-  GRAPH ?oldVersionGraph {
+  GRAPH ?newVersionGraph {
     ?instance a ?class .
     ?instance ?property ?value .
+    BIND(lang(?value) as ?languageTag)
     optional {
       ?instance skos:prefLabel ?prefLabel .
       FILTER (lang(?prefLabel) = 'en')
@@ -68,7 +68,7 @@ ORDER BY ?instance ?value" %}
     {% call mc.render_fetch_results(content, error) %}
         {# TODO: need a function that adds a relative count column, so that we can see the percentage of classes #}
         {# {{ content["percentage"] = content["instances"]  / content["instances"].sum() }}#}
-        {{ mc.pandas_table(content, "Deleted identifiers (DC") }}
+        {{ mc.pandas_table(content, "Added notes") }}
     {% endcall %}
 
 

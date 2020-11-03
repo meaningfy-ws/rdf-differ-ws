@@ -27,13 +27,7 @@ SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (?value AS ?addedV
 WHERE {
     GRAPH ?versionHistoryGraph {
         VALUES ( ?versionHistoryGraph ?oldVersion ?newVersion ?class ?property ?language) {
-            ( undef
-            undef
-            undef
-            skos:Concept
-            skos:altLabel
-            'en'
-        )
+            ( undef undef undef skos:Concept skos:altLabel 'en' )
         }
         ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
         ?versionset dsv:currentVersionRecord/dc:identifier ?latestVersion .
@@ -52,12 +46,7 @@ WHERE {
                     sh:usingNamedGraph/sd:name ?insertionsGraph .
     }
     GRAPH ?insertionsGraph {
-        ?instance ?property ?value .
-    }
-    FILTER NOT EXISTS {
-        GRAPH ?deletionsGraph {
-            ?instance ?property ?value .
-        }
+      ?instance ?property ?value .
     }
     GRAPH ?newVersionGraph {
         ?instance a ?class .

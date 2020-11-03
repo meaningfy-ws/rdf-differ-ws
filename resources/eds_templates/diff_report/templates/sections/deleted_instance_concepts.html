@@ -2,7 +2,7 @@
 
 <h2 class="ui header">Deleted concepts</h2>
 <section class="ui basic segment">
-    <p>The table below lists deleted concepts
+    <p>The table below lists deleted <strong>concepts</strong>.
     </p>
     {% set select_query =
     "prefix owl: <http://www.w3.org/2002/07/owl#>
@@ -31,15 +31,10 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 SELECT distinct ?class (?instance AS ?deletedInstance) (str(?prefLabel) AS ?deletedInstanceLabel)
 WHERE {
+  VALUES (?versionHistoryGraph ?oldVersion ?newVersion ?class) {
+      (undef undef undef skos:Concept)
+  }
   GRAPH ?versionHistoryGraph {
-    VALUES ( ?versionHistoryGraph ?oldVersion ?newVersion ?class ?language ) {
-        ( undef
-          undef
-          undef
-          skos:Concept
-          'en'
-        )
-    }
     ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
     ?versionset dsv:currentVersionRecord/dc:identifier ?latestVersion .
     BIND(coalesce(?oldVersion, ?previousVersion) AS ?oldVersionSelected)
@@ -59,16 +54,11 @@ WHERE {
   GRAPH ?deletionsGraph {
     ?instance a ?class .
   }
-  FILTER NOT EXISTS {
-    GRAPH ?newVersionGraph {
-      ?instance ?p []
-    }
-  }
   GRAPH ?oldVersionGraph {
     ?instance a ?class .
-    {
-        ?concept skos:prefLabel ?prefLabel .
-        FILTER (lang(?prefLabel) = 'en')
+    optional {
+      ?instance skos:prefLabel ?prefLabel .
+      FILTER (lang(?prefLabel) = 'en')
     }
   }
 }

@@ -1,38 +1,38 @@
 {% import "macros.html" as mc %}
 
-<h2 class="ui header">Deleted concept identifiers (DC)</h2>
+<h2 class="ui header">Deleted concept hidden label</h2>
 <section class="ui basic segment">
-    <p>The table below lists the deleted concept <strong>dc:identifier</strong> values
+    <p>The table below lists the deleted concept <strong>skos:hiddenLabel</strong> values
     </p>
     {% set select_query =
-    "prefix owl: <http://www.w3.org/2002/07/owl#> 
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+    "prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix vb: <http://art.uniroma2.it/ontologies/vocbench#>
 prefix eurovoc: <http://eurovoc.europa.eu/>
-prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> 
+prefix euvoc: <http://publications.europa.eu/ontology/euvoc#>
 prefix label: <http://publications.europa.eu/resource/authority/label-type/>
-prefix status: <http://publications.europa.eu/resource/authority/concept-status/> 
+prefix status: <http://publications.europa.eu/resource/authority/concept-status/>
 prefix align: <http://knowledgeweb.semanticweb.org/heterogeneity/alignment#>
 prefix skos: <http://www.w3.org/2004/02/skos/core#>
-prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> 
-prefix dct: <http://purl.org/dc/terms/> 
-prefix dc: <http://purl.org/dc/elements/1.1/> 
-prefix prov: <http://www.w3.org/ns/prov#> 
+prefix skosxl: <http://www.w3.org/2008/05/skos-xl#>
+prefix dct: <http://purl.org/dc/terms/>
+prefix dc: <http://purl.org/dc/elements/1.1/>
+prefix prov: <http://www.w3.org/ns/prov#>
 prefix lemon: <http://lemon-model.net/lemon#>
-prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> 
-prefix lexvo: <http://lexvo.org/ontology#> 
+prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#>
+prefix lexvo: <http://lexvo.org/ontology#>
 prefix oldevo: <http://eurovoc.europa.eu/schema#>
 prefix thes: <http://purl.org/iso25964/skos-thes#>
 PREFIX dsv: <http://purl.org/iso25964/DataSet/Versioning#>
 PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
-SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (?value AS ?deletedValue)
+SELECT DISTINCT ?instance (str(?prefLabel) as ?instanceLabel) (str(?value) AS ?deletedValue) ?languageTag
 WHERE {
   VALUES (?versionHistoryGraph ?oldVersion ?newVersion ?class ?property) {
-      (undef undef undef skos:Concept dc:identifier)
+      (undef undef undef skos:Concept skos:hiddenLabel)
   }
   GRAPH ?versionHistoryGraph {
     ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
@@ -57,6 +57,7 @@ WHERE {
   GRAPH ?oldVersionGraph {
     ?instance a ?class .
     ?instance ?property ?value .
+    BIND (lang(?value) as ?languageTag)
     optional {
       ?instance skos:prefLabel ?prefLabel .
       FILTER (lang(?prefLabel) = 'en')
@@ -68,7 +69,7 @@ ORDER BY ?instance ?value" %}
     {% call mc.render_fetch_results(content, error) %}
         {# TODO: need a function that adds a relative count column, so that we can see the percentage of classes #}
         {# {{ content["percentage"] = content["instances"]  / content["instances"].sum() }}#}
-        {{ mc.pandas_table(content, "Deleted identifiers (DC") }}
+        {{ mc.pandas_table(content, "Overview") }}
     {% endcall %}
 
 
