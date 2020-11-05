@@ -35,7 +35,7 @@ def get_diffs() -> tuple:
     :return: list of existent datasets
     :rtype: list, int
     """
-    fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_ENDPOINT_SERVICE, http_client=requests, sparql_client=SPARQLRunner())
+    fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests, sparql_client=SPARQLRunner())
     try:
         datasets = fuseki_adapter.list_datasets()
         return [fuseki_adapter.dataset_description(dataset) for dataset in datasets], 200
@@ -51,7 +51,7 @@ def get_diff(dataset_id: str) -> tuple:
     :rtype: dict, int
     """
     try:
-        dataset = FusekiDiffAdapter(config.RDF_DIFFER_ENDPOINT_SERVICE, http_client=requests,
+        dataset = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                     sparql_client=SPARQLRunner()).dataset_description(dataset_id)
         return dataset, 200
     except EndPointNotFound:
@@ -76,7 +76,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     :return:
     :rtype: dict, int
     """
-    fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_ENDPOINT_SERVICE, http_client=requests, sparql_client=SPARQLRunner())
+    fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests, sparql_client=SPARQLRunner())
 
     try:
         dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_id'))
@@ -116,7 +116,7 @@ def delete_diff(dataset_id: str) -> tuple:
     :rtype: str, int
     """
     try:
-        FusekiDiffAdapter(config.RDF_DIFFER_ENDPOINT_SERVICE, http_client=requests, sparql_client=SPARQLRunner()).delete_dataset(
+        FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests, sparql_client=SPARQLRunner()).delete_dataset(
             dataset_id)
         return f'<{dataset_id}> deleted successfully.', 200
     except FusekiException:

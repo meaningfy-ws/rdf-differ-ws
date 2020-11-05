@@ -14,7 +14,7 @@ from urllib.parse import urljoin, quote
 
 from rdflib.util import guess_format
 
-from rdf_differ.config import RDF_DIFFER_ENDPOINT_SERVICE, RDF_DIFFER_FILENAME
+from rdf_differ.config import RDF_DIFFER_FUSEKI_SERVICE, RDF_DIFFER_FILENAME
 from utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 CONFIG_TEMPLATE = """#!/bin/bash
@@ -82,7 +82,7 @@ class SKOSHistoryRunner:
 
         self.basedir = basedir
         self.filename = filename if filename else RDF_DIFFER_FILENAME
-        self.endpoint = endpoint if endpoint else RDF_DIFFER_ENDPOINT_SERVICE
+        self.endpoint = endpoint if endpoint else RDF_DIFFER_FUSEKI_SERVICE
 
         self._check_basedir()
 
