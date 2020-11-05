@@ -10,4 +10,4 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 #CMD flask run --host=0.0.0.0 --port=${UI_PORT}
-CMD gunicorn --timeout $RDF_DIFFER_GUNICORN_TIMEOUT --workers 10 --bind 0.0.0.0:${RDF_DIFFER_UI_PORT} --reload rdf_differ.entrypoints.ui.run:app
+CMD gunicorn --timeout ${RDF_DIFFER_GUNICORN_TIMEOUT} --workers 10 --bind 0.0.0.0:${RDF_DIFFER_UI_PORT} --reload rdf_differ.entrypoints.ui.run:app
