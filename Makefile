@@ -15,7 +15,7 @@ install:
 # Service commands
 #-----------------------------------------------------------------------------
 
-build:
+build-services:
 	@ echo -e '$(BUILD_PRINT)Building the RDF Differ micro-services'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build
 
