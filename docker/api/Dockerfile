@@ -9,4 +9,4 @@ COPY . /usr/src/app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt --use-feature=2020-resolver
 
-CMD gunicorn --timeout $RDF_DIFFER_GUNICORN_TIMEOUT --workers 10 --bind 0.0.0.0:${RDF_DIFFER_API_PORT} --reload rdf_differ.entrypoints.api.run:app
+CMD gunicorn --timeout ${RDF_DIFFER_GUNICORN_TIMEOUT} --workers 10 --bind 0.0.0.0:${RDF_DIFFER_API_PORT} --reload rdf_differ.entrypoints.api.run:app
