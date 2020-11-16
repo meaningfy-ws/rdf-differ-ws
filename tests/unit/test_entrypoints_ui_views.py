@@ -5,6 +5,7 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 from io import BytesIO
+from json import dumps
 from unittest.mock import patch
 
 from bs4 import BeautifulSoup
@@ -107,6 +108,34 @@ def test_create_diff_success(mock_create_diff, mock_get_dataset, ui_client):
 
     assert response.status_code == 200
     assert 'Details: /dataset_name' in title.get_text()
+
+
+@patch('rdf_differ.entrypoints.ui.views.api_create_diff')
+def test_create_diff_failure_dataset_is_not_empty(mock_create_diff, ui_client):
+    mock_create_diff.return_value = dumps({
+                                        "detail": "Dataset is not empty.",
+                                        "status": 409,
+                                        "title": "Conflict",
+                                        "type": "about:blank"
+                                    }), 409
+
+    data = {
+        'dataset_name': 'dataset_name',
+        'dataset_description': 'dataset description',
+        'dataset_uri': 'http://dataset.uri',
+        'old_version_file_content': FileStorage(BytesIO(b'old content'), 'old.rdf'),
+        'new_version_file_content': FileStorage(BytesIO(b'new content'), 'new.rdf'),
+        'old_version_id': 'old_version_id',
+        'new_version_id': 'new_version_id'
+    }
+
+    response = ui_client.post('/create-diff', data=data, follow_redirects=True,
+                              content_type='multipart/form-data')
+
+    soup = BeautifulSoup(response.data, 'html.parser')
+    body = soup.get_text()
+
+    assert 'Status: 409. Title: Conflict Detail: Dataset is not empty.' in body
 
 
 @patch('rdf_differ.entrypoints.ui.views.api_create_diff')

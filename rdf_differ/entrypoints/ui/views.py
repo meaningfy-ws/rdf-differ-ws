@@ -16,6 +16,7 @@ from flask import render_template, redirect, flash, url_for, send_from_directory
 from rdf_differ.entrypoints.ui import app
 from rdf_differ.entrypoints.ui.api_wrapper import get_datasets, create_diff as api_create_diff, get_dataset, get_report
 from rdf_differ.entrypoints.ui.forms import CreateDiffForm
+from rdf_differ.entrypoints.ui.helpers import get_error_message_from_response
 
 
 @app.route('/')
@@ -45,10 +46,11 @@ def create_diff():
             new_version_file=form.new_version_file_content.data
         )
 
-        if status == 200:
+        if status != 200:
+            flash(get_error_message_from_response(response), 'error')
+        else:
             flash(response, 'success')
-
-        return redirect(url_for('view_dataset', dataset_id=form.dataset_name.data))
+            return redirect(url_for('view_dataset', dataset_id=form.dataset_name.data))
 
     return render_template('dataset/create_diff.html', title='Create diff', form=form)
 
