@@ -9,6 +9,7 @@ services:
       dockerfile: ./docker/api/Dockerfile
     volumes:
       - ..:/usr/src/app
+      - rdf-differ-template:${RDF_DIFFER_TEMPLATE_LOCATION}
     ports:
       - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
     env_file: .env
@@ -45,6 +46,10 @@ services:
       - ${RDF_DIFFER_FUSEKI_PORT}:${RDF_DIFFER_FUSEKI_PORT}
     networks:
       - mydefault
+
+volumes:
+  rdf-differ-template:
+    external: true
 
 networks:
   mydefault:
