@@ -37,7 +37,7 @@ make fuseki-create-test-dbs
 make test
 ```
 ## Configure diff report template 
-The default diff report template resides in [resources/eds_templates/diff_report](resources/templates/diff_report). 
+The default diff report template resides in [resources/templates/diff_report](resources/templates/diff_report). 
 
 To configure your own template you can copy the default report template and adjust it to your needs. Read more about the required structure of the template on the [eds4jinja2](https://github.com/meaningfy-ws/eds4jinja2) documentation page.
  
