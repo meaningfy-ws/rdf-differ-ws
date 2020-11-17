@@ -14,10 +14,11 @@ install:
 #-----------------------------------------------------------------------------
 # Service commands
 #-----------------------------------------------------------------------------
+build-volumes:
+	@ docker volume create rdf-differ-template
 
 build-services:
 	@ echo -e '$(BUILD_PRINT)Building the RDF Differ micro-services'
-	@ docker volume create rdf-differ-template
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build
 
 start-services:
@@ -32,9 +33,8 @@ stop-services:
 #-----------------------------------------------------------------------------
 # Fuseki control for github actions
 #-----------------------------------------------------------------------------
-build-test-fuseki:
+build-test-fuseki: | build-volumes
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
-	@ docker volume create rdf-differ-template
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build fuseki
 
 start-test-fuseki:

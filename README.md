@@ -20,7 +20,8 @@ newgrp docker
 
 To build and the containers run:
 ```bash
-make build
+make build-volumes
+make build-services
 ```
 
 Install test/dev dependencies:

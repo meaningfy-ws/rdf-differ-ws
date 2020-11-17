@@ -14,7 +14,6 @@ jobs:
     env:
       OS: ${{ matrix.os }}
       PYTHON: '3.8'
-      RDF_DIFFER_TEMPLATE_LOCATION: /usr/src/app/template
     steps:
       - uses: actions/checkout@master
 
