@@ -35,6 +35,27 @@ To run the tests:
 make fuseki-create-test-dbs
 make test
 ```
+## Configure diff report template 
+The default diff report template resides in [resources/eds_templates/diff_report](resources/eds_templates/diff_report). 
+
+To configure your own template you can copy the default report template and adjust it to your needs. Read more about the required structure of the template on the [eds4jinja2](https://github.com/meaningfy-ws/eds4jinja2) documentation page.
+ 
+### Use the custom template
+After you have your custom template, run the `make` command, indicating the location of your template through the `location` variable.
+```bash
+make location=<location to template> set-report-template
+```
+---
+**NOTE**
+
+Make sure that the location specified ends with a trailing slash `/`, otherwise the command will not work.
+
+Example:
+```bash
+make location=~/template/location/ set-report-template
+```
+---
+After this, restart the `rdf-differ-api` container for the effects to take place.
 
 # Usage
 

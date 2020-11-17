@@ -17,6 +17,7 @@ install:
 
 build-services:
 	@ echo -e '$(BUILD_PRINT)Building the RDF Differ micro-services'
+	@ docker volume create rdf-differ-template
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build
 
 start-services:
@@ -56,6 +57,19 @@ test:
 lint:
 	@ echo "$(BUILD_PRINT)Linting the code"
 	@ flake8 || true
+
+#-----------------------------------------------------------------------------
+# Template commands
+#-----------------------------------------------------------------------------
+
+set-report-template:
+	@ echo "$(BUILD_PRINT)Copying custom template"
+	@ docker rm temp | true
+	@ docker volume rm rdf-differ-template | true
+	@ docker volume create rdf-differ-template
+	@ docker container create --name temp -v rdf-differ-template:/data busybox
+	@ docker cp $(location). temp:/data
+	@ docker rm temp
 
 #-----------------------------------------------------------------------------
 # Run UI dev environment
