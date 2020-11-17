@@ -14,7 +14,9 @@ from pathlib import Path
 
 RDF_DIFFER_FILENAME = os.environ.get('RDF_DIFFER_FILENAME', 'file')
 
-if os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION') and any(Path(os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')).iterdir()):
+if os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION') \
+        and Path(os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')).exists() \
+        and any(Path(os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')).iterdir()):
     RDF_DIFFER_REPORT_TEMPLATE_LOCATION = os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')
 else:
     RDF_DIFFER_REPORT_TEMPLATE_LOCATION = Path(__file__).parents[1] / 'resources/templates/diff_report'
