@@ -134,7 +134,7 @@ def get_report(dataset_id: str) -> tuple:
 
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
-            template_location = Path(__file__).parents[3] / 'resources/eds_templates/diff_report'
+            template_location = config.RDF_DIFFER_REPORT_TEMPLATE_LOCATION
             copytree(template_location, temp_dir, dirs_exist_ok=True)
 
             with open(Path(temp_dir) / 'config.json', 'w') as config_file:
