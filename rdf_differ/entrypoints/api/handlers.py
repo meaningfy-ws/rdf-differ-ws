@@ -35,6 +35,7 @@ def get_diffs() -> tuple:
     :return: list of existent datasets
     :rtype: list, int
     """
+    print('diffs')
     fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests, sparql_client=SPARQLRunner())
     try:
         datasets = fuseki_adapter.list_datasets()
