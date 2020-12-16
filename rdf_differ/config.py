@@ -19,7 +19,7 @@ if os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION') \
         and any(Path(os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')).iterdir()):
     RDF_DIFFER_REPORT_TEMPLATE_LOCATION = os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')
 else:
-    RDF_DIFFER_REPORT_TEMPLATE_LOCATION = Path(__file__).parents[1] / 'resources/templates/diff_report'
+    RDF_DIFFER_REPORT_TEMPLATE_LOCATION = str(Path(__file__).parents[1] / 'resources/templates/diff_report')
 
 RDF_DIFFER_UI_PORT = os.environ.get('RDF_DIFFER_UI_PORT', 8030)
 
@@ -35,3 +35,5 @@ RDF_DIFFER_FUSEKI_PASSWORD = os.environ.get('RDF_DIFFER_FUSEKI_PASSWORD', 'admin
 
 RDF_DIFFER_SECRET_KEY_UI = os.environ.get('RDF_DIFFER_SECRET_KEY_UI', 'secret key ui')
 RDF_DIFFER_SECRET_KEY_API = os.environ.get('RDF_DIFFER_SECRET_KEY_API', 'secret key api')
+
+RDF_DIFFER_LOGGER = 'differ'

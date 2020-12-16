@@ -4,7 +4,7 @@
 # Date: 30/07/2020
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
-
+import logging
 import tempfile
 from json import dumps
 from pathlib import Path
@@ -21,12 +21,14 @@ from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
+from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.entrypoints.api.handlers_helpers import generate_report_builder_config
 from utils.file_utils import temporarily_save_files
 
 """
 The definition of the API endpoints
 """
+logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
 def get_diffs() -> tuple:
@@ -35,11 +37,16 @@ def get_diffs() -> tuple:
     :return: list of existent datasets
     :rtype: list, int
     """
-    fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests, sparql_client=SPARQLRunner())
+    logger.debug('start get diffs endpoint')
+
+    fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
+                                       sparql_client=SPARQLRunner())
     try:
         datasets = fuseki_adapter.list_datasets()
+        logger.debug('finish get diffs endpoint')
         return [fuseki_adapter.dataset_description(dataset) for dataset in datasets], 200
     except (FusekiException, ValueError, IndexError) as exception:
+        logger.exception(str(exception))
         raise InternalServerError(str(exception))  # 500
 
 
@@ -50,14 +57,21 @@ def get_diff(dataset_id: str) -> tuple:
     :return: dataset description
     :rtype: dict, int
     """
+    logger.debug(f'start get diff for {dataset_id} endpoint')
+
     try:
         dataset = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                     sparql_client=SPARQLRunner()).dataset_description(dataset_id)
+        logger.debug(f'finish get diff for {dataset_id} endpoint')
         return dataset, 200
     except EndPointNotFound:
-        raise NotFound(f'<{dataset_id}> does not exist.')  # 404
-    except (ValueError, IndexError):
-        raise InternalServerError('Unexpected Error.')  # 500
+        exception_text = f'<{dataset_id}> does not exist.'
+        logger.exception(exception_text)
+        raise NotFound(exception_text)  # 404
+    except (ValueError, IndexError) as exception:
+        exception_text = f'Unexpected Error. {str(exception)}'
+        logger.exception(exception_text)
+        raise InternalServerError(exception_text)  # 500
 
 
 def create_diff(body: dict, old_version_file_content: FileStorage, new_version_file_content: FileStorage) -> tuple:
@@ -76,15 +90,20 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     :return:
     :rtype: dict, int
     """
-    fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests, sparql_client=SPARQLRunner())
+    logger.debug('start create diff endpoint')
+
+    fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
+                                       sparql_client=SPARQLRunner())
 
     try:
         dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_id'))
         # if description is {} (empty) then we can create the diff
         can_create = not bool(dataset)
+        logger.debug('dataset exists, but is empty')
     except EndPointNotFound:
         fuseki_adapter.create_dataset(dataset_name=body.get('dataset_id'))
         can_create = True
+        logger.debug('dataset didn\'t exist. dataset created')
 
     if can_create:
         try:
@@ -99,12 +118,17 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
                                            new_version_file=new_version_file)
 
             # TODO: return dataset url, in case that this call could take more time that usual api request.
+            logger.debug('finish create diff endpoint')
             return 'Request to create a new dataset diff successfully accepted for processing.', 200
         except ValueError as exception:
+            logger.exception(str(exception))
             raise BadRequest(str(exception))  # 400
         except SubprocessFailure as exception:
-            raise InternalServerError('Internal error while uploading the diffs.\n' + str(exception))  # 500
+            exception_text = 'Internal error while uploading the diffs.\n' + str(exception)
+            logger.exception(exception_text)
+            raise InternalServerError(exception_text)  # 500
     else:
+        logger.exception('dataset exists and is not empty, no diff created')
         raise Conflict('Dataset is not empty.')  # 409
 
 
@@ -115,12 +139,18 @@ def delete_diff(dataset_id: str) -> tuple:
     :return: info about deletion
     :rtype: str, int
     """
+    logger.debug(f'start delete dataset: {dataset_id} endpoint')
+
     try:
-        FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests, sparql_client=SPARQLRunner()).delete_dataset(
+        FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
+                          sparql_client=SPARQLRunner()).delete_dataset(
             dataset_id)
+        logger.debug(f'finish delete dataset: {dataset_id} endpoint')
         return f'<{dataset_id}> deleted successfully.', 200
     except FusekiException:
-        raise NotFound(f'<{dataset_id}> does not exist.')  # 404
+        exception_text = f'<{dataset_id}> does not exist.'
+        logger.exception(exception_text)
+        raise NotFound(exception_text)  # 404
 
 
 def get_report(dataset_id: str) -> tuple:
@@ -130,6 +160,8 @@ def get_report(dataset_id: str) -> tuple:
     :return: html report as attachment
     :rtype: file, int
     """
+    logger.debug(f'start get report for {dataset_id} endpoint')
+
     dataset, _ = get_diff(dataset_id)  # potential 404
 
     try:
@@ -144,6 +176,8 @@ def get_report(dataset_id: str) -> tuple:
             report_builder = ReportBuilder(target_path=temp_dir)
             report_builder.make_document()
 
+            logger.debug(f'finish get report for {dataset_id} endpoint')
             return send_from_directory(Path(str(temp_dir)) / 'output', 'main.html', as_attachment=True)  # 200
     except Exception as e:
+        logger.exception(str(e))
         raise InternalServerError(str(e))  # 500

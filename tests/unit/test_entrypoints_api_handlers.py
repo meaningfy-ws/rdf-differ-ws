@@ -14,7 +14,7 @@ from werkzeug.exceptions import InternalServerError, Conflict, BadRequest, NotFo
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
 from rdf_differ.entrypoints.api.handlers import get_diffs, create_diff, get_diff, delete_diff, get_report
-from tests.unit.conftest import helper_create_diff
+from tests.conftest import helper_create_diff
 
 
 @patch.object(FusekiDiffAdapter, 'dataset_description')
