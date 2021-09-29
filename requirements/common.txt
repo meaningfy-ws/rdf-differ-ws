@@ -1,9 +1,12 @@
-Click
-rdflib
+Click==7.1.2
+
 sparqlwrapper
+rdflib
 requests
-connexion[swagger-ui]
-Flask
+
+Flask==1.1.4
 flask-bootstrap
 Flask-Wtf
+connexion[swagger-ui]==2.9.0
+
 eds4jinja2

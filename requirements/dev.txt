@@ -12,5 +12,5 @@ flake8
 
 # Documentation Dependencies
 myst-parser
-sphinx<3
+sphinx
 sphinxcontrib-apidoc
