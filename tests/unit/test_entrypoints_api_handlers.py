@@ -196,9 +196,7 @@ def test_get_report_500(mock_make_document, mock_get_diff):
 
 
 @patch('rdf_differ.entrypoints.api.handlers.get_diff')
-@patch.object(ReportBuilder, 'make_document')
-def test_get_report_422(mock_make_document, mock_get_diff):
-    mock_make_document.side_effect = Exception('422 Unprocessable Entity')
+def test_get_report_422(mock_get_diff):
     mock_get_diff.return_value = {'query_url': 'http://somequery'}, 200
 
     with pytest.raises(Exception) as e:
