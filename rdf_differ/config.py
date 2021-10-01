@@ -38,4 +38,4 @@ RDF_DIFFER_SECRET_KEY_API = os.environ.get('RDF_DIFFER_SECRET_KEY_API', 'secret 
 
 RDF_DIFFER_LOGGER = 'differ'
 
-RDF_DIFFER_APPLICATION_PROFILES_LIST = os.environ.get('RDF_DIFFER_APPLICATION_PROFILES', 'diff_report').split(" ")
+RDF_DIFFER_APPLICATION_PROFILES_LIST = os.listdir(Path(__file__).parents[1] / 'resources/templates')
