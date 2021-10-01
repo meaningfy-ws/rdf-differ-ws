@@ -173,10 +173,9 @@ def get_report(dataset_id: str, application_profile: str = "diff_report") -> tup
 
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
-            template_location = config.RDF_DIFFER_REPORT_TEMPLATE_LOCATION + "/" + application_profile
+            template_location = config.get_aplication_profile_location(application_profile)
             logger.debug(f'template location {template_location}')
             copytree(template_location, temp_dir, dirs_exist_ok=True)
-            logger.debug(f'template location {temp_dir}')
 
             with open(Path(temp_dir) / 'config.json', 'w') as config_file:
                 config_content = generate_report_builder_config(template_location, dataset)
