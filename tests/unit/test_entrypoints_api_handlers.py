@@ -193,3 +193,13 @@ def test_get_report_500(mock_make_document, mock_get_diff):
         _ = get_report('http://url.com')
 
     assert '500 error' in str(e.value)
+
+
+@patch('rdf_differ.entrypoints.api.handlers.get_diff')
+def test_get_report_422(mock_get_diff):
+    mock_get_diff.return_value = {'query_url': 'http://somequery'}, 200
+
+    with pytest.raises(Exception) as e:
+        _ = get_report('http://url.com', "unknown_application_profile")
+
+    assert '422 Unprocessable Entity' in str(e.value)

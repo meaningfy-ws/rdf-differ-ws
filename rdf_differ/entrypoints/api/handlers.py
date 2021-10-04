@@ -15,7 +15,7 @@ from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from eds4jinja2.builders.report_builder import ReportBuilder
 from flask import send_from_directory
 from werkzeug.datastructures import FileStorage
-from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound
+from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound, UnprocessableEntity
 
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
@@ -153,10 +153,11 @@ def delete_diff(dataset_id: str) -> tuple:
         raise NotFound(exception_text)  # 404
 
 
-def get_report(dataset_id: str) -> tuple:
+def get_report(dataset_id: str, application_profile: str = "diff_report") -> tuple:
     """
         Generate a dataset diff report
     :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
+    :param application_profile: The application profile identifier. This should be a text string
     :return: html report as attachment
     :rtype: file, int
     """
@@ -164,14 +165,20 @@ def get_report(dataset_id: str) -> tuple:
 
     dataset, _ = get_diff(dataset_id)  # potential 404
 
+    if application_profile not in config.RDF_DIFFER_APPLICATION_PROFILES_LIST:
+        exception_text = f"The chosen application profile does not exist. Existing application profiles:" \
+                         f" {','.join(config.RDF_DIFFER_APPLICATION_PROFILES_LIST)}"
+        logger.exception(exception_text)
+        raise UnprocessableEntity(exception_text)
+
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
-            template_location = config.RDF_DIFFER_REPORT_TEMPLATE_LOCATION
+            template_location = config.get_aplication_profile_location(application_profile)
             logger.debug(f'template location {template_location}')
             copytree(template_location, temp_dir, dirs_exist_ok=True)
 
             with open(Path(temp_dir) / 'config.json', 'w') as config_file:
-                config_content = generate_report_builder_config(dataset)
+                config_content = generate_report_builder_config(template_location, dataset)
                 config_file.write(dumps(config_content))
 
             report_builder = ReportBuilder(target_path=temp_dir)

@@ -19,7 +19,7 @@ if os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION') \
         and any(Path(os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')).iterdir()):
     RDF_DIFFER_REPORT_TEMPLATE_LOCATION = os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')
 else:
-    RDF_DIFFER_REPORT_TEMPLATE_LOCATION = str(Path(__file__).parents[1] / 'resources/templates/diff_report')
+    RDF_DIFFER_REPORT_TEMPLATE_LOCATION = str(Path(__file__).parents[1] / 'resources/templates/')
 
 RDF_DIFFER_UI_PORT = os.environ.get('RDF_DIFFER_UI_PORT', 8030)
 
@@ -37,3 +37,9 @@ RDF_DIFFER_SECRET_KEY_UI = os.environ.get('RDF_DIFFER_SECRET_KEY_UI', 'secret ke
 RDF_DIFFER_SECRET_KEY_API = os.environ.get('RDF_DIFFER_SECRET_KEY_API', 'secret key api')
 
 RDF_DIFFER_LOGGER = 'differ'
+
+RDF_DIFFER_APPLICATION_PROFILES_LIST = os.listdir(Path(__file__).parents[1] / 'resources/templates')
+
+
+def get_aplication_profile_location(application_profile):
+    return f'{RDF_DIFFER_REPORT_TEMPLATE_LOCATION}/{application_profile}'
