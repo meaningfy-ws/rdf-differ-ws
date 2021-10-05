@@ -6,6 +6,7 @@
         "title": "RDF Diff report",
         "type": "report",
         "author": "Meaningfy",
-        "ns_file": "data/prefix.csv"
+        "ns_file": "data/prefix.csv",
+        "query_folder_path": "resources/templates/diff_report/queries/"
     }
 }
