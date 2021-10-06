@@ -58,6 +58,31 @@ make location=~/template/location/ set-report-template
 ---
 After this, restart the `rdf-differ-api` container for the effects to take place.
 
+### Adding a new application profile template
+The default application profile template is the diff report template that resides in [resources/templates/diff_report](resources/templates/diff_report) folder. 
+For adding a new application profile create a new folder under [resources/templates](resources/templates) with the name
+of your new application profile and following the structure explained below.
+<br> Folder structure needed for adding a new application profile:
+```
+templates 
+│
+└───diff_report
+│   
+└───new_application_profile
+│   │   config.json      <--- configuration file
+│   │
+│   └───queries          <--- folder that contains SPARQL queries
+│   │    │   query1.rq
+│   │    │   query2.rq
+│   │    │   ...
+│   │    
+│   └───templates
+│       │
+│       └───html        <--- folder that contains files needed for a html template
+│       │  
+│       └───json        <--- folder that contains files needed for a json template
+```
+
 # Usage
 
 ## Start services
