@@ -20,7 +20,7 @@ from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.services.builders import generate_report
-from rdf_differ.services.validation import validate_choice
+from rdf_differ.services.validation import validate_choice, get_template_types_for_an_application_profile
 from utils.file_utils import temporarily_save_files
 
 """
@@ -151,11 +151,12 @@ def delete_diff(dataset_id: str) -> tuple:
         raise NotFound(exception_text)  # 404
 
 
-def get_report(dataset_id: str, application_profile: str = "diff_report") -> tuple:
+def get_report(dataset_id: str, application_profile: str = "diff_report", template_type: str = "html") -> tuple:
     """
         Generate a dataset diff report
     :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
     :param application_profile: The application profile identifier. This should be a text string
+    :param template_type: The template type identifier. This should be a text string
     :return: html report as attachment
     :rtype: file, int
     """
@@ -163,9 +164,12 @@ def get_report(dataset_id: str, application_profile: str = "diff_report") -> tup
 
     dataset, _ = get_diff(dataset_id)  # potential 404
 
-    is_valid, exception_text = validate_choice(application_profile, config.RDF_DIFFER_APPLICATION_PROFILES_LIST)
-    if not is_valid:
-        raise UnprocessableEntity(exception_text)
+    valid_application_profile, exception_text_ap = validate_choice(application_profile,
+                                                                config.RDF_DIFFER_APPLICATION_PROFILES_LIST)
+    valid_template_type, exception_text = validate_choice(template_type, get_template_types_for_an_application_profile(
+        application_profile))
+    if not valid_application_profile or not valid_template_type:
+        raise UnprocessableEntity(exception_text_ap + exception_text)
 
     try:
         with tempfile.TemporaryDirectory() as temp_dir:

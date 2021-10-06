@@ -3,7 +3,8 @@ from json import dumps
 from pathlib import Path
 from shutil import copytree
 
-from rdf_differ.config import RDF_DIFFER_LOGGER, get_application_profile_location
+from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ.services.validation import get_application_profile_location
 from rdf_differ.entrypoints.api.handlers_helpers import generate_report_builder_config
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)

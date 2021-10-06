@@ -12,6 +12,8 @@ Project wide configuration file.
 import os
 from pathlib import Path
 
+TEMPLATES_FOLDER_PATH = Path(__file__).parents[1] / 'resources' / 'templates'
+
 RDF_DIFFER_FILENAME = os.environ.get('RDF_DIFFER_FILENAME', 'file')
 
 if os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION') \
@@ -19,7 +21,7 @@ if os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION') \
         and any(Path(os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')).iterdir()):
     RDF_DIFFER_REPORT_TEMPLATE_LOCATION = os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')
 else:
-    RDF_DIFFER_REPORT_TEMPLATE_LOCATION = str(Path(__file__).parents[1] / 'resources/templates/')
+    RDF_DIFFER_REPORT_TEMPLATE_LOCATION = str(TEMPLATES_FOLDER_PATH)
 
 RDF_DIFFER_UI_PORT = os.environ.get('RDF_DIFFER_UI_PORT', 8030)
 
@@ -38,8 +40,6 @@ RDF_DIFFER_SECRET_KEY_API = os.environ.get('RDF_DIFFER_SECRET_KEY_API', 'secret 
 
 RDF_DIFFER_LOGGER = 'differ'
 
-RDF_DIFFER_APPLICATION_PROFILES_LIST = os.listdir(Path(__file__).parents[1] / 'resources/templates')
+RDF_DIFFER_APPLICATION_PROFILES_LIST = os.listdir(TEMPLATES_FOLDER_PATH)
 
 
-def get_application_profile_location(application_profile):
-    return f'{RDF_DIFFER_REPORT_TEMPLATE_LOCATION}/{application_profile}'
