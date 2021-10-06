@@ -6,9 +6,6 @@
 # Email: coslet.mihai@gmail.com
 import logging
 import tempfile
-from json import dumps
-from pathlib import Path
-from shutil import copytree
 
 import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
@@ -22,7 +19,8 @@ from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
-from rdf_differ.entrypoints.api.handlers_helpers import generate_report_builder_config
+from rdf_differ.services.builders import generate_report
+from rdf_differ.services.validation import validate_choice
 from utils.file_utils import temporarily_save_files
 
 """
@@ -165,27 +163,15 @@ def get_report(dataset_id: str, application_profile: str = "diff_report") -> tup
 
     dataset, _ = get_diff(dataset_id)  # potential 404
 
-    if application_profile not in config.RDF_DIFFER_APPLICATION_PROFILES_LIST:
-        exception_text = f"The chosen application profile does not exist. Existing application profiles:" \
-                         f" {','.join(config.RDF_DIFFER_APPLICATION_PROFILES_LIST)}"
-        logger.exception(exception_text)
+    is_valid, exception_text = validate_choice(application_profile, config.RDF_DIFFER_APPLICATION_PROFILES_LIST)
+    if not is_valid:
         raise UnprocessableEntity(exception_text)
 
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
-            template_location = config.get_aplication_profile_location(application_profile)
-            logger.debug(f'template location {template_location}')
-            copytree(template_location, temp_dir, dirs_exist_ok=True)
-
-            with open(Path(temp_dir) / 'config.json', 'w') as config_file:
-                config_content = generate_report_builder_config(template_location, dataset)
-                config_file.write(dumps(config_content))
-
-            report_builder = ReportBuilder(target_path=temp_dir)
-            report_builder.make_document()
-
+            report_path, report_name = generate_report(temp_dir, application_profile, dataset, ReportBuilder)
             logger.debug(f'finish get report for {dataset_id} endpoint')
-            return send_from_directory(Path(str(temp_dir)) / 'output', 'main.html', as_attachment=True)  # 200
+            return send_from_directory(directory=report_path, filename=report_name, as_attachment=True)  # 200
     except Exception as e:
         logger.exception(str(e))
         raise InternalServerError(str(e))  # 500
