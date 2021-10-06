@@ -11,7 +11,8 @@ from pathlib import Path
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from utils.file_utils import dir_exists, file_exists, dir_is_empty, temporarily_save_files
+from utils.file_utils import dir_exists, file_exists, dir_is_empty, temporarily_save_files, save_files, \
+    check_files_exist
 
 
 def test_dir_exists(tmpdir):
@@ -77,10 +78,26 @@ def test_temporarily_save_files_success():
     assert not dir_exists(location)
 
 
+def test_save_files_success(tmpdir):
+    location = tmpdir.mkdir('db')
+    with save_files(FileStorage((BytesIO(b'1')), filename='old_file'),
+                    FileStorage((BytesIO(b'2')), filename='new_file'),
+                    location) \
+            as (storage_location, old_file, new_file):
+        location = storage_location
+        assert dir_exists(location)
+
+        with open(old_file) as file:
+            assert file.read() == '1'
+        with open(new_file) as file:
+            assert file.read() == '2'
+
+    assert dir_exists(location)
+
+
 @pytest.mark.parametrize("file_1, file_2", [(FileStorage((BytesIO(b'1')), filename='old_file'), None),
                                             (None, FileStorage((BytesIO(b'2')), filename='new_file')),
                                             (None, None)])
-def test_temporarily_save_files_failure(file_1, file_2):
+def test_check_files_exist_failure(file_1, file_2):
     with pytest.raises(TypeError):
-        with temporarily_save_files(file_1, file_2):
-            pass
+        check_files_exist(file_1, file_2)

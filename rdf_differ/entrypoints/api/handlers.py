@@ -12,11 +12,10 @@ from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from eds4jinja2.builders.report_builder import ReportBuilder
 from flask import send_from_directory
 from werkzeug.datastructures import FileStorage
-from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound, UnprocessableEntity
+from werkzeug.exceptions import Conflict, InternalServerError, NotFound, UnprocessableEntity
 
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.services.builders import generate_report
@@ -109,13 +108,10 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
             with save_files(old_version_file_content, new_version_file_content,
                             config.RDF_DIFFER_FILE_DB) as \
                     (db_location, old_version_file, new_version_file):
-                task = async_create_diff.delay(body, str(old_version_file), str(new_version_file), str(db_location))
+                task = async_create_diff.delay(body, old_version_file, new_version_file, db_location)
             logger.debug('finish create diff endpoint')
             return {'task_id': task.id}, 200
         except ValueError as exception:
-            logger.exception(str(exception))
-            raise BadRequest(str(exception))  # 400
-        except SubprocessFailure as exception:
             exception_text = 'Internal error while uploading the diffs.\n' + str(exception)
             logger.exception(exception_text)
             raise InternalServerError(exception_text)  # 500

@@ -66,16 +66,13 @@ def test_create_diff_200_empty_dataset(_, mock_init, mock_dataset_description):
                                    old_version_file_content=file_1,
                                    new_version_file_content=file_2)
 
-    assert "Request to create a new dataset diff successfully accepted for processing." in response
+    assert 'task_id' in response
     assert status == 200
 
 
 @patch.object(FusekiDiffAdapter, 'create_dataset')
 @patch.object(FusekiDiffAdapter, 'dataset_description')
-@patch.object(SKOSHistoryRunner, '__init__')
-@patch.object(SKOSHistoryRunner, 'run')
-def test_create_diff_200_dataset_doesnt_exist(_, mock_init, mock_dataset_description, mock_create_dataset):
-    mock_init.return_value = None
+def test_create_diff_200_dataset_doesnt_exist(mock_dataset_description, mock_create_dataset):
     mock_dataset_description.side_effect = EndPointNotFound
 
     file_1, file_2, body = helper_create_diff()
@@ -85,23 +82,22 @@ def test_create_diff_200_dataset_doesnt_exist(_, mock_init, mock_dataset_descrip
                                    new_version_file_content=file_2)
 
     mock_create_dataset.assert_called_once()
-    assert "Request to create a new dataset diff successfully accepted for processing." in response
+    assert 'task_id' in response
     assert status == 200
 
 
-@patch.object(SKOSHistoryRunner, '__init__')
-@patch.object(SKOSHistoryRunner, 'run')
-def test_create_diff_400(_, mock_init):
-    mock_init.side_effect = ValueError('Value error')
-
-    file_1, file_2, body = helper_create_diff()
-
-    with pytest.raises(BadRequest) as e:
-        _ = create_diff(body=body,
-                        old_version_file_content=file_1,
-                        new_version_file_content=file_2)
-
-    assert 'Value error' in str(e.value)
+# @patch('utils.file_utils.build_secure_filename')
+# def test_create_diff_500(mock_exception):
+#     mock_exception.side_effect = ValueError('error')
+#
+#     file_1, file_2, body = helper_create_diff()
+#
+#     with pytest.raises(InternalServerError) as e:
+#         _ = create_diff(body=body,
+#                         old_version_file_content=file_1,
+#                         new_version_file_content=file_2)
+#
+#     assert 'Value error' in str(e.value)
 
 
 @patch.object(FusekiDiffAdapter, 'dataset_description')
@@ -114,21 +110,6 @@ def test_create_diff_409(mock_dataset_description):
         _ = create_diff(body=body,
                         old_version_file_content=file_1,
                         new_version_file_content=file_2)
-
-
-@patch.object(SKOSHistoryRunner, '__init__')
-@patch.object(SKOSHistoryRunner, 'run')
-def test_create_diff_500(_, mock_init):
-    mock_init.side_effect = SubprocessFailure()
-
-    file_1, file_2, body = helper_create_diff()
-
-    with pytest.raises(InternalServerError) as e:
-        _ = create_diff(body=body,
-                        old_version_file_content=file_1,
-                        new_version_file_content=file_2)
-
-    assert 'Internal error while uploading the diffs.' in str(e.value)
 
 
 @patch.object(FusekiDiffAdapter, 'dataset_description')
