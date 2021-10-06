@@ -5,6 +5,7 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 
+import logging
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
@@ -13,6 +14,10 @@ from uuid import uuid4
 
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
+
+from rdf_differ.config import RDF_DIFFER_LOGGER
+
+logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
 def dir_exists(path: Union[str, Path]) -> bool:
@@ -50,6 +55,35 @@ def file_exists(path: Union[str, Path]) -> bool:
         Whether the file exists or not.
     """
     return Path(path).is_file()
+
+
+@contextmanager
+def save_files(old_file: FileStorage, new_file: FileStorage, location: str = ''):
+    """
+    Context manager that accepts 2 files and saved them in a temporary directory that gets removed after the context
+    closes.
+    :param old_file: file to be saved in the temporary directory
+    :param new_file: file to be saved in the temporary directory
+    :param location: location to store files
+    """
+    if not old_file or not new_file:
+        raise TypeError("Files cannot be of None type.")
+
+    if not location:
+        raise TypeError("Location can't be null")
+
+    location_to_save = Path(location) / str(uuid4())
+    location_to_save.mkdir()
+    try:
+        saved_old_file = location_to_save / (str(uuid4()) + secure_filename(old_file.filename))
+        saved_new_file = location_to_save / (str(uuid4()) + secure_filename(new_file.filename))
+
+        old_file.save(str(saved_old_file))
+        new_file.save(str(saved_new_file))
+
+        yield location_to_save, saved_old_file, saved_new_file
+    except Exception as e:
+        logger.error(str(e))
 
 
 @contextmanager
