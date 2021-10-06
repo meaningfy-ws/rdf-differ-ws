@@ -19,7 +19,7 @@ from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.services.builders import generate_report
-from rdf_differ.services.tasks import async_create_diff
+from rdf_differ.services.tasks import async_create_diff, retrieve_task, retrieve_active_tasks
 from rdf_differ.services.validation import validate_choice
 from utils.file_utils import save_files
 
@@ -165,3 +165,27 @@ def get_report(dataset_id: str, application_profile: str = "diff_report") -> tup
     except Exception as e:
         logger.exception(str(e))
         raise InternalServerError(str(e))  # 500
+
+
+def get_active_tasks() -> tuple:
+    """
+    Get all active celery tasks
+    :return: dict of celery workers and their active tasks
+    """
+    tasks = retrieve_active_tasks()
+    return tasks, 200
+
+
+def get_task_status(task_id: str) -> tuple:
+    """
+    Get specified task status data
+    :param task_id: Id of task to get status for
+    :return: dict
+    """
+    task = retrieve_task(task_id)
+    if task:
+        return {
+                   "task_id": task.id,
+                   "task_status": task.status,
+               }, 200
+    return '', 200

@@ -152,6 +152,37 @@ paths:
         5XX:
           description: Unexpected Error.
 
+  /tasks/active:
+    get:
+      operationId: rdf_differ.entrypoints.api.handlers.get_active_tasks
+      description: Get status of a task
+      responses:
+        200:
+          description: Task status description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskStatus"
+
+  /tasks/{task_id}:
+    get:
+      operationId: rdf_differ.entrypoints.api.handlers.get_task_status
+      description: Get status of a task
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: task id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Task status description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskStatus"
+
 components:
   schemas:
     BasicDiffDescription:
@@ -210,3 +241,14 @@ components:
               type: string
               format: date
               description: The date of the calculated diff.
+
+    TaskStatus:
+      type: object
+      description: A description of a task status response.
+      properties:
+        task_id:
+          type: string
+          description: The task identifier.
+        task_status:
+          type: string
+          description: The task status.

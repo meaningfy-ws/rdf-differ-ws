@@ -8,9 +8,10 @@
 """
 Project wide configuration file.
 """
-
 import os
 from pathlib import Path
+
+from celery import Celery
 
 RDF_DIFFER_FILENAME = os.environ.get('RDF_DIFFER_FILENAME', 'file')
 
@@ -45,3 +46,11 @@ RDF_DIFFER_FILE_DB = os.environ.get('RDF_DIFFER_FILE_DB', str(Path(__file__).par
 
 def get_application_profile_location(application_profile):
     return f'{RDF_DIFFER_REPORT_TEMPLATE_LOCATION}/{application_profile}'
+
+
+# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379/0'),
+# CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0'),
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
+
+celery_worker = Celery('rdf-differ-tasks', broker=CELERY_BROKER_URL, backend=CELERY_RESULT_BACKEND)
