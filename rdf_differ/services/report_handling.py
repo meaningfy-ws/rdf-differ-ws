@@ -6,7 +6,7 @@ from shutil import copytree
 
 from eds4jinja2.builders.report_builder import ReportBuilder
 
-from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
+from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.config import get_application_profile_location
 from utils.file_utils import dir_is_empty, empty_directory, copy_file_to_destination, dir_exists
 
@@ -34,21 +34,21 @@ def build_report(temp_dir: str, dataset: dict, application_profile: str):
     return Path(str(temp_dir)) / 'output/main.html'
 
 
-def build_report_location(dataset_name: str, application_profile: str) -> str:
-    return str(Path(RDF_DIFFER_REPORTS_DB) / f'{dataset_name}/{application_profile}')
+def build_report_location(dataset_name: str, application_profile: str, db_location: str) -> str:
+    return str(Path(db_location) / f'{dataset_name}/{application_profile}')
 
 
-def retrieve_report(dataset_name: str, application_profile: str) -> str:
-    return str(next(Path(build_report_location(dataset_name, application_profile)).iterdir()))
+def retrieve_report(dataset_name: str, application_profile: str, db_location: str) -> str:
+    return str(next(Path(build_report_location(dataset_name, application_profile, db_location)).iterdir(), ''))
 
 
-def report_exists(dataset_name: str, application_profile: str) -> bool:
-    report_location = build_report_location(dataset_name, application_profile)
+def report_exists(dataset_name: str, application_profile: str, db_location: str) -> bool:
+    report_location = build_report_location(dataset_name, application_profile, db_location)
     return dir_exists(report_location) and not dir_is_empty(report_location)
 
 
-def save_report(report: str, dataset_name: str, application_profile: str) -> None:
-    location_to_save = build_report_location(dataset_name, application_profile)
+def save_report(report: str, dataset_name: str, application_profile: str, db_location: str) -> None:
+    location_to_save = build_report_location(dataset_name, application_profile, db_location)
 
     if not dir_exists(location_to_save):
         Path(location_to_save).mkdir(parents=True)
@@ -58,5 +58,3 @@ def save_report(report: str, dataset_name: str, application_profile: str) -> Non
         empty_directory(location_to_save)
 
     copy_file_to_destination(report, location_to_save)
-
-    return

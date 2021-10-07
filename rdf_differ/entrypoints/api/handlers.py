@@ -15,7 +15,7 @@ from werkzeug.exceptions import Conflict, InternalServerError, NotFound, Unproce
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
-from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.report_handling import report_exists, retrieve_report
 from rdf_differ.services.tasks import async_create_diff, retrieve_task, retrieve_active_tasks, async_generate_report
 from rdf_differ.services.validation import validate_choice
@@ -156,11 +156,12 @@ def get_report(dataset_id: str, application_profile: str = "diff_report", rebuil
     if not is_valid:
         raise UnprocessableEntity(exception_text)
 
-    if not report_exists(dataset_id, application_profile) or rebuild:
+    if not report_exists(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB) or rebuild:
         task = async_generate_report.delay(dataset, application_profile)
         return {'task_id': task.id}, 200
     else:
-        return send_file(retrieve_report(dataset_id, application_profile), as_attachment=True)  # 200
+        return send_file(retrieve_report(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB),
+                         as_attachment=True)  # 200
 
 
 def get_active_tasks() -> tuple:

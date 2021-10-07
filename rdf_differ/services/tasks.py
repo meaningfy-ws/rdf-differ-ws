@@ -9,7 +9,7 @@ from celery.result import AsyncResult
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
-from rdf_differ.config import celery_worker, RDF_DIFFER_LOGGER
+from rdf_differ.config import celery_worker, RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.report_handling import build_report, save_report
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
@@ -70,6 +70,6 @@ def async_generate_report(dataset: dict, application_profile: str):
     """
     with tempfile.TemporaryDirectory() as temp_dir:
         path_to_report = build_report(str(temp_dir), dataset, application_profile)
-        save_report(path_to_report, dataset['dataset_id'], application_profile)
+        save_report(path_to_report, dataset['dataset_id'], application_profile, RDF_DIFFER_REPORTS_DB)
 
     return True
