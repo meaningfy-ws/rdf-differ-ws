@@ -5,7 +5,7 @@ from typing import List
 
 from werkzeug.exceptions import NotFound
 
-from rdf_differ.config import RDF_DIFFER_REPORT_TEMPLATE_LOCATION
+from rdf_differ.config import APPLICATION_PROFILES_ROOT_FOLDER
 from rdf_differ.services import list_folders_from_path, list_files_from_path
 
 QUERIES_SUBFOLDER = "queries"
@@ -22,7 +22,7 @@ class ApplicationProfileManager:
     """
 
     def __init__(self, application_profile: str, template_type: str,
-                 root_folder: pathlib.Path = RDF_DIFFER_REPORT_TEMPLATE_LOCATION):
+                 root_folder: pathlib.Path = APPLICATION_PROFILES_ROOT_FOLDER):
         self.root_folder = root_folder
         self.application_profile = application_profile
         self.template_type = template_type

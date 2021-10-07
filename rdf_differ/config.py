@@ -12,21 +12,17 @@ Project wide configuration file.
 import os
 from pathlib import Path
 
-# TODO: this shall be deprecated because now we shall rely on the APManager
+
 TEMPLATES_FOLDER_PATH = Path(__file__).parents[1] / 'resources' / 'templates'
-
-# # TODO: this is teh discovery path
-# APPLICATION_PROFILE_ROOT_FOLDER = Path(os.environ.get('RDF_DIFFER_APPLICATION_PROFILE_ROOT_FOLDER', '...'))
-
 
 RDF_DIFFER_FILENAME = os.environ.get('RDF_DIFFER_FILENAME', 'file')
 
 if os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION') \
         and Path(os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')).exists() \
         and any(Path(os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')).iterdir()):
-    RDF_DIFFER_REPORT_TEMPLATE_LOCATION = os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')
+    APPLICATION_PROFILES_ROOT_FOLDER = os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')
 else:
-    RDF_DIFFER_REPORT_TEMPLATE_LOCATION = TEMPLATES_FOLDER_PATH
+    APPLICATION_PROFILES_ROOT_FOLDER = TEMPLATES_FOLDER_PATH
 
 RDF_DIFFER_UI_PORT = os.environ.get('RDF_DIFFER_UI_PORT', 8030)
 
@@ -44,7 +40,5 @@ RDF_DIFFER_SECRET_KEY_UI = os.environ.get('RDF_DIFFER_SECRET_KEY_UI', 'secret ke
 RDF_DIFFER_SECRET_KEY_API = os.environ.get('RDF_DIFFER_SECRET_KEY_API', 'secret key api')
 
 RDF_DIFFER_LOGGER = 'differ'
-
-RDF_DIFFER_APPLICATION_PROFILES_LIST = os.listdir(TEMPLATES_FOLDER_PATH)
 
 
