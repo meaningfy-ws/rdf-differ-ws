@@ -86,18 +86,18 @@ def test_create_diff_200_dataset_doesnt_exist(mock_dataset_description, mock_cre
     assert status == 200
 
 
-# @patch('utils.file_utils.build_secure_filename')
-# def test_create_diff_500(mock_exception):
-#     mock_exception.side_effect = ValueError('error')
-#
-#     file_1, file_2, body = helper_create_diff()
-#
-#     with pytest.raises(InternalServerError) as e:
-#         _ = create_diff(body=body,
-#                         old_version_file_content=file_1,
-#                         new_version_file_content=file_2)
-#
-#     assert 'Value error' in str(e.value)
+@patch('utils.file_utils.build_secure_filename')
+def test_create_diff_500(mock_exception):
+    mock_exception.side_effect = ValueError('error')
+
+    file_1, file_2, body = helper_create_diff()
+
+    with pytest.raises(InternalServerError) as e:
+        _ = create_diff(body=body,
+                        old_version_file_content=file_1,
+                        new_version_file_content=file_2)
+
+    assert 'error' in str(e.value)
 
 
 @patch.object(FusekiDiffAdapter, 'dataset_description')
@@ -162,18 +162,6 @@ def test_delete_diff_404(mock_delete_dataset):
         _ = delete_diff('dataset')
 
     assert "<dataset> does not exist." in str(e.value)
-
-
-@patch('rdf_differ.entrypoints.api.handlers.get_diff')
-@patch.object(ReportBuilder, 'make_document')
-def test_get_report_500(mock_make_document, mock_get_diff):
-    mock_make_document.side_effect = Exception('500 error')
-    mock_get_diff.return_value = {'query_url': 'http://somequery'}, 200
-
-    with pytest.raises(Exception) as e:
-        _ = get_report('http://url.com')
-
-    assert '500 error' in str(e.value)
 
 
 @patch('rdf_differ.entrypoints.api.handlers.get_diff')

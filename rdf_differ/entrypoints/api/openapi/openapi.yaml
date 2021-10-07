@@ -139,6 +139,13 @@ paths:
           description: Application profile
           schema:
             type: string
+        - in: query
+          name: rebuild
+          required: false
+          allowEmptyValue: False
+          description: Flag to signal rebuilding the report even if already exists.
+          schema:
+            type: string
       responses:
         200:
           description: Dataset diff report succesfully retreived.
