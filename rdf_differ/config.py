@@ -39,9 +39,10 @@ RDF_DIFFER_SECRET_KEY_API = os.environ.get('RDF_DIFFER_SECRET_KEY_API', 'secret 
 
 RDF_DIFFER_LOGGER = 'differ'
 
-RDF_DIFFER_APPLICATION_PROFILES_LIST = os.listdir(Path(__file__).parents[1] / 'resources/templates')
+RDF_DIFFER_APPLICATION_PROFILES_LIST = os.listdir(RDF_DIFFER_REPORT_TEMPLATE_LOCATION)
 
 RDF_DIFFER_FILE_DB = os.environ.get('RDF_DIFFER_FILE_DB', str(Path(__file__).parents[1] / 'db'))
+RDF_DIFFER_REPORTS_DB = os.environ.get('RDF_DIFFER_REPORT_DB', str(Path(__file__).parents[1] / 'reports'))
 
 
 def get_application_profile_location(application_profile):

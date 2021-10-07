@@ -5,12 +5,10 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 import logging
-import tempfile
 
 import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
-from eds4jinja2.builders.report_builder import ReportBuilder
-from flask import send_from_directory
+from flask import send_file
 from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import Conflict, InternalServerError, NotFound, UnprocessableEntity
 
@@ -18,8 +16,8 @@ from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
-from rdf_differ.services.builders import generate_report
-from rdf_differ.services.tasks import async_create_diff, retrieve_task, retrieve_active_tasks
+from rdf_differ.services.report_handling import report_exists, retrieve_report
+from rdf_differ.services.tasks import async_create_diff, retrieve_task, retrieve_active_tasks, async_generate_report
 from rdf_differ.services.validation import validate_choice
 from utils.file_utils import save_files
 
@@ -141,11 +139,12 @@ def delete_diff(dataset_id: str) -> tuple:
         raise NotFound(exception_text)  # 404
 
 
-def get_report(dataset_id: str, application_profile: str = "diff_report") -> tuple:
+def get_report(dataset_id: str, application_profile: str = "diff_report", rebuild: bool = False) -> tuple:
     """
         Generate a dataset diff report
     :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
     :param application_profile: The application profile identifier. This should be a text string
+    :param rebuild: flag to signal rebuilding the report even if already exists
     :return: html report as attachment
     :rtype: file, int
     """
@@ -157,14 +156,11 @@ def get_report(dataset_id: str, application_profile: str = "diff_report") -> tup
     if not is_valid:
         raise UnprocessableEntity(exception_text)
 
-    try:
-        with tempfile.TemporaryDirectory() as temp_dir:
-            report_path, report_name = generate_report(temp_dir, application_profile, dataset, ReportBuilder)
-            logger.debug(f'finish get report for {dataset_id} endpoint')
-            return send_from_directory(directory=report_path, filename=report_name, as_attachment=True)  # 200
-    except Exception as e:
-        logger.exception(str(e))
-        raise InternalServerError(str(e))  # 500
+    if not report_exists(dataset_id, application_profile) or rebuild:
+        task = async_generate_report.delay(dataset, application_profile)
+        return {'task_id': task.id}, 200
+    else:
+        return send_file(retrieve_report(dataset_id, application_profile), as_attachment=True)  # 200
 
 
 def get_active_tasks() -> tuple:
@@ -188,4 +184,4 @@ def get_task_status(task_id: str) -> tuple:
                    "task_id": task.id,
                    "task_status": task.status,
                }, 200
-    return '', 200
+    raise NotFound('task not found')  # 404

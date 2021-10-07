@@ -6,6 +6,7 @@
 # Email: coslet.mihai@gmail.com
 
 import logging
+import shutil
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
@@ -46,6 +47,16 @@ def dir_is_empty(path: Union[str, Path]) -> bool:
     return False
 
 
+def empty_directory(path: Union[str, Path]) -> None:
+    """
+    Method to remove all files from a directory
+    :param path: directory to clean
+    """
+    for item in Path(path).iterdir():
+        if item.is_file():
+            item.unlink()
+
+
 def file_exists(path: Union[str, Path]) -> bool:
     """
     Method to check the existence of the file from the indicated path.
@@ -55,6 +66,10 @@ def file_exists(path: Union[str, Path]) -> bool:
         Whether the file exists or not.
     """
     return Path(path).is_file()
+
+
+def copy_file_to_destination(file: str, destination: str) -> None:
+    shutil.copy(file, destination)
 
 
 def check_files_exist(file_a: FileStorage, file_b: FileStorage) -> None:
