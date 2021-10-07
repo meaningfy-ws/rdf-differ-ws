@@ -3,6 +3,9 @@
 import pathlib
 from typing import List
 
+from werkzeug.exceptions import NotFound
+
+from rdf_differ.config import RDF_DIFFER_REPORT_TEMPLATE_LOCATION
 from rdf_differ.services import list_folders_from_path, list_files_from_path
 
 QUERIES_SUBFOLDER = "queries"
@@ -18,7 +21,8 @@ class ApplicationProfileManager:
         * path to chosen template type of a chosen ap
     """
 
-    def __init__(self, root_folder: pathlib.Path, application_profile: str, template_type:str):
+    def __init__(self, application_profile: str, template_type: str,
+                 root_folder: pathlib.Path = RDF_DIFFER_REPORT_TEMPLATE_LOCATION):
         self.root_folder = root_folder
         self.application_profile = application_profile
         self.template_type = template_type
@@ -73,7 +77,7 @@ class ApplicationProfileManager:
             raise LookupError(f"the AP named '{self.application_profile}' is not found.")
         template_variants_folder_path = self.path_to_ap_folder() / TEMPLATE_VARIANTS_SUBFOLDER
         if not template_variants_folder_path.exists():
-            raise FileNotFoundError(f"The template_variants folder '{template_variants_folder_path}' is not found.")
+            raise NotFound(f"The template_variants folder '{template_variants_folder_path}' is not found.")
 
         return template_variants_folder_path
 
@@ -82,7 +86,9 @@ class ApplicationProfileManager:
             returns the list of discovered template variants for a chosen AP
         """
         if self.application_profile not in self.list_aps():
-            raise LookupError(f"the AP named '{self.application_profile}' is not found.")
+            raise NotFound(f"the AP named '{self.application_profile}' is not found.")
+        if not self.template_variants_folder().exists():
+            raise NotFound(f"the template variations folder '{self.template_variants_folder()}' is not found.")
         return list_folders_from_path(self.template_variants_folder())
 
     def template_folder(self) -> pathlib.Path:
@@ -90,10 +96,8 @@ class ApplicationProfileManager:
             returns the path to the folder of a chosen template variant for a chosen AP
         """
         if self.template_type not in self.list_template_variants():
-            raise LookupError(f"the template type named '{self.template_type}' is not found.")
+            raise NotFound(f"the template type named '{self.template_type}' is not found.")
         template_folder_path = self.template_variants_folder() / self.template_type
-        if not template_folder_path.exists():
-            raise FileNotFoundError(f"The template folder '{template_folder_path}' is not found.")
 
         return template_folder_path
 

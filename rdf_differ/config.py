@@ -12,7 +12,12 @@ Project wide configuration file.
 import os
 from pathlib import Path
 
+# TODO: this shall be deprecated because now we shall rely on the APManager
 TEMPLATES_FOLDER_PATH = Path(__file__).parents[1] / 'resources' / 'templates'
+
+# # TODO: this is teh discovery path
+# APPLICATION_PROFILE_ROOT_FOLDER = Path(os.environ.get('RDF_DIFFER_APPLICATION_PROFILE_ROOT_FOLDER', '...'))
+
 
 RDF_DIFFER_FILENAME = os.environ.get('RDF_DIFFER_FILENAME', 'file')
 
@@ -21,7 +26,7 @@ if os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION') \
         and any(Path(os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')).iterdir()):
     RDF_DIFFER_REPORT_TEMPLATE_LOCATION = os.environ.get('RDF_DIFFER_TEMPLATE_LOCATION')
 else:
-    RDF_DIFFER_REPORT_TEMPLATE_LOCATION = str(TEMPLATES_FOLDER_PATH)
+    RDF_DIFFER_REPORT_TEMPLATE_LOCATION = TEMPLATES_FOLDER_PATH
 
 RDF_DIFFER_UI_PORT = os.environ.get('RDF_DIFFER_UI_PORT', 8030)
 

@@ -1,6 +1,7 @@
 import pathlib
 
 import pytest
+from werkzeug.exceptions import NotFound
 
 from rdf_differ.services.ap_manager import ApplicationProfileManager
 
@@ -52,14 +53,14 @@ def test_list_functions_negative(sample_ap_root_folder):
         apm.queries_folder()
 
     apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap3", template_type="")
-    with pytest.raises(LookupError):
+    with pytest.raises(NotFound):
         apm.list_template_variants()
     apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap1",
                                     template_type="xhtmlz")
-    with pytest.raises(LookupError):
+    with pytest.raises(NotFound):
         apm.template_folder()
 
     apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap2",
                                     template_type="html")
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises(NotFound):
         apm.template_folder()

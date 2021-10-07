@@ -12,15 +12,15 @@ from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from eds4jinja2.builders.report_builder import ReportBuilder
 from flask import send_from_directory
 from werkzeug.datastructures import FileStorage
-from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound, UnprocessableEntity
+from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound
 
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.services.builders import generate_report
-from rdf_differ.services.validation import validate_choice, get_template_types_for_an_application_profile
 from utils.file_utils import temporarily_save_files
 
 """
@@ -164,16 +164,12 @@ def get_report(dataset_id: str, application_profile: str = "diff_report", templa
 
     dataset, _ = get_diff(dataset_id)  # potential 404
 
-    valid_application_profile, exception_text_ap = validate_choice(application_profile,
-                                                                config.RDF_DIFFER_APPLICATION_PROFILES_LIST)
-    valid_template_type, exception_text = validate_choice(template_type, get_template_types_for_an_application_profile(
-        application_profile))
-    if not valid_application_profile or not valid_template_type:
-        raise UnprocessableEntity(exception_text_ap + exception_text)
+    ap_manager = ApplicationProfileManager(application_profile=application_profile, template_type=template_type)
 
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
-            report_path, report_name = generate_report(temp_dir, application_profile, dataset, ReportBuilder)
+            report_path, report_name = generate_report(temp_dir=temp_dir, application_profile_manager=ap_manager,
+                                                       dataset=dataset, report_builder_class=ReportBuilder)
             logger.debug(f'finish get report for {dataset_id} endpoint')
             return send_from_directory(directory=report_path, filename=report_name, as_attachment=True)  # 200
     except Exception as e:
