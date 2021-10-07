@@ -1,0 +1,61 @@
+{# Default way of showing errors #}
+{% macro render_error(message) -%}
+    <div class="ui icon message error">
+        <i class="times circle icon"></i>
+        <div class="content">
+            <div class="header">
+                Error
+            </div>
+            <p>{{ message|e }}</p>
+        </div>
+    </div>
+{%- endmacro %}
+
+{# Default macro for showing/wrapping the fetch results #}
+{% macro render_fetch_results(content, error) -%}
+    {% if error %}
+        {{ render_error(error) }}
+    {% else %}
+        {% if content is undefined %}
+            {{ render_error("Some content expected but none was found.") }}
+        {% else %}
+            {{ caller() }}
+        {% endif %}
+    {% endif %}
+{%- endmacro %}
+
+
+{% macro pandas_table(df, caption, column_labels={}) -%}
+    {% if (df is defined) and (df is not none) %}
+        <table class="display">
+            <thead class="center aligned">
+            <tr>
+                {% for column in df.columns %}
+                    {% if column in column_labels %}
+                        <th>{{ column_labels[column] }}</th>
+                    {% else %}
+                        <th>{{ column }}</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for idx, row in df.iterrows() %}
+                <tr>
+                    {% for colname in df.columns %}
+                        {# handle decimal format: float, float64, float32 #}
+                        {% if 'float' in (df.dtypes[colname] | string) %}
+                            <td class="left aligned collapsing">{{ row[colname] | round(precision=2) }}</td>
+                        {% else %}
+                            <td>{{ row[colname] }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+            <caption>{{ caption }}</caption>
+        </table>
+    {% else %}
+        {{ render_error("How did you get here? did you forget to use 'render_fetch_results' macro?") }}
+    {% endif %}
+{%- endmacro %}
