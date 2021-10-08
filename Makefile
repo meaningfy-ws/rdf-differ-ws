@@ -51,6 +51,11 @@ fuseki-create-test-dbs: | build-test-fuseki start-test-fuseki
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
 
+
+run-redis:
+	@ echo -e '$(BUILD_PRINT)Starting redis'
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d redis
+
 test:
 	@ echo "$(BUILD_PRINT)Running the tests"
 	@ pytest
