@@ -15,10 +15,13 @@ TEMPLATE_VARIANTS_SUBFOLDER = "template_variants"
 class ApplicationProfileManager:
     """
     This class will
-        * list of ap names
-        * path to chosen ap queries
-        * list of chosen ap template types
-        * path to chosen template type of a chosen ap
+        * give the path to the application profile folder
+        * list all available application profiles
+        * give the path to the queries folder for an application profile
+        * get all queries file names and paths
+        * give the path to the template variations folder
+        * list all available template variants available for an application profile
+        * give the path for a template variant folder of an application profile
     """
 
     def __init__(self, application_profile: str = None, template_type: str = None,

@@ -178,6 +178,11 @@ def get_report(dataset_id: str, application_profile: str = "diff_report", templa
 
 
 def get_application_profiles_details() -> tuple:
+    """
+      Get all available application profiles and their available template variants.
+    :return: list[dict]
+    :rtype: list, int
+    """
     list_of_aps = ApplicationProfileManager().list_aps()
     result_list = []
     for ap in list_of_aps:
