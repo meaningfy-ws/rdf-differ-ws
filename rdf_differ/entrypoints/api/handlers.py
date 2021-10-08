@@ -157,7 +157,7 @@ def get_report(dataset_id: str, application_profile: str = "diff_report", rebuil
         raise UnprocessableEntity(exception_text)
 
     if not report_exists(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB) or rebuild:
-        task = async_generate_report.delay(dataset, application_profile)
+        task = async_generate_report.delay(dataset, application_profile, RDF_DIFFER_REPORTS_DB)
         return {'task_id': task.id}, 200
     else:
         return send_file(retrieve_report(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB),
