@@ -11,9 +11,10 @@ Module for configuring and exposing the connexion api server using the Flask fra
 
 import connexion
 
-from rdf_differ.config import RDF_DIFFER_SECRET_KEY_API
+from rdf_differ.config import RDF_DIFFER_SECRET_KEY_API, SHOW_SWAGGER_UI
 
-connexion_app = connexion.FlaskApp(__name__, specification_dir='openapi')
+connexion_app = connexion.FlaskApp(__name__, specification_dir='openapi',
+                                   options={"swagger_ui": SHOW_SWAGGER_UI})
 connexion_app.add_api('openapi.yaml')
 
 app = connexion_app.app

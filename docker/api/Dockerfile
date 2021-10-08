@@ -7,6 +7,6 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt --use-feature=2020-resolver
+RUN pip install -r requirements.txt
 
-CMD gunicorn --timeout ${RDF_DIFFER_GUNICORN_TIMEOUT} --workers ${RDF_DIFFER_GUNICORN_API_WORKERS} --bind 0.0.0.0:${RDF_DIFFER_API_PORT} --reload rdf_differ.entrypoints.api.run:app
+CMD gunicorn --timeout ${RDF_DIFFER_GUNICORN_TIMEOUT} --workers ${RDF_DIFFER_GUNICORN_API_WORKERS} --bind 0.0.0.0:${RDF_DIFFER_API_PORT} --reload rdf_differ.entrypoints.api.run:app --log-file ${RDF_DIFFER_API_LOGS}

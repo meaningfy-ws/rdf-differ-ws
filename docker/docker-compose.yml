@@ -54,10 +54,9 @@ services:
     build:
       context: ..
       dockerfile: ./docker/api/Dockerfile
-    command: celery -A rdf_differ.services.tasks.celery_worker worker --loglevel info --logfile celery/logs/celery.log
+    command: celery -A rdf_differ.services.tasks.celery_worker worker --loglevel info --logfile ${RDF_DIFFER_CELERY_LOGS}
     volumes:
       - ..:/usr/src/app
-      - rdf-differ-template:${RDF_DIFFER_TEMPLATE_LOCATION}
     env_file: .env
     networks:
       - mydefault
@@ -68,7 +67,7 @@ services:
   redis:
     image: redis:6-alpine
     ports:
-      - "6379:6379"
+      - ${RDF_DIFFER_REDIS_PORT}:${RDF_DIFFER_REDIS_PORT}
     networks:
       - mydefault
 
@@ -76,9 +75,9 @@ services:
     build:
       context: ..
       dockerfile: ./docker/api/Dockerfile
-    command: celery -A rdf_differ.services.tasks.celery_worker --broker=redis://redis:6379/0 flower --port=5555
+    command: celery -A rdf_differ.services.tasks.celery_worker --broker=${RDF_DIFFER_REDIS_LOCATION}:${RDF_DIFFER_REDIS_PORT} flower --port=${RDF_FLOWER_PORT}
     ports:
-      - 5555:5555
+      - ${RDF_FLOWER_PORT}:${RDF_FLOWER_PORT}
     depends_on:
       - rdf-differ-api
       - celery-worker

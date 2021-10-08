@@ -10,6 +10,7 @@ Project wide configuration file.
 """
 import os
 from pathlib import Path
+from distutils.util import strtobool
 
 from celery import Celery
 
@@ -29,10 +30,15 @@ RDF_DIFFER_API_LOCATION = os.environ.get('RDF_DIFFER_API_LOCATION', 'http://loca
 RDF_DIFFER_API_SERVICE = str(RDF_DIFFER_API_LOCATION) + ":" + str(RDF_DIFFER_API_PORT)
 
 RDF_DIFFER_FUSEKI_LOCATION = os.environ.get('RDF_DIFFER_FUSEKI_LOCATION', 'http://localhost')
-RDF_DIFFER_FUSEKI_SERVICE = str(RDF_DIFFER_FUSEKI_LOCATION) + ":" + '3030'
+RDF_DIFFER_FUSEKI_PORT = os.environ.get('RDF_DIFFER_FUSEKI_PORT', 3030)
+RDF_DIFFER_FUSEKI_SERVICE = f'{RDF_DIFFER_FUSEKI_LOCATION}:{RDF_DIFFER_FUSEKI_PORT}'
 
 RDF_DIFFER_FUSEKI_USERNAME = os.environ.get('RDF_DIFFER_FUSEKI_USERNAME', 'admin')
 RDF_DIFFER_FUSEKI_PASSWORD = os.environ.get('RDF_DIFFER_FUSEKI_PASSWORD', 'admin')
+
+RDF_DIFFER_REDIS_LOCATION = os.environ.get('RDF_DIFFER_REDIS_LOCATION', 'redis://localhost')
+RDF_DIFFER_REDIS_PORT = os.environ.get('RDF_DIFFER_REDIS_PORT', 6379)
+RDF_DIFFER_REDIS_SERVICE = f'{RDF_DIFFER_REDIS_LOCATION}:{RDF_DIFFER_REDIS_PORT}'
 
 RDF_DIFFER_SECRET_KEY_UI = os.environ.get('RDF_DIFFER_SECRET_KEY_UI', 'secret key ui')
 RDF_DIFFER_SECRET_KEY_API = os.environ.get('RDF_DIFFER_SECRET_KEY_API', 'secret key api')
@@ -44,14 +50,11 @@ RDF_DIFFER_APPLICATION_PROFILES_LIST = os.listdir(RDF_DIFFER_REPORT_TEMPLATE_LOC
 RDF_DIFFER_FILE_DB = os.environ.get('RDF_DIFFER_FILE_DB', str(Path(__file__).parents[1] / 'db'))
 RDF_DIFFER_REPORTS_DB = os.environ.get('RDF_DIFFER_REPORT_DB', str(Path(__file__).parents[1] / 'reports'))
 
+SHOW_SWAGGER_UI = strtobool(os.environ.get('SHOW_SWAGGER_UI', 'true'))
 
 def get_application_profile_location(application_profile):
     return f'{RDF_DIFFER_REPORT_TEMPLATE_LOCATION}/{application_profile}'
 
 
-# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379/0'),
-# CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0'),
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
+celery_worker = Celery('rdf-differ-tasks', broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE)
 
-celery_worker = Celery('rdf-differ-tasks', broker=CELERY_BROKER_URL, backend=CELERY_RESULT_BACKEND)
