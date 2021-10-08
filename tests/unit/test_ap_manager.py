@@ -7,12 +7,12 @@ from rdf_differ.services.ap_manager import ApplicationProfileManager
 
 
 def test_ap_manager_creation(sample_ap_root_folder):
-    apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap1", template_type="")
+    apm = ApplicationProfileManager(root_folder=sample_ap_root_folder)
     assert apm is not None
 
 
 def test_ap_manager_exception(unexistent_ap_folder):
-    apm = ApplicationProfileManager(root_folder=unexistent_ap_folder, application_profile="ap1", template_type="")
+    apm = ApplicationProfileManager(root_folder=unexistent_ap_folder, application_profile="ap1")
     with pytest.raises(FileNotFoundError):
         apm.path_to_ap_folder()
     with pytest.raises(FileNotFoundError):
@@ -43,16 +43,16 @@ def test_list_functions_positive(sample_ap_root_folder):
 
 
 def test_list_functions_negative(sample_ap_root_folder):
-    apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap3", template_type="")
+    apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap3")
 
     with pytest.raises(LookupError):
         apm.queries_folder()
 
-    apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap2", template_type="")
+    apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap2")
     with pytest.raises(FileNotFoundError):
         apm.queries_folder()
 
-    apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap3", template_type="")
+    apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap3")
     with pytest.raises(NotFound):
         apm.list_template_variants()
     apm = ApplicationProfileManager(root_folder=sample_ap_root_folder, application_profile="ap1",

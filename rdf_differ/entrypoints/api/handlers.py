@@ -175,3 +175,15 @@ def get_report(dataset_id: str, application_profile: str = "diff_report", templa
     except Exception as e:
         logger.exception(str(e))
         raise InternalServerError(str(e))  # 500
+
+
+def get_application_profiles_details() -> tuple:
+    list_of_aps = ApplicationProfileManager().list_aps()
+    result_list = []
+    for ap in list_of_aps:
+        apm = ApplicationProfileManager(application_profile=ap)
+        details_dict = {"application_profile": ap,
+                        "template_variations": apm.list_template_variants()}
+        result_list.append(details_dict)
+
+    return result_list, 200

@@ -21,7 +21,7 @@ class ApplicationProfileManager:
         * path to chosen template type of a chosen ap
     """
 
-    def __init__(self, application_profile: str, template_type: str,
+    def __init__(self, application_profile: str = None, template_type: str = None,
                  root_folder: pathlib.Path = APPLICATION_PROFILES_ROOT_FOLDER):
         self.root_folder = root_folder
         self.application_profile = application_profile

@@ -158,7 +158,19 @@ paths:
           description: dataset_id query param not present.
         5XX:
           description: Unexpected Error.
-
+  /aps_details:
+    get:
+      operationId: rdf_differ.entrypoints.api.handlers.get_application_profiles_details
+      description: Get application profiles names and their template variations.
+      responses:
+        200:
+          description: Application profiles details succesfully retreived.
+          content:
+            application/json:
+              schema:
+                type: array
+        5XX:
+          description: Unexpected Error.
 components:
   schemas:
     BasicDiffDescription:
