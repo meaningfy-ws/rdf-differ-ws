@@ -12,7 +12,7 @@ from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from eds4jinja2.builders.report_builder import ReportBuilder
 from flask import send_from_directory
 from werkzeug.datastructures import FileStorage
-from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound
+from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound, UnprocessableEntity
 
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
@@ -151,7 +151,7 @@ def delete_diff(dataset_id: str) -> tuple:
         raise NotFound(exception_text)  # 404
 
 
-def get_report(dataset_id: str, application_profile: str = "diff_report", template_type: str = "html") -> tuple:
+def get_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
     """
         Generate a dataset diff report
     :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
@@ -165,10 +165,16 @@ def get_report(dataset_id: str, application_profile: str = "diff_report", templa
     dataset, _ = get_diff(dataset_id)  # potential 404
 
     ap_manager = ApplicationProfileManager(application_profile=application_profile, template_type=template_type)
+    try:
+        template_location = ap_manager.get_template_folder()
+    except (LookupError, FileNotFoundError) as e:
+        logger.exception(str(e))
+        raise UnprocessableEntity("Application profile or template type not valid. "
+                                  "Check valid application profiles and their template types through the API")
 
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
-            report_path, report_name = generate_report(temp_dir=temp_dir, application_profile_manager=ap_manager,
+            report_path, report_name = generate_report(temp_dir=temp_dir, template_location=template_location,
                                                        dataset=dataset, report_builder_class=ReportBuilder)
             logger.debug(f'finish get report for {dataset_id} endpoint')
             return send_from_directory(directory=report_path, filename=report_name, as_attachment=True)  # 200
@@ -183,12 +189,6 @@ def get_application_profiles_details() -> tuple:
     :return: list[dict]
     :rtype: list, int
     """
-    list_of_aps = ApplicationProfileManager().list_aps()
-    result_list = []
-    for ap in list_of_aps:
-        apm = ApplicationProfileManager(application_profile=ap)
-        details_dict = {"application_profile": ap,
-                        "template_variations": apm.list_template_variants()}
-        result_list.append(details_dict)
-
-    return result_list, 200
+    return [{"application_profile": ap,
+             "template_variations": ApplicationProfileManager(ap).list_template_variants()} for ap in
+            ApplicationProfileManager().list_aps()], 200

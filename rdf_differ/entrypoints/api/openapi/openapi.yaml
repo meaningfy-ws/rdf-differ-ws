@@ -134,14 +134,14 @@ paths:
             type: string
         - in: query
           name: application_profile
-          required: false
+          required: true
           allowEmptyValue: False
           description: Application profile
           schema:
             type: string
         - in: query
           name: template_type
-          required: false
+          required: true
           allowEmptyValue: False
           description: Template type
           schema:
@@ -158,7 +158,7 @@ paths:
           description: dataset_id query param not present.
         5XX:
           description: Unexpected Error.
-  /aps_details:
+  /aps:
     get:
       operationId: rdf_differ.entrypoints.api.handlers.get_application_profiles_details
       description: Get application profiles names and their template variations.

@@ -4,14 +4,13 @@ from pathlib import Path
 from shutil import copytree
 
 from rdf_differ.config import RDF_DIFFER_LOGGER
-from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.entrypoints.api.handlers_helpers import generate_report_builder_config
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
-def generate_report(temp_dir, application_profile_manager: ApplicationProfileManager, dataset, report_builder_class):
-    template_location = str(application_profile_manager.template_folder())
+def generate_report(temp_dir, template_location, dataset, report_builder_class):
+    template_location = str(template_location)
     logger.debug(f'template location {template_location}')
     copytree(template_location, temp_dir, dirs_exist_ok=True)
 

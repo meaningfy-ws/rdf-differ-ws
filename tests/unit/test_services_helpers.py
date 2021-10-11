@@ -1,4 +1,4 @@
-from rdf_differ.services import list_folders_from_path, list_files_from_path
+from utils.file_utils import list_folders_from_path, list_files_from_path
 
 
 def test_list_folders_from_path(sample_ap_root_folder):
