@@ -13,7 +13,9 @@ from werkzeug.exceptions import InternalServerError, Conflict, BadRequest, NotFo
 
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
-from rdf_differ.entrypoints.api.handlers import get_diffs, create_diff, get_diff, delete_diff, get_report
+from rdf_differ.entrypoints.api.handlers import get_diffs, create_diff, get_diff, delete_diff, get_report, \
+    get_application_profiles_details
+from rdf_differ.services.ap_manager import ApplicationProfileManager
 from tests.conftest import helper_create_diff
 
 
@@ -190,9 +192,9 @@ def test_get_report_500(mock_make_document, mock_get_diff):
     mock_get_diff.return_value = {'query_url': 'http://somequery'}, 200
 
     with pytest.raises(Exception) as e:
-        _ = get_report('http://url.com')
+        _ = get_report('http://url.com', "diff_report", "html")
 
-    assert '500 error' in str(e.value)
+    assert '500 Internal Server Error' in str(e.value)
 
 
 @patch('rdf_differ.entrypoints.api.handlers.get_diff')
@@ -200,6 +202,31 @@ def test_get_report_422(mock_get_diff):
     mock_get_diff.return_value = {'query_url': 'http://somequery'}, 200
 
     with pytest.raises(Exception) as e:
-        _ = get_report('http://url.com', "unknown_application_profile")
+        _ = get_report('http://url.com', "unknown_application_profile", "html")
 
-    assert '422 Unprocessable Entity' in str(e.value)
+    assert "422 Unprocessable Entity" in str(e.value)
+
+
+@patch.object(ApplicationProfileManager, 'list_aps')
+@patch.object(ApplicationProfileManager, 'list_template_variants')
+def test_get_application_profiles_details_200(mock_list_template_variants, mock_list_aps):
+    mock_list_aps.return_value = ["ap1", "ap2"]
+    mock_list_template_variants.return_value = ["html", "json"]
+    response, status = get_application_profiles_details()
+
+    assert status == 200
+    assert len(response) == 2
+    assert response[0]["application_profile"] == "ap1"
+    assert response[0]["template_variations"] == ["html", "json"]
+
+
+@patch.object(ApplicationProfileManager, 'list_aps')
+@patch.object(ApplicationProfileManager, 'list_template_variants')
+def test_get_application_profiles_details_500(mock_list_template_variants, mock_list_aps):
+    mock_list_aps.side_effect = Exception('500 Error')
+    mock_list_template_variants.return_value = ["html", "json"]
+
+    with pytest.raises(Exception) as e:
+        _ = get_application_profiles_details()
+
+    assert '500 Error' in str(e.value)

@@ -19,8 +19,8 @@ from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.services.builders import generate_report
-from rdf_differ.services.validation import validate_choice
 from utils.file_utils import temporarily_save_files
 
 """
@@ -151,11 +151,12 @@ def delete_diff(dataset_id: str) -> tuple:
         raise NotFound(exception_text)  # 404
 
 
-def get_report(dataset_id: str, application_profile: str = "diff_report") -> tuple:
+def get_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
     """
         Generate a dataset diff report
     :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
     :param application_profile: The application profile identifier. This should be a text string
+    :param template_type: The template type identifier. This should be a text string
     :return: html report as attachment
     :rtype: file, int
     """
@@ -163,15 +164,31 @@ def get_report(dataset_id: str, application_profile: str = "diff_report") -> tup
 
     dataset, _ = get_diff(dataset_id)  # potential 404
 
-    is_valid, exception_text = validate_choice(application_profile, config.RDF_DIFFER_APPLICATION_PROFILES_LIST)
-    if not is_valid:
-        raise UnprocessableEntity(exception_text)
+    ap_manager = ApplicationProfileManager(application_profile=application_profile, template_type=template_type)
+    try:
+        template_location = ap_manager.get_template_folder()
+    except (LookupError, FileNotFoundError) as e:
+        logger.exception(str(e))
+        raise UnprocessableEntity("Application profile or template type not valid. "
+                                  "Check valid application profiles and their template types through the API")
 
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
-            report_path, report_name = generate_report(temp_dir, application_profile, dataset, ReportBuilder)
+            report_path, report_name = generate_report(temp_dir=temp_dir, template_location=template_location,
+                                                       dataset=dataset, report_builder_class=ReportBuilder)
             logger.debug(f'finish get report for {dataset_id} endpoint')
             return send_from_directory(directory=report_path, filename=report_name, as_attachment=True)  # 200
     except Exception as e:
         logger.exception(str(e))
         raise InternalServerError(str(e))  # 500
+
+
+def get_application_profiles_details() -> tuple:
+    """
+      Get all available application profiles and their available template variants.
+    :return: list[dict]
+    :rtype: list, int
+    """
+    return [{"application_profile": ap,
+             "template_variations": ApplicationProfileManager(ap).list_template_variants()} for ap in
+            ApplicationProfileManager().list_aps()], 200
