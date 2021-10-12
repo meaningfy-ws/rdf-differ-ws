@@ -9,7 +9,7 @@ from celery.result import AsyncResult
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
-from rdf_differ.config import celery_worker, RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
+from rdf_differ.config import celery_worker, RDF_DIFFER_LOGGER
 from rdf_differ.services.report_handling import build_report, save_report
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
@@ -29,6 +29,12 @@ def retrieve_task(task_id: str, worker=None) -> AsyncResult:
     return task
 
 
+def revoke_task(task_id: str, terminate: bool = False, worker=None) -> list:
+    worker = worker if worker else celery_worker
+    stuff = worker.control.revoke(task_id, terminate=terminate)
+    return stuff
+
+
 # =================== TASKS =================== #
 @celery_worker.task(name="create_diff")
 def async_create_diff(body: dict, old_version_file: str, new_version_file: str, cleanup_location: str):
@@ -42,6 +48,7 @@ def async_create_diff(body: dict, old_version_file: str, new_version_file: str, 
     logger.debug('start async create diff')
     fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                        sparql_client=SPARQLRunner())
+    # time.sleep(100)
     try:
         fuseki_adapter.create_diff(dataset=body.get('dataset_id'),
                                    dataset_uri=body.get('dataset_uri'),
@@ -64,7 +71,7 @@ def async_create_diff(body: dict, old_version_file: str, new_version_file: str, 
 def async_generate_report(dataset: dict, application_profile: str, db_location: str):
     """
     Task that generates the specified diff report
-    :param dataset_name: The dataset identifier
+    :param dataset: The dataset data
     :param application_profile: the application profile for report generation
     :param db_location: location of the local db storage
     """
@@ -73,3 +80,8 @@ def async_generate_report(dataset: dict, application_profile: str, db_location: 
         save_report(path_to_report, dataset['dataset_id'], application_profile, db_location)
 
     return True
+
+
+@celery_worker.task(name="test_task")
+def async_test(v):
+    logger.debug(v)

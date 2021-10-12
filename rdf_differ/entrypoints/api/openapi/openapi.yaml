@@ -189,6 +189,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TaskStatus"
+    delete:
+      operationId: rdf_differ.entrypoints.api.handlers.stop_running_task
+      description: cancel execution  status of a task
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: task id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Task status description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskStatus"
 
 components:
   schemas:

@@ -8,11 +8,10 @@ from unittest.mock import patch
 
 import pytest
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
-from eds4jinja2.builders.report_builder import ReportBuilder
-from werkzeug.exceptions import InternalServerError, Conflict, BadRequest, NotFound
+from werkzeug.exceptions import InternalServerError, Conflict, NotFound
 
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from rdf_differ.entrypoints.api.handlers import get_diffs, create_diff, get_diff, delete_diff, get_report
 from tests.conftest import helper_create_diff
 

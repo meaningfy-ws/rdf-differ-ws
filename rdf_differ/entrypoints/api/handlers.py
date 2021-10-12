@@ -15,9 +15,10 @@ from werkzeug.exceptions import Conflict, InternalServerError, NotFound, Unproce
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
-from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
+from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB, celery_worker
 from rdf_differ.services.report_handling import report_exists, retrieve_report
-from rdf_differ.services.tasks import async_create_diff, retrieve_task, retrieve_active_tasks, async_generate_report
+from rdf_differ.services.tasks import async_create_diff, retrieve_task, retrieve_active_tasks, async_generate_report, \
+    revoke_task, async_test
 from rdf_differ.services.validation import validate_choice
 from utils.file_utils import save_files
 
@@ -186,3 +187,15 @@ def get_task_status(task_id: str) -> tuple:
                    "task_status": task.status,
                }, 200
     raise NotFound('task not found')  # 404
+
+
+def stop_running_task(task_id: str) -> tuple:
+    """
+    Get specified task status data
+    :param task_id: Id of task to get status for
+    :return: dict
+    """
+    # result = celery_worker.AsyncResult(task_id)
+    # logger.debug(result)
+    # result.link(async_test.si(task_id))
+    return 'OK', 200
