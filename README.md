@@ -76,7 +76,7 @@ templates
 │   │    │   query2.rq
 │   │    │   ...
 │   │    
-│   └───templates
+│   └───template_variants
 │       │
 │       └───html        <--- folder that contains files needed for a html template
 │       │  

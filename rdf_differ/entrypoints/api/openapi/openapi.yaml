@@ -134,9 +134,16 @@ paths:
             type: string
         - in: query
           name: application_profile
-          required: false
+          required: true
           allowEmptyValue: False
           description: Application profile
+          schema:
+            type: string
+        - in: query
+          name: template_type
+          required: true
+          allowEmptyValue: False
+          description: Template type
           schema:
             type: string
         - in: query
@@ -155,7 +162,20 @@ paths:
                 type: string
                 format: binary
         400:
-          description: dataset_id or application_profile query param not present.
+          description: dataset_id query param not present.
+        5XX:
+          description: Unexpected Error.
+  /aps:
+    get:
+      operationId: rdf_differ.entrypoints.api.handlers.get_application_profiles_details
+      description: Get application profiles names and their template variations.
+      responses:
+        200:
+          description: Application profiles details succesfully retreived.
+          content:
+            application/json:
+              schema:
+                type: array
         5XX:
           description: Unexpected Error.
 
