@@ -167,15 +167,16 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
     ap_manager = ApplicationProfileManager(application_profile=application_profile, template_type=template_type)
     try:
         template_location = ap_manager.get_template_folder()
+        query_files = ap_manager.get_queries_dict()
     except (LookupError, FileNotFoundError) as e:
         logger.exception(str(e))
-        raise UnprocessableEntity("Application profile or template type not valid. "
-                                  "Check valid application profiles and their template types through the API")
+        raise UnprocessableEntity("Check valid application profiles and their template types through the API"
+                                  "and if the queries folder exists in the chosen application profile folder")
 
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
             report_path, report_name = generate_report(temp_dir=temp_dir, template_location=template_location,
-                                                       dataset=dataset, report_builder_class=ReportBuilder)
+                                                       dataset=dataset, report_builder_class=ReportBuilder, query_files=query_files)
             logger.debug(f'finish get report for {dataset_id} endpoint')
             return send_from_directory(directory=report_path, filename=report_name, as_attachment=True)  # 200
     except Exception as e:

@@ -1,12 +1,10 @@
 {
-    "template": "main.html",
+    "template": "main.json",
     "conf":
     {
         "default_endpoint" : "http://localhost:3030/report1/sparql",
         "title": "RDF Diff report",
-        "type": "report",
-        "author": "Meaningfy",
-        "ns_file": "data/prefix.csv",
-        "query_folder_path": "resources/templates/diff_report/queries/"
+        "type": "json report",
+        "author": "Meaningfy"
     }
 }
