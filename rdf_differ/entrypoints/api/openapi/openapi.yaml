@@ -121,6 +121,22 @@ paths:
           description: Unexpected Error.
 
   /diffs/report:
+    post:
+      operationId: rdf_differ.entrypoints.api.handlers.build_report
+      description: Create report for a dataset.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportRequest"
+      responses:
+        200:
+          description: Report generation succesfully started.
+        406:
+          description: Report already exists
+        422:
+          description: AP error
     get:
       operationId: rdf_differ.entrypoints.api.handlers.get_report
       description: Get report for a dataset.
@@ -285,6 +301,27 @@ components:
               type: string
               format: date
               description: The date of the calculated diff.
+
+    ReportRequest:
+      type: object
+      description: Report request body.
+      properties:
+        dataset_id:
+          type: string
+          description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
+        application_profile:
+          type: string
+          description: The application profile identifier
+        template_type:
+          type: string
+          description: The template type identifier
+        rebuild:
+          type: string
+          description: Flag to signal rebuilding the report even if already exists
+      required:
+        - dataset_id
+        - application_profile
+        - template_type
 
     TaskStatus:
       type: object

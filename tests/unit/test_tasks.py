@@ -45,9 +45,10 @@ def test_async_create_diff_failure(mock_create_diff, tmpdir):
 @patch('rdf_differ.services.tasks.build_report')
 def test_async_create_report_success(mock_build_report, mock_save_report, tmpdir):
     db = tmpdir.mkdir('db')
+    template_location = tmpdir.mkdir('template_location')
     dataset_id = 'dataset'
     application_profile = 'ap'
-    return_value = async_generate_report({'dataset_id': dataset_id}, application_profile, db)
+    return_value = async_generate_report(template_location, {}, {'dataset_id': dataset_id}, application_profile, db)
 
     mock_build_report.assert_called_once()
     mock_save_report.assert_called_once()

@@ -14,7 +14,6 @@ from distutils.util import strtobool
 
 from celery import Celery
 
-
 TEMPLATES_FOLDER_PATH = Path(__file__).parents[1] / 'resources' / 'templates'
 
 RDF_DIFFER_FILENAME = os.environ.get('RDF_DIFFER_FILENAME', 'file')
@@ -48,16 +47,9 @@ RDF_DIFFER_SECRET_KEY_API = os.environ.get('RDF_DIFFER_SECRET_KEY_API', 'secret 
 
 RDF_DIFFER_LOGGER = 'differ'
 
-RDF_DIFFER_APPLICATION_PROFILES_LIST = os.listdir(RDF_DIFFER_REPORT_TEMPLATE_LOCATION)
-
 RDF_DIFFER_FILE_DB = os.environ.get('RDF_DIFFER_FILE_DB', str(Path(__file__).parents[1] / 'db'))
 RDF_DIFFER_REPORTS_DB = os.environ.get('RDF_DIFFER_REPORT_DB', str(Path(__file__).parents[1] / 'reports'))
 
 SHOW_SWAGGER_UI = strtobool(os.environ.get('SHOW_SWAGGER_UI', 'true'))
 
-def get_application_profile_location(application_profile):
-    return f'{RDF_DIFFER_REPORT_TEMPLATE_LOCATION}/{application_profile}'
-
-
 celery_worker = Celery('rdf-differ-tasks', broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE)
-

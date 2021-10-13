@@ -5,6 +5,7 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 import logging
+from distutils.util import strtobool
 
 import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
@@ -15,15 +16,11 @@ from werkzeug.exceptions import Conflict, InternalServerError, NotFound, Unproce
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
-from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.services.builders import generate_report
-from utils.file_utils import temporarily_save_files
-from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB, celery_worker
 from rdf_differ.services.report_handling import report_exists, retrieve_report
-from rdf_differ.services.tasks import async_create_diff, retrieve_task, retrieve_active_tasks, async_generate_report, \
-    revoke_task, async_test
-from rdf_differ.services.validation import validate_choice
+from rdf_differ.services.tasks import async_create_diff, retrieve_task, retrieve_active_tasks, async_generate_report
 from utils.file_utils import save_files
 
 """
@@ -144,17 +141,25 @@ def delete_diff(dataset_id: str) -> tuple:
         raise NotFound(exception_text)  # 404
 
 
-def get_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
+def build_report(body: dict) -> tuple:
     """
         Generate a dataset diff report
-    :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
-    :param application_profile: The application profile identifier. This should be a text string
-    :param template_type: The template type identifier. This should be a text string
-    :param rebuild: flag to signal rebuilding the report even if already exists
-    :return: html report as attachment
+    :param body:
+        {
+          "dataset_id": "string", // The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
+          "application_profile": "string", // The application profile identifier
+          "template_type": "string", // The template type identifier.
+          "rebuild": "string" // flag to signal rebuilding the report even if already exists
+          }
+    :return: report as attachment
     :rtype: file, int
     """
-    logger.debug(f'start get report for {dataset_id} endpoint')
+    dataset_id = body['dataset_id']
+    application_profile = body['application_profile']
+    template_type = body['template_type']
+    rebuild = strtobool(body.get('rebuild', 'false'))
+
+    logger.debug(f'start build report for {dataset_id} endpoint')
 
     dataset, _ = get_diff(dataset_id)  # potential 404
 
@@ -168,11 +173,51 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
                                   "and if the queries folder exists in the chosen application profile folder")
 
     if not report_exists(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB) or rebuild:
-        task = async_generate_report.delay(dataset, application_profile, RDF_DIFFER_REPORTS_DB)
+        task = async_generate_report.delay(str(template_location), query_files, dataset, application_profile,
+                                           RDF_DIFFER_REPORTS_DB)
         return {'task_id': task.id}, 200
     else:
+        return {'message': 'Report already exists. To rebuild send the `rebuild` query parameter set to true'}, 406
+
+
+def get_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
+    """
+        Get a dataset diff report
+    :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
+    :param application_profile: The application profile identifier. This should be a text string
+    :param template_type: The template type identifier. This should be a text string
+    :return: html report as attachment
+    :rtype: file, int
+    """
+    logger.debug(f'start get report for {dataset_id} endpoint')
+
+    dataset, _ = get_diff(dataset_id)  # potential 404
+
+    ap_manager = ApplicationProfileManager(application_profile=application_profile, template_type=template_type)
+    try:
+        _ = ap_manager.get_template_folder()
+        _ = ap_manager.get_queries_dict()
+    except (LookupError, FileNotFoundError) as e:
+        logger.exception(str(e))
+        raise UnprocessableEntity("Check valid application profiles and their template types through the API"
+                                  "and if the queries folder exists in the chosen application profile folder")
+
+    if report_exists(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB):
         return send_file(retrieve_report(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB),
                          as_attachment=True)  # 200
+    else:
+        raise NotFound('First send a request to build the report.')
+
+
+def get_application_profiles_details() -> tuple:
+    """
+      Get all available application profiles and their available template variants.
+    :return: list[dict]
+    :rtype: list, int
+    """
+    return [{"application_profile": ap,
+             "template_variations": ApplicationProfileManager(ap).list_template_variants()} for ap in
+            ApplicationProfileManager().list_aps()], 200
 
 
 def get_active_tasks() -> tuple:
@@ -212,20 +257,10 @@ def stop_running_task(task_id: str) -> tuple:
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
             report_path, report_name = generate_report(temp_dir=temp_dir, template_location=template_location,
-                                                       dataset=dataset, report_builder_class=ReportBuilder, query_files=query_files)
+                                                       dataset=dataset, report_builder_class=ReportBuilder,
+                                                       query_files=query_files)
             logger.debug(f'finish get report for {dataset_id} endpoint')
             return send_from_directory(directory=report_path, filename=report_name, as_attachment=True)  # 200
     except Exception as e:
         logger.exception(str(e))
         raise InternalServerError(str(e))  # 500
-
-
-def get_application_profiles_details() -> tuple:
-    """
-      Get all available application profiles and their available template variants.
-    :return: list[dict]
-    :rtype: list, int
-    """
-    return [{"application_profile": ap,
-             "template_variations": ApplicationProfileManager(ap).list_template_variants()} for ap in
-            ApplicationProfileManager().list_aps()], 200

@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 import pytest
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
+from eds4jinja2.builders.report_builder import ReportBuilder
 from werkzeug.exceptions import InternalServerError, Conflict, NotFound
 
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
@@ -168,9 +169,7 @@ def test_delete_diff_404(mock_delete_dataset):
 
 
 @patch('rdf_differ.entrypoints.api.handlers.get_diff')
-@patch.object(ReportBuilder, 'make_document')
-def test_get_report_500(mock_make_document, mock_get_diff):
-    mock_make_document.side_effect = Exception('500 error')
+def test_get_report_500(mock_get_diff):
     mock_get_diff.return_value = {'query_url': 'http://somequery'}, 200
 
     with pytest.raises(Exception) as e:

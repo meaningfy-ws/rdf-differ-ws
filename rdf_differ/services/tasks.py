@@ -68,15 +68,18 @@ def async_create_diff(body: dict, old_version_file: str, new_version_file: str, 
 
 
 @celery_worker.task(name="generate_report")
-def async_generate_report(dataset: dict, application_profile: str, db_location: str):
+def async_generate_report(template_location: str, query_files: dict, dataset: dict, application_profile: str,
+                          db_location: str):
     """
     Task that generates the specified diff report
+    :param template_location:
+    :param query_files: list of files to be included in the generation
     :param dataset: The dataset data
     :param application_profile: the application profile for report generation
     :param db_location: location of the local db storage
     """
     with tempfile.TemporaryDirectory() as temp_dir:
-        path_to_report = build_report(str(temp_dir), dataset, application_profile)
+        path_to_report = build_report(str(temp_dir), template_location, query_files, dataset)
         save_report(path_to_report, dataset['dataset_id'], application_profile, db_location)
 
     return True
