@@ -20,7 +20,8 @@ from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.services.builders import generate_report
 from rdf_differ.services.report_handling import report_exists, retrieve_report
-from rdf_differ.services.tasks import async_create_diff, retrieve_task, retrieve_active_tasks, async_generate_report
+from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks
+from rdf_differ.adapters.celery import async_create_diff, async_generate_report
 from utils.file_utils import save_files
 
 """

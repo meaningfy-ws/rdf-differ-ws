@@ -12,8 +12,6 @@ import os
 from pathlib import Path
 from distutils.util import strtobool
 
-from celery import Celery
-
 TEMPLATES_FOLDER_PATH = Path(__file__).parents[1] / 'resources' / 'templates'
 
 RDF_DIFFER_FILENAME = os.environ.get('RDF_DIFFER_FILENAME', 'file')
@@ -52,4 +50,3 @@ RDF_DIFFER_REPORTS_DB = os.environ.get('RDF_DIFFER_REPORT_DB', str(Path(__file__
 
 SHOW_SWAGGER_UI = strtobool(os.environ.get('SHOW_SWAGGER_UI', 'true'))
 
-celery_worker = Celery('rdf-differ-tasks', broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE)
