@@ -1,6 +1,18 @@
 from pathlib import Path
 
-from rdf_differ.services.report_handling import build_report_location, retrieve_report, report_exists, save_report
+from rdf_differ.services.report_handling import build_report_location, retrieve_report, report_exists, save_report, \
+    build_dataset_reports_location, remove_all_reports
+from utils.file_utils import dir_exists
+
+
+def test_build_dataset_report_location():
+    dataset_name = 'dataset'
+    db_location = '/db'
+    expected_result = '/db/dataset'
+
+    report_location = build_dataset_reports_location(dataset_name, db_location)
+
+    assert report_location == expected_result
 
 
 def test_build_report_location():
@@ -79,3 +91,24 @@ def test_save_report_rewrite(tmpdir):
     save_report(report, dataset_name, application_profile, db_location)
 
     assert (Path(db_location) / 'dataset/application/report.html').read_text() == 'data'
+
+
+def test_remove_all_reports_success(tmpdir):
+    dataset_name = 'dataset'
+    db_location = tmpdir.mkdir('db')
+    report_location = db_location.mkdir(dataset_name)
+    report_location.join('report.html')
+
+    success = remove_all_reports(dataset_name, db_location)
+
+    assert not dir_exists(report_location)
+    assert success
+
+
+def test_remove_all_reports_failure(tmpdir):
+    dataset_name = 'dataset'
+    db_location = tmpdir.mkdir('db')
+
+    success = remove_all_reports(dataset_name, db_location)
+
+    assert not success

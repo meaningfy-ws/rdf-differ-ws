@@ -1,5 +1,6 @@
 import json
 import logging
+import shutil
 from pathlib import Path
 from shutil import copytree
 
@@ -28,8 +29,12 @@ def build_report(temp_dir: str, template_location: str, query_files: dict, datas
     return Path(str(temp_dir)) / f'output/{config_content["template"]}'
 
 
+def build_dataset_reports_location(dataset_name: str, db_location: str) -> str:
+    return str(Path(db_location) / dataset_name)
+
+
 def build_report_location(dataset_name: str, application_profile: str, db_location: str) -> str:
-    return str(Path(db_location) / f'{dataset_name}/{application_profile}')
+    return str(Path(build_dataset_reports_location(dataset_name, db_location)) / application_profile)
 
 
 def retrieve_report(dataset_name: str, application_profile: str, db_location: str) -> str:
@@ -53,3 +58,14 @@ def save_report(report: str, dataset_name: str, application_profile: str, db_loc
 
     logger.debug(f'{location_to_save}.')
     copy_file_to_destination(report, location_to_save)
+
+
+def remove_all_reports(dataset_name: str, db_location: str) -> bool:
+    report_location = build_dataset_reports_location(dataset_name, db_location)
+    try:
+        shutil.rmtree(report_location)
+        return True
+    except OSError as e:
+        logger.debug(f'no reports found for {dataset_name}. nothing to delete.')
+
+    return False
