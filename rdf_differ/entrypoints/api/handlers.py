@@ -14,14 +14,13 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import Conflict, InternalServerError, NotFound, UnprocessableEntity
 
 from rdf_differ import config
+from rdf_differ.adapters.celery import async_create_diff, async_generate_report
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.ap_manager import ApplicationProfileManager
-from rdf_differ.services.builders import generate_report
 from rdf_differ.services.report_handling import report_exists, retrieve_report
 from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks
-from rdf_differ.adapters.celery import async_create_diff, async_generate_report
 from utils.file_utils import save_files
 
 """
@@ -255,13 +254,3 @@ def stop_running_task(task_id: str) -> tuple:
     # logger.debug(result)
     # result.link(async_test.si(task_id))
     return 'OK', 200
-    try:
-        with tempfile.TemporaryDirectory() as temp_dir:
-            report_path, report_name = generate_report(temp_dir=temp_dir, template_location=template_location,
-                                                       dataset=dataset, report_builder_class=ReportBuilder,
-                                                       query_files=query_files)
-            logger.debug(f'finish get report for {dataset_id} endpoint')
-            return send_from_directory(directory=report_path, filename=report_name, as_attachment=True)  # 200
-    except Exception as e:
-        logger.exception(str(e))
-        raise InternalServerError(str(e))  # 500

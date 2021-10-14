@@ -41,8 +41,8 @@ def test_async_create_diff_failure(mock_create_diff, tmpdir):
     assert not dir_exists(cleanup_location)
 
 
-@patch('rdf_differ.services.tasks.save_report')
-@patch('rdf_differ.services.tasks.build_report')
+@patch('rdf_differ.adapters.celery.save_report')
+@patch('rdf_differ.adapters.celery.build_report')
 def test_async_create_report_success(mock_build_report, mock_save_report, tmpdir):
     db = tmpdir.mkdir('db')
     template_location = tmpdir.mkdir('template_location')

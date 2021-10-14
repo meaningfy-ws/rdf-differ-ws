@@ -22,7 +22,8 @@ def retrieve_task(task_id: str, worker=None) -> AsyncResult:
     return task
 
 
-def revoke_task(task_id: str, terminate: bool = False, worker=None) -> list:
+def revoke_task(task_id: str, terminate: bool = False, worker=None) -> str:
     worker = worker if worker else celery_worker
     stuff = worker.control.revoke(task_id, terminate=terminate)
-    return stuff
+
+    return 'ok'

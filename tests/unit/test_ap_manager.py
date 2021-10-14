@@ -1,7 +1,6 @@
 import pathlib
 
 import pytest
-from werkzeug.exceptions import NotFound
 
 from rdf_differ.services.ap_manager import ApplicationProfileManager
 
