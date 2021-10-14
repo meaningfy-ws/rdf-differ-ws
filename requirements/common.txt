@@ -10,3 +10,7 @@ Flask-Wtf
 connexion[swagger-ui]==2.9.0
 
 eds4jinja2
+
+celery==5.1.2
+redis==3.5.3
+flower

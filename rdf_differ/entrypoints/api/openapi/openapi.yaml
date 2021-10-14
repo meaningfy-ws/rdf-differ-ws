@@ -121,6 +121,22 @@ paths:
           description: Unexpected Error.
 
   /diffs/report:
+    post:
+      operationId: rdf_differ.entrypoints.api.handlers.build_report
+      description: Create report for a dataset.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportRequest"
+      responses:
+        200:
+          description: Report generation succesfully started.
+        406:
+          description: Report already exists
+        422:
+          description: AP error
     get:
       operationId: rdf_differ.entrypoints.api.handlers.get_report
       description: Get report for a dataset.
@@ -144,6 +160,13 @@ paths:
           required: true
           allowEmptyValue: False
           description: Template type
+          schema:
+            type: string
+        - in: query
+          name: rebuild
+          required: false
+          allowEmptyValue: False
+          description: Flag to signal rebuilding the report even if already exists.
           schema:
             type: string
       responses:
@@ -171,6 +194,55 @@ paths:
                 type: array
         5XX:
           description: Unexpected Error.
+
+  /tasks/active:
+    get:
+      operationId: rdf_differ.entrypoints.api.handlers.get_active_tasks
+      description: Get status of a task
+      responses:
+        200:
+          description: Task status description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskStatus"
+
+  /tasks/{task_id}:
+    get:
+      operationId: rdf_differ.entrypoints.api.handlers.get_task_status
+      description: Get status of a task
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: task id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Task status description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskStatus"
+    delete:
+      operationId: rdf_differ.entrypoints.api.handlers.stop_running_task
+      description: cancel execution  status of a task
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: task id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Task status description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskStatus"
+
 components:
   schemas:
     BasicDiffDescription:
@@ -229,3 +301,35 @@ components:
               type: string
               format: date
               description: The date of the calculated diff.
+
+    ReportRequest:
+      type: object
+      description: Report request body.
+      properties:
+        dataset_id:
+          type: string
+          description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
+        application_profile:
+          type: string
+          description: The application profile identifier
+        template_type:
+          type: string
+          description: The template type identifier
+        rebuild:
+          type: string
+          description: Flag to signal rebuilding the report even if already exists
+      required:
+        - dataset_id
+        - application_profile
+        - template_type
+
+    TaskStatus:
+      type: object
+      description: A description of a task status response.
+      properties:
+        task_id:
+          type: string
+          description: The task identifier.
+        task_status:
+          type: string
+          description: The task status.

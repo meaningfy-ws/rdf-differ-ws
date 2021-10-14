@@ -7,6 +7,8 @@
 import os
 import pathlib
 
+import logging
+import shutil
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
@@ -15,6 +17,10 @@ from uuid import uuid4
 
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
+
+from rdf_differ.config import RDF_DIFFER_LOGGER
+
+logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
 def dir_exists(path: Union[str, Path]) -> bool:
@@ -43,6 +49,16 @@ def dir_is_empty(path: Union[str, Path]) -> bool:
     return False
 
 
+def empty_directory(path: Union[str, Path]) -> None:
+    """
+    Method to remove all files from a directory
+    :param path: directory to clean
+    """
+    for item in Path(path).iterdir():
+        if item.is_file():
+            item.unlink()
+
+
 def file_exists(path: Union[str, Path]) -> bool:
     """
     Method to check the existence of the file from the indicated path.
@@ -54,6 +70,48 @@ def file_exists(path: Union[str, Path]) -> bool:
     return Path(path).is_file()
 
 
+def copy_file_to_destination(file: str, destination: str) -> None:
+    shutil.copy(file, destination)
+
+
+def check_files_exist(file_a: FileStorage, file_b: FileStorage) -> None:
+    if not file_a or not file_b:
+        raise TypeError("Files cannot be of None type.")
+
+
+def build_secure_filename(location: str, filename: str) -> str:
+    return str(Path(location) / (str(uuid4()) + secure_filename(filename)))
+
+
+@contextmanager
+def save_files(old_file: FileStorage, new_file: FileStorage, location: str = ''):
+    """
+    Context manager that accepts 2 files and saved them in the specified directory
+    :param old_file: file to be saved
+    :param new_file: file to be saved
+    :param location: location to store files
+    """
+
+    if not location:
+        raise TypeError("Location can't be null")
+
+    check_files_exist(old_file, new_file)
+
+    location_to_save = Path(location) / str(uuid4())
+    location_to_save.mkdir()
+    try:
+        saved_old_file = build_secure_filename(str(location_to_save), old_file.filename)
+        saved_new_file = build_secure_filename(str(location_to_save), new_file.filename)
+
+        old_file.save(str(saved_old_file))
+        new_file.save(str(saved_new_file))
+
+        yield str(location_to_save), saved_old_file, saved_new_file
+    except Exception as e:
+        logger.error(str(e))
+        raise ValueError(str(e))
+
+
 @contextmanager
 def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
     """
@@ -62,18 +120,17 @@ def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
     :param old_file: file to be saved in the temporary directory
     :param new_file: file to be saved in the temporary directory
     """
-    if not old_file or not new_file:
-        raise TypeError("Files cannot be of None type.")
+    check_files_exist(old_file, new_file)
 
     temp_dir = tempfile.TemporaryDirectory()
     try:
-        saved_old_file = Path(temp_dir.name) / (str(uuid4()) + secure_filename(old_file.filename))
-        saved_new_file = Path(temp_dir.name) / (str(uuid4()) + secure_filename(new_file.filename))
+        saved_old_file = build_secure_filename(temp_dir.name, old_file.filename)
+        saved_new_file = build_secure_filename(temp_dir.name, new_file.filename)
 
         old_file.save(saved_old_file)
         new_file.save(saved_new_file)
 
-        yield Path(temp_dir.name), saved_old_file, saved_new_file
+        yield temp_dir.name, saved_old_file, saved_new_file
     finally:
         temp_dir.cleanup()
 

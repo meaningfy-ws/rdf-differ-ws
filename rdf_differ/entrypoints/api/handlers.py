@@ -5,23 +5,23 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 import logging
-import tempfile
+from distutils.util import strtobool
 
 import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
-from eds4jinja2.builders.report_builder import ReportBuilder
-from flask import send_from_directory
+from flask import send_file
 from werkzeug.datastructures import FileStorage
-from werkzeug.exceptions import BadRequest, Conflict, InternalServerError, NotFound, UnprocessableEntity
+from werkzeug.exceptions import Conflict, InternalServerError, NotFound, UnprocessableEntity
 
 from rdf_differ import config
+from rdf_differ.adapters.celery import async_create_diff, async_generate_report
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.adapters.skos_history_wrapper import SubprocessFailure
 from rdf_differ.adapters.sparql import SPARQLRunner
-from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.ap_manager import ApplicationProfileManager
-from rdf_differ.services.builders import generate_report
-from utils.file_utils import temporarily_save_files
+from rdf_differ.services.report_handling import report_exists, retrieve_report
+from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks
+from utils.file_utils import save_files
 
 """
 The definition of the API endpoints
@@ -101,27 +101,17 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     except EndPointNotFound:
         fuseki_adapter.create_dataset(dataset_name=body.get('dataset_id'))
         can_create = True
-        logger.debug('dataset didn\'t exist. dataset created')
+        logger.debug('creating dataset')
 
     if can_create:
         try:
-            with temporarily_save_files(old_version_file_content, new_version_file_content) as \
-                    (temp_dir, old_version_file, new_version_file):
-                fuseki_adapter.create_diff(dataset=body.get('dataset_id'),
-                                           dataset_uri=body.get('dataset_uri'),
-                                           temp_dir=temp_dir,
-                                           old_version_id=body.get('old_version_id'),
-                                           new_version_id=body.get('new_version_id'),
-                                           old_version_file=old_version_file,
-                                           new_version_file=new_version_file)
-
-            # TODO: return dataset url, in case that this call could take more time that usual api request.
+            with save_files(old_version_file_content, new_version_file_content,
+                            config.RDF_DIFFER_FILE_DB) as \
+                    (db_location, old_version_file, new_version_file):
+                task = async_create_diff.delay(body, old_version_file, new_version_file, db_location)
             logger.debug('finish create diff endpoint')
-            return 'Request to create a new dataset diff successfully accepted for processing.', 200
+            return {'task_id': task.id}, 200
         except ValueError as exception:
-            logger.exception(str(exception))
-            raise BadRequest(str(exception))  # 400
-        except SubprocessFailure as exception:
             exception_text = 'Internal error while uploading the diffs.\n' + str(exception)
             logger.exception(exception_text)
             raise InternalServerError(exception_text)  # 500
@@ -151,16 +141,25 @@ def delete_diff(dataset_id: str) -> tuple:
         raise NotFound(exception_text)  # 404
 
 
-def get_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
+def build_report(body: dict) -> tuple:
     """
         Generate a dataset diff report
-    :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
-    :param application_profile: The application profile identifier. This should be a text string
-    :param template_type: The template type identifier. This should be a text string
-    :return: html report as attachment
+    :param body:
+        {
+          "dataset_id": "string", // The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
+          "application_profile": "string", // The application profile identifier
+          "template_type": "string", // The template type identifier.
+          "rebuild": "string" // flag to signal rebuilding the report even if already exists
+          }
+    :return: report as attachment
     :rtype: file, int
     """
-    logger.debug(f'start get report for {dataset_id} endpoint')
+    dataset_id = body['dataset_id']
+    application_profile = body['application_profile']
+    template_type = body['template_type']
+    rebuild = strtobool(body.get('rebuild', 'false'))
+
+    logger.debug(f'start build report for {dataset_id} endpoint')
 
     dataset, _ = get_diff(dataset_id)  # potential 404
 
@@ -173,15 +172,41 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
         raise UnprocessableEntity("Check valid application profiles and their template types through the API"
                                   "and if the queries folder exists in the chosen application profile folder")
 
+    if not report_exists(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB) or rebuild:
+        task = async_generate_report.delay(str(template_location), query_files, dataset, application_profile,
+                                           RDF_DIFFER_REPORTS_DB)
+        return {'task_id': task.id}, 200
+    else:
+        return {'message': 'Report already exists. To rebuild send the `rebuild` query parameter set to true'}, 406
+
+
+def get_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
+    """
+        Get a dataset diff report
+    :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
+    :param application_profile: The application profile identifier. This should be a text string
+    :param template_type: The template type identifier. This should be a text string
+    :return: html report as attachment
+    :rtype: file, int
+    """
+    logger.debug(f'start get report for {dataset_id} endpoint')
+
+    dataset, _ = get_diff(dataset_id)  # potential 404
+
+    ap_manager = ApplicationProfileManager(application_profile=application_profile, template_type=template_type)
     try:
-        with tempfile.TemporaryDirectory() as temp_dir:
-            report_path, report_name = generate_report(temp_dir=temp_dir, template_location=template_location,
-                                                       dataset=dataset, report_builder_class=ReportBuilder, query_files=query_files)
-            logger.debug(f'finish get report for {dataset_id} endpoint')
-            return send_from_directory(directory=report_path, filename=report_name, as_attachment=True)  # 200
-    except Exception as e:
+        _ = ap_manager.get_template_folder()
+        _ = ap_manager.get_queries_dict()
+    except (LookupError, FileNotFoundError) as e:
         logger.exception(str(e))
-        raise InternalServerError(str(e))  # 500
+        raise UnprocessableEntity("Check valid application profiles and their template types through the API"
+                                  "and if the queries folder exists in the chosen application profile folder")
+
+    if report_exists(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB):
+        return send_file(retrieve_report(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB),
+                         as_attachment=True)  # 200
+    else:
+        raise NotFound('First send a request to build the report.')
 
 
 def get_application_profiles_details() -> tuple:
@@ -193,3 +218,39 @@ def get_application_profiles_details() -> tuple:
     return [{"application_profile": ap,
              "template_variations": ApplicationProfileManager(ap).list_template_variants()} for ap in
             ApplicationProfileManager().list_aps()], 200
+
+
+def get_active_tasks() -> tuple:
+    """
+    Get all active celery tasks
+    :return: dict of celery workers and their active tasks
+    """
+    tasks = retrieve_active_tasks()
+    return tasks, 200
+
+
+def get_task_status(task_id: str) -> tuple:
+    """
+    Get specified task status data
+    :param task_id: Id of task to get status for
+    :return: dict
+    """
+    task = retrieve_task(task_id)
+    if task:
+        return {
+                   "task_id": task.id,
+                   "task_status": task.status,
+               }, 200
+    raise NotFound('task not found')  # 404
+
+
+def stop_running_task(task_id: str) -> tuple:
+    """
+    Get specified task status data
+    :param task_id: Id of task to get status for
+    :return: dict
+    """
+    # result = celery_worker.AsyncResult(task_id)
+    # logger.debug(result)
+    # result.link(async_test.si(task_id))
+    return 'OK', 200

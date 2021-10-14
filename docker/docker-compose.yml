@@ -15,6 +15,8 @@ services:
     env_file: .env
     networks:
       - mydefault
+    depends_on:
+      - redis
 
   rdf-differ-ui:
     container_name: rdf-differ-ui
@@ -44,6 +46,42 @@ services:
       - JVM_ARGS=${RDF_DIFFER_FUSEKI_JVM_ARGS}
     ports:
       - ${RDF_DIFFER_FUSEKI_PORT}:${RDF_DIFFER_FUSEKI_PORT}
+    networks:
+      - mydefault
+
+  celery-worker:
+    container_name: celery-worker
+    build:
+      context: ..
+      dockerfile: ./docker/api/Dockerfile
+    command: celery -A rdf_differ.adapters.celery.celery_worker worker --loglevel info --logfile ${RDF_DIFFER_CELERY_LOGS}
+    volumes:
+      - ..:/usr/src/app
+    env_file: .env
+    networks:
+      - mydefault
+    depends_on:
+      - rdf-differ-api
+      - redis
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - ${RDF_DIFFER_REDIS_PORT}:${RDF_DIFFER_REDIS_PORT}
+    networks:
+      - mydefault
+
+  dashboard:
+    build:
+      context: ..
+      dockerfile: ./docker/api/Dockerfile
+    command: celery -A rdf_differ.adapters.celery.celery_worker --broker=${RDF_DIFFER_REDIS_LOCATION}:${RDF_DIFFER_REDIS_PORT} flower --port=${RDF_FLOWER_PORT}
+    ports:
+      - ${RDF_FLOWER_PORT}:${RDF_FLOWER_PORT}
+    depends_on:
+      - rdf-differ-api
+      - celery-worker
+      - redis
     networks:
       - mydefault
 

@@ -8,11 +8,11 @@ from unittest.mock import patch
 
 import pytest
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
-from eds4jinja2.builders.report_builder import ReportBuilder
-from werkzeug.exceptions import InternalServerError, Conflict, BadRequest, NotFound
+from werkzeug.exceptions import InternalServerError, Conflict, NotFound, UnprocessableEntity
 
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner, SubprocessFailure
+from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.entrypoints.api.handlers import build_report
 from rdf_differ.entrypoints.api.handlers import get_diffs, create_diff, get_diff, delete_diff, get_report, \
     get_application_profiles_details
 from rdf_differ.services.ap_manager import ApplicationProfileManager
@@ -68,16 +68,13 @@ def test_create_diff_200_empty_dataset(_, mock_init, mock_dataset_description):
                                    old_version_file_content=file_1,
                                    new_version_file_content=file_2)
 
-    assert "Request to create a new dataset diff successfully accepted for processing." in response
+    assert 'task_id' in response
     assert status == 200
 
 
 @patch.object(FusekiDiffAdapter, 'create_dataset')
 @patch.object(FusekiDiffAdapter, 'dataset_description')
-@patch.object(SKOSHistoryRunner, '__init__')
-@patch.object(SKOSHistoryRunner, 'run')
-def test_create_diff_200_dataset_doesnt_exist(_, mock_init, mock_dataset_description, mock_create_dataset):
-    mock_init.return_value = None
+def test_create_diff_200_dataset_doesnt_exist(mock_dataset_description, mock_create_dataset):
     mock_dataset_description.side_effect = EndPointNotFound
 
     file_1, file_2, body = helper_create_diff()
@@ -87,23 +84,22 @@ def test_create_diff_200_dataset_doesnt_exist(_, mock_init, mock_dataset_descrip
                                    new_version_file_content=file_2)
 
     mock_create_dataset.assert_called_once()
-    assert "Request to create a new dataset diff successfully accepted for processing." in response
+    assert 'task_id' in response
     assert status == 200
 
 
-@patch.object(SKOSHistoryRunner, '__init__')
-@patch.object(SKOSHistoryRunner, 'run')
-def test_create_diff_400(_, mock_init):
-    mock_init.side_effect = ValueError('Value error')
+@patch('utils.file_utils.build_secure_filename')
+def test_create_diff_500(mock_exception):
+    mock_exception.side_effect = ValueError('error')
 
     file_1, file_2, body = helper_create_diff()
 
-    with pytest.raises(BadRequest) as e:
+    with pytest.raises(InternalServerError) as e:
         _ = create_diff(body=body,
                         old_version_file_content=file_1,
                         new_version_file_content=file_2)
 
-    assert 'Value error' in str(e.value)
+    assert 'error' in str(e.value)
 
 
 @patch.object(FusekiDiffAdapter, 'dataset_description')
@@ -116,21 +112,6 @@ def test_create_diff_409(mock_dataset_description):
         _ = create_diff(body=body,
                         old_version_file_content=file_1,
                         new_version_file_content=file_2)
-
-
-@patch.object(SKOSHistoryRunner, '__init__')
-@patch.object(SKOSHistoryRunner, 'run')
-def test_create_diff_500(_, mock_init):
-    mock_init.side_effect = SubprocessFailure()
-
-    file_1, file_2, body = helper_create_diff()
-
-    with pytest.raises(InternalServerError) as e:
-        _ = create_diff(body=body,
-                        old_version_file_content=file_1,
-                        new_version_file_content=file_2)
-
-    assert 'Internal error while uploading the diffs.' in str(e.value)
 
 
 @patch.object(FusekiDiffAdapter, 'dataset_description')
@@ -185,16 +166,120 @@ def test_delete_diff_404(mock_delete_dataset):
     assert "<dataset> does not exist." in str(e.value)
 
 
-@patch('rdf_differ.entrypoints.api.handlers.get_diff')
-@patch.object(ReportBuilder, 'make_document')
-def test_get_report_500(mock_make_document, mock_get_diff):
-    mock_make_document.side_effect = Exception('500 error')
-    mock_get_diff.return_value = {'query_url': 'http://somequery'}, 200
+@patch.object(FusekiDiffAdapter, 'dataset_description')
+@patch.object(ApplicationProfileManager, 'get_template_folder')
+@patch.object(ApplicationProfileManager, 'get_queries_dict')
+@patch('rdf_differ.entrypoints.api.handlers.report_exists')
+def test_build_report_200(mock_report_exists, mock_get_queries_dict, mock_get_template_folder,
+                          mock_dataset_description, tmpdir):
+    mock_report_exists.return_value = False
+    mock_get_queries_dict.return_value = {}
+    mock_get_template_folder.return_value = tmpdir.mkdir('template')
+    mock_dataset_description.return_value = {}
 
-    with pytest.raises(Exception) as e:
-        _ = get_report('http://url.com', "diff_report", "html")
+    response, status = build_report({
+        'dataset_id': 'dataset',
+        'application_profile': 'ap',
+        'template_type': 'tt'
+    })
 
-    assert '500 Internal Server Error' in str(e.value)
+    assert 'task_id' in response
+    assert status == 200
+
+
+@patch.object(FusekiDiffAdapter, 'dataset_description')
+@patch.object(ApplicationProfileManager, 'get_template_folder')
+@patch.object(ApplicationProfileManager, 'get_queries_dict')
+@patch('rdf_differ.entrypoints.api.handlers.report_exists')
+def test_build_report_200_rebuild(mock_report_exists, mock_get_queries_dict, mock_get_template_folder,
+                          mock_dataset_description, tmpdir):
+    mock_report_exists.return_value = True
+    mock_get_queries_dict.return_value = {}
+    mock_get_template_folder.return_value = tmpdir.mkdir('template')
+    mock_dataset_description.return_value = {}
+
+    response, status = build_report({
+        'dataset_id': 'dataset',
+        'application_profile': 'ap',
+        'template_type': 'tt',
+        'rebuild': 'true'
+    })
+
+    assert 'task_id' in response
+    assert status == 200
+
+
+@patch.object(FusekiDiffAdapter, 'dataset_description')
+@patch.object(ApplicationProfileManager, 'get_template_folder')
+@patch.object(ApplicationProfileManager, 'get_queries_dict')
+@patch('rdf_differ.entrypoints.api.handlers.report_exists')
+def test_build_report_406_exists(mock_report_exists, mock_get_queries_dict, mock_get_template_folder,
+                          mock_dataset_description, tmpdir):
+    mock_report_exists.return_value = True
+    mock_get_queries_dict.return_value = {}
+    mock_get_template_folder.return_value = tmpdir.mkdir('template')
+    mock_dataset_description.return_value = {}
+
+    response, status = build_report({
+        'dataset_id': 'dataset',
+        'application_profile': 'ap',
+        'template_type': 'tt'
+    })
+
+    assert 'Report already exists. To rebuild send the `rebuild` query parameter set to true' in response['message']
+    assert status == 406
+
+
+@patch.object(FusekiDiffAdapter, 'dataset_description')
+def test_build_report_404_dataset(mock_dataset_description):
+    mock_dataset_description.side_effect = EndPointNotFound
+
+    with pytest.raises(NotFound) as e:
+        _ = get_diff('dataset')
+
+    assert "<dataset> does not exist." in str(e.value)
+
+
+@patch.object(ApplicationProfileManager, 'get_template_folder')
+@patch.object(ApplicationProfileManager, 'get_queries_dict')
+def test_build_report_unprocessable_entity(mock_get_queries_dict, mock_get_template_folder):
+    mock_get_template_folder.side_effect = LookupError
+
+    with pytest.raises(UnprocessableEntity) as e:
+        _ = build_report({
+            'dataset_id': 'dataset',
+            'application_profile': 'ap',
+            'template_type': 'tt'
+        })
+
+    mock_get_template_folder.assert_called_once()
+
+    assert "Check valid application profiles and their template types through the API" in str(e.value)
+
+
+@patch.object(FusekiDiffAdapter, 'dataset_description')
+def test_get_report_404_dataset(mock_dataset_description):
+    mock_dataset_description.side_effect = EndPointNotFound
+
+    with pytest.raises(NotFound) as e:
+        _ = get_diff('dataset')
+
+    assert "<dataset> does not exist." in str(e.value)
+
+
+@patch.object(ApplicationProfileManager, 'get_template_folder')
+@patch.object(ApplicationProfileManager, 'get_queries_dict')
+@patch('rdf_differ.entrypoints.api.handlers.report_exists')
+def test_get_report_404_report(mock_report_exists, mock_get_queries_dict, mock_get_template_folder):
+    mock_report_exists.return_value = False
+
+    with pytest.raises(NotFound) as e:
+        _ = get_report('dataset', 'ap', 'template_type')
+
+    mock_get_template_folder.assert_called_once()
+    mock_get_queries_dict.assert_called_once()
+
+    assert "First send a request to build the report." in str(e.value)
 
 
 @patch('rdf_differ.entrypoints.api.handlers.get_diff')
