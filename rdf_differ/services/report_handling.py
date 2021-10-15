@@ -33,21 +33,23 @@ def build_dataset_reports_location(dataset_name: str, db_location: str) -> str:
     return str(Path(db_location) / dataset_name)
 
 
-def build_report_location(dataset_name: str, application_profile: str, db_location: str) -> str:
-    return str(Path(build_dataset_reports_location(dataset_name, db_location)) / application_profile)
+def build_report_location(dataset_name: str, application_profile: str, template_type: str, db_location: str) -> str:
+    return str(
+        Path(build_dataset_reports_location(dataset_name, db_location)) / f'{application_profile}/{template_type}')
 
 
-def retrieve_report(dataset_name: str, application_profile: str, db_location: str) -> str:
-    return str(next(Path(build_report_location(dataset_name, application_profile, db_location)).iterdir(), ''))
+def retrieve_report(dataset_name: str, application_profile: str, template_type: str, db_location: str) -> str:
+    return str(
+        next(Path(build_report_location(dataset_name, application_profile, template_type, db_location)).iterdir(), ''))
 
 
-def report_exists(dataset_name: str, application_profile: str, db_location: str) -> bool:
-    report_location = build_report_location(dataset_name, application_profile, db_location)
+def report_exists(dataset_name: str, application_profile: str, template_type: str, db_location: str) -> bool:
+    report_location = build_report_location(dataset_name, application_profile, template_type, db_location)
     return dir_exists(report_location) and not dir_is_empty(report_location)
 
 
-def save_report(report: str, dataset_name: str, application_profile: str, db_location: str) -> None:
-    location_to_save = build_report_location(dataset_name, application_profile, db_location)
+def save_report(report: str, dataset_name: str, application_profile: str, template_type: str, db_location: str) -> None:
+    location_to_save = build_report_location(dataset_name, application_profile, template_type, db_location)
 
     if not dir_exists(location_to_save):
         Path(location_to_save).mkdir(parents=True)
@@ -58,6 +60,18 @@ def save_report(report: str, dataset_name: str, application_profile: str, db_loc
 
     logger.debug(f'{location_to_save}.')
     copy_file_to_destination(report, location_to_save)
+
+
+def remove_report(dataset_name: str, application_profile: str, template_type: str, db_location: str) -> bool:
+    report_location = build_report_location(dataset_name, application_profile, template_type, db_location)
+    try:
+        shutil.rmtree(report_location)
+        return True
+    except FileNotFoundError as e:
+        logger.debug(
+            f'no report found for {dataset_name} with {application_profile}, {template_type}. nothing to delete.')
+
+    return False
 
 
 def remove_all_reports(dataset_name: str, db_location: str) -> bool:

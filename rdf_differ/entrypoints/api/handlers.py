@@ -177,8 +177,9 @@ def build_report(body: dict) -> tuple:
         raise UnprocessableEntity("Check valid application profiles and their template types through the API"
                                   "and if the queries folder exists in the chosen application profile folder")
 
-    if not report_exists(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB) or rebuild:
+    if not report_exists(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB) or rebuild:
         task = async_generate_report.delay(str(template_location), query_files, dataset, application_profile,
+                                           template_type,
                                            RDF_DIFFER_REPORTS_DB)
         return {'task_id': task.id}, 200
     else:
@@ -207,8 +208,8 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
         raise UnprocessableEntity("Check valid application profiles and their template types through the API"
                                   "and if the queries folder exists in the chosen application profile folder")
 
-    if report_exists(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB):
-        return send_file(retrieve_report(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB),
+    if report_exists(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB):
+        return send_file(retrieve_report(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB),
                          as_attachment=True)  # 200
     else:
         raise NotFound('First send a request to build the report.')
