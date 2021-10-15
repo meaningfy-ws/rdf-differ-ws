@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from rdf_differ.services.report_handling import build_report_location, retrieve_report, report_exists, save_report, \
-    build_dataset_reports_location, remove_all_reports
+    build_dataset_reports_location, remove_all_reports, remove_report
 from utils.file_utils import dir_exists
 
 
@@ -120,3 +120,28 @@ def test_remove_all_reports_failure(tmpdir):
     success = remove_all_reports(dataset_name, db_location)
 
     assert not success
+
+
+def test_remove_report_success(tmpdir):
+    dataset_name = 'dataset'
+    application_profile = 'application'
+    template_type = 'template_type'
+
+    db_location = tmpdir.mkdir('db')
+    report_location = db_location.mkdir(dataset_name).mkdir(application_profile).mkdir(template_type)
+    report_location.join('report.html')
+
+    success = remove_report(dataset_name, application_profile, template_type, db_location)
+
+    assert not dir_exists(report_location)
+    assert success
+
+
+def test_remove_report_failure(tmpdir):
+    dataset_name = 'dataset'
+    application_profile = 'application'
+    template_type = 'template_type'
+
+    db_location = tmpdir.mkdir('db')
+
+    assert not remove_report(dataset_name, application_profile, template_type, db_location)

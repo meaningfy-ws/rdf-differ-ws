@@ -36,7 +36,6 @@ RequestObj = namedtuple('RequestObj', ['status_code', 'url', 'text'])
 
 
 class FakeRequests:
-
     def __init__(self):
         self.text = None
         self.status_code = None
@@ -53,6 +52,23 @@ class FakeRequests:
     def post(self, url, data=None, json=None, **kwargs):
         self.url = url
         return self
+
+
+class FakeRedisClient:
+    def __init__(self, lrange_return: list = None):
+        self.actions = list()
+        self.lrange_return = lrange_return
+
+    def lpush(self, key, value):
+        self.actions.append(('LEFT PUSH', key, value))
+
+    def lrem(self, key, count, value):
+        self.actions.append(('REMOVE VALUE FROM KEY', key, count, value))
+        return 1
+
+    def lrange(self, key, start, end):
+        self.actions.append(('GET LIST FROM KEY', key, start, end))
+        return self.lrange_return
 
 
 @pytest.fixture(scope='function')

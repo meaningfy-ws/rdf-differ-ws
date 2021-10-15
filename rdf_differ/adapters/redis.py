@@ -7,21 +7,23 @@ redis_client = redis.Redis(host=RDF_DIFFER_REDIS_LOCATION, port=RDF_DIFFER_REDIS
 REVOKING_QUEUE = 'revoke'
 
 
-def push_task_to_revoking_queue(task_id: str, client: redis.Redis = None):
+def push_task_to_revoking_queue(task_id: str, revoking_queue: str = REVOKING_QUEUE, client: redis.Redis = None):
     client = client if client else redis_client
-    client.lpush(REVOKING_QUEUE, task_id)
+    client.lpush(revoking_queue, task_id)
 
 
-def remove_task_from_revoking_queue(task_id: str, client: redis.Redis = None) -> bool:
-    client = client if client else redis_client
-
-    return bool(client.lrem(REVOKING_QUEUE, 1, task_id))
-
-
-def task_exists_in_revoking_queue(task_id: str, client: redis.Redis = None) -> bool:
+def remove_task_from_revoking_queue(task_id: str, revoking_queue: str = REVOKING_QUEUE,
+                                    client: redis.Redis = None) -> bool:
     client = client if client else redis_client
 
-    queue_list = client.lrange(REVOKING_QUEUE, 0, -1)
+    return bool(client.lrem(revoking_queue, 1, task_id))
+
+
+def task_exists_in_revoking_queue(task_id: str, revoking_queue: str = REVOKING_QUEUE,
+                                  client: redis.Redis = None) -> bool:
+    client = client if client else redis_client
+
+    queue_list = client.lrange(revoking_queue, 0, -1)
 
     for item in queue_list:
         if item.decode() == task_id:
