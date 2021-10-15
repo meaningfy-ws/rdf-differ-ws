@@ -75,7 +75,7 @@ services:
     build:
       context: ..
       dockerfile: ./docker/api/Dockerfile
-    command: celery -A rdf_differ.adapters.celery.celery_worker --broker=${RDF_DIFFER_REDIS_LOCATION}:${RDF_DIFFER_REDIS_PORT} flower --port=${RDF_FLOWER_PORT}
+    command: celery -A rdf_differ.adapters.celery.celery_worker --broker=redis://${RDF_DIFFER_REDIS_LOCATION}:${RDF_DIFFER_REDIS_PORT} flower --port=${RDF_FLOWER_PORT}
     ports:
       - ${RDF_FLOWER_PORT}:${RDF_FLOWER_PORT}
     depends_on:

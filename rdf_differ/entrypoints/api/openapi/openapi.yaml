@@ -237,11 +237,9 @@ paths:
             type: string
       responses:
         200:
-          description: Task status description succesfully retreived.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TaskStatus"
+          description: Task accepted for revoking.
+        406:
+          description: Task already marked for revoking.
 
 components:
   schemas:

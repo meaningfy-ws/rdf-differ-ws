@@ -11,16 +11,18 @@ from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.config import RDF_DIFFER_REDIS_SERVICE
+from rdf_differ.services.queue import cleanup_diff_creation
 from rdf_differ.services.report_handling import build_report, save_report
 
 celery_worker = Celery('rdf-differ-tasks', broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE)
+celery_worker.conf.update(result_extended=True)
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
 # =================== TASKS =================== #
-@celery_worker.task(name="create_diff")
-def async_create_diff(body: dict, old_version_file: str, new_version_file: str, cleanup_location: str):
+@celery_worker.task(name="create_diff", bind=True)
+def async_create_diff(self, body: dict, old_version_file: str, new_version_file: str, cleanup_location: str):
     """
     Task that retrieves diff files form specified location, creates the diff and cleans up the files
     :param body: data for diff creation
@@ -46,12 +48,16 @@ def async_create_diff(body: dict, old_version_file: str, new_version_file: str, 
     finally:
         shutil.rmtree(cleanup_location)
 
+    if cleanup_diff_creation(body.get('dataset_id'), self.request.id):
+        logger.debug('request to revoke task received. initiating cleanup process.')
+        return False
+
     logger.debug('finish async create diff')
     return True
 
 
-@celery_worker.task(name="generate_report")
-def async_generate_report(template_location: str, query_files: dict, dataset: dict, application_profile: str,
+@celery_worker.task(name="generate_report", bind=True)
+def async_generate_report(self, template_location: str, query_files: dict, dataset: dict, application_profile: str,
                           db_location: str):
     """
     Task that generates the specified diff report
