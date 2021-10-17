@@ -12,7 +12,7 @@ import pytest
 from werkzeug.datastructures import FileStorage
 
 from utils.file_utils import dir_exists, file_exists, dir_is_empty, temporarily_save_files, save_files, \
-    check_files_exist
+    check_files_exist, build_unique_name
 
 
 def test_dir_exists(tmpdir):
@@ -101,3 +101,26 @@ def test_save_files_success(tmpdir):
 def test_check_files_exist_failure(file_1, file_2):
     with pytest.raises(TypeError):
         check_files_exist(file_1, file_2)
+
+
+def test_build_secure_filename():
+    base = 'dataset_name'
+    unique_name = build_unique_name(base)
+
+    assert len(base) + 8 == len(unique_name)
+
+
+def test_build_secure_filename_custom_length():
+    base = 'dataset_name'
+
+    unique_name = build_unique_name(base, 20)
+
+    assert len(base) + 20 == len(unique_name)
+
+
+def test_build_secure_filename_max_custom_length():
+    base = 'dataset_name'
+
+    unique_name = build_unique_name(base, 24)
+
+    assert len(base) + 22 == len(unique_name)

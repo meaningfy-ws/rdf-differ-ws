@@ -23,7 +23,7 @@ from rdf_differ.services import queue
 from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.services.report_handling import report_exists, retrieve_report, remove_all_reports
 from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks
-from utils.file_utils import save_files
+from utils.file_utils import save_files, build_unique_name
 
 """
 The definition of the API endpoints
@@ -95,11 +95,13 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                        sparql_client=SPARQLRunner())
 
+    dataset_name = build_unique_name(body.get('dataset_id'))
+    body['dataset_id'] = dataset_name
     try:
         dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_id'))
         # if description is {} (empty) then we can create the diff
         can_create = not bool(dataset)
-        logger.debug('dataset exists, but is empty')
+        logger.debug(f'dataset exists. empty: {not can_create}')
     except EndPointNotFound:
         fuseki_adapter.create_dataset(dataset_name=body.get('dataset_id'))
         can_create = True
@@ -113,7 +115,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
                 task = async_create_diff.delay(body, old_version_file, new_version_file, db_location)
                 redis_client.set(task.id, str(False))
             logger.debug('finish create diff endpoint')
-            return {'task_id': task.id}, 200
+            return {'task_id': task.id, 'dataset_name': dataset_name}, 200
         except ValueError as exception:
             exception_text = 'Internal error while uploading the diffs.\n' + str(exception)
             logger.exception(exception_text)

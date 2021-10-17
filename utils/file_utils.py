@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Union
 from uuid import uuid4
 
+import shortuuid
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
@@ -77,6 +78,14 @@ def copy_file_to_destination(file: str, destination: str) -> None:
 def check_files_exist(file_a: FileStorage, file_b: FileStorage) -> None:
     if not file_a or not file_b:
         raise TypeError("Files cannot be of None type.")
+
+
+def build_unique_name(base: str, length_added: int = 8) -> str:
+    if length_added > 22:
+        logger.warning('currently max accepted length_added is 22')
+        length_added = 22
+
+    return f'{base}{shortuuid.uuid()[:length_added]}'
 
 
 def build_secure_filename(location: str, filename: str) -> str:
