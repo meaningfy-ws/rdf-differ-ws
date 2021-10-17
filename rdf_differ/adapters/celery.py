@@ -1,7 +1,6 @@
 import logging
 import shutil
 import tempfile
-import time
 from pathlib import Path
 
 import requests
@@ -34,7 +33,7 @@ def async_create_diff(self, body: dict, old_version_file: str, new_version_file:
     logger.debug('start async create diff')
     fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                        sparql_client=SPARQLRunner())
-    # time.sleep(100)
+
     try:
         fuseki_adapter.create_diff(dataset=body.get('dataset_id'),
                                    dataset_uri=body.get('dataset_uri'),

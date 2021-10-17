@@ -23,7 +23,7 @@ from rdf_differ.services import queue
 from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.services.report_handling import report_exists, retrieve_report, remove_all_reports
 from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks
-from utils.file_utils import save_files, build_unique_name
+from utils.file_utils import save_files, build_unique_name, check_dataset_name_validity
 
 """
 The definition of the API endpoints
@@ -94,6 +94,10 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
 
     fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                        sparql_client=SPARQLRunner())
+
+    if not check_dataset_name_validity(body.get('dataset_id')):
+        raise Conflict(f'<{body.get("dataset_id")}> name is not acceptable is not empty.'
+                       'Dataset name can contain only ASCII letters, numbers, _, :, and -')  # 409
 
     dataset_name = build_unique_name(body.get('dataset_id'))
     body['dataset_id'] = dataset_name

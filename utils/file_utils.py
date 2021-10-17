@@ -4,10 +4,11 @@
 # Date: 09/07/2020
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
-import os
-import pathlib
 
 import logging
+import os
+import pathlib
+import re
 import shutil
 import tempfile
 from contextlib import contextmanager
@@ -78,6 +79,10 @@ def copy_file_to_destination(file: str, destination: str) -> None:
 def check_files_exist(file_a: FileStorage, file_b: FileStorage) -> None:
     if not file_a or not file_b:
         raise TypeError("Files cannot be of None type.")
+
+
+def check_dataset_name_validity(name: str) -> bool:
+    return bool(re.match(r'^[\w\d_:-]*$', name, flags=re.A))
 
 
 def build_unique_name(base: str, length_added: int = 8) -> str:
