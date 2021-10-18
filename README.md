@@ -10,6 +10,7 @@ See the [Wiki page of the original repository](https://github.com/jneubert/skos-
 Run the following commands to install all required dependencies 
 
 ```bash
+sudo apt install make
 make install-os-dependencies
 make install
 ```
