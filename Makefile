@@ -6,7 +6,10 @@ BUILD_PRINT = \e[1;34mSTEP: \e[0m
 # Install dev environment
 #-----------------------------------------------------------------------------
 export-envs:
-	@ set -o allexport; source docker.env; set +o allexport
+	@ set -o allexport; source docker/.env; set +o allexport
+
+install-os-dependencies:
+	@ sudo apt install default-jre git python3-pip redis-server python3.8-venv curl
 
 install:
 	@ echo "$(BUILD_PRINT)Installing the production requirements"
@@ -35,7 +38,7 @@ run-local-celery:
 stop-celery-workers:
 	@ celery -A rdf_differ.adapters.celery.celery_worker control shutdown
 
-run-local-api:
+run-local-api: | run-local-celery
 	@ gunicorn --timeout ${RDF_DIFFER_GUNICORN_TIMEOUT} --workers ${RDF_DIFFER_GUNICORN_API_WORKERS} --bind 0.0.0.0:${RDF_DIFFER_API_PORT} --reload rdf_differ.entrypoints.api.run:app --log-file ${RDF_DIFFER_API_LOGS} --log-level debug
 
 

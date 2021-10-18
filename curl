@@ -1,0 +1,12 @@
+curl -X 'POST' \
+  'http://localhost:4030/diffs' \
+  -H 'accept: */*' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'dataset_description=' \
+  -F 'dataset_id=dataset' \
+  -F 'dataset_uri=fsd' \
+  -F 'new_version_file_content=@new-data-theme-skos-ap-act.rdf;type=application/rdf+xml' \
+  -F 'new_version_id=fsd' \
+  -F 'old_version_file_content=@old-data-theme-skos-ap-act.rdf;type=application/rdf+xml' \
+  -F 'old_version_id=fdsa'
+

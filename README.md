@@ -7,27 +7,29 @@ See the [Wiki page of the original repository](https://github.com/jneubert/skos-
 [![codecov](https://codecov.io/gh/eu-vocabularies/rdf-differ/branch/master/graph/badge.svg)](https://codecov.io/gh/eu-vocabularies/rdf-differ)
 
 # Installation
-
-Make sure that you are running `Docker` and have the correct permissions set. If not, run the following lines to install it. 
+Run the following commands to install all required dependencies 
 
 ```bash
-sudo apt -y install docker.io docker-compose
-
-sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker
+make install-os-dependencies
+make install
 ```
 
-To build and the containers run:
+To run fuseki server (on first setup accept the default values): <br>
+_needs running terminal window_
 ```bash
-make build-volumes
-make build-services
+make setup-fuseki
+make run-local-fuseki
+```
+
+To set up redis server:
+```bash
+make setup-redis
 ```
 
 Install test/dev dependencies:
-
 ```bash
-make install
+set -o allexport; source docker/.env; set +o allexport
+make run-local-api
 ```
 
 To run the tests:
@@ -36,28 +38,6 @@ To run the tests:
 make fuseki-create-test-dbs
 make test
 ```
-## Configure diff report template 
-The default diff report template resides in [resources/templates/diff_report](resources/templates/diff_report). 
-
-To configure your own template you can copy the default report template and adjust it to your needs. Read more about the required structure of the template on the [eds4jinja2](https://github.com/meaningfy-ws/eds4jinja2) documentation page.
- 
-### Use the custom template
-After you have your custom template, run the `make` command, indicating the location of your template through the `location` variable.
-```bash
-make location=<location to template> set-report-template
-```
----
-**NOTE**
-
-Make sure that the location specified ends with a trailing slash `/`, otherwise the command will not work.
-
-Example:
-```bash
-make location=~/template/location/ set-report-template
-```
----
-After this, restart the `rdf-differ-api` container for the effects to take place.
-
 ### Adding a new application profile template
 The default application profile template is the diff report template that resides in [resources/templates/diff_report](resources/templates/diff_report) folder. 
 For adding a new application profile create a new folder under [resources/templates](resources/templates) with the name
@@ -98,11 +78,6 @@ service | URL | info
 ------- | ------- | ----
 `differ-api` | [localhost:4030](http://localhost:4030) | _access [localhost:4030/ui](http://localhost:4030/ui) for the swagger interface_ 
 `differ-ui` | [localhost:8030](http://localhost:8030)
-
-## Differ API
-
-> Go to this link [localhost:4030/ui](http://localhost:4010/ui) to access the online definition of the API.
-![list of diffs page](docs/images/api-swagger-2020-10.png)
 
 ## Differ UI
 
