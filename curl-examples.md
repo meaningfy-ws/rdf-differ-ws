@@ -8,7 +8,7 @@ curl -X 'GET' \
     -H 'accept: application/json'
 ```
 
-###get specific diff
+### get specific diff
 change `dataset_id` to the desired dataset name.
 ```bash
 curl -X 'GET' \
