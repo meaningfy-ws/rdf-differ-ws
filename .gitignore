@@ -137,3 +137,7 @@ fuseki-data/
 cucumber_report.json
 junit_report.xml
 *.ldb
+
+fuseki
+run
+apache-jena-fuseki*

@@ -5,11 +5,39 @@ BUILD_PRINT = \e[1;34mSTEP: \e[0m
 #-----------------------------------------------------------------------------
 # Install dev environment
 #-----------------------------------------------------------------------------
+export-envs:
+	@ set -o allexport; source docker.env; set +o allexport
 
 install:
 	@ echo "$(BUILD_PRINT)Installing the production requirements"
+	@ python3 -m venv env
 	@ pip install --upgrade pip
 	@ pip install -r requirements/dev.txt
+
+setup-fuseki:
+	@ sudo adduser --disabled-password fuseki
+	@ cd /home/fuseki
+	@ sudo -u fuseki bash
+	@ wget https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-4.2.0.tar.gz
+	@ tar xzf apache-jena-fuseki-4.2.0.tar.gz
+	@ ln -s apache-jena-fuseki-4.2.0 fuseki
+
+run-local-fuseki:
+	@ ./fuseki/fuseki-server -q
+
+setup-redis:
+	@ sudo cp docker/redis.conf /etc/redis/redis.conf
+	@ sudo systemctl restart redis.service
+
+run-local-celery:
+	@ celery -A rdf_differ.adapters.celery.celery_worker worker --loglevel=DEBUG --detach
+
+stop-celery-workers:
+	@ celery -A rdf_differ.adapters.celery.celery_worker control shutdown
+
+run-local-api:
+	@ gunicorn --timeout ${RDF_DIFFER_GUNICORN_TIMEOUT} --workers ${RDF_DIFFER_GUNICORN_API_WORKERS} --bind 0.0.0.0:${RDF_DIFFER_API_PORT} --reload rdf_differ.entrypoints.api.run:app --log-file ${RDF_DIFFER_API_LOGS} --log-level debug
+
 
 #-----------------------------------------------------------------------------
 # Service commands
