@@ -39,6 +39,9 @@ To run the tests:
 make fuseki-create-test-dbs
 make test
 ```
+
+### [this file](curl-examples.md) contains a list of examples on how to use the updated api
+
 ### Adding a new application profile template
 The default application profile template is the diff report template that resides in [resources/templates/diff_report](resources/templates/diff_report) folder. 
 For adding a new application profile create a new folder under [resources/templates](resources/templates) with the name
