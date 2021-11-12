@@ -105,11 +105,11 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
         dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_id'))
         # if description is {} (empty) then we can create the diff
         can_create = not bool(dataset)
-        logger.debug(f'dataset exists. empty: {not can_create}')
+        logger.info(f'dataset exists. empty: {not can_create}')
     except EndPointNotFound:
         fuseki_adapter.create_dataset(dataset_name=body.get('dataset_id'))
         can_create = True
-        logger.debug('creating dataset')
+        logger.info('creating dataset')
 
     if can_create:
         try:
@@ -118,7 +118,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
                     (db_location, old_version_file, new_version_file):
                 task = async_create_diff.delay(body, old_version_file, new_version_file, db_location)
                 redis_client.set(task.id, str(False))
-            logger.debug('finish create diff endpoint')
+            logger.info('finish create diff endpoint')
             return {'task_id': task.id, 'dataset_name': dataset_name}, 200
         except ValueError as exception:
             exception_text = 'Internal error while uploading the diffs.\n' + str(exception)
@@ -144,7 +144,7 @@ def delete_diff(dataset_id: str) -> tuple:
             dataset_id)
         remove_all_reports(dataset_id, RDF_DIFFER_REPORTS_DB)
 
-        logger.debug(f'finish delete dataset: {dataset_id} endpoint')
+        logger.info(f'finish delete dataset: {dataset_id} endpoint')
         return f'<{dataset_id}> deleted successfully.', 200
     except FusekiException:
         exception_text = f'<{dataset_id}> does not exist.'

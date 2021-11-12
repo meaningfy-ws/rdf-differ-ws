@@ -30,25 +30,67 @@ def build_report(temp_dir: str, template_location: str, query_files: dict, datas
 
 
 def build_dataset_reports_location(dataset_name: str, db_location: str) -> str:
+    """
+    build path for report location of given dataset
+
+    :param dataset_name: dataset name
+    :param db_location: which file system location to use to perform the action
+    :return:
+    """
     return str(Path(db_location) / dataset_name)
 
 
 def build_report_location(dataset_name: str, application_profile: str, template_type: str, db_location: str) -> str:
+    """
+    build report path
+
+    :param dataset_name: dataset name
+    :param application_profile: application profile for report identification
+    :param template_type: template to retrieve existence
+    :param db_location: which file system location to use to perform the action
+    :return: report location
+    """
     return str(
         Path(build_dataset_reports_location(dataset_name, db_location)) / f'{application_profile}/{template_type}')
 
 
 def retrieve_report(dataset_name: str, application_profile: str, template_type: str, db_location: str) -> str:
+    """
+    retrieve report path
+
+    :param dataset_name: dataset name
+    :param application_profile: application profile for report identification
+    :param template_type: template to retrieve existence
+    :param db_location: which file system location to use to perform the action
+    :return:
+    """
     return str(
         next(Path(build_report_location(dataset_name, application_profile, template_type, db_location)).iterdir(), ''))
 
 
 def report_exists(dataset_name: str, application_profile: str, template_type: str, db_location: str) -> bool:
+    """
+
+    :param dataset_name: dataset name
+    :param application_profile: application profile for report identification
+    :param template_type: template to check existence
+    :param db_location: which file system location to use to perform the action
+    :return: if report exists return true otherwise false
+    """
     report_location = build_report_location(dataset_name, application_profile, template_type, db_location)
     return dir_exists(report_location) and not dir_is_empty(report_location)
 
 
 def save_report(report: str, dataset_name: str, application_profile: str, template_type: str, db_location: str) -> None:
+    """
+    save report to specified location
+
+    :param report: report to save
+    :param dataset_name: dataset name
+    :param application_profile: application profile for report identification
+    :param template_type: template to save
+    :param db_location: which file system location to use to perform the action
+    """
     location_to_save = build_report_location(dataset_name, application_profile, template_type, db_location)
 
     if not dir_exists(location_to_save):
@@ -63,6 +105,15 @@ def save_report(report: str, dataset_name: str, application_profile: str, templa
 
 
 def remove_report(dataset_name: str, application_profile: str, template_type: str, db_location: str) -> bool:
+    """
+    remove report
+
+    :param dataset_name: dataset name
+    :param application_profile: application profile for report identification
+    :param template_type: template to remove
+    :param db_location: which file system location to use to perform the action
+    :return: if report successfully deleted return true otherwise return false
+    """
     report_location = build_report_location(dataset_name, application_profile, template_type, db_location)
     try:
         shutil.rmtree(report_location)
@@ -75,6 +126,13 @@ def remove_report(dataset_name: str, application_profile: str, template_type: st
 
 
 def remove_all_reports(dataset_name: str, db_location: str) -> bool:
+    """
+    remove all reports for specified dataset
+
+    :param dataset_name: dataset name
+    :param db_location: which file system location to use to perform the action
+    :return: if reports successfully deleted return true otherwise return false
+    """
     report_location = build_dataset_reports_location(dataset_name, db_location)
     try:
         shutil.rmtree(report_location)

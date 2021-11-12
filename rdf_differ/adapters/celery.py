@@ -14,7 +14,9 @@ from rdf_differ.config import RDF_DIFFER_REDIS_SERVICE
 from rdf_differ.services.queue import cleanup_diff_creation, cleanup_report_creation
 from rdf_differ.services.report_handling import build_report, save_report
 
-celery_worker = Celery('rdf-differ-tasks', broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE)
+celery_worker = Celery('rdf-differ-tasks',
+                       broker=RDF_DIFFER_REDIS_SERVICE.split('redis://')[1],
+                       backend=RDF_DIFFER_REDIS_SERVICE.split('redis://')[1])
 celery_worker.conf.update(result_extended=True)
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)

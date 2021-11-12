@@ -5,8 +5,9 @@ BUILD_PRINT = \e[1;34mSTEP: \e[0m
 #-----------------------------------------------------------------------------
 # Install dev environment
 #-----------------------------------------------------------------------------
-export-envs:
-	@ set -o allexport; source docker/.env; set +o allexport
+
+# how to set envs to local
+# set -o allexport; source docker/.env; set +o allexport
 
 install-os-dependencies:
 	@ sudo apt install default-jre git python3-pip redis-server python3.8-venv curl
