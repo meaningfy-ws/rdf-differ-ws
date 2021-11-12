@@ -11,17 +11,19 @@ import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from flask import send_file
 from werkzeug.datastructures import FileStorage
-from werkzeug.exceptions import Conflict, InternalServerError, NotFound, UnprocessableEntity
+from werkzeug.exceptions import Conflict, InternalServerError, NotFound, UnprocessableEntity, NotAcceptable
 
 from rdf_differ import config
 from rdf_differ.adapters.celery import async_create_diff, async_generate_report
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.adapters.redis import redis_client
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
+from rdf_differ.services import queue
 from rdf_differ.services.ap_manager import ApplicationProfileManager
-from rdf_differ.services.report_handling import report_exists, retrieve_report
+from rdf_differ.services.report_handling import report_exists, retrieve_report, remove_all_reports
 from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks
-from utils.file_utils import save_files
+from utils.file_utils import save_files, build_unique_name, check_dataset_name_validity
 
 """
 The definition of the API endpoints
@@ -93,15 +95,21 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                        sparql_client=SPARQLRunner())
 
+    if not check_dataset_name_validity(body.get('dataset_id')):
+        raise Conflict(f'<{body.get("dataset_id")}> name is not acceptable is not empty.'
+                       'Dataset name can contain only ASCII letters, numbers, _, :, and -')  # 409
+
+    dataset_name = build_unique_name(body.get('dataset_id'))
+    body['dataset_id'] = dataset_name
     try:
         dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_id'))
         # if description is {} (empty) then we can create the diff
         can_create = not bool(dataset)
-        logger.debug('dataset exists, but is empty')
+        logger.info(f'dataset exists. empty: {not can_create}')
     except EndPointNotFound:
         fuseki_adapter.create_dataset(dataset_name=body.get('dataset_id'))
         can_create = True
-        logger.debug('creating dataset')
+        logger.info('creating dataset')
 
     if can_create:
         try:
@@ -109,8 +117,9 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
                             config.RDF_DIFFER_FILE_DB) as \
                     (db_location, old_version_file, new_version_file):
                 task = async_create_diff.delay(body, old_version_file, new_version_file, db_location)
-            logger.debug('finish create diff endpoint')
-            return {'task_id': task.id}, 200
+                redis_client.set(task.id, str(False))
+            logger.info('finish create diff endpoint')
+            return {'task_id': task.id, 'dataset_name': dataset_name}, 200
         except ValueError as exception:
             exception_text = 'Internal error while uploading the diffs.\n' + str(exception)
             logger.exception(exception_text)
@@ -133,7 +142,9 @@ def delete_diff(dataset_id: str) -> tuple:
         FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                           sparql_client=SPARQLRunner()).delete_dataset(
             dataset_id)
-        logger.debug(f'finish delete dataset: {dataset_id} endpoint')
+        remove_all_reports(dataset_id, RDF_DIFFER_REPORTS_DB)
+
+        logger.info(f'finish delete dataset: {dataset_id} endpoint')
         return f'<{dataset_id}> deleted successfully.', 200
     except FusekiException:
         exception_text = f'<{dataset_id}> does not exist.'
@@ -172,8 +183,9 @@ def build_report(body: dict) -> tuple:
         raise UnprocessableEntity("Check valid application profiles and their template types through the API"
                                   "and if the queries folder exists in the chosen application profile folder")
 
-    if not report_exists(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB) or rebuild:
+    if not report_exists(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB) or rebuild:
         task = async_generate_report.delay(str(template_location), query_files, dataset, application_profile,
+                                           template_type,
                                            RDF_DIFFER_REPORTS_DB)
         return {'task_id': task.id}, 200
     else:
@@ -202,8 +214,8 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
         raise UnprocessableEntity("Check valid application profiles and their template types through the API"
                                   "and if the queries folder exists in the chosen application profile folder")
 
-    if report_exists(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB):
-        return send_file(retrieve_report(dataset_id, application_profile, RDF_DIFFER_REPORTS_DB),
+    if report_exists(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB):
+        return send_file(retrieve_report(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB),
                          as_attachment=True)  # 200
     else:
         raise NotFound('First send a request to build the report.')
@@ -240,17 +252,18 @@ def get_task_status(task_id: str) -> tuple:
         return {
                    "task_id": task.id,
                    "task_status": task.status,
+                   "task_result": task.result
                }, 200
     raise NotFound('task not found')  # 404
 
 
 def stop_running_task(task_id: str) -> tuple:
     """
-    Get specified task status data
-    :param task_id: Id of task to get status for
-    :return: dict
+    Revoke a task
+    :param task_id: Id of task to revoke
     """
-    # result = celery_worker.AsyncResult(task_id)
-    # logger.debug(result)
-    # result.link(async_test.si(task_id))
-    return 'OK', 200
+    try:
+        queue.stop_task(task_id)
+        return {'message': f'task {task_id} set for revoking.'}, 200
+    except ValueError:
+        raise NotAcceptable('task already marked for revoking')  # 406
