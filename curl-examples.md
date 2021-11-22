@@ -16,6 +16,14 @@ curl -X 'GET' \
     -H 'accept: application/json'
 ```
 
+### delete specific diff
+change `dataset_id` to the desired dataset name.
+```bash
+curl -X 'DELETE' \
+    'http://localhost:4030/diffs/<dataset_id>' \
+    -H 'accept: application/json'
+```
+
 ### create diff
 change `dataset_id`, `dataset_uri`, `new_version_id` and `old_version_id` to the desired data.
 ```bash
@@ -32,6 +40,14 @@ curl -X 'POST' \
     -F 'old_version_id=old'
 ```
 
+### get active tasks
+change `task_id` to the desired task id.
+```bash
+curl -X 'GET' \
+  'http://localhost:4030/tasks/active' \ 
+  -H 'accept: application/json'
+```
+
 ### check task status
 change `task_id` to the desired task id.
 ```bash
@@ -40,8 +56,7 @@ curl -X 'GET' \
   -H 'accept: application/json'
 ```
 
-
-###revoke running for a task
+### revoke (kill) a task
 change `task_id` to the desired task id.
 ```bash
 curl -X 'DELETE' \
