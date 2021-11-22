@@ -47,6 +47,23 @@ def get_report(dataset_id: str) -> tuple:
     return response.content, response.status_code
 
 
+def build_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
+    """
+
+    :param dataset_id:
+    :param application_profile:
+    :param template_type:
+    :return:
+    """
+    data = {
+        'dataset_id': dataset_id,
+        'application_profile': application_profile,
+        'template_type': template_type
+    }
+    response = requests.post(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs/report', data=data)
+    return response.text, response.status_code
+
+
 def create_diff(dataset_name: str, dataset_description: str, dataset_uri: str,
                 old_version_id: str, old_version_file: FileStorage,
                 new_version_id: str, new_version_file: FileStorage) -> tuple:
@@ -75,3 +92,34 @@ def create_diff(dataset_name: str, dataset_description: str, dataset_uri: str,
     }
     response = requests.post(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs', data=data, files=files)
     return response.text, response.status_code
+
+
+def get_application_profiles() -> tuple:
+    """
+    Method to get application profiles from api
+    :return: applicaiton profiles
+    :rtype list, int
+    """
+    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + '/aps')
+    return response.json(), response.status_code
+
+
+def get_active_tasks() -> tuple:
+    """
+    Method to get celery active tasks from api
+    :return: active celery tasks
+    :rtype list, int
+    """
+    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + '/tasks/active')
+    return response.json(), response.status_code
+
+
+def revoke_task(task_id: str) -> tuple:
+    """
+    Method to kill celery tasks from api
+    :param task_id: celery task to kill
+    :return: api response
+    :rtype: dict, int
+    """
+    response = requests.delete(url=f'{rdf_differ.config.RDF_DIFFER_API_SERVICE}/tasks/{task_id}')
+    return response.json(), response.status_code

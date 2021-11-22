@@ -14,9 +14,7 @@ from rdf_differ.config import RDF_DIFFER_REDIS_SERVICE
 from rdf_differ.services.queue import cleanup_diff_creation, cleanup_report_creation
 from rdf_differ.services.report_handling import build_report, save_report
 
-celery_worker = Celery('rdf-differ-tasks',
-                       broker=RDF_DIFFER_REDIS_SERVICE.split('redis://')[1],
-                       backend=RDF_DIFFER_REDIS_SERVICE.split('redis://')[1])
+celery_worker = Celery('rdf-differ-tasks', broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE)
 celery_worker.conf.update(result_extended=True)
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
@@ -36,6 +34,8 @@ def async_create_diff(self, body: dict, old_version_file: str, new_version_file:
     fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                        sparql_client=SPARQLRunner())
 
+    import time
+    time.sleep(20)
     try:
         fuseki_adapter.create_diff(dataset=body.get('dataset_id'),
                                    dataset_uri=body.get('dataset_uri'),

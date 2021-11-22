@@ -10,7 +10,7 @@
 """
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
-from wtforms import StringField, SubmitField, FileField
+from wtforms import StringField, SubmitField, FileField, SelectField
 from wtforms.validators import Length, DataRequired, URL, Regexp
 
 
@@ -29,3 +29,9 @@ class CreateDiffForm(FlaskForm):
     new_version_id = StringField('New dataset version name', validators=[DataRequired()], default='new')
 
     submit = SubmitField('Create diff')
+
+
+class BuildReportForm(FlaskForm):
+    application_profile = SelectField('Application profile', choices=[])
+    template_type = SelectField('Template type', choices=[])
+    submit = SubmitField('Build report')

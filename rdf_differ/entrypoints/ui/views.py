@@ -8,19 +8,19 @@
 """
 UI pages
 """
-import logging
 import tempfile
 from pathlib import Path
 
-from flask import render_template, redirect, flash, url_for, send_from_directory
+from flask import render_template, redirect, flash, url_for, send_from_directory, request
 
-from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.entrypoints.ui import app
-from rdf_differ.entrypoints.ui.api_wrapper import get_datasets, create_diff as api_create_diff, get_dataset, get_report
-from rdf_differ.entrypoints.ui.forms import CreateDiffForm
+from rdf_differ.entrypoints.ui.api_wrapper import get_datasets, create_diff as api_create_diff, get_dataset, get_report, \
+    get_active_tasks as api_get_active_tasks, revoke_task as api_revoke_task, get_application_profiles, build_report
+from rdf_differ.entrypoints.ui.forms import CreateDiffForm, BuildReportForm
 from rdf_differ.entrypoints.ui.helpers import get_error_message_from_response
 
-logger = logging.getLogger(RDF_DIFFER_LOGGER)
+# this allows feeding the logs to gunicorn
+logger = app.logger
 
 
 @app.route('/')
@@ -68,17 +68,50 @@ def create_diff():
     return render_template('dataset/create_diff.html', title='Create diff', form=form)
 
 
-@app.route('/diffs/<dataset_id>')
+@app.route('/diffs/<dataset_id>', methods=['GET', 'POST'])
 def view_dataset(dataset_id: str):
     """
     Page for viewing a dataset diff.
     :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
     """
     logger.debug(f'request dataset view for: {dataset_id}')
+
     dataset, _ = get_dataset(dataset_id)
 
+    application_profiles, _ = get_application_profiles()
+    form = BuildReportForm()
+    try:
+        form.application_profile.choices = [(item['application_profile'], item['application_profile']) for item in
+                                            application_profiles]
+        form.template_type.choices = [(item, item) for item in
+                                      application_profiles[0]['template_variations']]
+    except Exception as e:
+        logger.exception(str(e))
+
+    logger.debug(form.validate())
+    logger.debug(form.errors)
+    if request.method == 'POST':
+        logger.debug('hell0')
+
+        logger.debug(form.application_profile.data)
+        response, status = build_report(
+            dataset_id=dataset_id,
+            application_profile=form.application_profile.data,
+            template_type=form.template_type.data,
+        )
+
+        if status != 200:
+            exception_text = get_error_message_from_response(response)
+            logger.exception(exception_text)
+            flash(exception_text, 'error')
+        else:
+            flash(response, 'success')
+            logger.debug('render create diff view')
+            return redirect(url_for('view_dataset', dataset_id=form.dataset_name.data))
+
     logger.debug(f'render dataset view for: {dataset_id}')
-    return render_template('dataset/view_dataset.html', title=f'{dataset_id} view', dataset=dataset)
+    return render_template('dataset/view_dataset.html', title=f'{dataset_id} view', dataset=dataset, form=form,
+                           application_profiles=application_profiles)
 
 
 @app.route('/diff-report/<dataset_id>')
@@ -100,3 +133,33 @@ def download_report(dataset_id: str):
 
         logger.debug('redirect to index view')
         return render_template('index.html', datasets=datasets)
+
+
+@app.route('/tasks')
+def get_active_tasks():
+    """
+    Page containing the list of active tasks.
+    """
+    logger.debug('request active tasks view')
+    tasks, _ = api_get_active_tasks()
+
+    logger.debug(tasks)
+    logger.debug('render active tasks view')
+    return render_template('tasks/view_active_tasks.html', tasks=tasks)
+
+
+@app.route('/revoke-task/<task_id>')
+def revoke_task(task_id: str):
+    """
+    helper to revoke task from UI
+    :param task_id: task to kill
+    """
+    logger.debug(f'request revoking for : {task_id}')
+    message, status = api_revoke_task(task_id)
+    if status == 200:
+        flash(message, 'success')
+    else:
+        logger.exception(message)
+        flash(message, 'error')
+
+    return redirect(url_for('get_active_tasks'))

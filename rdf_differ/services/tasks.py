@@ -8,7 +8,7 @@ from rdf_differ.config import RDF_DIFFER_LOGGER
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
-def retrieve_active_tasks(worker=None) -> list:
+def retrieve_active_tasks(worker=None) -> dict:
     worker = worker if worker else celery_worker
     inspector = worker.control.inspect()
 
