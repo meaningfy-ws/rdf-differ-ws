@@ -2,7 +2,7 @@ import redis
 
 from rdf_differ.config import RDF_DIFFER_REDIS_LOCATION, RDF_DIFFER_REDIS_PORT
 
-redis_client = redis.Redis(host=RDF_DIFFER_REDIS_LOCATION, port=RDF_DIFFER_REDIS_PORT)
+redis_client = redis.Redis(host=RDF_DIFFER_REDIS_LOCATION.split('redis://')[1], port=RDF_DIFFER_REDIS_PORT)
 
 REVOKING_QUEUE = 'revoke'
 

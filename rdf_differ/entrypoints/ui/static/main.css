@@ -29,3 +29,7 @@ main {
 .table {
     margin-bottom: 5em;
 }
+
+select {
+    display: block !important;
+}

@@ -8,6 +8,8 @@
 """
 Service to consume RDF diff API.
 """
+from json import dumps
+
 import requests
 from werkzeug.datastructures import FileStorage
 
@@ -55,12 +57,13 @@ def build_report(dataset_id: str, application_profile: str, template_type: str) 
     :param template_type:
     :return:
     """
-    data = {
+    data = dumps({
         'dataset_id': dataset_id,
         'application_profile': application_profile,
         'template_type': template_type
-    }
-    response = requests.post(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs/report', data=data)
+    })
+    headers = {'Content-type': 'application/json'}
+    response = requests.post(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs/report', data=data, headers=headers)
     return response.text, response.status_code
 
 

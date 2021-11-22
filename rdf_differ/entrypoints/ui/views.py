@@ -90,10 +90,7 @@ def view_dataset(dataset_id: str):
 
     logger.debug(form.validate())
     logger.debug(form.errors)
-    if request.method == 'POST':
-        logger.debug('hell0')
-
-        logger.debug(form.application_profile.data)
+    if form.validate_on_submit():
         response, status = build_report(
             dataset_id=dataset_id,
             application_profile=form.application_profile.data,
@@ -105,13 +102,12 @@ def view_dataset(dataset_id: str):
             logger.exception(exception_text)
             flash(exception_text, 'error')
         else:
-            flash(response, 'success')
+            flash('report started building', 'success')
             logger.debug('render create diff view')
-            return redirect(url_for('view_dataset', dataset_id=form.dataset_name.data))
 
     logger.debug(f'render dataset view for: {dataset_id}')
-    return render_template('dataset/view_dataset.html', title=f'{dataset_id} view', dataset=dataset, form=form,
-                           application_profiles=application_profiles)
+    return render_template('dataset/view_dataset.html', title=f'{dataset_id} view',
+                           dataset=dataset, form=form, application_profiles=application_profiles)
 
 
 @app.route('/diff-report/<dataset_id>')
