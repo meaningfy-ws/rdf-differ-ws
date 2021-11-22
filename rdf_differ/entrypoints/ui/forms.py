@@ -31,7 +31,15 @@ class CreateDiffForm(FlaskForm):
     submit = SubmitField('Create diff')
 
 
+class NonValidatingSelectMultipleField(SelectField):
+    """
+    Allow select fields to have dynamically set values
+    """
+    def pre_validate(self, form):
+        pass
+
+
 class BuildReportForm(FlaskForm):
-    application_profile = SelectField('Application profile', choices=[])
-    template_type = SelectField('Template type', choices=[])
+    application_profile = NonValidatingSelectMultipleField('Application profile', choices=[])
+    template_type = NonValidatingSelectMultipleField('Template type', choices=[])
     submit = SubmitField('Build report')

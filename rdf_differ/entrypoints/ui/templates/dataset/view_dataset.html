@@ -42,13 +42,28 @@
     </div>
     <br>
     <div class="row">
+        {% for report in dataset.available_reports %}
+            <h4>{{ report.application_profile }}</h4>
+            <ul>
+                {% for type in report.template_variations %}
+                    <li>
+                        <a href="{{ url_for('download_report', dataset_id=dataset.dataset_id,
+                        application_profile=report.application_profile,
+                        template_type=type) }}"
+                           id="report-{{ dataset.dataset_id }}-{{ report.application_profile }}-{{ type }}"
+                           class="blue-text text-darken-2">Download {{ report.application_profile }} {{ type }}
+                            report</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+    <div class="row">
         <form class="col s12 z-depth-3 form" method="POST" role="form" action="">
             {{ form.csrf_token }}
 
             {{ form.application_profile }}
             {{ form.template_type }}
-            {#            {{ render_select_field(form.application_profile, 'application-profile') }}#}
-            {#            {{ render_select_field(form.template_type, 'template-type') }}#}
             <div class="row">
                 <div class="col s12 right-align">
                     {{ form.submit(class_='btn btn-file blue darken-2') }}
@@ -73,6 +88,7 @@
                 optionsHTML += '<option value="' + template_variation + '">' + template_variation + '</option>';
             }
             template_type.innerHTML = optionsHTML;
+            template_type.value = selected_application['template_variations'][0];
         }
     </script>
 

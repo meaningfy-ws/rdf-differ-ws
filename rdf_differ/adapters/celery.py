@@ -34,8 +34,6 @@ def async_create_diff(self, body: dict, old_version_file: str, new_version_file:
     fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                        sparql_client=SPARQLRunner())
 
-    import time
-    time.sleep(20)
     try:
         fuseki_adapter.create_diff(dataset=body.get('dataset_id'),
                                    dataset_uri=body.get('dataset_uri'),

@@ -88,35 +88,39 @@ def view_dataset(dataset_id: str):
     except Exception as e:
         logger.exception(str(e))
 
-    logger.debug(form.validate())
-    logger.debug(form.errors)
-    if form.validate_on_submit():
-        response, status = build_report(
-            dataset_id=dataset_id,
-            application_profile=form.application_profile.data,
-            template_type=form.template_type.data,
-        )
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            response, status = build_report(
+                dataset_id=dataset_id,
+                application_profile=form.application_profile.data,
+                template_type=form.template_type.data,
+            )
 
-        if status != 200:
-            exception_text = get_error_message_from_response(response)
-            logger.exception(exception_text)
-            flash(exception_text, 'error')
-        else:
-            flash('report started building', 'success')
-            logger.debug('render create diff view')
+            if status != 200:
+                logger.exception(response)
+                flash(response, 'error')
+            else:
+                flash('report started building', 'success')
+                logger.debug(response)
+                logger.debug('render create diff view')
+
+        # this solves issues with reloading page with preselected application profile
+        # which leads to wrong template variation assignments
+        return redirect(url_for('view_dataset', dataset_id=dataset_id))
 
     logger.debug(f'render dataset view for: {dataset_id}')
     return render_template('dataset/view_dataset.html', title=f'{dataset_id} view',
                            dataset=dataset, form=form, application_profiles=application_profiles)
 
 
-@app.route('/diff-report/<dataset_id>')
-def download_report(dataset_id: str):
+@app.route('/diff-report/<dataset_id>/<application_profile>/<template_type>')
+def download_report(dataset_id: str, application_profile: str, template_type: str):
     logger.debug(f'request diff report view for: {dataset_id}')
     try:
         with tempfile.TemporaryDirectory() as temp_folder:
-            file_name = f"report-{dataset_id}.html"
-            report_content, _ = get_report(dataset_id)
+            report_content, extension, _ = get_report(dataset_id, application_profile, template_type)
+            file_name = f"report-{dataset_id}-{application_profile}-{template_type}{extension}"
+            logger.debug(file_name)
             report = Path(temp_folder) / file_name
             report.write_bytes(report_content)
             logger.debug(f'render diff report view for: {dataset_id}')

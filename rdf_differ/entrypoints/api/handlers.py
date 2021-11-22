@@ -21,7 +21,7 @@ from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services import queue
 from rdf_differ.services.ap_manager import ApplicationProfileManager
-from rdf_differ.services.report_handling import report_exists, retrieve_report, remove_all_reports
+from rdf_differ.services.report_handling import report_exists, retrieve_report, remove_all_reports, get_all_reports
 from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks
 from utils.file_utils import save_files, build_unique_name, check_dataset_name_validity
 
@@ -62,7 +62,7 @@ def get_diff(dataset_id: str) -> tuple:
     try:
         dataset = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                     sparql_client=SPARQLRunner()).dataset_description(dataset_id)
-        dataset['available_reports'] = [1, 2]
+        dataset['available_reports'] = get_all_reports(dataset_id, config.RDF_DIFFER_REPORTS_DB)
         logger.debug(f'finish get diff for {dataset_id} endpoint')
         return dataset, 200
     except EndPointNotFound:
