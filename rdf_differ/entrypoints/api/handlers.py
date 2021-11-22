@@ -62,6 +62,7 @@ def get_diff(dataset_id: str) -> tuple:
     try:
         dataset = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                     sparql_client=SPARQLRunner()).dataset_description(dataset_id)
+        dataset['available_reports'] = [1, 2]
         logger.debug(f'finish get diff for {dataset_id} endpoint')
         return dataset, 200
     except EndPointNotFound:
@@ -238,7 +239,8 @@ def get_active_tasks() -> tuple:
     :return: dict of celery workers and their active tasks
     """
     tasks = retrieve_active_tasks()
-    return tasks, 200
+    flattened_tasks = tasks.get(list(tasks.keys())[0], [])
+    return flattened_tasks, 200
 
 
 def get_task_status(task_id: str) -> tuple:
