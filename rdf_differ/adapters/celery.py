@@ -28,6 +28,8 @@ def async_create_diff(self, dataset_id: str, body: dict, old_version_file: str, 
                       cleanup_location: str):
     """
     Task that retrieves diff files form specified location, creates the diff and cleans up the files
+
+    NOTE: the order of the first arg is important for task cancellation, don't change its order
     :param dataset_id: name of the dataset
     :param body: data for diff creation
     :param old_version_file: location of the old version file
@@ -62,6 +64,8 @@ def async_generate_report(self, dataset_id: str, application_profile: str,
                           ):
     """
     Task that generates the specified diff report
+
+    NOTE: the order of the first 4 args is important for task cancellation, don't change its order
     :param dataset_id: name of the dataset
     :param application_profile: the application profile for report generation
     :param template_type: the application profile report "flavour"
@@ -70,6 +74,8 @@ def async_generate_report(self, dataset_id: str, application_profile: str,
     :param dataset: The dataset data
     :param db_location: location of the local db storage
     """
+    import time
+    time.sleep(1000)
     with tempfile.TemporaryDirectory() as temp_dir:
         path_to_report = build_report(str(temp_dir), template_location, query_files, dataset)
         save_report(path_to_report, dataset['dataset_id'], application_profile, template_type, db_location)
