@@ -6,6 +6,7 @@
 # Email: coslet.mihai@gmail.com
 import logging
 from distutils.util import strtobool
+from json import dumps
 
 import requests
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
@@ -16,13 +17,13 @@ from werkzeug.exceptions import Conflict, InternalServerError, NotFound, Unproce
 from rdf_differ import config
 from rdf_differ.adapters.celery import async_create_diff, async_generate_report
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.adapters.redis import redis_client
+from rdf_differ.adapters.redis import redis_client, push_task_to_queue
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
-from rdf_differ.services import queue
 from rdf_differ.services.ap_manager import ApplicationProfileManager
+from rdf_differ.services.queue import kill_task
 from rdf_differ.services.report_handling import report_exists, retrieve_report, remove_all_reports, get_all_reports
-from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks
+from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks, flatten_active_tasks
 from utils.file_utils import save_files, build_unique_name, check_dataset_name_validity
 
 """
@@ -117,7 +118,9 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
             with save_files(old_version_file_content, new_version_file_content,
                             config.RDF_DIFFER_FILE_DB) as \
                     (db_location, old_version_file, new_version_file):
-                task = async_create_diff.delay(body, old_version_file, new_version_file, db_location)
+                task = async_create_diff.delay(dataset_name, body, old_version_file, new_version_file, db_location)
+                push_task_to_queue(dumps([task.id, dataset_name]))
+
                 redis_client.set(task.id, str(False))
             logger.info('finish create diff endpoint')
             return {'task_id': task.id, 'dataset_name': dataset_name}, 200
@@ -185,9 +188,8 @@ def build_report(body: dict) -> tuple:
                                   "and if the queries folder exists in the chosen application profile folder")
 
     if not report_exists(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB) or rebuild:
-        task = async_generate_report.delay(str(template_location), query_files, dataset, application_profile,
-                                           template_type,
-                                           RDF_DIFFER_REPORTS_DB)
+        task = async_generate_report.delay(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB,
+                                           str(template_location), query_files, dataset)
         return {'task_id': task.id}, 200
     else:
         return {'message': 'Report already exists. To rebuild send the `rebuild` query parameter set to true'}, 406
@@ -265,7 +267,10 @@ def stop_running_task(task_id: str) -> tuple:
     :param task_id: Id of task to revoke
     """
     try:
-        queue.stop_task(task_id)
-        return {'message': f'task {task_id} set for revoking.'}, 200
-    except ValueError:
-        raise NotAcceptable('task already marked for revoking')  # 406
+        tasks = flatten_active_tasks(retrieve_active_tasks())
+        task = next(task for task in tasks if task["id"] == task_id)
+        kill_task(task, RDF_DIFFER_REPORTS_DB)
+    except:
+        raise NotAcceptable('task already finished executing or does not exist')  # 406
+
+    return {'message': f'task {task_id} set for revoking.'}, 200
