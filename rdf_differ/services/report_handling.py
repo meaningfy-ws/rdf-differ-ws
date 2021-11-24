@@ -5,6 +5,7 @@ from pathlib import Path
 from shutil import copytree
 
 from eds4jinja2.builders.report_builder import ReportBuilder
+from werkzeug.exceptions import UnprocessableEntity
 
 from rdf_differ.config import RDF_DIFFER_LOGGER
 from utils.file_utils import dir_is_empty, empty_directory, copy_file_to_destination, dir_exists
@@ -12,17 +13,22 @@ from utils.file_utils import dir_is_empty, empty_directory, copy_file_to_destina
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
-def build_report(temp_dir: str, template_location: str, query_files: dict, dataset: dict):
+def build_report(temp_dir: str, template_location: str, query_files: dict, dataset: dict, timestamp: str):
     additional_config = {"conf": {"query_files": query_files,
-                                  "default_endpoint": dataset['query_url']}}
+                                  "default_endpoint": dataset['query_url'],
+                                  "timestamp": timestamp}}
     logger.debug(f'template location {template_location}')
 
     copytree(template_location, temp_dir, dirs_exist_ok=True)
 
-    with open(Path(temp_dir) / 'config.json', 'r') as config_file:
-        config_content = json.load(config_file)
+    try:
+        with open(Path(temp_dir) / 'config.json', 'r') as config_file:
+            config_content = json.load(config_file)
 
-    logger.debug(f'template file {config_content["template"]}')
+        logger.debug(f'template file {config_content["template"]}')
+    except FileNotFoundError as e:
+        logger.exception(str(e))
+        raise UnprocessableEntity("config.json file is missing from the chosen template variant folder")
 
     report_builder = ReportBuilder(target_path=temp_dir, additional_config=additional_config)
     report_builder.make_document()
@@ -52,6 +58,23 @@ def build_report_location(dataset_name: str, application_profile: str, template_
     """
     return str(
         Path(build_dataset_reports_location(dataset_name, db_location)) / f'{application_profile}/{template_type}')
+
+
+def build_report_name(destination_folder: str, dataset_name: str, application_profile: str, template_type: str,
+                      timestamp: str, extension: str) -> str:
+    """
+    build absolute report path including the filename
+
+    :param destination_folder: report location
+    :param dataset_name: dataset name
+    :param application_profile: application profile for report identification
+    :param template_type: template to retrieve existence
+    :param timestamp: time of report creation
+    :param extension: report extension
+    :return: absolute report path
+    """
+    return str(
+        Path(destination_folder) / f'{dataset_name}-{application_profile}-{template_type}-{timestamp}.{extension}')
 
 
 def retrieve_report(dataset_name: str, application_profile: str, template_type: str, db_location: str) -> str:
@@ -103,7 +126,8 @@ def get_all_reports(dataset_name: str, db_location: str) -> list:
     return list()
 
 
-def save_report(report: str, dataset_name: str, application_profile: str, template_type: str, db_location: str) -> None:
+def save_report(report: str, dataset_name: str, application_profile: str, template_type: str, timestamp: str,
+                db_location: str) -> None:
     """
     save report to specified location
 
@@ -111,9 +135,13 @@ def save_report(report: str, dataset_name: str, application_profile: str, templa
     :param dataset_name: dataset name
     :param application_profile: application profile for report identification
     :param template_type: template to save
+    :param timestamp: time of report creation
     :param db_location: which file system location to use to perform the action
     """
+    report_extension = Path(report).suffix[1:]  # remove `.` from extension
     location_to_save = build_report_location(dataset_name, application_profile, template_type, db_location)
+    report_name = build_report_name(location_to_save, dataset_name, application_profile, template_type, timestamp,
+                                    report_extension)
 
     if not dir_exists(location_to_save):
         Path(location_to_save).mkdir(parents=True)
@@ -123,7 +151,7 @@ def save_report(report: str, dataset_name: str, application_profile: str, templa
         empty_directory(location_to_save)
 
     logger.debug(f'{location_to_save}.')
-    copy_file_to_destination(report, location_to_save)
+    copy_file_to_destination(report, report_name)
 
 
 def remove_report(dataset_name: str, application_profile: str, template_type: str, db_location: str) -> bool:

@@ -73,21 +73,24 @@ def test_save_report(tmpdir):
     dataset_name = 'dataset'
     application_profile = 'application'
     template_type = 'template_type'
+    timestamp = '12-12-2021T12:12:12'
 
     report = tmpdir.join('report.html')
     report.write('data')
 
     db_location = tmpdir.mkdir('db')
 
-    save_report(report, dataset_name, application_profile, template_type, db_location)
+    save_report(report, dataset_name, application_profile, template_type, timestamp, db_location)
 
-    assert (Path(db_location) / 'dataset/application/template_type/report.html').read_text() == 'data'
+    assert (Path(
+        db_location) / f'dataset/application/template_type/{dataset_name}-{application_profile}-{template_type}-{timestamp}.html').read_text() == 'data'
 
 
 def test_save_report_rewrite(tmpdir):
     dataset_name = 'dataset'
     application_profile = 'application'
     template_type = 'template_type'
+    timestamp = '12-12-2021T12:12:12'
 
     report = tmpdir.join('report.html')
     report.write('data')
@@ -96,9 +99,10 @@ def test_save_report_rewrite(tmpdir):
     old_report = db_location.mkdir(dataset_name).mkdir(application_profile).mkdir(template_type).join('report.html')
     old_report.write('old data')
 
-    save_report(report, dataset_name, application_profile, template_type, db_location)
+    save_report(report, dataset_name, application_profile, template_type, timestamp, db_location)
 
-    assert (Path(db_location) / 'dataset/application/template_type/report.html').read_text() == 'data'
+    assert (Path(
+        db_location) / f'dataset/application/template_type/{dataset_name}-{application_profile}-{template_type}-{timestamp}.html').read_text() == 'data'
 
 
 def test_remove_all_reports_success(tmpdir):

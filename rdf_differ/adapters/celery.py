@@ -12,6 +12,7 @@ from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.config import RDF_DIFFER_REDIS_SERVICE
 from rdf_differ.services.report_handling import build_report, save_report
+from rdf_differ.services.time import get_timestamp
 
 celery_worker = Celery('rdf-differ-tasks', broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE)
 celery_worker.conf.update(result_extended=True)
@@ -74,10 +75,9 @@ def async_generate_report(self, dataset_id: str, application_profile: str,
     :param dataset: The dataset data
     :param db_location: location of the local db storage
     """
-    import time
-    time.sleep(1000)
+    timestamp = get_timestamp()
     with tempfile.TemporaryDirectory() as temp_dir:
-        path_to_report = build_report(str(temp_dir), template_location, query_files, dataset)
-        save_report(path_to_report, dataset['dataset_id'], application_profile, template_type, db_location)
+        path_to_report = build_report(str(temp_dir), template_location, query_files, dataset, timestamp)
+        save_report(path_to_report, dataset['dataset_id'], application_profile, template_type, timestamp, db_location)
 
     return True
