@@ -19,7 +19,7 @@ def test_async_create_diff_success(mock_create_diff, tmpdir):
     new_version_file = cleanup_location.join('new_version.rdf')
     old_version_file = cleanup_location.join('old_version.rdf')
 
-    return_value = async_create_diff({}, old_version_file, new_version_file, cleanup_location)
+    return_value = async_create_diff('dataset', {}, old_version_file, new_version_file, cleanup_location)
 
     mock_create_diff.assert_called_once()
 
@@ -36,7 +36,7 @@ def test_async_create_diff_failure(mock_create_diff, tmpdir):
     old_version_file = cleanup_location.join('old_version.rdf')
 
     with pytest.raises(FusekiException) as e:
-        async_create_diff({}, old_version_file, new_version_file, cleanup_location)
+        async_create_diff('dataset', {}, old_version_file, new_version_file, cleanup_location)
 
     assert not dir_exists(cleanup_location)
 
@@ -49,10 +49,10 @@ def test_async_create_report_success(mock_build_report, mock_save_report, tmpdir
     dataset_id = 'dataset'
     application_profile = 'ap'
     template_type = 'tp'
-    return_value = async_generate_report(template_location, {}, {'dataset_id': dataset_id}, application_profile,
-                                         template_type, db)
+    return_value = async_generate_report(dataset_id, application_profile, template_type, db, template_location, {},
+                                         {'dataset_id': dataset_id})
 
     mock_build_report.assert_called_once()
     mock_save_report.assert_called_once()
 
-    assert True == return_value
+    assert return_value
