@@ -1,44 +1,7 @@
 {% extends "base.html" %}
 {% set active_page = "create_diff" %}
+{% from "macros.html" import render_text_input_field, render_upload_input_field with context %}
 
-{% macro render_text_input_field(field) %}
-    <div class="row">
-        <div class="col s12">
-            <div class="input-field">
-                {{ field.label }}
-                {{ field(**kwargs)|safe }}
-
-                {% if field.errors %}
-
-                    {% for error in field.errors %}
-                        <p class="red-text">{{ error }}</p>
-                    {% endfor %}
-
-                {% endif %}
-            </div>
-        </div>
-    </div>
-{% endmacro %}
-
-{% macro render_upload_input_field(field) %}
-            <div class="row">
-                <div class="col s12">
-                    {{ field.label }}
-                    <div class="file-field input-field">
-                        <div class="btn blue lighten-1">
-
-                            <span><i class="material-icons left">cloud_upload</i>Browse</span>
-                             {{ field(**kwargs)|safe }}
-                        </div>
-
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text"
-                                   placeholder="Upload file"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-{% endmacro %}
 
 
 {% block app_content %}
@@ -69,11 +32,11 @@
             {{ render_upload_input_field(form.new_version_file_content) }}
 
             {{ render_text_input_field(form.new_version_id) }}
-          <div class="row">
+            <div class="row">
                 <div class="col s12 right-align">
-                {{ form.submit(class_='btn btn-file blue darken-2') }}
+                    {{ form.submit(class_='btn btn-file blue darken-2') }}
                 </div>
-          </div>
+            </div>
 
         </form>
     </div>

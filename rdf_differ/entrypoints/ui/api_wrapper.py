@@ -8,6 +8,10 @@
 """
 Service to consume RDF diff API.
 """
+import re
+from json import dumps
+from pathlib import Path
+
 import requests
 from werkzeug.datastructures import FileStorage
 
@@ -35,16 +39,42 @@ def get_dataset(dataset_id: str) -> tuple:
     return response.json(), response.status_code
 
 
-def get_report(dataset_id: str) -> tuple:
+def get_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
     """
     Method to connect to the RDF diff api to get the dataset diff report
     :param dataset_id: The dataset identifier.
+    :param application_profile: application profile for report
+    :param template_type: report variation
     :return: html report
     :rtype: file, int
     """
     response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs/report',
-                            params={'dataset_id': dataset_id})
-    return response.content, response.status_code
+                            params={
+                                'dataset_id': dataset_id,
+                                'application_profile': application_profile,
+                                'template_type': template_type
+                            })
+    d = response.headers['content-disposition']
+    file_extension = Path(re.findall("filename=(.+)", d)[0]).suffix
+    return response.content, file_extension, response.status_code
+
+
+def build_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
+    """
+    Method to send build a report call to api
+    :param dataset_id: The dataset identifier.
+    :param application_profile: application profile for report
+    :param template_type: report variation
+    :return: task and dataset ids
+    """
+    data = dumps({
+        'dataset_id': dataset_id,
+        'application_profile': application_profile,
+        'template_type': template_type
+    })
+    headers = {'Content-type': 'application/json'}
+    response = requests.post(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs/report', data=data, headers=headers)
+    return response.text, response.status_code
 
 
 def create_diff(dataset_name: str, dataset_description: str, dataset_uri: str,
@@ -75,3 +105,34 @@ def create_diff(dataset_name: str, dataset_description: str, dataset_uri: str,
     }
     response = requests.post(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs', data=data, files=files)
     return response.text, response.status_code
+
+
+def get_application_profiles() -> tuple:
+    """
+    Method to get application profiles from api
+    :return: applicaiton profiles
+    :rtype list, int
+    """
+    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + '/aps')
+    return response.json(), response.status_code
+
+
+def get_active_tasks() -> tuple:
+    """
+    Method to get celery active tasks from api
+    :return: active celery tasks
+    :rtype list, int
+    """
+    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + '/tasks/active')
+    return response.json(), response.status_code
+
+
+def revoke_task(task_id: str) -> tuple:
+    """
+    Method to kill celery tasks from api
+    :param task_id: celery task to kill
+    :return: api response
+    :rtype: dict, int
+    """
+    response = requests.delete(url=f'{rdf_differ.config.RDF_DIFFER_API_SERVICE}/tasks/{task_id}')
+    return response.json(), response.status_code

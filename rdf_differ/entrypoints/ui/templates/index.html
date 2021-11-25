@@ -10,7 +10,6 @@
             <th scope="col">New version name</th>
             <th scope="col">Old version name</th>
             <th scope="col">Dataset URI</th>
-            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -22,10 +21,8 @@
                     </th>
                     <td>{{ dataset.new_version_id }}</td>
                     <td>{{ dataset.old_version_id }}</td>
-                    <td><a href="{{ url_for('view_dataset', dataset_id=dataset.dataset_id[1:]) }}">{{ dataset.dataset_uri }}</a></td>
-                    <td><a href="{{ url_for('download_report', dataset_id=dataset.dataset_id) }}"
-                           id="report-{{ dataset.dataset_id }}"
-                           class="btn btn-file blue darken-2">Generate report<i class="material-icons right">file_download</i></a>
+                    <td>
+                        <a href="{{ url_for('view_dataset', dataset_id=dataset.dataset_id[1:]) }}">{{ dataset.dataset_uri }}</a>
                     </td>
                 </tr>
             {% endif %}

@@ -113,11 +113,11 @@ def test_create_diff_success(mock_create_diff, mock_get_dataset, ui_client):
 @patch('rdf_differ.entrypoints.ui.views.api_create_diff')
 def test_create_diff_failure_dataset_is_not_empty(mock_create_diff, ui_client):
     mock_create_diff.return_value = dumps({
-                                        "detail": "Dataset is not empty.",
-                                        "status": 409,
-                                        "title": "Conflict",
-                                        "type": "about:blank"
-                                    }), 409
+        "detail": "Dataset is not empty.",
+        "status": 409,
+        "title": "Conflict",
+        "type": "about:blank"
+    }), 409
 
     data = {
         'dataset_name': 'dataset_name',
@@ -176,9 +176,11 @@ def test_create_diff_incorrect_dataset_name(mock_create_diff, ui_client):
 @patch('rdf_differ.entrypoints.ui.views.get_report')
 def test_download_report_success(mock_get_report, ui_client):
     dataset_id = 'dataset'
-    mock_get_report.return_value = b'important report', 200
+    application_profile = 'ap'
+    template_type = 'type'
+    mock_get_report.return_value = b'important report', '.html', 200
 
-    response = ui_client.get(f'/diff-report/{dataset_id}')
+    response = ui_client.get(f'/diff-report/{dataset_id}/{application_profile}/{template_type}')
     assert 'important report' in response.data.decode()
 
 
@@ -186,10 +188,12 @@ def test_download_report_success(mock_get_report, ui_client):
 @patch('rdf_differ.entrypoints.ui.views.get_report')
 def test_download_report_failure(mock_get_report, mock_get_datasets, ui_client):
     dataset_id = 'dataset'
+    application_profile = 'ap'
+    template_type = 'type'
     mock_get_report.side_effect = Exception('report error')
     mock_get_datasets.return_value = [], 200
 
-    response = ui_client.get(f'/diff-report/{dataset_id}')
+    response = ui_client.get(f'/diff-report/{dataset_id}/{application_profile}/{template_type}')
     soup = BeautifulSoup(response.data, 'html.parser')
 
     # check if redirected to index page

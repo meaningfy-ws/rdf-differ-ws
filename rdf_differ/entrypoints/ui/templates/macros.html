@@ -1,0 +1,47 @@
+{% macro render_upload_input_field(field) %}flaskl
+    <div class="row">
+        <div class="col s12">
+            {{ field.label }}
+            <div class="file-field input-field">
+                <div class="btn blue lighten-1">
+
+                    <span><i class="material-icons left">cloud_upload</i>Browse</span>
+                    {{ field(**kwargs)|safe }}
+                </div>
+
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text"
+                           placeholder="Upload file"/>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_text_input_field(field) %}
+    <div class="row">
+        <div class="col s12">
+            <div class="input-field">
+                {{ field.label }}
+                {{ field(**kwargs)|safe }}
+
+                {% if field.errors %}
+
+                    {% for error in field.errors %}
+                        <p class="red-text">{{ error }}</p>
+                    {% endfor %}
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_select_field(field, id) %}
+    <select style="display: block" id="{{ id }}">
+        {% for choice in field.choices %}
+            <option value="{{ choice[0] }}">{{ choice[1] }}</option>
+        {% endfor %}
+    </select>
+    <label>{{ field.label }}</label>
+{% endmacro %}

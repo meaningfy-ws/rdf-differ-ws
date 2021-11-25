@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% set active_page = "view_active_tasks" %}
+
+{% block app_content %}
+    <h1>List of active tasks</h1>
+    <table class="table highlight ">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">type</th>
+            <th scope="col">args</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks %}
+            {% if task %}
+                <tr>
+                    <th scope="row">{{ task.id }}</th>
+                    <td>{{ task.type }}</td>
+                    <td>{{ task.args }}</td>
+                    <td><a href="{{ url_for('revoke_task', task_id=task.id) }}"
+                           id="stop-task-{{ task.id }}"
+                           class="btn btn-file red darken-2">Stop task<i class="material-icons right">do_disturb_on</i></a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -121,7 +121,7 @@ def test_get_diff_200(mock_dataset_description):
     response, status = get_diff('dataset')
 
     assert status == 200
-    assert response == {'dataset_id': "dataset"}
+    assert response == {'dataset_id': "dataset", 'available_reports': []}
 
 
 @patch.object(FusekiDiffAdapter, 'dataset_description')

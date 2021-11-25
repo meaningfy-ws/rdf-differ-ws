@@ -10,7 +10,7 @@
 """
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
-from wtforms import StringField, SubmitField, FileField
+from wtforms import StringField, SubmitField, FileField, SelectField
 from wtforms.validators import Length, DataRequired, URL, Regexp
 
 
@@ -29,3 +29,17 @@ class CreateDiffForm(FlaskForm):
     new_version_id = StringField('New dataset version name', validators=[DataRequired()], default='new')
 
     submit = SubmitField('Create diff')
+
+
+class NonValidatingSelectMultipleField(SelectField):
+    """
+    Allow select fields to have dynamically set values
+    """
+    def pre_validate(self, form):
+        pass
+
+
+class BuildReportForm(FlaskForm):
+    application_profile = NonValidatingSelectMultipleField('Application profile', choices=[])
+    template_type = NonValidatingSelectMultipleField('Template type', choices=[])
+    submit = SubmitField('Build report')

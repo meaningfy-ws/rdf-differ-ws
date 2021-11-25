@@ -81,6 +81,28 @@ def report_exists(dataset_name: str, application_profile: str, template_type: st
     return dir_exists(report_location) and not dir_is_empty(report_location)
 
 
+def get_all_reports(dataset_name: str, db_location: str) -> list:
+    """
+    Get all built reports for specified dataset
+    :param dataset_name: dataset name
+    :param db_location: which file system location to use to perform the action
+    :return: list of application profiles and their variations
+    """
+    reports_location = Path(build_dataset_reports_location(dataset_name, db_location))
+    if dir_exists(reports_location):
+        reports = list()
+        for ap_location in Path(reports_location).iterdir():
+            reports.append(
+                {
+                    'application_profile': ap_location.name,
+                    'template_variations': [location.name for location in ap_location.iterdir()]
+                }
+            )
+        return reports
+
+    return list()
+
+
 def save_report(report: str, dataset_name: str, application_profile: str, template_type: str, db_location: str) -> None:
     """
     save report to specified location
