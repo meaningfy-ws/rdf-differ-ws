@@ -72,8 +72,14 @@ def file_exists(path: Union[str, Path]) -> bool:
     return Path(path).is_file()
 
 
-def copy_file_to_destination(file: str, destination: str) -> None:
-    shutil.copy(file, destination)
+def copy_file_to_destination(file: str, destination: str) -> str:
+    """
+    Copy file helper method
+    :param file: file to copy
+    :param destination: destination to copy
+    :return: new file destination
+    """
+    return shutil.copy(file, destination)
 
 
 def check_files_exist(file_a: FileStorage, file_b: FileStorage) -> None:

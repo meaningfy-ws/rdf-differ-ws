@@ -45,8 +45,10 @@ RDF_DIFFER_SECRET_KEY_API = os.environ.get('RDF_DIFFER_SECRET_KEY_API', 'secret 
 
 RDF_DIFFER_LOGGER = 'differ'
 
+RDF_DIFFER_TIME_FORMAT = os.environ.get('RDF_DIFFER_TIME_FORMAT', '%d-%b-%YT%H:%M:%S')
+RDF_DIFFER_TIMEZONE = os.environ.get('RDF_DIFFER_TIMEZONE', 'Europe/Paris')
+
 RDF_DIFFER_FILE_DB = os.environ.get('RDF_DIFFER_FILE_DB', str(Path(__file__).parents[1] / 'db'))
 RDF_DIFFER_REPORTS_DB = os.environ.get('RDF_DIFFER_REPORT_DB', str(Path(__file__).parents[1] / 'reports'))
 
 SHOW_SWAGGER_UI = strtobool(os.environ.get('SHOW_SWAGGER_UI', 'true'))
-
