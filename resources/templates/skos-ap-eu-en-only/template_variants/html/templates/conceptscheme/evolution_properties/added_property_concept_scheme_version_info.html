@@ -1,0 +1,19 @@
+
+{% import "macros.html" as mc %}
+
+    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["added_property_concept_scheme_version_info.rq"]).fetch_tabular() %}
+    
+{% if not content.empty %}
+    {% call mc.render_fetch_results(content, error) %}
+    
+<h3 class="ui header">Added version infos</h3>
+<section class="ui basic segment">
+    <p>The table below lists the added <strong>owl:versionInfo</strong>
+    </p>
+    <p><strong>Query identifier:</strong> added_property_concept_scheme_version_info.rq</p>
+    {{ mc.pandas_table(content, "Added version info") }}
+</section>
+    
+    {% endcall %}
+{% endif %}
+    

@@ -1,0 +1,10 @@
+{
+    "template": "main.json",
+    "conf":
+    {
+        "default_endpoint" : "http://localhost:3030/report1/sparql",
+        "title": "RDF Diff report",
+        "type": "json report",
+        "author": "Meaningfy"
+    }
+}

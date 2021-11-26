@@ -1,0 +1,284 @@
+
+{% extends "layout.html" %}
+{% import "macros.html" as mc %}
+{% block content %}
+
+    <p>This report is automatically generated from the {{ conf.dataset_name }} RDF dataset on <time>{{ conf.timestamp }}</time>
+        and aims at presenting the difference between two versions of an authority table following {{ conf.application_profile }} application profile.</p>
+    <p>Report details</p>
+    <p><strong>Dataset used: </strong> {{ conf.dataset_name }}</p>
+    <p><strong>Time: </strong> {{ conf.timestamp }}</p>
+    <p><strong>Application profile: </strong> {{ conf.application_profile }}</p>
+    <p><strong>Graph URI: </strong> {{ conf.graph_uri }}</p>
+
+{% include "statistics.html" %}
+
+
+    <h1>Concept Scheme</h1>
+    
+    
+        {% include "conceptscheme/added_instance_concept_scheme.html" with context %}
+    
+        {% include "conceptscheme/deleted_instance_concept_scheme.html" with context %}
+    
+    
+        <h2>Labels</h2>
+        
+            {% include "conceptscheme/labels/added_property_concept_scheme_pref_label.html" with context %}
+        
+            {% include "conceptscheme/labels/deleted_property_concept_scheme_pref_label.html" with context %}
+        
+            {% include "conceptscheme/labels/updated_property_concept_scheme_pref_label.html" with context %}
+        
+            {% include "conceptscheme/labels/moved_property_concept_scheme_pref_label.html" with context %}
+        
+            {% include "conceptscheme/labels/changed_property_concept_scheme_pref_label.html" with context %}
+        
+            {% include "conceptscheme/labels/added_property_concept_scheme_alt_label.html" with context %}
+        
+            {% include "conceptscheme/labels/deleted_property_concept_scheme_alt_label.html" with context %}
+        
+            {% include "conceptscheme/labels/updated_property_concept_scheme_alt_label.html" with context %}
+        
+            {% include "conceptscheme/labels/moved_property_concept_scheme_alt_label.html" with context %}
+        
+            {% include "conceptscheme/labels/changed_property_concept_scheme_alt_label.html" with context %}
+        
+    
+        <h2>Semantic Properties</h2>
+        
+            {% include "conceptscheme/semantic_properties/added_property_concept_scheme_has_top_concept.html" with context %}
+        
+            {% include "conceptscheme/semantic_properties/deleted_property_concept_scheme_has_top_concept.html" with context %}
+        
+            {% include "conceptscheme/semantic_properties/updated_property_concept_scheme_has_top_concept.html" with context %}
+        
+            {% include "conceptscheme/semantic_properties/moved_property_concept_scheme_has_top_concept.html" with context %}
+        
+            {% include "conceptscheme/semantic_properties/changed_property_concept_scheme_has_top_concept.html" with context %}
+        
+    
+
+    <h1>Concept</h1>
+    
+    
+        {% include "concept/added_instance_concept.html" with context %}
+    
+        {% include "concept/deleted_instance_concept.html" with context %}
+    
+    
+        <h2>Semantic Properties</h2>
+        
+            {% include "concept/semantic_properties/added_property_concept_in_scheme.html" with context %}
+        
+            {% include "concept/semantic_properties/deleted_property_concept_in_scheme.html" with context %}
+        
+            {% include "concept/semantic_properties/updated_property_concept_in_scheme.html" with context %}
+        
+            {% include "concept/semantic_properties/moved_property_concept_in_scheme.html" with context %}
+        
+            {% include "concept/semantic_properties/changed_property_concept_in_scheme.html" with context %}
+        
+            {% include "concept/semantic_properties/added_property_concept_top_concept_of.html" with context %}
+        
+            {% include "concept/semantic_properties/deleted_property_concept_top_concept_of.html" with context %}
+        
+            {% include "concept/semantic_properties/updated_property_concept_top_concept_of.html" with context %}
+        
+            {% include "concept/semantic_properties/moved_property_concept_top_concept_of.html" with context %}
+        
+            {% include "concept/semantic_properties/changed_property_concept_top_concept_of.html" with context %}
+        
+            {% include "concept/semantic_properties/added_property_concept_broader.html" with context %}
+        
+            {% include "concept/semantic_properties/deleted_property_concept_broader.html" with context %}
+        
+            {% include "concept/semantic_properties/updated_property_concept_broader.html" with context %}
+        
+            {% include "concept/semantic_properties/moved_property_concept_broader.html" with context %}
+        
+            {% include "concept/semantic_properties/changed_property_concept_broader.html" with context %}
+        
+            {% include "concept/semantic_properties/added_property_concept_narrower.html" with context %}
+        
+            {% include "concept/semantic_properties/deleted_property_concept_narrower.html" with context %}
+        
+            {% include "concept/semantic_properties/updated_property_concept_narrower.html" with context %}
+        
+            {% include "concept/semantic_properties/moved_property_concept_narrower.html" with context %}
+        
+            {% include "concept/semantic_properties/changed_property_concept_narrower.html" with context %}
+        
+            {% include "concept/semantic_properties/added_property_concept_related.html" with context %}
+        
+            {% include "concept/semantic_properties/deleted_property_concept_related.html" with context %}
+        
+            {% include "concept/semantic_properties/updated_property_concept_related.html" with context %}
+        
+            {% include "concept/semantic_properties/moved_property_concept_related.html" with context %}
+        
+            {% include "concept/semantic_properties/changed_property_concept_related.html" with context %}
+        
+    
+        <h2>Notes</h2>
+        
+            {% include "concept/notes/added_property_concept_notation.html" with context %}
+        
+            {% include "concept/notes/deleted_property_concept_notation.html" with context %}
+        
+            {% include "concept/notes/updated_property_concept_notation.html" with context %}
+        
+            {% include "concept/notes/moved_property_concept_notation.html" with context %}
+        
+            {% include "concept/notes/changed_property_concept_notation.html" with context %}
+        
+            {% include "concept/notes/added_property_concept_change_note.html" with context %}
+        
+            {% include "concept/notes/deleted_property_concept_change_note.html" with context %}
+        
+            {% include "concept/notes/updated_property_concept_change_note.html" with context %}
+        
+            {% include "concept/notes/moved_property_concept_change_note.html" with context %}
+        
+            {% include "concept/notes/changed_property_concept_change_note.html" with context %}
+        
+            {% include "concept/notes/added_property_concept_definition.html" with context %}
+        
+            {% include "concept/notes/deleted_property_concept_definition.html" with context %}
+        
+            {% include "concept/notes/updated_property_concept_definition.html" with context %}
+        
+            {% include "concept/notes/moved_property_concept_definition.html" with context %}
+        
+            {% include "concept/notes/changed_property_concept_definition.html" with context %}
+        
+            {% include "concept/notes/added_property_concept_example.html" with context %}
+        
+            {% include "concept/notes/deleted_property_concept_example.html" with context %}
+        
+            {% include "concept/notes/updated_property_concept_example.html" with context %}
+        
+            {% include "concept/notes/moved_property_concept_example.html" with context %}
+        
+            {% include "concept/notes/changed_property_concept_example.html" with context %}
+        
+            {% include "concept/notes/added_property_concept_history_note.html" with context %}
+        
+            {% include "concept/notes/deleted_property_concept_history_note.html" with context %}
+        
+            {% include "concept/notes/updated_property_concept_history_note.html" with context %}
+        
+            {% include "concept/notes/moved_property_concept_history_note.html" with context %}
+        
+            {% include "concept/notes/changed_property_concept_history_note.html" with context %}
+        
+            {% include "concept/notes/added_property_concept_scope_note.html" with context %}
+        
+            {% include "concept/notes/deleted_property_concept_scope_note.html" with context %}
+        
+            {% include "concept/notes/updated_property_concept_scope_note.html" with context %}
+        
+            {% include "concept/notes/moved_property_concept_scope_note.html" with context %}
+        
+            {% include "concept/notes/changed_property_concept_scope_note.html" with context %}
+        
+            {% include "concept/notes/added_property_concept_editorial_note.html" with context %}
+        
+            {% include "concept/notes/deleted_property_concept_editorial_note.html" with context %}
+        
+            {% include "concept/notes/updated_property_concept_editorial_note.html" with context %}
+        
+            {% include "concept/notes/moved_property_concept_editorial_note.html" with context %}
+        
+            {% include "concept/notes/changed_property_concept_editorial_note.html" with context %}
+        
+    
+        <h2>Labels</h2>
+        
+            {% include "concept/labels/added_property_concept_pref_label.html" with context %}
+        
+            {% include "concept/labels/deleted_property_concept_pref_label.html" with context %}
+        
+            {% include "concept/labels/updated_property_concept_pref_label.html" with context %}
+        
+            {% include "concept/labels/moved_property_concept_pref_label.html" with context %}
+        
+            {% include "concept/labels/changed_property_concept_pref_label.html" with context %}
+        
+            {% include "concept/labels/added_property_concept_alt_label.html" with context %}
+        
+            {% include "concept/labels/deleted_property_concept_alt_label.html" with context %}
+        
+            {% include "concept/labels/updated_property_concept_alt_label.html" with context %}
+        
+            {% include "concept/labels/moved_property_concept_alt_label.html" with context %}
+        
+            {% include "concept/labels/changed_property_concept_alt_label.html" with context %}
+        
+            {% include "concept/labels/added_property_concept_hidden_label.html" with context %}
+        
+            {% include "concept/labels/deleted_property_concept_hidden_label.html" with context %}
+        
+            {% include "concept/labels/updated_property_concept_hidden_label.html" with context %}
+        
+            {% include "concept/labels/moved_property_concept_hidden_label.html" with context %}
+        
+            {% include "concept/labels/changed_property_concept_hidden_label.html" with context %}
+        
+    
+        <h2>Mapping Properties</h2>
+        
+            {% include "concept/mapping_properties/added_property_concept_broad_match.html" with context %}
+        
+            {% include "concept/mapping_properties/deleted_property_concept_broad_match.html" with context %}
+        
+            {% include "concept/mapping_properties/updated_property_concept_broad_match.html" with context %}
+        
+            {% include "concept/mapping_properties/moved_property_concept_broad_match.html" with context %}
+        
+            {% include "concept/mapping_properties/changed_property_concept_broad_match.html" with context %}
+        
+            {% include "concept/mapping_properties/added_property_concept_narrow_match.html" with context %}
+        
+            {% include "concept/mapping_properties/deleted_property_concept_narrow_match.html" with context %}
+        
+            {% include "concept/mapping_properties/updated_property_concept_narrow_match.html" with context %}
+        
+            {% include "concept/mapping_properties/moved_property_concept_narrow_match.html" with context %}
+        
+            {% include "concept/mapping_properties/changed_property_concept_narrow_match.html" with context %}
+        
+            {% include "concept/mapping_properties/added_property_concept_close_match.html" with context %}
+        
+            {% include "concept/mapping_properties/deleted_property_concept_close_match.html" with context %}
+        
+            {% include "concept/mapping_properties/updated_property_concept_close_match.html" with context %}
+        
+            {% include "concept/mapping_properties/moved_property_concept_close_match.html" with context %}
+        
+            {% include "concept/mapping_properties/changed_property_concept_close_match.html" with context %}
+        
+            {% include "concept/mapping_properties/added_property_concept_exact_match.html" with context %}
+        
+            {% include "concept/mapping_properties/deleted_property_concept_exact_match.html" with context %}
+        
+            {% include "concept/mapping_properties/updated_property_concept_exact_match.html" with context %}
+        
+            {% include "concept/mapping_properties/moved_property_concept_exact_match.html" with context %}
+        
+            {% include "concept/mapping_properties/changed_property_concept_exact_match.html" with context %}
+        
+            {% include "concept/mapping_properties/added_property_concept_related_match.html" with context %}
+        
+            {% include "concept/mapping_properties/deleted_property_concept_related_match.html" with context %}
+        
+            {% include "concept/mapping_properties/updated_property_concept_related_match.html" with context %}
+        
+            {% include "concept/mapping_properties/moved_property_concept_related_match.html" with context %}
+        
+            {% include "concept/mapping_properties/changed_property_concept_related_match.html" with context %}
+        
+    
+
+
+{% endblock %}

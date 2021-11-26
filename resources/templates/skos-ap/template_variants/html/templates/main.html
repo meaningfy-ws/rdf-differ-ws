@@ -13,6 +13,8 @@
         may occur (e.g. skos:ConceptScheme, skosxl:Label, euvoc:XlNote etc.).</p>
     <p>This is a beta version of the report and is subject to changes.</p>
 
+
+    {% include "statistical_info.html" with context %}
     <h1>Concepts</h1>
     {% include "sections/added_instance_concepts.html" with context %}
     {% include "sections/deleted_instance_concepts.html" with context %}

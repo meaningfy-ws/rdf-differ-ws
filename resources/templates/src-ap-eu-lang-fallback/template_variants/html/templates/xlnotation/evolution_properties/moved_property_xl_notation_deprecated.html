@@ -1,0 +1,19 @@
+
+{% import "macros.html" as mc %}
+
+    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["moved_property_xl_notation_deprecated.rq"]).fetch_tabular() %}
+    
+{% if not content.empty %}
+    {% call mc.render_fetch_results(content, error) %}
+    
+<h3 class="ui header">Moved deprecateds</h3>
+<section class="ui basic segment">
+    <p>The table below lists the moved <strong>owl:deprecated</strong>
+    </p>
+    <p><strong>Query identifier:</strong> moved_property_xl_notation_deprecated.rq</p>
+    {{ mc.pandas_table(content, "Moved deprecated") }}
+</section>
+    
+    {% endcall %}
+{% endif %}
+    

@@ -1,0 +1,19 @@
+
+{% import "macros.html" as mc %}
+
+    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["added_reified_concept_scheme_pref_label_literal_form.rq"]).fetch_tabular() %}
+    
+{% if not content.empty %}
+    {% call mc.render_fetch_results(content, error) %}
+    
+    <h3 class="ui header">Added reified pref label</h3>
+    <section class="ui basic segment">
+        <p>The table below lists the added <strong>skosxl:prefLabel / skosxl:literalForm</strong>
+        </p>
+        <p><strong>Query identifier:</strong> added_reified_concept_scheme_pref_label_literal_form.rq</p>
+        {{ mc.pandas_table(content, "Added reified pref label") }}
+    </section>
+    
+    {% endcall %}
+{% endif %}
+    

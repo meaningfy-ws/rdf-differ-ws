@@ -1,0 +1,19 @@
+
+{% import "macros.html" as mc %}
+
+    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["updated_property_concept_is_replaced_by.rq"]).fetch_tabular() %}
+    
+{% if not content.empty %}
+    {% call mc.render_fetch_results(content, error) %}
+    
+<h3 class="ui header">Updated is replaced bys</h3>
+<section class="ui basic segment">
+    <p>The table below lists the updated <strong>dct:isReplacedBy</strong>
+    </p>
+    <p><strong>Query identifier:</strong> updated_property_concept_is_replaced_by.rq</p>
+    {{ mc.pandas_table(content, "Updated is replaced by") }}
+</section>
+    
+    {% endcall %}
+{% endif %}
+    

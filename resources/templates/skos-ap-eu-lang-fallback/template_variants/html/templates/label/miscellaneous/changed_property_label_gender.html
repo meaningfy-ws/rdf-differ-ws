@@ -1,0 +1,19 @@
+
+{% import "macros.html" as mc %}
+
+    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["changed_property_label_gender.rq"]).fetch_tabular() %}
+    
+{% if not content.empty %}
+    {% call mc.render_fetch_results(content, error) %}
+    
+<h3 class="ui header">Changed genders</h3>
+<section class="ui basic segment">
+    <p>The table below lists the changed <strong>lexinfo:gender</strong>
+    </p>
+    <p><strong>Query identifier:</strong> changed_property_label_gender.rq</p>
+    {{ mc.pandas_table(content, "Changed gender") }}
+</section>
+    
+    {% endcall %}
+{% endif %}
+    
