@@ -10,38 +10,35 @@ BUILD_PRINT = \e[1;34mSTEP: \e[0m
 # set -o allexport; source docker/.env; set +o allexport
 
 install-os-dependencies:
-	@ sudo apt install default-jre git python3-pip redis-server python3.8-venv curl
+	@ ./bash/install_os_dependencies.sh
 
-install:
-	@ echo "$(BUILD_PRINT)Installing the production requirements"
-	@ python3 -m venv env
-	@ pip install --upgrade pip
-	@ pip install -r requirements/dev.txt
+install-python-dependencies:
+	@ ./bash/setup_python.sh
+
+run-api:
+	@ ./bash/run_api.sh
+
+run-ui:
+	@ ./bash/run_ui.sh
 
 setup-fuseki:
-	@ sudo adduser --disabled-password fuseki
-	@ cd /home/fuseki
-	@ sudo -u fuseki bash
-	@ wget https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-4.2.0.tar.gz
-	@ tar xzf apache-jena-fuseki-4.2.0.tar.gz
-	@ ln -s apache-jena-fuseki-4.2.0 fuseki
+	@ ./bash/setup_fuseki.sh
 
 run-local-fuseki:
 	@ ./fuseki/fuseki-server -q
 
 setup-redis:
+	@ sudo systemctl enable redis --now
+
+stop-gunicorn:
+	@ ./bash/stop_gunicorn.sh
+
+ubuntu-install-os-dependencies:
+	@ sudo apt install default-jre git python3-pip redis-server python3.8-venv curl
+
+ubuntu-setup-redis:
 	@ sudo cp docker/redis.conf /etc/redis/redis.conf
 	@ sudo systemctl restart redis.service
-
-run-local-celery:
-	@ celery -A rdf_differ.adapters.celery.celery_worker worker --loglevel=DEBUG --detach
-
-stop-celery-workers:
-	@ celery -A rdf_differ.adapters.celery.celery_worker control shutdown
-
-run-local-api: | run-local-celery
-	@ gunicorn --timeout ${RDF_DIFFER_GUNICORN_TIMEOUT} --workers ${RDF_DIFFER_GUNICORN_API_WORKERS} --bind 0.0.0.0:${RDF_DIFFER_API_PORT} --reload rdf_differ.entrypoints.api.run:app --log-file ${RDF_DIFFER_API_LOGS} --log-level debug
-
 
 #-----------------------------------------------------------------------------
 # Service commands
