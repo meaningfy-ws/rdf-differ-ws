@@ -13,10 +13,18 @@ from utils.file_utils import dir_is_empty, empty_directory, copy_file_to_destina
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
-def build_report(temp_dir: str, template_location: str, query_files: dict, dataset: dict, timestamp: str):
-    additional_config = {"conf": {"query_files": query_files,
-                                  "default_endpoint": dataset['query_url'],
-                                  "timestamp": timestamp}}
+def build_report(temp_dir: str, template_location: str, query_files: dict, application_profile: str, dataset_id: str,
+                 dataset: dict,
+                 timestamp: str):
+    additional_config = {
+        "conf": {
+            "query_files": query_files,
+            "default_endpoint": dataset['query_url'],
+            "dataset_name": dataset_id,
+            "application_profile": application_profile,
+            "timestamp": timestamp
+        }
+    }
     logger.debug(f'template location {template_location}')
 
     copytree(template_location, temp_dir, dirs_exist_ok=True)
