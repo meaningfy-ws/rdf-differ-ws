@@ -240,8 +240,11 @@ def get_active_tasks() -> tuple:
     Get all active celery tasks
     :return: dict of celery workers and their active tasks
     """
-    tasks = retrieve_active_tasks()
-    flattened_tasks = tasks.get(list(tasks.keys())[0], [])
+    try:
+        tasks = retrieve_active_tasks()
+        flattened_tasks = tasks.get(list(tasks.keys())[0], [])
+    except AttributeError:
+        return [], 200
     return flattened_tasks, 200
 
 
