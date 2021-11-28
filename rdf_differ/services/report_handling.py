@@ -16,6 +16,16 @@ logger = logging.getLogger(RDF_DIFFER_LOGGER)
 def build_report(temp_dir: str, template_location: str, query_files: dict, application_profile: str, dataset_id: str,
                  dataset: dict,
                  timestamp: str):
+    """
+    :param temp_dir: location to temporarily save the report
+    :param template_location: report location
+    :param query_files: list of files to be included in the query
+    :param application_profile: application profile for report identification
+    :param dataset_id: dataset name
+    :param dataset: data about dataset
+    :param timestamp: time of report creation
+    :return:
+    """
     additional_config = {
         "conf": {
             "query_files": query_files,

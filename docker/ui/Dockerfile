@@ -9,4 +9,4 @@ COPY . /usr/src/app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-CMD gunicorn --timeout ${RDF_DIFFER_GUNICORN_TIMEOUT} --workers ${RDF_DIFFER_GUNICORN_UI_WORKERS} --bind 0.0.0.0:${RDF_DIFFER_UI_PORT} --reload rdf_differ.entrypoints.ui.run:app --log-file ${RDF_DIFFER_UI_LOGS}
+CMD gunicorn --timeout ${RDF_DIFFER_GUNICORN_TIMEOUT} --workers ${RDF_DIFFER_GUNICORN_UI_WORKERS} --bind 0.0.0.0:${RDF_DIFFER_UI_PORT} --reload rdf_differ.entrypoints.ui.run:app --log-file ${RDF_DIFFER_UI_LOGS} --log-level ${RDF_LOG_LEVEL}
