@@ -9,6 +9,13 @@ BUILD_PRINT = \e[1;34mSTEP: \e[0m
 # how to set envs to local
 # set -o allexport; source docker/.env; set +o allexport
 
+install:
+	@ echo "$(BUILD_PRINT)Installing the production requirements"
+	@ python3 -m venv env
+	@ pip install --upgrade pip
+	@ pip install -r requirements/dev.txt
+
+
 install-os-dependencies:
 	@ ./bash/install_os_dependencies.sh
 
