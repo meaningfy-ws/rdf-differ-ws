@@ -2,7 +2,7 @@ from pathlib import Path
 
 from rdf_differ.services.report_handling import build_report_location, retrieve_report, report_exists, save_report, \
     build_dataset_reports_location, remove_all_reports, remove_report, build_report_name
-from utils.file_utils import dir_exists
+from rdf_differ.utils.file_utils import dir_exists
 
 
 def test_build_dataset_report_location():
