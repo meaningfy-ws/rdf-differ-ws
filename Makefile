@@ -9,12 +9,6 @@ BUILD_PRINT = \e[1;34mSTEP: \e[0m
 # how to set envs to local
 # set -o allexport; source docker/.env; set +o allexport
 
-install:
-	@ echo "$(BUILD_PRINT)Installing the production requirements"
-	@ python3 -m venv env
-	@ pip install --upgrade pip
-	@ pip install -r requirements/dev.txt
-
 
 install-os-dependencies:
 	@ ./bash/install_os_dependencies.sh
@@ -46,6 +40,12 @@ ubuntu-install-os-dependencies:
 ubuntu-setup-redis:
 	@ sudo cp docker/redis.conf /etc/redis/redis.conf
 	@ sudo systemctl restart redis.service
+
+ubuntu-install-python-dependencies:
+	@ echo "$(BUILD_PRINT)Installing the production requirements"
+	@ python3 -m venv env
+	@ pip install --upgrade pip
+	@ pip install -r requirements/dev.txt
 
 #-----------------------------------------------------------------------------
 # Service commands
