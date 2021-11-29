@@ -10,13 +10,12 @@ See the [Wiki page of the original repository](https://github.com/jneubert/skos-
 Run the following commands to install all required dependencies 
 
 ```bash
-sudo apt install make
 make install-os-dependencies
-make install
+make install-python-dependencies
 ```
 
 To run fuseki server (on first setup accept the default values): <br>
-_needs running terminal window_
+_leave this terminal session open_
 ```bash
 make setup-fuseki
 make run-local-fuseki
@@ -27,17 +26,19 @@ To set up redis server:
 make setup-redis
 ```
 
-Install test/dev dependencies:
+Run api and celery:
 ```bash
-set -o allexport; source docker/.env; set +o allexport
 make run-local-api
 ```
 
-To run the tests:
-> Make sure that fuseki is running: `make fuseki-create-test-dbs`. (This command will create 2 dummy datasets.)
+Run ui:
 ```bash
-make fuseki-create-test-dbs
-make test
+make run-local-ui
+```
+
+Stop api and ui servers:
+```bash
+make stop-gunicorn
 ```
 
 ### [this file](curl-examples.md) contains a list of examples on how to use the updated api
@@ -69,12 +70,6 @@ templates
 
 # Usage
 
-## Start services
-To run the docker containers for the `rdf-differ` `api` and `ui`, and `fuseki`:
-
-```bash
-make start-services
-```
 
 The diffing services are split into:
 
