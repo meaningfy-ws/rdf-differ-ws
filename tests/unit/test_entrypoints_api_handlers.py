@@ -88,7 +88,7 @@ def test_create_diff_200_dataset_doesnt_exist(mock_dataset_description, mock_cre
     assert status == 200
 
 
-@patch('utils.file_utils.build_secure_filename')
+@patch('rdf_differ.utils.file_utils.build_secure_filename')
 def test_create_diff_500(mock_exception):
     mock_exception.side_effect = ValueError('error')
 
