@@ -1,0 +1,21 @@
+{
+    "dataset_name": "{{ conf.dataset_name }}",
+    "timestamp": "{{ conf.timestamp }}",
+    "application_profile": "{{ conf.application_profile }}",
+    "graph_uri": "{{ conf.graph_uri }}",
+{% for query_name, path_to_query_file in conf.query_files.items() %}
+    {% set result_set, error = from_endpoint(conf.default_endpoint).with_query_from_file(path_to_query_file).fetch_tree() %}
+    {% if error %}
+        "{{ query_name }}": "{{ error|replace('"',"'") }}"
+    {% else %}
+        {% if result_set is undefined %}
+            "{{ query_name }}": "Some content expected but none was found."
+        {% elif result_set.results.bindings == [] %}
+            "{{ query_name }}": "No changes found."
+        {% else %}
+            "{{ query_name }}" : {{ result_set|tojson }}
+        {% endif %}
+    {% endif %}
+    {{ "," if not loop.last else "" }}
+{% endfor %}
+}

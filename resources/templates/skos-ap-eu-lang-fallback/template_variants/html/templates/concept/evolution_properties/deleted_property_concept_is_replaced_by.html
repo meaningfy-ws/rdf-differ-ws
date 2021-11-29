@@ -1,0 +1,20 @@
+
+{% import "macros.html" as mc %}
+
+    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["deleted_property_concept_is_replaced_by.rq"]).fetch_tabular() %}
+    
+{% if not content.empty %}
+    {% call mc.render_fetch_results(content, error) %}
+    {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
+    
+<h3 class="ui header">Deleted is replaced bys</h3>
+<section class="ui basic segment">
+    <p>The table below lists the deleted <strong>dct:isReplacedBy</strong>
+    </p>
+    <p><strong>Query identifier:</strong> deleted_property_concept_is_replaced_by.rq</p>
+    {{ mc.pandas_table(content, "Deleted is replaced by") }}
+</section>
+    
+    {% endcall %}
+{% endif %}
+    
