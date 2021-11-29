@@ -77,7 +77,8 @@ def async_generate_report(self, dataset_id: str, application_profile: str,
     """
     timestamp = get_timestamp()
     with tempfile.TemporaryDirectory() as temp_dir:
-        path_to_report = build_report(str(temp_dir), template_location, query_files, dataset, timestamp)
+        path_to_report = build_report(str(temp_dir), template_location, query_files, application_profile, dataset_id,
+                                      dataset, timestamp)
         save_report(path_to_report, dataset['dataset_id'], application_profile, template_type, timestamp, db_location)
 
     return True
