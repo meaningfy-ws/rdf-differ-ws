@@ -1,5 +1,5 @@
 #!/bin/bash
-set -o allexport; source docker/.env; set +o allexport
+set -o allexport; source bash/.env; set +o allexport
 
 python3.8 -m venv env
 source env/bin/activate
