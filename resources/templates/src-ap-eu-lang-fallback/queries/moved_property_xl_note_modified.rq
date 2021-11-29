@@ -25,7 +25,7 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 # Show all movements cross instances
-SELECT DISTINCT ?oldInstance ?oldInstancePrefLabel ?newInstance ?newInstancePrefLabel ?property ?value
+SELECT DISTINCT ?oldInstance ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance ?newInstancePrefLabel ?newInstancePrefLabelLang ?property ?value ?valueLang
 WHERE {
           GRAPH ?versionHistoryGraph {
     # parameters
@@ -85,6 +85,8 @@ WHERE {
     
     BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?newInstancePrefLabel)
     
+     BIND (lang(?newInstancePrefLabel) as ?newInstancePrefLabelLang)
+    BIND (lang(?value) AS ?valueLang )
     }
     # get all instances from the old version with the same property and value
     GRAPH ?oldVersionGraph {
@@ -114,6 +116,7 @@ WHERE {
     
     BIND(COALESCE(?oldPrefLabelEn, ?oldPrefLabelFr, ?oldPrefLabelDe, ?oldPrefLabelEs) as ?oldInstancePrefLabel)
     
+     BIND (lang(?oldInstancePrefLabel) as ?oldInstancePrefLabelLang)
     }
     # the new instance shall be inserted
     GRAPH ?insertionsGraph {

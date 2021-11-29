@@ -34,7 +34,7 @@ PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # Show all deleted instance/property
-SELECT DISTINCT ?instance ?prefLabel ?property ?value
+SELECT DISTINCT ?instance ?prefLabel ?prefLabelLang ?property ?value ?valueLang
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -103,6 +103,8 @@ WHERE {
     
     BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?prefLabel)
     
+          BIND (lang(?prefLabel) AS ?prefLabelLang )
+        BIND (lang(?value) AS ?valueLang )
   }
 }
 ORDER BY ?instance

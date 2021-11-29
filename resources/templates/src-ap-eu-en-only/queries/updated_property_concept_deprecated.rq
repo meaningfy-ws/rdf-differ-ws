@@ -35,7 +35,7 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 
 # Show all properties value updates
-SELECT DISTINCT ?instance ?prefLabel ?property ?oldValue ?newValue
+SELECT DISTINCT ?instance ?prefLabel ?prefLabelLang ?property ?oldValue ?oldValueLang ?newValue ?newValueLang
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -79,10 +79,13 @@ WHERE {
     
     BIND (?prefLabelEn AS ?prefLabel)
     
+          BIND (lang(?prefLabel) AS ?prefLabelLang )
+        BIND (lang(?newValue) AS ?newValueLang )
   }
   # ... which were attached to some (other) instance before and had another value
   GRAPH ?oldVersionGraph {
       ?instance ?property ?oldValue .
+      BIND (lang(?oldValue) AS ?oldValueLang )
   }
   # the old value shall be deleted
   GRAPH ?deletionsGraph {

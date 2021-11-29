@@ -40,7 +40,7 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # as bad practice, because they still may be referenced elsewhere.
 # Cosider using owl:deprecated instead)
 
-SELECT distinct ?class ?instance ?prefLabel
+SELECT distinct ?class ?instance ?prefLabel ?prefLabelLang
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -108,7 +108,7 @@ WHERE {
     
     BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?prefLabel)
     
-
+     BIND (lang(?prefLabel) as ?prefLabelLang)
   }
 }
 ORDER BY ?instance

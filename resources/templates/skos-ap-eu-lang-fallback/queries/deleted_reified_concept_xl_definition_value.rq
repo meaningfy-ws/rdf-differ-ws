@@ -34,7 +34,7 @@ PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # Show all deleted reified structures
-SELECT DISTINCT ?instance ?prefLabel ?property ?objProperty ?value
+SELECT DISTINCT ?instance ?prefLabel ?prefLabelLang ?property ?objProperty ?value ?valueLang
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -113,6 +113,8 @@ WHERE {
     
     BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?prefLabel)
     
+          BIND (lang(?prefLabel) AS ?prefLabelLang )
+        BIND (lang(?value) AS ?valueLang )
   }
 }
 ORDER BY ?instance

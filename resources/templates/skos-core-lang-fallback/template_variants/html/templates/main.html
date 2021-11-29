@@ -11,6 +11,7 @@
     <p><strong>Application profile: </strong> {{ conf.application_profile }}</p>
     <p><strong>Graph URI: </strong> {{ conf.graph_uri }}</p>
 
+{% set namespaces = namespace_inventory({}) %}
 {% include "statistics.html" %}
 
 

@@ -5,6 +5,7 @@
     
 {% if not content.empty %}
     {% call mc.render_fetch_results(content, error) %}
+    {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
     
 <h3 class="ui header">Changed titles</h3>
 <section class="ui basic segment">

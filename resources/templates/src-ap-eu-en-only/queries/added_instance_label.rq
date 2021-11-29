@@ -34,7 +34,7 @@ PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # identify added instances
-SELECT distinct ?class ?instance ?prefLabel
+SELECT distinct ?class ?instance ?prefLabel ?prefLabelLang
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -76,6 +76,7 @@ WHERE {
     
     BIND (?prefLabelEn AS ?prefLabel)
     
+    BIND (lang(?prefLabel) as ?prefLabelLang)
   }
   # ... and the instance must not exist in the old version
   FILTER NOT EXISTS {

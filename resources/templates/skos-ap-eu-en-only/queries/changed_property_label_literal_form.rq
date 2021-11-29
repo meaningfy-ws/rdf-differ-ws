@@ -25,7 +25,7 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 # Show all movements cross property
-SELECT DISTINCT ?instance ?prefLabel ?oldProperty ?newProperty ?value
+SELECT DISTINCT ?instance ?prefLabel ?prefLabelLang ?oldProperty ?newProperty ?value ?valueLang
 WHERE {
           GRAPH ?versionHistoryGraph {
     # parameters
@@ -71,6 +71,8 @@ WHERE {
     
     BIND (?prefLabelEn AS ?prefLabel)
     
+     BIND (lang(?prefLabel) as ?prefLabelLang)
+    BIND (lang(?value) AS ?valueLang )
     }
     # the instance from the old version should have another property and but same value
     GRAPH ?oldVersionGraph {
