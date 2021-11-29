@@ -23,7 +23,7 @@ from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_FUSEKI_SERVICE
 from tests.conftest import helper_fuseki_service
-from utils.file_utils import dir_exists
+from rdf_differ.utils.file_utils import dir_exists
 
 
 @pytest.fixture()

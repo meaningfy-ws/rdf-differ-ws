@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from utils.file_utils import dir_exists, file_exists, dir_is_empty, temporarily_save_files, save_files, \
+from rdf_differ.utils.file_utils import dir_exists, file_exists, dir_is_empty, temporarily_save_files, save_files, \
     check_files_exist, build_unique_name
 
 

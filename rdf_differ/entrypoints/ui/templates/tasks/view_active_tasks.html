@@ -18,7 +18,7 @@
                 <tr>
                     <th scope="row">{{ task.id }}</th>
                     <td>{{ task.type }}</td>
-                    <td>{{ task.args }}</td>
+                    <td>{{ task.args|truncate(3, True, '...') }}</td>
                     <td><a href="{{ url_for('revoke_task', task_id=task.id) }}"
                            id="stop-task-{{ task.id }}"
                            class="btn btn-file red darken-2">Stop task<i class="material-icons right">do_disturb_on</i></a>

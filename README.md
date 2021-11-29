@@ -9,7 +9,7 @@ See the [Wiki page of the original repository](https://github.com/jneubert/skos-
 # Installation
 RDF Differ uses fuseki (as the triplestore), celery (for multithreading programming), and redis (for pesistent storage).
 
-Run the following commands to install all required dependencies 
+Run the following commands to install all required dependencies on a **redhat** system
 
 ```bash
 make install-os-dependencies
@@ -103,18 +103,6 @@ service | URL | info
 > To list the existent diffs you can access [http://localhost:8030](http://localhost:8030/)
 ![list of diffs page](docs/images/list-diffs-202010.png)
 
-## Stop services
-To stop the containers run:
-```bash
-make stop-services
-```
-
-## Performance estimates
-
-Environment: AWS EC2 p2.medium and running the operations with Fuseki triple store.
-
-* Calculating the diff for two versions of a large NAL (used Corporate Bodies) ~ 58s
-* Generating the diff report for two versions of a large NAL (used Corporate Bodies)  ~  12 min
 
 # Change type inventory
 

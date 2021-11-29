@@ -24,7 +24,7 @@ from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.services.queue import kill_task
 from rdf_differ.services.report_handling import report_exists, retrieve_report, remove_all_reports, get_all_reports
 from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks, flatten_active_tasks
-from utils.file_utils import save_files, build_unique_name, check_dataset_name_validity
+from rdf_differ.utils.file_utils import save_files, build_unique_name, check_dataset_name_validity
 
 """
 The definition of the API endpoints
@@ -190,7 +190,7 @@ def build_report(body: dict) -> tuple:
     if not report_exists(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB) or rebuild:
         task = async_generate_report.delay(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB,
                                            str(template_location), query_files, dataset)
-        return {'task_id': task.id}, 200
+        return {'task_id': task.id, 'application_profile': application_profile}, 200
     else:
         return {'message': 'Report already exists. To rebuild send the `rebuild` query parameter set to true'}, 406
 

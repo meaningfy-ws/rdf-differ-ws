@@ -8,7 +8,7 @@ from eds4jinja2.builders.report_builder import ReportBuilder
 from werkzeug.exceptions import UnprocessableEntity
 
 from rdf_differ.config import RDF_DIFFER_LOGGER
-from utils.file_utils import dir_is_empty, empty_directory, copy_file_to_destination, dir_exists
+from rdf_differ.utils.file_utils import dir_is_empty, empty_directory, copy_file_to_destination, dir_exists
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
