@@ -7,6 +7,8 @@ See the [Wiki page of the original repository](https://github.com/jneubert/skos-
 [![codecov](https://codecov.io/gh/eu-vocabularies/rdf-differ/branch/master/graph/badge.svg)](https://codecov.io/gh/eu-vocabularies/rdf-differ)
 
 # Installation
+RDF Differ uses fuseki (as the triplestore), celery (for multithreading programming), and redis (for pesistent storage).
+
 Run the following commands to install all required dependencies 
 
 ```bash
@@ -39,6 +41,21 @@ make run-local-ui
 Stop api and ui servers:
 ```bash
 make stop-gunicorn
+```
+
+If you are running the project for the first time this would be the commands run:
+```bash
+make install-os-dependencies
+make install-python-dependencies
+make setup-redis
+make setup-fuseki
+make run-api
+make run-ui
+```
+
+In a separate terminal process run
+```bash
+make run-local-fuseki
 ```
 
 ### [this file](curl-examples.md) contains a list of examples on how to use the updated api
