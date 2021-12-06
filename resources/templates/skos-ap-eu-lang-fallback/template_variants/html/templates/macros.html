@@ -70,3 +70,24 @@
 
     {% endfor %}
 {% endmacro %}
+
+
+{% macro render_namespaces(namesapces_dist) %}
+    <table class="display">
+        <thead class="center aligned">
+        <tr>
+            <th>Namespace</th>
+            <th>URI</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for prefix, uri in namesapces_dist|dictsort %}
+            <tr>
+                <td>{{ prefix }}</td>
+                <td>{{ uri }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <caption>Prefixes</caption>
+    </table>
+{% endmacro %}
