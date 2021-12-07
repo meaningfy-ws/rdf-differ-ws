@@ -279,6 +279,9 @@
             {% include "concept/mapping_properties/changed_property_concept_related_match.html" with context %}
         
     
-
+    <h1>Prefixes</h1>
+    <section class="ui basic segment">
+    {{ mc.render_namespaces(namespaces.namespaces_as_dict()) }}
+    </section>
 
 {% endblock %}

@@ -981,7 +981,10 @@
         
             {% include "xlnote/evolution_properties/changed_property_xl_note_created.html" with context %}
         
-    
+    <h1>Prefixes</h1>
+    <section class="ui basic segment">
+    {{ mc.render_namespaces(namespaces.namespaces_as_dict()) }}
+    </section>
 
 
 {% endblock %}
