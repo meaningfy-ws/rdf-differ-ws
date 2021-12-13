@@ -25,7 +25,7 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 # Show all movements cross property
-SELECT DISTINCT ?instance ?prefLabel ?prefLabelLang ?oldProperty ?newProperty ?value ?valueLang
+SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?oldProperty ?newProperty ?value ?valueLang ("Movement (cross property)" as ?actionType)
 WHERE {
           GRAPH ?versionHistoryGraph {
     # parameters

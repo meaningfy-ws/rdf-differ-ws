@@ -35,7 +35,8 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 
 # Show all movements cross reified properties
-SELECT DISTINCT ?instance ?prefLabel ?prefLabelLang ?oldProperty ?newProperty ?objProperty ?value ?valueLang
+SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?oldProperty ?oldObject ?newProperty ?newObject ?objProperty
+  ?value ?valueLang ("Movement (cross property)" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -71,8 +72,8 @@ WHERE {
     GRAPH ?newVersionGraph {
 
     ?instance a ?class .
-    ?instance ?newProperty ?object .
-    ?object ?objProperty ?value .
+    ?instance ?newProperty ?newObject .
+    ?newObject ?objProperty ?value .
     
     optional {
       ?instance skos:prefLabel ?prefLabelEn .
@@ -108,8 +109,8 @@ WHERE {
     }
     # the added reified property shall be inserted
     GRAPH ?insertionsGraph {
-        ?instance ?newProperty ?object .
-    ?object ?objProperty ?value .
+        ?instance ?newProperty ?newObject .
+    ?newObject ?objProperty ?value .
     }
     # the transferred reified property shall be deleted
     GRAPH ?deletionsGraph {
