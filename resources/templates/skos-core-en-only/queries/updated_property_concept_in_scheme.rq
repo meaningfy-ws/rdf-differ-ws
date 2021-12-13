@@ -35,7 +35,8 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 
 # Show all properties value updates
-SELECT DISTINCT ?instance ?prefLabel ?prefLabelLang ?property ?oldValue ?oldValueLang ?newValue ?newValueLang
+SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?oldValue ?oldValueLang ?newValue ?newValueLang
+  ("Value update" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters

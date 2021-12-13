@@ -35,7 +35,7 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 
 # Show reified structures updated values
-SELECT DISTINCT ?instance ?prefLabel ?prefLabelLang ?property ?objProperty ?oldValue ?oldValueLang ?newValue ?newValueLang
+SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?object ?objProperty ?oldValue ?oldValueLang ?newValue ?newValueLang ("Value update" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters

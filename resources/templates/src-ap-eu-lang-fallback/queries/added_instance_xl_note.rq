@@ -34,7 +34,7 @@ PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # identify added instances
-SELECT distinct ?class ?instance ?prefLabel ?prefLabelLang
+SELECT distinct ?class ?instance ?prefLabel ?prefLabelLang ("Addition" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -69,22 +69,22 @@ WHERE {
     ?instance a ?class .
     
     optional {
-      ?instance skos:prefLabel ?prefLabelEn .
+      ?instance rdf:value ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
     
     optional {
-      ?instance skos:prefLabel ?prefLabelFr .
+      ?instance rdf:value ?prefLabelFr .
       FILTER (lang(?prefLabelFr) = "fr")
     }
     
     optional {
-      ?instance skos:prefLabel ?prefLabelDe .
+      ?instance rdf:value ?prefLabelDe .
       FILTER (lang(?prefLabelDe) = "de")
     }
     
     optional {
-      ?instance skos:prefLabel ?prefLabelEs .
+      ?instance rdf:value ?prefLabelEs .
       FILTER (lang(?prefLabelEs) = "es")
     }
     

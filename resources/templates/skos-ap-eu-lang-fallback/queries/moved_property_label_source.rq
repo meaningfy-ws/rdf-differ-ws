@@ -25,7 +25,9 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 # Show all movements cross instances
-SELECT DISTINCT ?oldInstance ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance ?newInstancePrefLabel ?newInstancePrefLabelLang ?property ?value ?valueLang
+SELECT DISTINCT ?oldInstance ?class ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance
+    ?newInstancePrefLabel
+    ?newInstancePrefLabelLang ?property ?value ?valueLang ("Movement (cross instance)" as ?actionType)
 WHERE {
           GRAPH ?versionHistoryGraph {
     # parameters
@@ -63,22 +65,22 @@ WHERE {
     ?newInstance ?property ?value .
     
     optional {
-      ?newInstance skos:prefLabel ?prefLabelEn .
+      ?newInstance skosxl:literalForm ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
     
     optional {
-      ?newInstance skos:prefLabel ?prefLabelFr .
+      ?newInstance skosxl:literalForm ?prefLabelFr .
       FILTER (lang(?prefLabelFr) = "fr")
     }
     
     optional {
-      ?newInstance skos:prefLabel ?prefLabelDe .
+      ?newInstance skosxl:literalForm ?prefLabelDe .
       FILTER (lang(?prefLabelDe) = "de")
     }
     
     optional {
-      ?newInstance skos:prefLabel ?prefLabelEs .
+      ?newInstance skosxl:literalForm ?prefLabelEs .
       FILTER (lang(?prefLabelEs) = "es")
     }
     
@@ -94,22 +96,22 @@ WHERE {
     ?oldInstance ?property ?value .
     
     optional {
-      ?oldInstance skos:prefLabel ?oldPrefLabelEn .
+      ?oldInstance skosxl:literalForm ?oldPrefLabelEn .
       FILTER (lang(?oldPrefLabelEn) = "en")
     }
     
     optional {
-      ?oldInstance skos:prefLabel ?oldPrefLabelFr .
+      ?oldInstance skosxl:literalForm ?oldPrefLabelFr .
       FILTER (lang(?oldPrefLabelFr) = "fr")
     }
     
     optional {
-      ?oldInstance skos:prefLabel ?oldPrefLabelDe .
+      ?oldInstance skosxl:literalForm ?oldPrefLabelDe .
       FILTER (lang(?oldPrefLabelDe) = "de")
     }
     
     optional {
-      ?oldInstance skos:prefLabel ?oldPrefLabelEs .
+      ?oldInstance skosxl:literalForm ?oldPrefLabelEs .
       FILTER (lang(?oldPrefLabelEs) = "es")
     }
     

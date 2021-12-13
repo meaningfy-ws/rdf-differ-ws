@@ -25,7 +25,7 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 # Show all movements cross property
-SELECT DISTINCT ?instance ?prefLabel ?prefLabelLang ?oldProperty ?newProperty ?value ?valueLang
+SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?oldProperty ?newProperty ?value ?valueLang ("Movement (cross property)" as ?actionType)
 WHERE {
           GRAPH ?versionHistoryGraph {
     # parameters
@@ -64,22 +64,22 @@ WHERE {
     ?instance ?newProperty ?value .
     
     optional {
-      ?instance skos:prefLabel ?prefLabelEn .
+      ?instance skosxl:literalForm ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
     
     optional {
-      ?instance skos:prefLabel ?prefLabelFr .
+      ?instance skosxl:literalForm ?prefLabelFr .
       FILTER (lang(?prefLabelFr) = "fr")
     }
     
     optional {
-      ?instance skos:prefLabel ?prefLabelDe .
+      ?instance skosxl:literalForm ?prefLabelDe .
       FILTER (lang(?prefLabelDe) = "de")
     }
     
     optional {
-      ?instance skos:prefLabel ?prefLabelEs .
+      ?instance skosxl:literalForm ?prefLabelEs .
       FILTER (lang(?prefLabelEs) = "es")
     }
     

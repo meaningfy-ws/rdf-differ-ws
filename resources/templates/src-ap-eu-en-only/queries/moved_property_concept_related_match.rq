@@ -25,7 +25,9 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 # Show all movements cross instances
-SELECT DISTINCT ?oldInstance ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance ?newInstancePrefLabel ?newInstancePrefLabelLang ?property ?value ?valueLang
+SELECT DISTINCT ?oldInstance ?class ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance
+    ?newInstancePrefLabel
+    ?newInstancePrefLabelLang ?property ?value ?valueLang ("Movement (cross instance)" as ?actionType)
 WHERE {
           GRAPH ?versionHistoryGraph {
     # parameters
