@@ -27,7 +27,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 # Show all movements cross instances
 SELECT DISTINCT ?oldInstance ?class ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance
     ?newInstancePrefLabel
-    ?newInstancePrefLabelLang ?property ?value ?valueLang ("Movement (cross instance)" as ?actionType)
+    ?newInstancePrefLabelLang ?property ?value ?valueLang ("moved" as ?actionType)
 WHERE {
           GRAPH ?versionHistoryGraph {
     # parameters
@@ -64,10 +64,13 @@ WHERE {
     ?newInstance a ?class .
     ?newInstance ?property ?value .
     
+    
     optional {
-      ?newInstance skos:prefLabel ?prefLabelEn .
+      ?newInstance skosxl:prefLabel ?prefLabelObj .
+      ?prefLabelObj skosxl:literalForm ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
+    
     
     
     BIND (?prefLabelEn AS ?newInstancePrefLabel)
@@ -80,10 +83,13 @@ WHERE {
     ?oldInstance a ?class .
     ?oldInstance ?property ?value .
     
+    
     optional {
-      ?oldInstance skos:prefLabel ?oldPrefLabelEn .
+      ?oldInstance skosxl:prefLabel ?prefLabelObj .
+      ?prefLabelObj skosxl:literalForm ?oldPrefLabelEn .
       FILTER (lang(?oldPrefLabelEn) = "en")
     }
+    
     
     
     BIND (?oldPrefLabelEn AS ?oldInstancePrefLabel)

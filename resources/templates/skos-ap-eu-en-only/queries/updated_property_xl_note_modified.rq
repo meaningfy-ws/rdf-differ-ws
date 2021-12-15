@@ -36,7 +36,7 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 
 # Show all properties value updates
 SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?oldValue ?oldValueLang ?newValue ?newValueLang
-  ("Value update" as ?actionType)
+  ("updated" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -72,10 +72,12 @@ WHERE {
     ?instance a ?class .
     ?instance ?property ?newValue .
     
+    
     optional {
       ?instance rdf:value ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
+    
     
     
     BIND (?prefLabelEn AS ?prefLabel)

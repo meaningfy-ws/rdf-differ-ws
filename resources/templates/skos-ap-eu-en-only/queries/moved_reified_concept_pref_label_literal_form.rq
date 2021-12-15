@@ -36,7 +36,7 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 
 # Show all movements cross instance for reified structures
 SELECT DISTINCT ?oldInstance ?class ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance ?newInstancePrefLabel
-  ?newInstancePrefLabelLang ?property ?object ?objProperty ?value ?valueLang ("Movement (cross instance)" as ?actionType)
+  ?newInstancePrefLabelLang ?property ?object ?objProperty ?value ?valueLang ("moved" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -75,10 +75,12 @@ WHERE {
     ?newInstance ?property ?object .
     ?object ?objProperty ?value .
     
+    
     optional {
       ?newInstance skos:prefLabel ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
+    
     
     
     BIND (?prefLabelEn AS ?newInstancePrefLabel)
@@ -92,10 +94,12 @@ WHERE {
     ?oldInstance ?property ?oldObject .
     ?oldObject ?objProperty ?value .
     
+    
     optional {
       ?oldInstance skos:prefLabel ?oldPrefLabelEn .
       FILTER (lang(?oldPrefLabelEn) = "en")
     }
+    
     
     
     BIND (?oldPrefLabelEn AS ?oldInstancePrefLabel)
