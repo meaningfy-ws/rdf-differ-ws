@@ -1530,9 +1530,9 @@
 
                     <tr>
                         <td>Labels</td>
-                        <td>skosxl:prefLabel</td>
+                        <td>skosxl:prefLabel/skosxl:literalForm</td>
                         
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_pref_label.rq"]).fetch_tabular() %}
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_pref_label_literal_form.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
@@ -1540,7 +1540,7 @@
                             {% endcall %}
                             
                         
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_pref_label.rq"]).fetch_tabular() %}
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_pref_label_literal_form.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
@@ -1548,7 +1548,7 @@
                             {% endcall %}
                             
                         
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_pref_label.rq"]).fetch_tabular() %}
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_pref_label_literal_form.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
@@ -1556,7 +1556,7 @@
                             {% endcall %}
                             
                         
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_pref_label.rq"]).fetch_tabular() %}
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_pref_label_literal_form.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
@@ -1564,55 +1564,7 @@
                             {% endcall %}
                             
                         
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_pref_label.rq"]).fetch_tabular() %}
-                            
-                            {% call mc.render_fetch_results(content, error) %}
-
-                            {{ mc.count_value(content) }}
-                            {% endcall %}
-                            
-                        
-                    </tr>
-
-                
-
-                    <tr>
-                        <td>Labels</td>
-                        <td>skosxl:altLabel</td>
-                        
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_alt_label.rq"]).fetch_tabular() %}
-                            
-                            {% call mc.render_fetch_results(content, error) %}
-
-                            {{ mc.count_value(content) }}
-                            {% endcall %}
-                            
-                        
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_alt_label.rq"]).fetch_tabular() %}
-                            
-                            {% call mc.render_fetch_results(content, error) %}
-
-                            {{ mc.count_value(content) }}
-                            {% endcall %}
-                            
-                        
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_alt_label.rq"]).fetch_tabular() %}
-                            
-                            {% call mc.render_fetch_results(content, error) %}
-
-                            {{ mc.count_value(content) }}
-                            {% endcall %}
-                            
-                        
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_alt_label.rq"]).fetch_tabular() %}
-                            
-                            {% call mc.render_fetch_results(content, error) %}
-
-                            {{ mc.count_value(content) }}
-                            {% endcall %}
-                            
-                        
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_alt_label.rq"]).fetch_tabular() %}
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_pref_label_literal_form.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
@@ -1626,9 +1578,9 @@
 
                     <tr>
                         <td>Labels</td>
-                        <td>skosxl:hiddenLabel</td>
+                        <td>skosxl:altLabel/skosxl:literalForm</td>
                         
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_hidden_label.rq"]).fetch_tabular() %}
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_alt_label_literal_form.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
@@ -1636,7 +1588,7 @@
                             {% endcall %}
                             
                         
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_hidden_label.rq"]).fetch_tabular() %}
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_alt_label_literal_form.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
@@ -1644,7 +1596,7 @@
                             {% endcall %}
                             
                         
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_hidden_label.rq"]).fetch_tabular() %}
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_alt_label_literal_form.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
@@ -1652,7 +1604,7 @@
                             {% endcall %}
                             
                         
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_hidden_label.rq"]).fetch_tabular() %}
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_alt_label_literal_form.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
@@ -1660,7 +1612,55 @@
                             {% endcall %}
                             
                         
-                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_hidden_label.rq"]).fetch_tabular() %}
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_alt_label_literal_form.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Labels</td>
+                        <td>skosxl:hiddenLabel/skosxl:literalForm</td>
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_hidden_label_literal_form.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_hidden_label_literal_form.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_hidden_label_literal_form.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_hidden_label_literal_form.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_hidden_label_literal_form.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
