@@ -37,7 +37,7 @@ def build_report(temp_dir: str, template_location: str, query_files: dict, appli
     }
     logger.debug(f'template location {template_location}')
 
-    copytree(template_location, temp_dir, dirs_exist_ok=True)
+    copytree(template_location, temp_dir)
 
     try:
         with open(Path(temp_dir) / 'config.json', 'r') as config_file:
