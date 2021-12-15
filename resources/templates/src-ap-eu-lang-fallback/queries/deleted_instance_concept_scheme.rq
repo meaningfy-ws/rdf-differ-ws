@@ -40,7 +40,7 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # as bad practice, because they still may be referenced elsewhere.
 # Cosider using owl:deprecated instead)
 
-SELECT distinct ?class ?instance ?prefLabel ?prefLabelLang ("Deletion" as ?actionType)
+SELECT distinct ?class ?instance ?prefLabel ?prefLabelLang ("deletion" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -85,28 +85,50 @@ WHERE {
     ?instance a ?class .
 
     
+    
     optional {
-      ?instance skos:prefLabel ?prefLabelEn .
+      ?instance skosxl:prefLabel ?prefLabelObj .
+      ?prefLabelObj skosxl:literalForm ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
     
+    
+    
     optional {
-      ?instance skos:prefLabel ?prefLabelFr .
+      ?instance skosxl:prefLabel ?prefLabelObj .
+      ?prefLabelObj skosxl:literalForm ?prefLabelFr .
       FILTER (lang(?prefLabelFr) = "fr")
     }
     
+    
+    
     optional {
-      ?instance skos:prefLabel ?prefLabelDe .
+      ?instance skosxl:prefLabel ?prefLabelObj .
+      ?prefLabelObj skosxl:literalForm ?prefLabelDe .
       FILTER (lang(?prefLabelDe) = "de")
     }
     
+    
+    
     optional {
-      ?instance skos:prefLabel ?prefLabelEs .
+      ?instance skosxl:prefLabel ?prefLabelObj .
+      ?prefLabelObj skosxl:literalForm ?prefLabelEs .
       FILTER (lang(?prefLabelEs) = "es")
     }
     
     
-    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?prefLabel)
+    
+    
+     {
+        SELECT ?instance (SAMPLE (?prefLabel) as ?prefLabelRandom)
+        {
+            ?instance skosxl:prefLabel ?prefLabelObj .
+            ?prefLabelObj skosxl:literalForm ?prefLabel
+        }
+        GROUP BY ?instance order by ?prefLabel
+     }
+     
+    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs, ?prefLabelRandom) as ?prefLabel)
     
      BIND (lang(?prefLabel) as ?prefLabelLang)
   }

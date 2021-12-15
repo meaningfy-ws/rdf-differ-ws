@@ -34,7 +34,7 @@ PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # identify added instances
-SELECT distinct ?class ?instance ?prefLabel ?prefLabelLang ("Addition" as ?actionType)
+SELECT distinct ?class ?instance ?prefLabel ?prefLabelLang ("addition" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -68,20 +68,27 @@ WHERE {
   GRAPH ?insertionsGraph {
     ?instance a ?class .
     
+    
     optional {
       ?instance skosxl:literalForm ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
+    
+    
     
     optional {
       ?instance skosxl:literalForm ?prefLabelFr .
       FILTER (lang(?prefLabelFr) = "fr")
     }
     
+    
+    
     optional {
       ?instance skosxl:literalForm ?prefLabelDe .
       FILTER (lang(?prefLabelDe) = "de")
     }
+    
+    
     
     optional {
       ?instance skosxl:literalForm ?prefLabelEs .
@@ -89,7 +96,17 @@ WHERE {
     }
     
     
-    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?prefLabel)
+    
+    
+     {
+        SELECT ?instance (SAMPLE (?prefLabel) as ?prefLabelRandom)
+        {
+            ?instance skosxl:literalForm ?prefLabel .
+        }
+        GROUP BY ?instance order by ?prefLabel
+     }
+     
+    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs, ?prefLabelRandom) as ?prefLabel)
     
     BIND (lang(?prefLabel) as ?prefLabelLang)
   }

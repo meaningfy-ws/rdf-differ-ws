@@ -36,7 +36,7 @@ PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 
 # Show all movements cross instance for reified structures
 SELECT DISTINCT ?oldInstance ?class ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance ?newInstancePrefLabel
-  ?newInstancePrefLabelLang ?property ?object ?objProperty ?value ?valueLang ("Movement (cross instance)" as ?actionType)
+  ?newInstancePrefLabelLang ?property ?object ?objProperty ?value ?valueLang ("moved" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -75,20 +75,27 @@ WHERE {
     ?newInstance ?property ?object .
     ?object ?objProperty ?value .
     
+    
     optional {
       ?newInstance skos:prefLabel ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
+    
+    
     
     optional {
       ?newInstance skos:prefLabel ?prefLabelFr .
       FILTER (lang(?prefLabelFr) = "fr")
     }
     
+    
+    
     optional {
       ?newInstance skos:prefLabel ?prefLabelDe .
       FILTER (lang(?prefLabelDe) = "de")
     }
+    
+    
     
     optional {
       ?newInstance skos:prefLabel ?prefLabelEs .
@@ -96,7 +103,17 @@ WHERE {
     }
     
     
-    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?newInstancePrefLabel)
+    
+    
+    {
+      SELECT ?newInstance (SAMPLE (?prefLabel) as ?prefLabelRandom)
+      {
+        ?newInstance skos:prefLabel ?prefLabel .
+      }
+      GROUP BY ?newInstance order by ?prefLabel
+    }
+   
+    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs, ?prefLabelRandom) as ?newInstancePrefLabel)
     
             BIND (lang(?newInstancePrefLabel) AS ?newInstancePrefLabelLang )
         BIND (lang(?value) AS ?valueLang )
@@ -107,20 +124,27 @@ WHERE {
     ?oldInstance ?property ?oldObject .
     ?oldObject ?objProperty ?value .
     
+    
     optional {
       ?oldInstance skos:prefLabel ?oldPrefLabelEn .
       FILTER (lang(?oldPrefLabelEn) = "en")
     }
+    
+    
     
     optional {
       ?oldInstance skos:prefLabel ?oldPrefLabelFr .
       FILTER (lang(?oldPrefLabelFr) = "fr")
     }
     
+    
+    
     optional {
       ?oldInstance skos:prefLabel ?oldPrefLabelDe .
       FILTER (lang(?oldPrefLabelDe) = "de")
     }
+    
+    
     
     optional {
       ?oldInstance skos:prefLabel ?oldPrefLabelEs .
@@ -128,7 +152,17 @@ WHERE {
     }
     
     
-    BIND(COALESCE(?oldPrefLabelEn, ?oldPrefLabelFr, ?oldPrefLabelDe, ?oldPrefLabelEs) as ?oldInstancePrefLabel)
+    
+    
+        {
+      SELECT ?oldInstance (SAMPLE (?prefLabelRd) as ?oldInstancePrefLabelRandom)
+      {
+        ?oldInstance skos:prefLabel ?prefLabelRd .
+      }
+      GROUP BY ?oldInstance order by ?prefLabelRd
+    }
+     
+    BIND(COALESCE(?oldPrefLabelEn, ?oldPrefLabelFr, ?oldPrefLabelDe, ?oldPrefLabelEs, ?oldInstancePrefLabelRandom) as ?oldInstancePrefLabel)
     
       BIND (lang(?oldInstancePrefLabel) AS ?oldInstancePrefLabelLang )
     }

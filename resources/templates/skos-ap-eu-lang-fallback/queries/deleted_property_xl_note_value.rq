@@ -34,7 +34,7 @@ PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # Show all deleted instance/property
-SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?value ?valueLang ("Deletion" as ?actionType)
+SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?value ?valueLang ("deletion" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -80,20 +80,27 @@ WHERE {
     ?instance a ?class .
     ?instance ?property ?value .
     
+    
     optional {
       ?instance rdf:value ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
+    
+    
     
     optional {
       ?instance rdf:value ?prefLabelFr .
       FILTER (lang(?prefLabelFr) = "fr")
     }
     
+    
+    
     optional {
       ?instance rdf:value ?prefLabelDe .
       FILTER (lang(?prefLabelDe) = "de")
     }
+    
+    
     
     optional {
       ?instance rdf:value ?prefLabelEs .
@@ -101,7 +108,17 @@ WHERE {
     }
     
     
-    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?prefLabel)
+    
+    
+    {
+      SELECT ?instance (SAMPLE (?prefLabel) as ?prefLabelRandom)
+      {
+        ?instance rdf:value ?prefLabel .
+      }
+      GROUP BY ?instance order by ?prefLabel
+    }
+     
+    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs, ?prefLabelRandom) as ?prefLabel)
     
           BIND (lang(?prefLabel) AS ?prefLabelLang )
         BIND (lang(?value) AS ?valueLang )

@@ -35,7 +35,7 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 
 # Show all added instance/property
-SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?value ?valueLang ("Addition" as ?actionType)
+SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?value ?valueLang ("addition" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -86,10 +86,12 @@ WHERE {
     ?instance a ?class .
     ?instance ?property ?value .
     
+    
     optional {
       ?instance rdf:value ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
+    
     
     
     BIND (?prefLabelEn AS ?prefLabel)

@@ -34,7 +34,7 @@ PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # Show all deleted instance/property
-SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?value ?valueLang ("Deletion" as ?actionType)
+SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?value ?valueLang ("deletion" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -80,28 +80,50 @@ WHERE {
     ?instance a ?class .
     ?instance ?property ?value .
     
+    
     optional {
-      ?instance skos:prefLabel ?prefLabelEn .
+      ?instance skosxl:prefLabel ?prefLabelObj .
+      ?prefLabelObj skosxl:literalForm ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
     
+    
+    
     optional {
-      ?instance skos:prefLabel ?prefLabelFr .
+      ?instance skosxl:prefLabel ?prefLabelObj .
+      ?prefLabelObj skosxl:literalForm ?prefLabelFr .
       FILTER (lang(?prefLabelFr) = "fr")
     }
     
+    
+    
     optional {
-      ?instance skos:prefLabel ?prefLabelDe .
+      ?instance skosxl:prefLabel ?prefLabelObj .
+      ?prefLabelObj skosxl:literalForm ?prefLabelDe .
       FILTER (lang(?prefLabelDe) = "de")
     }
     
+    
+    
     optional {
-      ?instance skos:prefLabel ?prefLabelEs .
+      ?instance skosxl:prefLabel ?prefLabelObj .
+      ?prefLabelObj skosxl:literalForm ?prefLabelEs .
       FILTER (lang(?prefLabelEs) = "es")
     }
     
     
-    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?prefLabel)
+    
+    
+     {
+        SELECT ?instance (SAMPLE (?prefLabel) as ?prefLabelRandom)
+        {
+            ?instance skosxl:prefLabel ?prefLabelObj .
+            ?prefLabelObj skosxl:literalForm ?prefLabel
+        }
+        GROUP BY ?instance order by ?prefLabel
+     }
+     
+    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs, ?prefLabelRandom) as ?prefLabel)
     
           BIND (lang(?prefLabel) AS ?prefLabelLang )
         BIND (lang(?value) AS ?valueLang )

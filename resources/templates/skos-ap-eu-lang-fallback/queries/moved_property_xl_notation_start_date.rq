@@ -27,7 +27,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 # Show all movements cross instances
 SELECT DISTINCT ?oldInstance ?class ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance
     ?newInstancePrefLabel
-    ?newInstancePrefLabelLang ?property ?value ?valueLang ("Movement (cross instance)" as ?actionType)
+    ?newInstancePrefLabelLang ?property ?value ?valueLang ("moved" as ?actionType)
 WHERE {
           GRAPH ?versionHistoryGraph {
     # parameters
@@ -64,20 +64,27 @@ WHERE {
     ?newInstance a ?class .
     ?newInstance ?property ?value .
     
+    
     optional {
       ?newInstance rdf:value ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
+    
+    
     
     optional {
       ?newInstance rdf:value ?prefLabelFr .
       FILTER (lang(?prefLabelFr) = "fr")
     }
     
+    
+    
     optional {
       ?newInstance rdf:value ?prefLabelDe .
       FILTER (lang(?prefLabelDe) = "de")
     }
+    
+    
     
     optional {
       ?newInstance rdf:value ?prefLabelEs .
@@ -85,7 +92,17 @@ WHERE {
     }
     
     
-    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?newInstancePrefLabel)
+    
+    
+    {
+        SELECT ?newInstance (SAMPLE (?prefLabel) as ?prefLabelRandom)
+        {
+            ?newInstance rdf:value ?prefLabel .
+        }
+        GROUP BY ?newInstance order by ?prefLabel
+    }
+    
+    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs, ?prefLabelRandom) as ?newInstancePrefLabel)
     
      BIND (lang(?newInstancePrefLabel) as ?newInstancePrefLabelLang)
     BIND (lang(?value) AS ?valueLang )
@@ -95,20 +112,27 @@ WHERE {
     ?oldInstance a ?class .
     ?oldInstance ?property ?value .
     
+    
     optional {
       ?oldInstance rdf:value ?oldPrefLabelEn .
       FILTER (lang(?oldPrefLabelEn) = "en")
     }
+    
+    
     
     optional {
       ?oldInstance rdf:value ?oldPrefLabelFr .
       FILTER (lang(?oldPrefLabelFr) = "fr")
     }
     
+    
+    
     optional {
       ?oldInstance rdf:value ?oldPrefLabelDe .
       FILTER (lang(?oldPrefLabelDe) = "de")
     }
+    
+    
     
     optional {
       ?oldInstance rdf:value ?oldPrefLabelEs .
@@ -116,7 +140,17 @@ WHERE {
     }
     
     
-    BIND(COALESCE(?oldPrefLabelEn, ?oldPrefLabelFr, ?oldPrefLabelDe, ?oldPrefLabelEs) as ?oldInstancePrefLabel)
+    
+    
+    {
+        SELECT ?oldInstance (SAMPLE (?prefLabelRd) as ?oldInstancePrefLabelRandom)
+        {
+            ?oldInstance rdf:value ?prefLabelRd .
+        }
+        GROUP BY ?oldInstance order by ?prefLabelRd
+    }
+    
+    BIND(COALESCE(?oldPrefLabelEn, ?oldPrefLabelFr, ?oldPrefLabelDe, ?oldPrefLabelEs, ?oldInstancePrefLabelRandom) as ?oldInstancePrefLabel)
     
      BIND (lang(?oldInstancePrefLabel) as ?oldInstancePrefLabelLang)
     }

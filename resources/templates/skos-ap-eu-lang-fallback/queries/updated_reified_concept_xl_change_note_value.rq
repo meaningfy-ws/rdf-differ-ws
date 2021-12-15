@@ -35,7 +35,7 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 
 # Show reified structures updated values
-SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?object ?objProperty ?oldValue ?oldValueLang ?newValue ?newValueLang ("Value update" as ?actionType)
+SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?object ?objProperty ?oldValue ?oldValueLang ?newValue ?newValueLang ("updated" as ?actionType)
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -73,20 +73,27 @@ WHERE {
     ?instance ?property ?object .
     ?object ?objProperty ?newValue .
     
+    
     optional {
       ?instance skos:prefLabel ?prefLabelEn .
       FILTER (lang(?prefLabelEn) = "en")
     }
+    
+    
     
     optional {
       ?instance skos:prefLabel ?prefLabelFr .
       FILTER (lang(?prefLabelFr) = "fr")
     }
     
+    
+    
     optional {
       ?instance skos:prefLabel ?prefLabelDe .
       FILTER (lang(?prefLabelDe) = "de")
     }
+    
+    
     
     optional {
       ?instance skos:prefLabel ?prefLabelEs .
@@ -94,7 +101,17 @@ WHERE {
     }
     
     
-    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs) as ?prefLabel)
+    
+    
+    {
+      SELECT ?instance (SAMPLE (?prefLabel) as ?prefLabelRandom)
+      {
+        ?instance skos:prefLabel ?prefLabel .
+      }
+      GROUP BY ?instance order by ?prefLabel
+    }
+    
+    BIND(COALESCE(?prefLabelEn, ?prefLabelFr, ?prefLabelDe, ?prefLabelEs, ?prefLabelRandom) as ?prefLabel)
     
           BIND (lang(?prefLabel) AS ?prefLabelLang )
           BIND (lang(?newValue) AS ?newValueLang )
