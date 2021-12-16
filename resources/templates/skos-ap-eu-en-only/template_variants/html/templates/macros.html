@@ -27,6 +27,7 @@
 
 {% macro pandas_table(df, caption, column_labels={}) -%}
     {% if (df is defined) and (df is not none) %}
+        {% set df = df.fillna(value="") %}
         <table class="display">
             <thead class="center aligned">
             <tr>
