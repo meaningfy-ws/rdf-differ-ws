@@ -2,7 +2,7 @@ import json
 import logging
 import shutil
 from pathlib import Path
-from shutil import copytree
+from distutils.dir_util import copy_tree
 
 from eds4jinja2.builders.report_builder import ReportBuilder
 from werkzeug.exceptions import UnprocessableEntity
@@ -37,7 +37,7 @@ def build_report(temp_dir: str, template_location: str, query_files: dict, appli
     }
     logger.debug(f'template location {template_location}')
 
-    copytree(template_location, temp_dir, dirs_exist_ok=True)
+    copy_tree(template_location, temp_dir)
 
     try:
         with open(Path(temp_dir) / 'config.json', 'r') as config_file:

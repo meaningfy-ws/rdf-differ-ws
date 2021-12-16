@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo dnf install python3.8 redis curl
+sudo yum install redis curl java-11-openjdk
