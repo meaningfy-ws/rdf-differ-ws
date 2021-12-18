@@ -92,7 +92,11 @@ run-redis:
 	@ echo -e '$(BUILD_PRINT)Starting redis'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d redis
 
-test:
+run-differ-api:
+	@ echo -e '$(BUILD_PRINT)Starting api'
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d redis
+
+test: | ubuntu-install-python-dependencies fuseki-create-test-dbs run-redis run-differ-api
 	@ echo "$(BUILD_PRINT)Running the tests"
 	@ pytest
 
