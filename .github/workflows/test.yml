@@ -22,15 +22,6 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Run adjacent services (Fuseki and redis)
-        run: |
-          make fuseki-create-test-dbs
-          make run-redis
-
-      - name: Install dependencies
-        run: |
-          make ubuntu-install-python-dependencies
-
       - name: Test with pytest
         run: |
           make test
