@@ -94,7 +94,7 @@ run-redis:
 
 run-differ-api:
 	@ echo -e '$(BUILD_PRINT)Starting api'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d redis
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d rdf-differ-api
 
 test: | ubuntu-install-python-dependencies fuseki-create-test-dbs run-redis run-differ-api
 	@ echo "$(BUILD_PRINT)Running the tests"
