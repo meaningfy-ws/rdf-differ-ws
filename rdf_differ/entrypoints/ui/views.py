@@ -62,7 +62,7 @@ def create_diff():
         else:
             flash(response, 'success')
             logger.debug('render create diff view')
-            return redirect(url_for('view_dataset', dataset_id=form.dataset_name.data))
+            return redirect(url_for('get_active_tasks'))
 
     logger.debug('render create diff clean view')
     return render_template('dataset/create_diff.html', title='Create diff', form=form)

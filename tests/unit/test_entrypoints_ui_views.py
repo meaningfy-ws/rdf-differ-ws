@@ -107,7 +107,7 @@ def test_create_diff_success(mock_create_diff, mock_get_dataset, ui_client):
     title = soup.find('h1')
 
     assert response.status_code == 200
-    assert 'Details: /dataset_name' in title.get_text()
+    assert 'List of active tasks' in title.get_text()
 
 
 @patch('rdf_differ.entrypoints.ui.views.api_create_diff')
