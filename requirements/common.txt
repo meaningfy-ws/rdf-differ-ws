@@ -13,6 +13,6 @@ eds4jinja2
 
 shortuuid==1.0.1  # https://pypi.org/project/shortuuid/
 
-celery==5.1.2
+celery==5.2.2
 redis==3.5.3
 flower
