@@ -21,8 +21,8 @@ prefix xhv: <http://www.w3.org/1999/xhtml/vocab#>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 """
 QUERY_DATASET_DESCRIPTION = """
-SELECT ?versionHistoryGraph (?identifier AS ?datasetVersion) (str(?vhrDate) AS ?date) ?currentVersionGraph ?schemeURI \
-?versionNamedGraph ?versionId
+SELECT ?versionHistoryGraph (?identifier AS ?datasetVersion) ?currentVersionGraph ?schemeURI \
+?versionNamedGraph ?versionId ?description ?created
 WHERE {
   # parameters
   VALUES ( ?versionHistoryGraph ) {
@@ -31,7 +31,10 @@ WHERE {
   GRAPH ?versionHistoryGraph {
     ?vhr dsv:hasVersionHistorySet ?vhs .
     OPTIONAL {
-        ?vhr dc:date ?vhrDate .
+        ?vhs dcterms:description ?description
+    }
+    OPTIONAL {
+        ?vhs dcterms:created ?created
     }
     OPTIONAL {
         ?vhr dc:identifier ?identifier
@@ -66,6 +69,27 @@ WHERE {
   }
 }
 """
+QUERY_INSERT_DESCRIPTION = """
+INSERT 
+{
+   GRAPH ?versionHistoryGraph {    
+     ?vhs dcterms:description ?description;
+      dcterms:created ?currentTime .
+  }
+}
+WHERE {
+  # parameters
+  VALUES ( ?description ) {
+    ( "~description~"@en )
+  }
+  GRAPH ?versionHistoryGraph {    
+     ?vhs a dsv:VersionHistorySet .
+    
+    BIND (now() as ?currentTime)
+  }
+}
+"""
+
 QUERY_DELETIONS_COUNT = """
 SELECT ?deletionsGraph ?triplesInDeletionGraph ?versionGraph
 WHERE {

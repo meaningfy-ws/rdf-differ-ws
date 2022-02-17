@@ -49,6 +49,7 @@ def async_create_diff(self, dataset_id: str, body: dict, old_version_file: str, 
                                    new_version_id=body.get('new_version_id'),
                                    old_version_file=Path(old_version_file),
                                    new_version_file=Path(new_version_file))
+        fuseki_adapter.inject_description(dataset_name=dataset_id, description=body.get('dataset_description', ''))
     except Exception as e:
         logger.error(str(e))
         raise FusekiException(str(e))

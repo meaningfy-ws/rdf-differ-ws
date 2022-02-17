@@ -21,7 +21,7 @@ from requests.auth import HTTPBasicAuth
 
 from rdf_differ import config
 from rdf_differ.adapters import SKOS_HISTORY_PREFIXES, QUERY_DATASET_DESCRIPTION, QUERY_INSERTIONS_COUNT, \
-    QUERY_DELETIONS_COUNT
+    QUERY_DELETIONS_COUNT, QUERY_INSERT_DESCRIPTION
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
@@ -228,6 +228,18 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         return self._extract_dataset_description(response=query_result, dataset_id=dataset_name,
                                                  query_url=self.make_sparql_endpoint(dataset_name))
 
+    def inject_description(self, dataset_name: str, description: str):
+        """
+            Insert data into the dataset
+        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
+        identifying the dataset
+        :param description: The description to be inserted
+        """
+        query_string = QUERY_INSERT_DESCRIPTION.replace('~description~', description)
+        response = self.execute_update_query(dataset_name=dataset_name,
+                                             sparql_query=SKOS_HISTORY_PREFIXES + query_string)
+        return response
+
     def list_datasets(self) -> list:
         """
             Get the list of the dataset names from the Fuseki store.
@@ -255,6 +267,19 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         return self.sparql_client.execute(endpoint_url=self.make_sparql_endpoint(dataset_name),
                                           query_text=sparql_query)
 
+    def execute_update_query(self, dataset_name: str, sparql_query: str) -> dict:
+        """
+            Helper method to execute queries to the Fuseki store using the SPARQLWrapper.
+        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
+        identifying the dataset
+        :param sparql_query: query to be executed
+        :return: SPARQLWrapper query response
+        """
+        return self.sparql_client.execute_update(endpoint_url=self.make_sparql_update_endpoint(dataset_name),
+                                                 query_text=sparql_query,
+                                                 login=config.RDF_DIFFER_FUSEKI_USERNAME,
+                                                 password=config.RDF_DIFFER_FUSEKI_PASSWORD)
+
     def make_sparql_endpoint(self, dataset_name: str) -> str:
         """
             Helper method to create the url for querying.
@@ -263,6 +288,15 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :return: the query url
         """
         return urljoin(self.triplestore_service_url, dataset_name + "/sparql")
+
+    def make_sparql_update_endpoint(self, dataset_name: str) -> str:
+        """
+            Helper method to create the url for updating.
+        :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
+        identifying the dataset
+        :return: the update url
+        """
+        return urljoin(self.triplestore_service_url, dataset_name + "/update")
 
     @staticmethod
     def _select_dataset_names_from_fuseki_response(response_text) -> list:
@@ -303,9 +337,9 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
 
         return {
             'dataset_id': dataset_id,
-            'dataset_description': None,
+            'dataset_description': response['results']['bindings'][0]['description']['value'],
             'dataset_uri': response['results']['bindings'][0]['schemeURI']['value'],
-            'diff_date': None,
+            'diff_date': response['results']['bindings'][0]['created']['value'],
             'old_version_id': response['results']['bindings'][0]['versionId']['value'],
             'new_version_id': response['results']['bindings'][1]['versionId']['value'],
             'query_url': query_url,
