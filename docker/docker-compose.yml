@@ -3,7 +3,6 @@ version: '3.7'
 services:
   rdf-differ-api:
     container_name: rdf-differ-api
-    image: meaningfy/rdf-differ-api:latest
     build:
       context: ..
       dockerfile: ./docker/api/Dockerfile
@@ -20,7 +19,6 @@ services:
 
   rdf-differ-ui:
     container_name: rdf-differ-ui
-    image: meaningfy/rdf-differ-ui:latest
     build:
       context: ..
       dockerfile: ./docker/ui/Dockerfile
@@ -34,7 +32,6 @@ services:
 
   fuseki:
     container_name: fuseki
-    image: meaningfy/fuseki:latest
     build:
       context: ..
       dockerfile: ./docker/fuseki/Dockerfile
