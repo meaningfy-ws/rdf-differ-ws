@@ -337,9 +337,12 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
 
         return {
             'dataset_id': dataset_id,
-            'dataset_description': response['results']['bindings'][0]['description']['value'],
+            'dataset_description': response['results']['bindings'][0]['description']['value'] if
+            response['results']['bindings'][0].get('description') else '',
             'dataset_uri': response['results']['bindings'][0]['schemeURI']['value'],
-            'diff_date': response['results']['bindings'][0]['created']['value'],
+            'diff_date': response['results']['bindings'][0]['created']['value'] if response['results']['bindings'][
+                0].get(
+                'created') else '',
             'old_version_id': response['results']['bindings'][0]['versionId']['value'],
             'new_version_id': response['results']['bindings'][1]['versionId']['value'],
             'query_url': query_url,
