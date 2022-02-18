@@ -165,9 +165,9 @@ def test_fuseki_diff_adapter_dataset_description(fake_sparql_runner):
     response = fuseki_service.dataset_description(dataset_name='/subdiv')
 
     assert response['dataset_id'] == '/subdiv'
-    assert response['dataset_description'] is None
+    assert response['dataset_description'] is ''
     assert response['dataset_uri'] == "http://publications.europa.eu/resource/authority/subdivision"
-    assert response['diff_date'] is None
+    assert response['diff_date'] is ''
     assert "v1" in response['old_version_id']
     assert "v2" in response['new_version_id']
     assert response['query_url'] == 'http://localhost:3030/subdiv/sparql'

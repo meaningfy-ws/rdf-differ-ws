@@ -13,14 +13,14 @@ jobs:
         os: [ ubuntu-latest ]
     env:
       OS: ${{ matrix.os }}
-      PYTHON: '3.8'
+      PYTHON: '3.6'
     steps:
       - uses: actions/checkout@master
 
       - name: Set up Python
         uses: actions/setup-python@master
         with:
-          python-version: 3.8
+          python-version: 3.6
 
       - name: Test with pytest
         run: |

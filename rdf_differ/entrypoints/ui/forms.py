@@ -20,7 +20,6 @@ class CreateDiffForm(FlaskForm):
                                                                   message='Dataset name can contain only letters, numbers, _, :, and -'),
                                                            Length(min=2, max=50)])
     dataset_description = StringField('Dataset description', description='Optional description of the dataset.')
-    # TODO: find out if the URL validator is enough or we'll need to create a custom one for URIs
     dataset_uri = StringField('Dataset URI', validators=[DataRequired(), URL()])
 
     old_version_file_content = FileField('Old dataset file', validators=[FileRequired()])

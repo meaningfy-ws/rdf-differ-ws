@@ -14,7 +14,8 @@ from rdf_differ.utils.file_utils import dir_exists
 
 
 @patch.object(FusekiDiffAdapter, 'create_diff')
-def test_async_create_diff_success(mock_create_diff, tmpdir):
+@patch.object(FusekiDiffAdapter, 'inject_description')
+def test_async_create_diff_success(mock_inject_description, mock_create_diff, tmpdir):
     cleanup_location = tmpdir.mkdir('files-location')
     new_version_file = cleanup_location.join('new_version.rdf')
     old_version_file = cleanup_location.join('old_version.rdf')
@@ -22,13 +23,15 @@ def test_async_create_diff_success(mock_create_diff, tmpdir):
     return_value = async_create_diff('dataset', {}, old_version_file, new_version_file, cleanup_location)
 
     mock_create_diff.assert_called_once()
+    mock_inject_description.assert_called_once()
 
     assert not dir_exists(cleanup_location)
     assert True == return_value
 
 
 @patch.object(FusekiDiffAdapter, 'create_diff')
-def test_async_create_diff_failure(mock_create_diff, tmpdir):
+@patch.object(FusekiDiffAdapter, 'inject_description')
+def test_async_create_diff_failure(mock_inject_description, mock_create_diff, tmpdir):
     mock_create_diff.side_effect = FusekiException()
 
     cleanup_location = tmpdir.mkdir('files-location')
