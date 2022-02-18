@@ -58,7 +58,7 @@ def get_diff(dataset_id: str) -> tuple:
     :return: dataset description
     :rtype: dict, int
     """
-    logger.debug(f'start get diff for {dataset_id} endpoint')
+    logger.debug(f'get diff for {dataset_id} endpoint')
 
     try:
         dataset = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
@@ -107,7 +107,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
         dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_id'))
         # if description is {} (empty) then we can create the diff
         can_create = not bool(dataset)
-        logger.info(f'dataset exists. empty: {not can_create}')
+        logger.debug(f'dataset exists. empty: {not can_create}')
     except EndPointNotFound:
         fuseki_adapter.create_dataset(dataset_name=body.get('dataset_id'))
         can_create = True
@@ -122,7 +122,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
                 push_task_to_queue(dumps([task.id, dataset_name]))
 
                 redis_client.set(task.id, str(False))
-            logger.info('finish create diff endpoint')
+            logger.debug(f'task executed with id: {task.id}')
             return {'task_id': task.id, 'dataset_name': dataset_name}, 200
         except ValueError as exception:
             exception_text = 'Internal error while uploading the diffs.\n' + str(exception)
@@ -240,6 +240,7 @@ def get_active_tasks() -> tuple:
     Get all active celery tasks
     :return: dict of celery workers and their active tasks
     """
+    logger.debug('get active tasks')
     try:
         tasks = retrieve_active_tasks()
         flattened_tasks = tasks.get(list(tasks.keys())[0], [])
@@ -254,14 +255,22 @@ def get_task_status(task_id: str) -> tuple:
     :param task_id: Id of task to get status for
     :return: dict
     """
+    logger.debug(f'get task status: {task_id}')
     task = retrieve_task(task_id)
     if task:
-        return {
-                   "task_id": task.id,
-                   "task_status": task.status,
-                   "task_result": task.result
-               }, 200
-    raise NotFound('task not found')  # 404
+        try:
+            result = dumps(task.result)
+        except TypeError:
+            result = ''
+
+        data = {
+            'task_id': task.id,
+            'status': task.status,
+            'result': result
+        }
+        return data, 200
+
+    raise NotFound(f'Task with {task_id} doesn\'t exist')  # 404
 
 
 def stop_running_task(task_id: str) -> tuple:
@@ -269,6 +278,7 @@ def stop_running_task(task_id: str) -> tuple:
     Revoke a task
     :param task_id: Id of task to revoke
     """
+    logger.debug(f'stop task: {task_id}')
     try:
         tasks = flatten_active_tasks(retrieve_active_tasks())
         task = next(task for task in tasks if task["id"] == task_id)
