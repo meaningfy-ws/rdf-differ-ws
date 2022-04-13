@@ -7,6 +7,13 @@ See the [Wiki page of the original repository](https://github.com/jneubert/skos-
 [![codecov](https://codecov.io/gh/eu-vocabularies/rdf-differ/branch/master/graph/badge.svg)](https://codecov.io/gh/eu-vocabularies/rdf-differ)
 
 # Installation
+> **NOTE**: The specified installation instruction are for `development` purposes only. _(Slight modifications are required for production use; including having a production level Fuseki server and Redis service available.)_
+
+Make sure that the EPEL (Extra Packages for Enterprise Linux) repository is enabled added to the server's package lists. This is usually installed by running:
+```bash 
+sudo yum install epel-release
+```
+
 RDF Differ uses fuseki (as the triplestore), celery (for multithreading programming), and redis (for pesistent storage).
 
 Run the following commands to install all required dependencies on a **redhat** system
