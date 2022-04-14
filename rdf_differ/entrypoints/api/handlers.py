@@ -22,12 +22,17 @@ from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.services.queue import kill_task
-from rdf_differ.services.report_handling import report_exists, retrieve_report, remove_all_reports, get_all_reports
+from rdf_differ.services.report_handling import report_exists, retrieve_report, remove_all_reports, get_all_reports, \
+    read_meta_file, build_dataset_reports_location, find_dataset_name_by_id
 from rdf_differ.services.tasks import retrieve_task, retrieve_active_tasks, flatten_active_tasks
 from rdf_differ.utils.file_utils import save_files, build_unique_name, check_dataset_name_validity
 
 """
 The definition of the API endpoints
+
+Important distinction:
+- dataset_name is the name of the dataset, which is the name of the folder containing the dataset diff results
+- dataset_id is the uid used for both identifying the dataset and the task that is associated with its creation
 """
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
@@ -44,8 +49,9 @@ def get_diffs() -> tuple:
                                        sparql_client=SPARQLRunner())
     try:
         datasets = fuseki_adapter.list_datasets()
+        response = [fuseki_adapter.dataset_description(dataset) for dataset in datasets]
         logger.debug('finish get diffs endpoint')
-        return [fuseki_adapter.dataset_description(dataset) for dataset in datasets], 200
+        return response, 200
     except (FusekiException, ValueError, IndexError) as exception:
         logger.exception(str(exception))
         raise InternalServerError(str(exception))  # 500
@@ -59,11 +65,19 @@ def get_diff(dataset_id: str) -> tuple:
     :rtype: dict, int
     """
     logger.debug(f'get diff for {dataset_id} endpoint')
+    try:
+        meta = read_meta_file(
+            build_dataset_reports_location(find_dataset_name_by_id(dataset_id),
+                                           RDF_DIFFER_REPORTS_DB))
+    except Exception as e:
+        exception_text = f'<{dataset_id}> does not exist.'
+        logger.exception(exception_text)
+        raise NotFound(exception_text)  # 404
 
     try:
         dataset = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
-                                    sparql_client=SPARQLRunner()).dataset_description(dataset_id)
-        dataset['available_reports'] = get_all_reports(dataset_id, config.RDF_DIFFER_REPORTS_DB)
+                                    sparql_client=SPARQLRunner()).dataset_description(meta.get('dataset_name'))
+        dataset['available_reports'] = get_all_reports(meta.get('dataset_name'), config.RDF_DIFFER_REPORTS_DB)
         logger.debug(f'finish get diff for {dataset_id} endpoint')
         return dataset, 200
     except EndPointNotFound:
@@ -82,7 +96,7 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     :param body:
         {
           "dataset_description": "string",
-          "dataset_id": "string",
+          "dataset_name": "string",
           "dataset_uri": "string",
           "new_version_id": "string",
           "old_version_id": "string",
@@ -97,19 +111,19 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
     fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                                        sparql_client=SPARQLRunner())
 
-    if not check_dataset_name_validity(body.get('dataset_id')):
-        raise Conflict(f'<{body.get("dataset_id")}> name is not acceptable is not empty.'
+    if not check_dataset_name_validity(body.get('dataset_name')):
+        raise Conflict(f'<{body.get("dataset_name")}> name is not acceptable is not empty.'
                        'Dataset name can contain only ASCII letters, numbers, _, :, and -')  # 409
 
-    dataset_name = build_unique_name(body.get('dataset_id'))
-    body['dataset_id'] = dataset_name
+    dataset_name = build_unique_name(body.get('dataset_name'))
+    body['dataset_name'] = dataset_name
     try:
-        dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_id'))
+        dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_name'))
         # if description is {} (empty) then we can create the diff
         can_create = not bool(dataset)
         logger.debug(f'dataset exists. empty: {not can_create}')
     except EndPointNotFound:
-        fuseki_adapter.create_dataset(dataset_name=body.get('dataset_id'))
+        fuseki_adapter.create_dataset(dataset_name=body.get('dataset_name'))
         can_create = True
         logger.info('creating dataset')
 
@@ -118,12 +132,13 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
             with save_files(old_version_file_content, new_version_file_content,
                             config.RDF_DIFFER_FILE_DB) as \
                     (db_location, old_version_file, new_version_file):
-                task = async_create_diff.delay(dataset_name, body, old_version_file, new_version_file, db_location)
+                task = async_create_diff.delay(dataset_name, body, old_version_file, new_version_file, db_location,
+                                               RDF_DIFFER_REPORTS_DB)
                 push_task_to_queue(dumps([task.id, dataset_name]))
 
                 redis_client.set(task.id, str(False))
             logger.debug(f'task executed with id: {task.id}')
-            return {'task_id': task.id, 'dataset_name': dataset_name}, 200
+            return {'uid': task.id, 'dataset_name': dataset_name}, 200
         except ValueError as exception:
             exception_text = 'Internal error while uploading the diffs.\n' + str(exception)
             logger.exception(exception_text)
@@ -145,8 +160,8 @@ def delete_diff(dataset_id: str) -> tuple:
     try:
         FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
                           sparql_client=SPARQLRunner()).delete_dataset(
-            dataset_id)
-        remove_all_reports(dataset_id, RDF_DIFFER_REPORTS_DB)
+            find_dataset_name_by_id(dataset_id))
+        remove_all_reports(find_dataset_name_by_id(dataset_id), RDF_DIFFER_REPORTS_DB)
 
         logger.info(f'finish delete dataset: {dataset_id} endpoint')
         return f'<{dataset_id}> deleted successfully.', 200
@@ -187,9 +202,12 @@ def build_report(body: dict) -> tuple:
         raise UnprocessableEntity("Check valid application profiles and their template types through the API"
                                   "and if the queries folder exists in the chosen application profile folder")
 
-    if not report_exists(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB) or rebuild:
-        task = async_generate_report.delay(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB,
-                                           str(template_location), query_files, dataset)
+    if not report_exists(find_dataset_name_by_id(dataset_id), application_profile, template_type,
+                         RDF_DIFFER_REPORTS_DB) or rebuild:
+        task = async_generate_report.delay(dataset_name=find_dataset_name_by_id(dataset_id),
+                                           application_profile=application_profile, template_type=template_type,
+                                           db_location=RDF_DIFFER_REPORTS_DB, template_location=str(template_location),
+                                           query_files=query_files, dataset=dataset)
         return {'task_id': task.id, 'application_profile': application_profile}, 200
     else:
         return {'message': 'Report already exists. To rebuild send the `rebuild` query parameter set to true'}, 406
@@ -217,8 +235,9 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
         raise UnprocessableEntity("Check valid application profiles and their template types through the API"
                                   "and if the queries folder exists in the chosen application profile folder")
 
-    if report_exists(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB):
-        return send_file(retrieve_report(dataset_id, application_profile, template_type, RDF_DIFFER_REPORTS_DB),
+    if report_exists(find_dataset_name_by_id(dataset_id), application_profile, template_type, RDF_DIFFER_REPORTS_DB):
+        return send_file(retrieve_report(find_dataset_name_by_id(dataset_id), application_profile, template_type,
+                                         RDF_DIFFER_REPORTS_DB),
                          as_attachment=True)  # 200
     else:
         raise NotFound('First send a request to build the report.')

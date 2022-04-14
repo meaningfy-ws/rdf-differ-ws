@@ -172,3 +172,21 @@ def list_folders_from_path(path: pathlib.Path):
 
 def list_files_from_path(path: pathlib.Path):
     return [x for x in os.listdir(path) if os.path.isfile(os.path.join(path, x))]
+
+
+def list_files_paths_from_path(path: pathlib.Path):
+    """
+    Method to list file names from a given path
+        :param path:
+        The path to be checked on.
+    """
+    return [str(path / x) for x in os.listdir(path) if os.path.isfile(os.path.join(path, x))]
+
+
+def list_folder_paths_from_path(path: pathlib.Path):
+    """
+    Method to list folder paths from a given path
+        :param path:
+        The path to be checked on.
+    """
+    return [str(path / x) for x in os.listdir(path) if os.path.isdir(os.path.join(path, x))]

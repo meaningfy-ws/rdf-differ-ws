@@ -44,7 +44,7 @@ paths:
               # using this explicit type definition until $ref method is fixed by connexion
               type: object
               properties:
-                dataset_id:
+                dataset_name:
                   type: string
                   description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
                 dataset_description:
@@ -68,7 +68,7 @@ paths:
                   format: binary
                   description: The content of the old version file.
               required:
-                - dataset_id
+                - dataset_name
                 - dataset_uri
                 - new_version_id
                 - old_version_id
@@ -247,7 +247,7 @@ components:
       type: object
       description: A minimal dataset description.
       properties:
-        dataset_id:
+        dataset_name:
           type: string
           description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
         dataset_description:
@@ -263,7 +263,7 @@ components:
           type: string
           description: Identifier for the older version of the dataset.
       required:
-        - dataset_id
+        - dataset_name
         - dataset_uri
         - new_version_id
         - old_version_id

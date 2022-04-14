@@ -50,5 +50,6 @@ RDF_DIFFER_TIMEZONE = os.environ.get('RDF_DIFFER_TIMEZONE', 'Europe/Paris')
 
 RDF_DIFFER_FILE_DB = os.environ.get('RDF_DIFFER_FILE_DB', str(Path(__file__).parents[1] / 'db'))
 RDF_DIFFER_REPORTS_DB = os.environ.get('RDF_DIFFER_REPORT_DB', str(Path(__file__).parents[1] / 'reports'))
+RDF_DIFFER_META_NAME = os.environ.get('RDF_DIFFER_META_NAME', 'meta.json')
 
 SHOW_SWAGGER_UI = strtobool(os.environ.get('SHOW_SWAGGER_UI', 'true'))

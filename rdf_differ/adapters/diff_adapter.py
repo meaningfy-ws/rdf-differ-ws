@@ -23,6 +23,8 @@ from rdf_differ import config
 from rdf_differ.adapters import SKOS_HISTORY_PREFIXES, QUERY_DATASET_DESCRIPTION, QUERY_INSERTIONS_COUNT, \
     QUERY_DELETIONS_COUNT, QUERY_INSERT_DESCRIPTION
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.config import RDF_DIFFER_REPORTS_DB
+from rdf_differ.services.report_handling import read_meta_file, build_dataset_reports_location
 
 
 class AbstractDiffAdapter(ABC):
@@ -225,7 +227,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         query_result = self.execute_query(dataset_name=dataset_name,
                                           sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
 
-        return self._extract_dataset_description(response=query_result, dataset_id=dataset_name,
+        return self._extract_dataset_description(response=query_result, dataset_name=dataset_name,
                                                  query_url=self.make_sparql_endpoint(dataset_name))
 
     def inject_description(self, dataset_name: str, description: str):
@@ -306,16 +308,17 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :return: list of the dataset names
         """
         result = loads(response_text)
-        return [d_item['ds.name'] for d_item in result['datasets']]
+        # the [1:] removes the `/` from the beginning of the dataset name
+        return [d_item['ds.name'][1:] for d_item in result['datasets']]
 
     @staticmethod
-    def _extract_dataset_description(response: dict, dataset_id: str, query_url: str) -> dict:
+    def _extract_dataset_description(response: dict, dataset_name: str, query_url: str) -> dict:
         """
             Helper method digging for:
 
         :param response: sparql query result
         :return: dataset description dict
-            * dataset_id = The dataset identifier. This should be short alphanumeric string uniquely
+            * dataset_name = The dataset identifier. This should be short alphanumeric string uniquely
                 identifying the dataset.
             * dataset_description = The dataset description. This is a free text description fo the dataset.
             * dataset_uri = The dataset URI. For SKOS datasets this is usually the ConceptSchema URI.
@@ -334,9 +337,16 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
 
         helper_current_version = [item['currentVersionGraph']['value'] for item in response['results']['bindings'] if
                                   'currentVersionGraph' in item and item['currentVersionGraph']['value']]
-
+        # todo: extract into method
+        meta={}
+        # remove try catch
+        try:
+            meta = read_meta_file(build_dataset_reports_location(dataset_name, RDF_DIFFER_REPORTS_DB))
+        except Exception as e:
+            print(str(e))
         return {
-            'dataset_id': dataset_id,
+            'dataset_name': dataset_name,
+            'uid': meta.get('uid'),
             'dataset_description': response['results']['bindings'][0]['description']['value'] if
             response['results']['bindings'][0].get('description') else '',
             'dataset_uri': response['results']['bindings'][0]['schemeURI']['value'],

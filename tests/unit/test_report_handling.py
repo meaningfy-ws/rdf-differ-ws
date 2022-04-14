@@ -7,10 +7,10 @@ from rdf_differ.utils.file_utils import dir_exists
 
 def test_build_dataset_report_location():
     dataset_name = 'dataset'
-    db_location = '/db'
-    expected_result = '/db/dataset'
+    reports_location = '/reports'
+    expected_result = '/reports/dataset'
 
-    report_location = build_dataset_reports_location(dataset_name, db_location)
+    report_location = build_dataset_reports_location(dataset_name, reports_location)
 
     assert report_location == expected_result
 
@@ -19,10 +19,10 @@ def test_build_report_location():
     dataset_name = 'dataset'
     application_profile = 'application_profile'
     template_type = 'template_type'
-    db_location = '/db'
-    expected_result = '/db/dataset/application_profile/template_type'
+    reports_location = '/reports'
+    expected_result = '/reports/dataset/application_profile/template_type'
 
-    report_location = build_report_location(dataset_name, application_profile, template_type, db_location)
+    report_location = build_report_location(dataset_name, application_profile, template_type, reports_location)
 
     assert report_location == expected_result
 
