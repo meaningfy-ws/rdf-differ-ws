@@ -68,7 +68,7 @@ def test_create_diff_200_empty_dataset(_, mock_init, mock_dataset_description):
                                    old_version_file_content=file_1,
                                    new_version_file_content=file_2)
 
-    assert 'task_id' in response
+    assert 'uid' in response
     assert status == 200
 
 
@@ -84,7 +84,7 @@ def test_create_diff_200_dataset_doesnt_exist(mock_dataset_description, mock_cre
                                    new_version_file_content=file_2)
 
     mock_create_dataset.assert_called_once()
-    assert 'task_id' in response
+    assert 'uid' in response
     assert status == 200
 
 
@@ -114,14 +114,24 @@ def test_create_diff_409(mock_dataset_description):
                         new_version_file_content=file_2)
 
 
+@patch('rdf_differ.entrypoints.api.handlers.read_meta_file')
+@patch('rdf_differ.entrypoints.api.handlers.build_dataset_reports_location')
+@patch('rdf_differ.entrypoints.api.handlers.find_dataset_name_by_id')
 @patch.object(FusekiDiffAdapter, 'dataset_description')
-def test_get_diff_200(mock_dataset_description):
-    mock_dataset_description.return_value = {'dataset_id': "dataset"}
+def test_get_diff_200(mock_dataset_description, find_dataset_name_by_id, mock_build_dataset_reports_location,
+                      mock_read_meta_file):
+    dataset_name = 'dataset'
+
+    mock_dataset_description.return_value = {'dataset_name': "dataset"}
+    mock_read_meta_file.return_value = {
+        'uid': '1',
+        'dataset_name': dataset_name
+    }
 
     response, status = get_diff('dataset')
 
     assert status == 200
-    assert response == {'dataset_id': "dataset", 'available_reports': []}
+    assert response == {'dataset_name': "dataset", 'available_reports': []}
 
 
 @patch.object(FusekiDiffAdapter, 'dataset_description')
@@ -134,10 +144,26 @@ def test_get_diff_404(mock_dataset_description):
     assert "<dataset> does not exist." in str(e.value)
 
 
+@patch('rdf_differ.entrypoints.api.handlers.find_dataset_name_by_id')
+@patch.object(FusekiDiffAdapter, 'delete_dataset')
+def test_delete_diff_200(mock_delete_dataset, mock_find_dataset_name_by_id):
+    mock_delete_dataset.return_value = "", 200
+
+    response, status = delete_diff('dataset')
+
+    assert '<dataset> deleted successfully.' in response
+    assert status == 200
+
+
 @pytest.mark.parametrize('exception', [ValueError, IndexError])
+@patch('rdf_differ.entrypoints.api.handlers.read_meta_file')
+@patch('rdf_differ.entrypoints.api.handlers.build_dataset_reports_location')
+@patch('rdf_differ.entrypoints.api.handlers.find_dataset_name_by_id')
 @patch.object(FusekiDiffAdapter, 'dataset_description')
-def test_get_diff_500(mock_dataset_description, exception):
+def test_get_diff_500(mock_dataset_description, find_dataset_name_by_id, mock_build_dataset_reports_location,
+                      mock_read_meta_file, exception):
     mock_dataset_description.side_effect = exception
+    mock_read_meta_file.return_value = {}
 
     with pytest.raises(InternalServerError) as e:
         _ = get_diff('dataset')
@@ -146,9 +172,11 @@ def test_get_diff_500(mock_dataset_description, exception):
 
 
 # TODO: update tests after refactoring. Add 5xx testing
+@patch('rdf_differ.entrypoints.api.handlers.find_dataset_name_by_id')
 @patch.object(FusekiDiffAdapter, 'delete_dataset')
-def test_delete_diff_200(mock_delete_dataset):
+def test_delete_diff_200(mock_delete_dataset, mock_find_dataset_name_by_id):
     mock_delete_dataset.return_value = "", 200
+    mock_find_dataset_name_by_id.return_value = "dataset"
 
     response, status = delete_diff('dataset')
 
@@ -166,16 +194,20 @@ def test_delete_diff_404(mock_delete_dataset):
     assert "<dataset> does not exist." in str(e.value)
 
 
+@patch('rdf_differ.entrypoints.api.handlers.get_diff')
+@patch('rdf_differ.entrypoints.api.handlers.find_dataset_name_by_id')
 @patch.object(FusekiDiffAdapter, 'dataset_description')
 @patch.object(ApplicationProfileManager, 'get_template_folder')
 @patch.object(ApplicationProfileManager, 'get_queries_dict')
 @patch('rdf_differ.entrypoints.api.handlers.report_exists')
 def test_build_report_200(mock_report_exists, mock_get_queries_dict, mock_get_template_folder,
-                          mock_dataset_description, tmpdir):
+                          mock_dataset_description, mock_find_dataset_name_by_id, mock_get_diff, tmpdir):
     mock_report_exists.return_value = False
     mock_get_queries_dict.return_value = {}
     mock_get_template_folder.return_value = tmpdir.mkdir('template')
     mock_dataset_description.return_value = {}
+    mock_find_dataset_name_by_id.return_value = 'dataset'
+    mock_get_diff.return_value = {}, 200
 
     response, status = build_report({
         'dataset_id': 'dataset',
@@ -187,16 +219,20 @@ def test_build_report_200(mock_report_exists, mock_get_queries_dict, mock_get_te
     assert status == 200
 
 
+@patch('rdf_differ.entrypoints.api.handlers.get_diff')
+@patch('rdf_differ.entrypoints.api.handlers.find_dataset_name_by_id')
 @patch.object(FusekiDiffAdapter, 'dataset_description')
 @patch.object(ApplicationProfileManager, 'get_template_folder')
 @patch.object(ApplicationProfileManager, 'get_queries_dict')
 @patch('rdf_differ.entrypoints.api.handlers.report_exists')
 def test_build_report_200_rebuild(mock_report_exists, mock_get_queries_dict, mock_get_template_folder,
-                                  mock_dataset_description, tmpdir):
+                                  mock_dataset_description, mock_find_dataset_name_by_id, mock_get_diff, tmpdir):
     mock_report_exists.return_value = True
     mock_get_queries_dict.return_value = {}
     mock_get_template_folder.return_value = tmpdir.mkdir('template')
     mock_dataset_description.return_value = {}
+    mock_find_dataset_name_by_id.return_value = 'dataset'
+    mock_get_diff.return_value = {}, 200
 
     response, status = build_report({
         'dataset_id': 'dataset',
@@ -209,16 +245,20 @@ def test_build_report_200_rebuild(mock_report_exists, mock_get_queries_dict, moc
     assert status == 200
 
 
+@patch('rdf_differ.entrypoints.api.handlers.get_diff')
+@patch('rdf_differ.entrypoints.api.handlers.find_dataset_name_by_id')
 @patch.object(FusekiDiffAdapter, 'dataset_description')
 @patch.object(ApplicationProfileManager, 'get_template_folder')
 @patch.object(ApplicationProfileManager, 'get_queries_dict')
 @patch('rdf_differ.entrypoints.api.handlers.report_exists')
 def test_build_report_406_exists(mock_report_exists, mock_get_queries_dict, mock_get_template_folder,
-                                 mock_dataset_description, tmpdir):
+                                 mock_dataset_description, mock_find_dataset_name_by_id, mock_get_diff, tmpdir):
     mock_report_exists.return_value = True
     mock_get_queries_dict.return_value = {}
     mock_get_template_folder.return_value = tmpdir.mkdir('template')
     mock_dataset_description.return_value = {}
+    mock_find_dataset_name_by_id.return_value = 'dataset'
+    mock_get_diff.return_value = {}, 200
 
     response, status = build_report({
         'dataset_id': 'dataset',
@@ -240,12 +280,18 @@ def test_build_report_404_dataset(mock_dataset_description):
     assert "<dataset> does not exist." in str(e.value)
 
 
+@patch('rdf_differ.entrypoints.api.handlers.get_diff')
+@patch('rdf_differ.entrypoints.api.handlers.find_dataset_name_by_id')
 @patch.object(FusekiDiffAdapter, 'dataset_description')
 @patch.object(ApplicationProfileManager, 'get_template_folder')
 @patch.object(ApplicationProfileManager, 'get_queries_dict')
-def test_build_report_unprocessable_entity(mock_get_queries_dict, mock_get_template_folder, mock_dataset_description):
+def test_build_report_unprocessable_entity(mock_get_queries_dict, mock_get_template_folder, mock_dataset_description,
+                                           mock_find_dataset_name_by_id, mock_get_diff, ):
     mock_get_template_folder.side_effect = LookupError
     mock_dataset_description.return_value = {}
+
+    mock_find_dataset_name_by_id.return_value = 'dataset'
+    mock_get_diff.return_value = {}, 200
 
     with pytest.raises(UnprocessableEntity) as e:
         _ = build_report({
@@ -269,13 +315,16 @@ def test_get_report_404_dataset(mock_dataset_description):
     assert "<dataset> does not exist." in str(e.value)
 
 
+@patch('rdf_differ.entrypoints.api.handlers.find_dataset_name_by_id')
 @patch('rdf_differ.entrypoints.api.handlers.get_diff')
 @patch.object(ApplicationProfileManager, 'get_template_folder')
 @patch.object(ApplicationProfileManager, 'get_queries_dict')
 @patch('rdf_differ.entrypoints.api.handlers.report_exists')
-def test_get_report_404_report(mock_report_exists, mock_get_queries_dict, mock_get_template_folder, mock_get_diff):
+def test_get_report_404_report(mock_report_exists, mock_get_queries_dict, mock_get_template_folder, mock_get_diff,
+                               mock_find_dataset_name_by_id):
     mock_report_exists.return_value = False
     mock_get_diff.return_value = {'query_url': 'http://somequery'}, 200
+    mock_find_dataset_name_by_id.return_value = 'dataset'
 
     with pytest.raises(NotFound) as e:
         _ = get_report('dataset', 'ap', 'template_type')

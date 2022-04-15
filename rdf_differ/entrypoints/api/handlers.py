@@ -165,7 +165,7 @@ def delete_diff(dataset_id: str) -> tuple:
 
         logger.info(f'finish delete dataset: {dataset_id} endpoint')
         return f'<{dataset_id}> deleted successfully.', 200
-    except FusekiException:
+    except (FusekiException, FileNotFoundError):
         exception_text = f'<{dataset_id}> does not exist.'
         logger.exception(exception_text)
         raise NotFound(exception_text)  # 404

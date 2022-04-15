@@ -144,7 +144,7 @@ def test_fuseki_diff_adapter_list_datasets(fake_requests):
     response_text = fuseki_service.list_datasets()
 
     assert len(response_text) == 3
-    assert '/subdiv' in response_text
+    assert 'subdiv' in response_text
 
 
 def test_fuseki_diff_adapter_list_datasets_failing(fake_requests):
@@ -162,9 +162,9 @@ def test_fuseki_diff_adapter_dataset_description(fake_sparql_runner):
 
     fuseki_service = helper_fuseki_service(triplestore_service_url='http://localhost:3030',
                                            sparql_client=fake_sparql_runner)
-    response = fuseki_service.dataset_description(dataset_name='/subdiv')
+    response = fuseki_service.dataset_description(dataset_name='subdiv')
 
-    assert response['dataset_id'] == '/subdiv'
+    assert response['dataset_name'] == 'subdiv'
     assert response['dataset_description'] is ''
     assert response['dataset_uri'] == "http://publications.europa.eu/resource/authority/subdivision"
     assert response['diff_date'] is ''

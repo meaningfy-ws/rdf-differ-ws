@@ -10,6 +10,7 @@ import pytest
 
 from rdf_differ.adapters.celery import async_create_diff, async_generate_report
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.config import RDF_DIFFER_REPORTS_DB
 from rdf_differ.utils.file_utils import dir_exists
 
 
@@ -20,7 +21,7 @@ def test_async_create_diff_success(mock_inject_description, mock_create_diff, tm
     new_version_file = cleanup_location.join('new_version.rdf')
     old_version_file = cleanup_location.join('old_version.rdf')
 
-    return_value = async_create_diff('dataset', {}, old_version_file, new_version_file, cleanup_location)
+    return_value = async_create_diff('dataset', {}, old_version_file, new_version_file, cleanup_location, RDF_DIFFER_REPORTS_DB)
 
     mock_create_diff.assert_called_once()
     mock_inject_description.assert_called_once()
@@ -39,7 +40,7 @@ def test_async_create_diff_failure(mock_inject_description, mock_create_diff, tm
     old_version_file = cleanup_location.join('old_version.rdf')
 
     with pytest.raises(FusekiException) as e:
-        async_create_diff('dataset', {}, old_version_file, new_version_file, cleanup_location)
+        async_create_diff('dataset', {}, old_version_file, new_version_file, cleanup_location, RDF_DIFFER_REPORTS_DB)
 
     assert not dir_exists(cleanup_location)
 
@@ -50,10 +51,11 @@ def test_async_create_report_success(mock_build_report, mock_save_report, tmpdir
     db = tmpdir.mkdir('db')
     template_location = tmpdir.mkdir('template_location')
     dataset_id = 'dataset'
+    dataset_name = 'dataset_name'
     application_profile = 'ap'
     template_type = 'tp'
     return_value = async_generate_report(dataset_id, application_profile, template_type, db, template_location, {},
-                                         {'dataset_id': dataset_id})
+                                         {'uid': dataset_id, 'dataset_name': dataset_name})
 
     mock_build_report.assert_called_once()
     mock_save_report.assert_called_once()

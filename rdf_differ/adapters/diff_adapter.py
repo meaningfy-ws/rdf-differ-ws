@@ -337,13 +337,14 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
 
         helper_current_version = [item['currentVersionGraph']['value'] for item in response['results']['bindings'] if
                                   'currentVersionGraph' in item and item['currentVersionGraph']['value']]
-        # todo: extract into method
-        meta={}
-        # remove try catch
+
+        meta = {}
         try:
             meta = read_meta_file(build_dataset_reports_location(dataset_name, RDF_DIFFER_REPORTS_DB))
-        except Exception as e:
-            print(str(e))
+        except:
+            # todo: handle meta file missing
+            pass
+
         return {
             'dataset_name': dataset_name,
             'uid': meta.get('uid'),

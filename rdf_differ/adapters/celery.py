@@ -25,6 +25,7 @@ CELERY_GENERATE_REPORT = 'generate_report'
 
 
 # =================== TASKS =================== #
+# bind=True means that the task will be bound to the current context
 @celery_worker.task(name=CELERY_CREATE_DIFF, bind=True)
 def async_create_diff(self, dataset_id: str, body: dict, old_version_file: str, new_version_file: str,
                       cleanup_location: str, reports_location: str):
@@ -58,8 +59,9 @@ def async_create_diff(self, dataset_id: str, body: dict, old_version_file: str, 
     finally:
         shutil.rmtree(cleanup_location)
 
-    dataset_location = build_dataset_reports_location(dataset_id, reports_location)
-    generate_meta_file(reports_location=dataset_location, uid=self.request.id, dataset_name=dataset_id)
+    dataset_location = Path(build_dataset_reports_location(dataset_id, reports_location))
+    dataset_location.mkdir(parents=True, exist_ok=True)
+    generate_meta_file(reports_location=str(dataset_location), uid=self.request.id, dataset_name=dataset_id)
     logger.debug('finish async create diff')
     return True
 
