@@ -1,7 +1,10 @@
+import uuid
+from json import dumps
 from pathlib import Path
 
 from rdf_differ.services.report_handling import build_report_location, retrieve_report, report_exists, save_report, \
-    build_dataset_reports_location, remove_all_reports, remove_report, build_report_name
+    build_dataset_reports_location, remove_all_reports, remove_report, build_report_name, generate_meta_file, \
+    read_meta_file, find_dataset_name_by_id
 from rdf_differ.utils.file_utils import dir_exists
 
 
@@ -164,3 +167,42 @@ def test_remove_report_failure(tmpdir):
     db_location = tmpdir.mkdir('db')
 
     assert not remove_report(dataset_name, application_profile, template_type, db_location)
+
+
+def test_generate_meta_file_and_read_file(tmpdir):
+    uid = str(uuid.uuid4())
+    dataset_name = 'dataset'
+    timestamp = '12-12-2012T12:12:12'
+    report_base_location = tmpdir.mkdir(uid)
+
+    meta_data = generate_meta_file(str(report_base_location), uid, dataset_name, timestamp)
+
+    assert meta_data['uid'] == uid
+    assert meta_data['dataset_name'] == dataset_name
+    assert meta_data['created_at'] == timestamp
+
+    meta_content = read_meta_file(str(report_base_location))
+
+    assert meta_content['uid'] == uid
+    assert meta_content['dataset_name'] == dataset_name
+    assert meta_content['created_at'] == timestamp
+
+
+def test_find_dataset_name_by_id(tmpdir):
+    uid = str(uuid.uuid4())
+    dataset_name = 'dataset'
+    timestamp = '12-12-2012T12:12:12'
+    reports_location = tmpdir.mkdir('reports')
+    dataset_base_location = reports_location.mkdir(uid)
+    meta_file = dataset_base_location.join('meta.json')
+    meta_file.write(dumps({'dataset_name': dataset_name, 'created_at': timestamp, 'uid': uid}))
+
+    dataset_name_found = find_dataset_name_by_id(uid, reports_location)
+    assert dataset_name_found == dataset_name
+
+
+def test_find_datast_name_by_id_failure(tmpdir):
+    uid = str(uuid.uuid4())
+    reports_location = tmpdir.mkdir('reports')
+
+    assert not find_dataset_name_by_id(uid, reports_location)

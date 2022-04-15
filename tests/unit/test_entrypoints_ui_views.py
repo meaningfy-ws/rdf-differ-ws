@@ -16,10 +16,12 @@ from werkzeug.datastructures import FileStorage
 def test_index(mock_get_datasets, ui_client):
     mock_get_datasets.return_value = [
                                          {
-                                             'dataset_id': '/dataset_one',
+                                             'uid': 'uid_one',
+                                             'dataset_name': 'dataset_one',
                                          },
                                          {
-                                             'dataset_id': '/dataset_two',
+                                             'uid': 'uid_two',
+                                             'dataset_name': 'dataset_two',
                                          },
                                      ], 200
 
@@ -32,15 +34,16 @@ def test_index(mock_get_datasets, ui_client):
     table_body = soup.find('tbody')
     rows = table_body.find_all('tr')
     assert 2 == len(rows)
-    assert '/dataset_one' in rows[0].get_text()
-    assert '/dataset_two' in rows[1].get_text()
+    assert 'dataset_one' in rows[0].get_text()
+    assert 'dataset_two' in rows[1].get_text()
 
 
 @patch('rdf_differ.entrypoints.ui.views.get_dataset')
 def test_get_dataset(mock_get_dataset, ui_client):
-    dataset_id = 'dataset_one'
+    dataset_id = 'uid'
+    dataset_name = 'dataset_one'
     mock_get_dataset.return_value = {
-                                        'dataset_id': f'/{dataset_id}',
+                                        'dataset_name': f'{dataset_name}',
                                         'dataset_uri': 'http://dataset.one',
                                         'new_version_id': 'one_new',
                                         'old_version_id': 'one_old',
@@ -54,7 +57,7 @@ def test_get_dataset(mock_get_dataset, ui_client):
     soup = BeautifulSoup(response.data, 'html.parser')
 
     title = soup.find('h1')
-    assert 'Details: /dataset_one' in title.get_text()
+    assert 'Name: dataset_one' in title.get_text()
 
     table_body = soup.find('tbody')
     rows = table_body.find_all('tr')
