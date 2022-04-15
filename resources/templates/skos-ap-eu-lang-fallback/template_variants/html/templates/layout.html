@@ -135,6 +135,16 @@
             }
         });
 
+        let number_of_headings_one = $('h1').toArray()
+
+        if (number_of_headings_one.length === 3) {
+            $("h1").not(':first').each(function () {
+                $(this).next().remove()
+                $(this).remove();
+            });
+            $("#print-container").append("<p><strong>Datasets are identical and no differences were found</strong></p>")
+        }
+
         $(function () {
             $("#toc").tocify({
                 selectors: "h1,h2",
