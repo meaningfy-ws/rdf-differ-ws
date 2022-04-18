@@ -11,7 +11,8 @@ from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.config import RDF_DIFFER_REDIS_SERVICE
-from rdf_differ.services.report_handling import build_report, save_report
+from rdf_differ.services.report_handling import build_report, save_report, build_dataset_reports_location, \
+    generate_meta_file
 from rdf_differ.services.time import get_timestamp
 
 celery_worker = Celery('rdf-differ-tasks', broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE)
@@ -24,9 +25,10 @@ CELERY_GENERATE_REPORT = 'generate_report'
 
 
 # =================== TASKS =================== #
+# bind=True means that the task will be bound to the current context
 @celery_worker.task(name=CELERY_CREATE_DIFF, bind=True)
 def async_create_diff(self, dataset_id: str, body: dict, old_version_file: str, new_version_file: str,
-                      cleanup_location: str):
+                      cleanup_location: str, reports_location: str):
     """
     Task that retrieves diff files form specified location, creates the diff and cleans up the files
 
@@ -36,6 +38,7 @@ def async_create_diff(self, dataset_id: str, body: dict, old_version_file: str, 
     :param old_version_file: location of the old version file
     :param new_version_file: location of the new version file
     :param cleanup_location: location to cleanup
+    :param reports_location: location to store dataset reports
     """
     logger.debug('start async create diff')
     fuseki_adapter = FusekiDiffAdapter(config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests,
@@ -56,19 +59,22 @@ def async_create_diff(self, dataset_id: str, body: dict, old_version_file: str, 
     finally:
         shutil.rmtree(cleanup_location)
 
+    dataset_location = Path(build_dataset_reports_location(dataset_id, reports_location))
+    dataset_location.mkdir(parents=True, exist_ok=True)
+    generate_meta_file(reports_location=str(dataset_location), uid=self.request.id, dataset_name=dataset_id)
     logger.debug('finish async create diff')
     return True
 
 
 @celery_worker.task(name=CELERY_GENERATE_REPORT, bind=True)
-def async_generate_report(self, dataset_id: str, application_profile: str,
+def async_generate_report(self, dataset_name: str, application_profile: str,
                           template_type: str, db_location: str, template_location: str, query_files: dict, dataset: dict
                           ):
     """
     Task that generates the specified diff report
 
     NOTE: the order of the first 4 args is important for task cancellation, don't change its order
-    :param dataset_id: name of the dataset
+    :param dataset_name: name of the dataset
     :param application_profile: the application profile for report generation
     :param template_type: the application profile report "flavour"
     :param template_location:
@@ -78,8 +84,8 @@ def async_generate_report(self, dataset_id: str, application_profile: str,
     """
     timestamp = get_timestamp()
     with tempfile.TemporaryDirectory() as temp_dir:
-        path_to_report = build_report(str(temp_dir), template_location, query_files, application_profile, dataset_id,
+        path_to_report = build_report(str(temp_dir), template_location, query_files, application_profile, dataset_name,
                                       dataset, timestamp)
-        save_report(path_to_report, dataset['dataset_id'], application_profile, template_type, timestamp, db_location)
+        save_report(path_to_report, dataset['dataset_name'], application_profile, template_type, timestamp, db_location)
 
     return True

@@ -97,7 +97,7 @@ def create_diff(dataset_name: str, dataset_description: str, dataset_uri: str,
         'new_version_file_content': (new_version_file.filename, new_version_file.stream, new_version_file.mimetype),
     }
     data = {
-        'dataset_id': dataset_name,
+        'dataset_name': dataset_name,
         'dataset_description': dataset_description,
         'dataset_uri': dataset_uri,
         'old_version_id': old_version_id,

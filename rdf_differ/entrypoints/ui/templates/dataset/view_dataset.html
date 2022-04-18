@@ -3,7 +3,8 @@
 {% set active_page = "view_dataset" %}
 
 {% block app_content %}
-    <h1>Details: {{ dataset.dataset_id }}</h1>
+    <h1>Name: {{ dataset.dataset_name }}</h1>
+    <h3>ID: {{ dataset.uid }}</h3>
     <br>
     <div class="row">
         <table class="table striped">
