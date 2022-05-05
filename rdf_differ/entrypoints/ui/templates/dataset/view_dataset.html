@@ -48,7 +48,7 @@
             <ul>
                 {% for type in report.template_variations %}
                     <li>
-                        <a href="{{ url_for('download_report', dataset_id=dataset.dataset_id,
+                        <a href="{{ url_for('download_report', dataset_id=dataset.uid,
                         application_profile=report.application_profile,
                         template_type=type) }}"
                            id="report-{{ dataset.dataset_id }}-{{ report.application_profile }}-{{ type }}"

@@ -78,7 +78,7 @@ WHERE {
   }
     FILTER NOT EXISTS {
     GRAPH ?oldVersionGraph {
-      [] ?property ?value .
+      ?instance ?property ?value .
     }
   }
   GRAPH ?newVersionGraph {
