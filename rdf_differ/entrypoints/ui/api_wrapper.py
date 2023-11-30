@@ -55,7 +55,8 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
                                 'template_type': template_type
                             })
     d = response.headers['content-disposition']
-    file_extension = Path(re.findall("filename=(.+)", d)[0]).suffix
+    # the regex search results in an extraneous double-quote, so strip that out
+    file_extension = Path(re.findall("filename=(.+)", d)[0]).suffix.strip('"')
     return response.content, file_extension, response.status_code
 
 
