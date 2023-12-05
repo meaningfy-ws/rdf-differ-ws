@@ -51,6 +51,7 @@ def get_diffs() -> tuple:
         datasets = fuseki_adapter.list_datasets()
         response = [fuseki_adapter.dataset_description(dataset) for dataset in datasets]
         logger.debug('finish get diffs endpoint')
+        response = sorted(response, key=lambda x: x.get('diff_date',''), reverse=True)
         return response, 200
     except (FusekiException, ValueError, IndexError) as exception:
         logger.exception(str(exception))
