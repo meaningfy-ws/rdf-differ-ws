@@ -18,7 +18,9 @@ For Debian derivative systems, no additional package repository should be needed
 
 RDF Differ uses fuseki (as the triplestore/database), celery (for multithreading programming), gunicorn (for serving), and redis (for queue-based pesistent storage).
 
-The applications are made available on ports [8030](http:localhost:8030) (ui), [4030](http:localhost:4030) (api), [3030](http:localhost:3030) (triplestore), [6379](http:localhost:6379) (redis), and [5555](http:localhost:5555) (celery). For all output except fuseki, see the `logs` folder, e.g. `tail -f logs/api.log` to follow the API output. For fuseki, run `docker logs fuseki` (add `-f` to follow).
+The applications are made available (by default) on ports [8030](http:localhost:8030) (ui), [4030](http:localhost:4030) (api), [3030](http:localhost:3030) (triplestore), [6379](http:localhost:6379) (redis), and [5555](http:localhost:5555) (celery). This is configurable via `bash/.env` and `docker/.env`.
+
+For all output except fuseki, see the `logs` folder, e.g. `tail -f logs/api.log` to follow the API output. For fuseki, run `docker logs fuseki` (add `-f` to follow).
 
 [This file](curl-examples.md) contains a list of examples on how to use the api.
 
