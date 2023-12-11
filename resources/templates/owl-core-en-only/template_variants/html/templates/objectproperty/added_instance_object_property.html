@@ -7,12 +7,12 @@
    {% call mc.render_fetch_results(content, error) %}
     {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
     
-    <h2 class="ui header">Added Object Propertys</h2>
+    <h2 class="ui header">Added Object Properties</h2>
     <section class="ui basic segment">
         <p>The table below lists the added <strong>owl:ObjectProperty</strong>
         </p>
         <p><strong>Query identifier:</strong> added_instance_object_property.rq</p>
-        {{ mc.pandas_table(content, "Added Object Propertys") }}
+        {{ mc.pandas_table(content, "Added Object Properties") }}
     </section>
     
     {% endcall %}
