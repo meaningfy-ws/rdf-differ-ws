@@ -1,0 +1,89 @@
+# basic namespaces
+PREFIX owl: <http://www.w3.org/2002/07/owl#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+# EuroVoc and SKOS-AP/SRC-AP specific namespaces
+PREFIX vb: <http://art.uniroma2.it/ontologies/vocbench#> 
+PREFIX eurovoc: <http://eurovoc.europa.eu/>
+PREFIX euvoc: <http://publications.europa.eu/ontology/euvoc#> 
+
+PREFIX label: <http://publications.europa.eu/resource/authority/label-type/> 
+PREFIX status: <http://publications.europa.eu/resource/authority/concept-status/> 
+PREFIX align: <http://knowledgeweb.semanticweb.org/heterogeneity/alignment#>
+
+# some popular namespaces
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
+PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#> 
+PREFIX dct: <http://purl.org/dc/terms/> 
+PREFIX dc: <http://purl.org/dc/elements/1.1/> 
+PREFIX prov: <http://www.w3.org/ns/prov#> 
+
+PREFIX lemon: <http://lemon-model.net/lemon#> 
+PREFIX lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> 
+PREFIX lexvo: <http://lexvo.org/ontology#>
+PREFIX vann: <http://purl.org/vocab/vann/>
+PREFIX shacl: <http://www.w3.org/ns/shacl#>
+
+# legacy namespaces
+PREFIX oldevo: <http://eurovoc.europa.eu/schema#> 
+PREFIX thes: <http://purl.org/iso25964/skos-thes#>
+
+# versioning namespaces 
+PREFIX dsv: <http://purl.org/iso25964/DataSet/Versioning#>
+PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
+PREFIX sh: <http://purl.org/skos-history/>
+PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
+# identify added instances
+SELECT (count(distinct *) as ?entries)
+WHERE {
+  GRAPH ?versionHistoryGraph {
+    # parameters
+    VALUES ( ?versionHistoryGraph ?oldVersion ?newVersion ?class) {
+        ( undef 
+          undef 
+          undef  
+          owl:Ontology 
+        )
+    }
+    # get the current and the previous version as default versions
+    ?versionset dsv:currentVersionRecord/xhv:prev/dc:identifier ?previousVersion .
+    ?versionset dsv:currentVersionRecord/dc:identifier ?latestVersion .
+    # select the versions to actually use
+    BIND(coalesce(?oldVersion, ?previousVersion) AS ?oldVersionSelected)
+    BIND(coalesce(?newVersion, ?latestVersion) AS ?newVersionSelected)
+    # get the delta and via that the relevant graphs
+    ?delta a sh:SchemeDelta ;
+      sh:deltaFrom/dc:identifier ?oldVersionSelected ;
+      sh:deltaTo/dc:identifier ?newVersionSelected ;
+      sh:deltaFrom/sh:usingNamedGraph/sd:name ?oldVersionGraph ;
+      sh:deltaTo/sh:usingNamedGraph/sd:name ?newVersionGraph .
+    ?insertions a sh:SchemeDeltaInsertions ;
+      dct:isPartOf ?delta ;
+      sh:usingNamedGraph/sd:name ?insertionsGraph .
+    ?deletions a sh:SchemeDeltaDeletions ;
+      dct:isPartOf ?delta ;
+      sh:usingNamedGraph/sd:name ?deletionsGraph .
+  }
+  # for each inserted instance a class statement should exist ...
+  GRAPH ?insertionsGraph {
+    ?instance a ?class .
+    
+    optional {
+      ?instance skos:prefLabel ?prefLabelEn .
+      FILTER (lang(?prefLabelEn) = "en")
+    }
+    
+    
+    BIND (?prefLabelEn AS ?prefLabel)
+    
+  }
+  # ... and the instance must not exist in the old version
+  FILTER NOT EXISTS {
+    GRAPH ?oldVersionGraph {
+      ?instance ?p [] .
+    }
+  }
+}
+ORDER BY ?instance
