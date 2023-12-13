@@ -1,9 +1,13 @@
 include docker/.env
 
 BUILD_PRINT = \e[1;34mSTEP: \e[0m
+MSG_PRINT = \e[1;34mINFO: \e[0m
+WARN_PRINT = \e[1;34mWARNING: \e[0m
 
 DEB_OS=$(shell command -v apt > /dev/null && echo 1)
 RPM_OS=$(shell command -v yum > /dev/null && echo 1)
+OS_DOCKER=$(shell command -v docker > /dev/null && echo 1)
+OS_DOCKERC=$(shell command -v docker-compose > /dev/null && echo 1)
 
 #-----------------------------------------------------------------------------
 # Install dev environment
@@ -13,16 +17,20 @@ RPM_OS=$(shell command -v yum > /dev/null && echo 1)
 # set -o allexport; source docker/.env; set +o allexport
 
 setup: | install build-volumes start-services
-	@ echo "$(BUILD_PRINT)Docker-based services started; make stop-services to stop"
+	@ echo "$(MSG_PRINT)Docker-based services started; make stop-services to stop"
 
 setup-dev: | install-dev build-volumes start-services
-	@ echo "$(BUILD_PRINT)Docker-based services started; make stop-services to stop"
+	@ echo "$(MSG_PRINT)Docker-based services started; make stop-services to stop"
+
+start: | build-volumes start-services
+	@ echo "$(MSG_PRINT)Docker-based services started; make stop-services to stop"
 
 install: | install-os-dependencies install-python-dependencies
-	@ echo "$(BUILD_PRINT)To use docker instead of local system services, run make setup"
+	@ echo "$(MSG_PRINT)To get started quickly with docker, make start"
+	@ echo "$(MSG_PRINT)To run tests, make install-python-dependencies-dev"
 
 install-dev: | install-os-dependencies install-python-dependencies-dev
-	@ echo "$(BUILD_PRINT)To use docker instead of local system services, run make setup-dev"
+	@ echo "$(MSG_PRINT)To get started quickly with docker, make start"
 
 install-os-dependencies:
 ifeq ($(DEB_OS), 1)
@@ -30,7 +38,9 @@ ifeq ($(DEB_OS), 1)
 else ifeq ($(RPM_OS), 1)
 	@ sudo yum install redis java-11-openjdk
 else
-	@ echo "$(BUILD_PRINT)Operating system not supported"
+	@ echo "$(MSG_PRINT)Operating system not supported"
+	@ echo "$(MSG_PRINT)Install Java 11+ and Redis 6+"
+	@ echo "$(MSG_PRINT)Then make install-python-dependencies"
 	false
 endif
 
@@ -59,14 +69,16 @@ run-local-ui:
 run-local-redis:
 ifeq ($(DEB_OS), 1)
 # running as root, and replacing a system config, are both bad practices!
-	@ echo "$(BUILD_PRINT)WARNING: Backing up and replacing a system config as root!"
+	@ echo "$(WARN_PRINT)Backing up and replacing a system config as root!"
 	@ sudo cp /etc/redis/redis.conf /etc/redis/redis.conf.rdf_differ.bak -v
 	@ sudo cp docker/redis.conf /etc/redis/redis.conf -v
 	@ sudo systemctl restart redis.service
 else ifeq ($(RPM_OS), 1)
 	@ sudo systemctl enable redis --now
 else
-	@ echo "$(BUILD_PRINT)Operating system not supported"
+	@ echo "$(MSG_PRINT)Operating system not supported"
+	@ echo "$(MSG_PRINT)Please start the Redis server yourself"
+	@ echo "$(MSG_PRINT)Refer also to docker/redis.conf"
 	false
 endif
 
@@ -77,19 +89,41 @@ stop-local-gunicorn:
 # Service commands
 #-----------------------------------------------------------------------------
 build-volumes:
+ifeq ($(OS_DOCKER), 1)
+	@ echo -e '$(BUILD_PRINT)Creating a shared volume for micro-services'
 	@ docker volume create rdf-differ-template
+else
+	@ echo "$(MSG_PRINT)Docker not found"
+	@ echo "$(MSG_PRINT)Please see README for other ways of starting up"
+	false
+endif
 
 build-services:
+ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Building the RDF Differ micro-services'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build
+else
+	@ echo "$(MSG_PRINT)Docker not found, please see README"
+	false
+endif
 
 start-services:
+ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Starting the RDF Differ micro-services'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d
+else
+	@ echo "$(MSG_PRINT)Docker not found, please see README"
+	false
+endif
 
 stop-services:
-	@ echo -e '$(BUILD_PRINT)Stopping the dev services'
+ifeq ($(OS_DOCKERC), 1)
+	@ echo -e '$(BUILD_PRINT)Stopping the RDF Differ micro-services'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env stop
+else
+	@ echo "$(MSG_PRINT)Docker not found, please see README"
+	false
+endif
 
 
 #-----------------------------------------------------------------------------

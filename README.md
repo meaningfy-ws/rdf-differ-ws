@@ -24,21 +24,29 @@ For all output except fuseki, see the `logs` folder, e.g. `tail -f logs/api.log`
 
 [This file](curl-examples.md) contains a list of examples on how to use the api.
 
-### With docker-based services
+### With docker micro-services
 
-Run the following commands to install all required dependencies on either a Debian or Red Hat system, start up required (docker) services -- including databases -- and run the application (api or ui):
+Run the following command to install all required dependencies on either a Debian or Red Hat system, start up required (docker) services -- including databases -- and run the application (api + ui):
 
 ```bash
-make setup
+make
 ```
 
-If you only want to install prerequisite packages and dependencies without starting any services or database, run:
+By default, that runs the first build target, currently `make setup`. You must have `docker` and `docker-compose` installed if you would like to use the micro-services to run everything, everywhere, all at once.
+
+If you only want to install prerequisite packages and dependencies without starting any service or database, run:
 
 ```bash
 make install
 ```
 
-If you only want to start up ALL the prerequisite docker services (this is already done by `setup` but in case you have already run `install`):
+In either case, some commands will be **run as root** with _sudo_. If you install operating system (OS) packages yourself (if in case you run an unsupported OS or you don't want to run as root), run:
+
+```bash
+make install-python-dependencies # add -dev if you want to run tests
+```
+
+If you only want to start up ALL the prerequisite docker services (this is already done by default but in case you have already run `install`):
 
 ```bash
 make build-volumes
