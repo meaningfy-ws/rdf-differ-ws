@@ -1,8 +1,6 @@
 #!/bin/bash
 set -o allexport; source bash/.env; set +o allexport
 
-source env/bin/activate
-
 # run celery
 celery -A rdf_differ.adapters.celery.celery_worker worker --loglevel ${RDF_DIFFER_LOG_LEVEL} --logfile ${RDF_DIFFER_CELERY_LOGS} --detach
 

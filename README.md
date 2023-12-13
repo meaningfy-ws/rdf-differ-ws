@@ -1,84 +1,139 @@
-#  RDF Differ
+# RDF Differ
 
-A service for calculating the difference between versions of a given RDF dataset. Current implementation is based on the [skos-history tool](https://github.com/eu-vocabularies/skos-history).
-See the [Wiki page of the original repository](https://github.com/jneubert/skos-history/wiki/Tutorial) for more technical details.
+A service for calculating the difference between versions of a given RDF dataset. Current implementation is based on the [skos-history tool](https://github.com/eu-vocabularies/skos-history). See the [wiki page of the original repository](https://github.com/jneubert/skos-history/wiki/Tutorial) for more technical details.
 
 ![RDF differ test](https://github.com/eu-vocabularies/rdf-differ/workflows/RDF%20differ%20test%20and%20lint/badge.svg)
 [![codecov](https://codecov.io/gh/eu-vocabularies/rdf-differ/branch/master/graph/badge.svg)](https://codecov.io/gh/eu-vocabularies/rdf-differ)
 
-# Installation
-> **NOTE**: The specified installation instruction are for `development` purposes only. _(Slight modifications are required for production use; including having a production level Fuseki server and Redis service available.)_
+## Installation
+> **NOTE**: The specified installation instruction are for development purposes only on a GNU/Linux operating system. _(Slight modifications are required for production use, including having a production level Fuseki server and Redis service available.)_
 
-Make sure that the EPEL (Extra Packages for Enterprise Linux) repository is enabled added to the server's package lists. This is usually installed by running:
-```bash 
+For Red Hat derivative systems, make sure that the EPEL (Extra Packages for Enterprise Linux) repository is enabled and added to the server's package lists. This is not currently handled automatically and can usually be installed by running:
+
+```bash
 sudo yum install epel-release
 ```
 
-RDF Differ uses fuseki (as the triplestore), celery (for multithreading programming), and redis (for pesistent storage).
+For Debian derivative systems, no additional package repository should be needed, for at least Ubuntu 18.04.
 
-Run the following commands to install all required dependencies on a **redhat** system
+RDF Differ uses fuseki (as the triplestore/database), celery (for multithreading programming), gunicorn (for serving), and redis (for queue-based pesistent storage).
+
+The applications are made available (by default) on ports [8030](http:localhost:8030) (ui), [4030](http:localhost:4030) (api), [3030](http:localhost:3030) (triplestore), [6379](http:localhost:6379) (redis), and [5555](http:localhost:5555) (celery). This is configurable via `bash/.env` and `docker/.env`.
+
+For all output except fuseki, see the `logs` folder, e.g. `tail -f logs/api.log` to follow the API output. For fuseki, run `docker logs fuseki` (add `-f` to follow).
+
+[This file](curl-examples.md) contains a list of examples on how to use the api.
+
+### With docker micro-services
+
+Run the following command to install all required dependencies on either a Debian or Red Hat system, start up required (docker) services -- including databases -- and run the application (api + ui):
 
 ```bash
-make install-os-dependencies
-make install-python-dependencies
+make
 ```
 
-To run fuseki server (on first setup accept the default values): <br>
-_leave this terminal session open_
+By default, that runs the first build target, currently `make setup`. You must have `docker` and `docker-compose` installed if you would like to use the micro-services to run everything, everywhere, all at once.
+
+If you only want to install prerequisite packages and dependencies without starting any service or database, run:
+
 ```bash
-make setup-fuseki
+make install
+```
+
+In either case, some commands will be **run as root** with _sudo_. If you install operating system (OS) packages yourself (if in case you run an unsupported OS or you don't want to run as root), run:
+
+```bash
+make install-python-dependencies # add -dev if you want to run tests
+```
+
+If you only want to start up ALL the prerequisite docker services (this is already done by default but in case you have already run `install`):
+
+```bash
+make build-volumes
+make start-services
+```
+
+This creates the docker images, prerequisite volumes (for file storage mirroring between the local project and the containers), and runs the containers.
+
+To stop ALL docker services at any time:
+
+```bash
+make stop-services
+```
+
+### With local system services
+
+To run the triplestore database (fuseki) server locally and not via docker (on first setup accept the default values):
+
+```bash
+make setup-local-fuseki
 make run-local-fuseki
 ```
+_leave this terminal session open_
 
-To set up redis server:
+To set up and run a local redis server:
+
 ```bash
-make setup-redis
+make run-local-redis
 ```
 
-Run api and celery:
+**WARNING:** Like `setup` and to some extent `install`, this runs as root and additionally replaces a system configuration file. If you get errors about configuration directives, you are likely running an older OS with older redis (e.g. Ubuntu 18.04 does not have the redis version that's required).
+
+To run the api (including celery) locally:
+
 ```bash
 make run-local-api
 ```
 
-Run ui:
+To run the ui locally:
+
 ```bash
 make run-local-ui
 ```
 
-Stop api and ui servers:
+To stop both api and ui servers:
+
 ```bash
 make stop-gunicorn
 ```
 
-If you are running the project for the first time this would be the commands run:
+To reiterate, if you are running the project for the first time this would be the commands to run in sequence:
+
 ```bash
 make install-os-dependencies
 make install-python-dependencies
-make setup-redis
-make setup-fuseki
-make run-api
-make run-ui
+make run-local-redis
+make setup-local-fuseki
+make run-local-api
+make run-local-ui
 ```
 
-In a separate terminal process run
+In a separate terminal process remember to run and keep open:
+
 ```bash
 make run-local-fuseki
 ```
 
-### [this file](curl-examples.md) contains a list of examples on how to use the updated api
+## Testing
 
-## Adding a new application profile template
-The default application profile template is the diff report template that resides in [resources/templates/diff_report](resources/templates/diff_report) folder. 
-For adding a new application profile create a new folder under [resources/templates](resources/templates) with the name
-of your new application profile and following the structure explained below.
+The test suite spins up required docker services. Run the following to run everything:
 
-Folder structure needed for adding a new application profile:
+```bash
+make test
 ```
-templates 
-│
-└───diff_report
+
+**WARNING**: There may be a conflict with test data and runtime data. If you get weird behaviour, you can clear the `fuseki-data` and `reports` folders. If you do that, you might also need to run `make stop-services`, delete ALL the docker containers and volumes with your preferred method, and then run `make build-volumes && make start-services` again.
+
+## Adding a new Application Profile template
+For adding a new Application Profile (AP) create a new folder under [resources/templates](resources/templates) with the name
+of your new AP, following the structure explained below.
+
+Folder structure needed for adding a new AP:
+
+```
+resources/templates
 │   
-└───new_application_profile
+└───<new_application_profile>
 │   │
 │   └───queries          <--- folder that contains SPARQL queries
 │   │    │   query1.rq
@@ -93,25 +148,24 @@ templates
 │       └───json        <--- folder that contains files needed for a json template
 ```
 
-###Html template variant
+### Html template variant
 
-####Folder structure
 ```
-html(folder) 
+html                 <--- the template_variants subfolder 
 │
-└─── config.json      <--- configuration file
+└───config.json      <--- configuration file
 │   
-└───templates         <--- this is the folder that contains the jinja html templates
+└───templates        <--- this is the folder that contains the jinja html templates
    │
    │  file1.html
    │  file2.html
    │  main.html
 
 ```
-*Note* Make sure that in the templates folder there is a file named the same as the one defined in the config.json file
-(i.e `    "template": "main.html"`)
 
-####Template structure
+*Note* Make sure that in the templates folder there is an entrypoint file named the same as the one defined in the config.json file (i.e `"template": "main.html"`)
+
+### HTML template structure
 
 The HTML template is built be combining four major parts as layout, main, macros and sections. The layout file (layout.html)
 will have the rules of how the report will look like in terms of positioning and styling. Macros will contain all the 
@@ -120,9 +174,9 @@ will be used to build the report.
 As the name suggest the main file of the html template is main.html. Here is where every other file that are a different 
 section in the report are included and will form the HTML report. 
 
-Example of including a section in the main html file
+Example of including a section in the main html file:
 
-` {% include "conceptscheme/added_instance_concept_scheme.html" with context %}`
+`{% include "conceptscheme/added_instance_concept_scheme.html" with context %}`
 
 Each section file has one or more variables where the SPARQL query result is saved 
 as a pandas dataframe.
@@ -132,19 +186,21 @@ Example
 `{% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["added_instance_concept.rq"]).fetch_tabular() %})`
 
 *Note* The system has in place an autodiscover process for the SPARQL queries in the queries folder. Make sure that the file 
-name added for the variable above (`"added_instance_concept.rq"`) exists in the queries folder.
+name added for the variable above (`added_instance_concept.rq`) exists in the queries folder.
 
-####Adjusting an existing template
+### Adjusting an existing Html template
+
 **Adding a new query/section**
 
 To add a query a new file needs to be created and added into the queries folder as the system will autodiscover
 this. After this is done a new html file that will represent a new section needs to be created. The content of this is 
 similar to the existing ones and the only thing that needs to be adjusted will be the query file name in the content
 variable definition as presented below:
-```
-{% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["new_query_file.rq"]).fetch_tabular() %})
 
 ```
+{% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["new_query_file.rq"]).fetch_tabular() %})
+```
+
 As a final step, the created html file needs to be included in the report and to do this it has to be included in the 
 main.html file by using the include block.
 
@@ -153,16 +209,15 @@ main.html file by using the include block.
       {% include "conceptscheme/labels/new file name.html" with context %}
 ```
 
-
 For adding a count query that will be used in the statistics 
 section the steps are a bit different. First, will need to add the new query file following the naming conventions and 
-adding the prefix count_ to the file name in queries folder. After this, the statistics.html will need to be modified as 
-follows:
+adding the prefix count_ to the file name in queries folder. After this, the statistics.html will need to be modified as follows:
 
 1. Create a new row in the existing table by using `<tr>` tag.
 2. Create the necessary columns for the newly created row. Each row should have 7 values as this is the defined table 
 structure (Property group, Property ,Added, Deleted, Updated, Moved, Changed) and each of them should be included by 
 using a `<td>` tag if you are not using the block below to autogenerate this. 
+
 ```
     {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["new_count_query_file_name.rq"]).fetch_tabular() %}
     
@@ -171,9 +226,11 @@ using a `<td>` tag if you are not using the block below to autogenerate this.
     {{ mc.count_value(content) }}
     {% endcall %}
 ```
+
 *Note* The order of the cells is important. If you don't want to include a type of operation just create a `<td>` with a
 desired value (i.e `<td>N/A</td>`). To avoid confusions, count queries should be added for all type of operations.
 The example below will show how to add a complete row in the statistics section of the report
+
 ```
 <tr>
     <td>Name of the property group</td>
@@ -220,16 +277,20 @@ The example below will show how to add a complete row in the statistics section 
 
 </tr>
 ```
-****Removing a query/section****
+
+**Removing a query/section**
 
 To remove a section from the existing report you just need to delete or comment the include statement from the main.html
 file. If you decide to delete the include statement it's recommended to delete the query from the queries folder to avoid 
 confusions later on.
+
 ```
       Include statement
             {% include "conceptscheme/labels/added_property_concept_scheme_pref_label.html" with context %}
 ```
+
 To remove a row from the statistics section just delete or comment the `<tr>` bloc from the statistics.html file 
+
 ```
 <tr>
     <td>Labels</td>
@@ -277,26 +338,30 @@ To remove a row from the statistics section just delete or comment the `<tr>` bl
     
 </tr>
 ```
-###Json template variant
-####Folder structure
+
+## Json template variant
+
+### Folder structure
+
 ```
-json(folder) 
+json                 <--- the template_variants subfolder
 │
-└─── config.json      <--- configuration file
+└───config.json      <--- configuration file
 │   
-└───templates         <--- this is the folder that contains the jinja json templates
+└───templates        <--- this is the folder that contains the jinja json templates
    │
    │  main.json
 
 ```
-*Note* Make sure that in the templates folder there is a file named the same as the one defined in the config.json file
-(i.e `    "template": "main.json"`)
 
-####Template structure
+*Note* Make sure that in the templates folder there is an entrypoint file named the same as the one defined in the config.json file (i.e `"template": "main.json"`)
+
+### Template structure
 The Json report is automatically built by running all queries that are found in the queries folder as the system has 
 autodiscover process for this. In the beginning of this report there will be 3 keys that will show the metadata of the 
 report like dataset used, created time and application profile used.  Each query result can be identified in the report 
 by the filename and will contain a results key that will represent the result set brought back by the query
+
 ```
 {
    --- Metadata
@@ -333,15 +398,16 @@ by the filename and will contain a results key that will represent the result se
     }
 }
 ```
-####Adjusting an existing template
-****Removing a query/section****
+
+### Adjusting an existing Json template
+
+**Removing a query/section**
 To remove a query result set from the report simply remove the query from the queries folder. 
 *Note* Doing this will also affect the html template and it's recommended to ajust the html template, if this exists as
 a template variant for the application profile that you are working with, following the 
 instruction above to avoid errors when generating the hmtl template variant. 
 
 # Usage
-
 
 The diffing services are split into:
 
@@ -358,6 +424,7 @@ service | URL | info
 > To list the existent diffs you can access [http://localhost:8030](http://localhost:8030/)
 ![list of diffs page](docs/images/list-diffs-202010.png)
 
+Note: If you see an error for any of the pages, your setup is not right. Please either check your local services, or rebuild the docker services if you are using that (including deleting the created volume). Check also the celery is running, which is needed for the asynchronous tasks.
 
 # Change type inventory
 

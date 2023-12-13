@@ -1,6 +1,13 @@
 include docker/.env
 
 BUILD_PRINT = \e[1;34mSTEP: \e[0m
+MSG_PRINT = \e[1;34mINFO: \e[0m
+WARN_PRINT = \e[1;34mWARNING: \e[0m
+
+DEB_OS=$(shell command -v apt > /dev/null && echo 1)
+RPM_OS=$(shell command -v yum > /dev/null && echo 1)
+OS_DOCKER=$(shell command -v docker > /dev/null && echo 1)
+OS_DOCKERC=$(shell command -v docker-compose > /dev/null && echo 1)
 
 #-----------------------------------------------------------------------------
 # Install dev environment
@@ -9,71 +16,124 @@ BUILD_PRINT = \e[1;34mSTEP: \e[0m
 # how to set envs to local
 # set -o allexport; source docker/.env; set +o allexport
 
+setup: | install build-volumes start-services
+	@ echo "$(MSG_PRINT)Docker-based services started; make stop-services to stop"
+
+setup-dev: | install-dev build-volumes start-services
+	@ echo "$(MSG_PRINT)Docker-based services started; make stop-services to stop"
+
+start: | build-volumes start-services
+	@ echo "$(MSG_PRINT)Docker-based services started; make stop-services to stop"
+
+install: | install-os-dependencies install-python-dependencies
+	@ echo "$(MSG_PRINT)To get started quickly with docker, make start"
+	@ echo "$(MSG_PRINT)To run tests, make install-python-dependencies-dev"
+
+install-dev: | install-os-dependencies install-python-dependencies-dev
+	@ echo "$(MSG_PRINT)To get started quickly with docker, make start"
 
 install-os-dependencies:
-	@ ./bash/install_os_dependencies.sh
+ifeq ($(DEB_OS), 1)
+	@ sudo apt install redis-server default-jre
+else ifeq ($(RPM_OS), 1)
+	@ sudo yum install redis java-11-openjdk
+else
+	@ echo "$(MSG_PRINT)Operating system not supported"
+	@ echo "$(MSG_PRINT)Install Java 11+ and Redis 6+"
+	@ echo "$(MSG_PRINT)Then make install-python-dependencies"
+	false
+endif
 
 install-python-dependencies:
-	@ ./bash/setup_python.sh
+	@ echo "$(BUILD_PRINT)Installing the production requirements"
+	@ python -m pip install --upgrade pip
+	@ python -m pip install -r requirements/prod.txt
 
-run-api:
-	@ ./bash/run_api.sh
+install-python-dependencies-dev:
+	@ echo "$(BUILD_PRINT)Installing the development requirements"
+	@ python -m pip install --upgrade pip
+	@ python -m pip install -r requirements/dev.txt
 
-run-ui:
-	@ ./bash/run_ui.sh
-
-setup-fuseki:
+setup-local-fuseki:
 	@ ./bash/setup_fuseki.sh
 
 run-local-fuseki:
 	@ ./fuseki/fuseki-server -q
 
-setup-redis:
-	@ sudo systemctl enable redis --now
+run-local-api:
+	@ ./bash/run_api.sh
 
-stop-gunicorn:
-	@ ./bash/stop_gunicorn.sh
+run-local-ui:
+	@ ./bash/run_ui.sh
 
-ubuntu-install-os-dependencies:
-	@ sudo apt install default-jre git python3-pip redis-server python3.8-venv curl
-
-ubuntu-setup-redis:
-	@ sudo cp docker/redis.conf /etc/redis/redis.conf
+run-local-redis:
+ifeq ($(DEB_OS), 1)
+# running as root, and replacing a system config, are both bad practices!
+	@ echo "$(WARN_PRINT)Backing up and replacing a system config as root!"
+	@ sudo cp /etc/redis/redis.conf /etc/redis/redis.conf.rdf_differ.bak -v
+	@ sudo cp docker/redis.conf /etc/redis/redis.conf -v
 	@ sudo systemctl restart redis.service
+else ifeq ($(RPM_OS), 1)
+	@ sudo systemctl enable redis --now
+else
+	@ echo "$(MSG_PRINT)Operating system not supported"
+	@ echo "$(MSG_PRINT)Please start the Redis server yourself"
+	@ echo "$(MSG_PRINT)Refer also to docker/redis.conf"
+	false
+endif
 
-ubuntu-install-python-dependencies:
-	@ echo "$(BUILD_PRINT)Installing the production requirements"
-	@ python3 -m venv env
-	@ pip install --upgrade pip
-	@ pip install -r requirements/dev.txt
+stop-local-gunicorn:
+	@ ./bash/stop_gunicorn.sh
 
 #-----------------------------------------------------------------------------
 # Service commands
 #-----------------------------------------------------------------------------
 build-volumes:
+ifeq ($(OS_DOCKER), 1)
+	@ echo -e '$(BUILD_PRINT)Creating a shared volume for micro-services'
 	@ docker volume create rdf-differ-template
+else
+	@ echo "$(MSG_PRINT)Docker not found"
+	@ echo "$(MSG_PRINT)Please see README for other ways of starting up"
+	false
+endif
 
 build-services:
+ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Building the RDF Differ micro-services'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build
+else
+	@ echo "$(MSG_PRINT)Docker not found, please see README"
+	false
+endif
 
 start-services:
+ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Starting the RDF Differ micro-services'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d
+else
+	@ echo "$(MSG_PRINT)Docker not found, please see README"
+	false
+endif
 
 stop-services:
-	@ echo -e '$(BUILD_PRINT)Stopping the dev services'
+ifeq ($(OS_DOCKERC), 1)
+	@ echo -e '$(BUILD_PRINT)Stopping the RDF Differ micro-services'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env stop
+else
+	@ echo "$(MSG_PRINT)Docker not found, please see README"
+	false
+endif
 
 
 #-----------------------------------------------------------------------------
 # Fuseki control for github actions
 #-----------------------------------------------------------------------------
-build-test-fuseki: | build-volumes
+setup-docker-fuseki: | build-volumes
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build fuseki
 
-start-test-fuseki:
+run-docker-fuseki:
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d fuseki
 
@@ -81,23 +141,26 @@ start-test-fuseki:
 # Test commands
 #-----------------------------------------------------------------------------
 
-fuseki-create-test-dbs: | build-test-fuseki start-test-fuseki
-	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" datasets at http://localhost:$(if $(RDF_DIFFER_FUSEKI_PORT),$(RDF_DIFFER_FUSEKI_PORT),unknown port)/$$/datasets"
+test-data-fuseki: | setup-docker-fuseki run-docker-fuseki
+	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" test datasets at http://localhost:$(if $(RDF_DIFFER_FUSEKI_PORT),$(RDF_DIFFER_FUSEKI_PORT),unknown port)/$$/datasets"
 	@ sleep 5
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
 
-
-run-redis:
+run-docker-redis:
 	@ echo -e '$(BUILD_PRINT)Starting redis'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d redis
 
-run-differ-api:
+run-docker-api:
 	@ echo -e '$(BUILD_PRINT)Starting api'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d rdf-differ-api
 
-test: | ubuntu-install-python-dependencies fuseki-create-test-dbs run-redis run-differ-api
-	@ echo "$(BUILD_PRINT)Running the tests"
+run-docker-ui:
+	@ echo -e '$(BUILD_PRINT)Starting ui'
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d rdf-differ-ui
+
+test: | install-python-dependencies-dev test-data-fuseki run-docker-redis run-docker-api
+	@ echo "$(BUILD_PRINT)Running the tests using docker services"
 	@ pytest
 
 lint:
@@ -121,7 +184,7 @@ set-report-template:
 # Run UI dev environment
 #-----------------------------------------------------------------------------
 
-run-ui-dev:
+run-dev-ui:
 	@ export FLASK_APP=rdf_differ.entrypoints.ui.run
 	@ export FLASK_ENV=development
 	@ flask run
@@ -147,5 +210,3 @@ $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_F
 	@ echo "$(BUILD_PRINT)Generating the testfile "$@"  from "$<" feature file"
 	@ pytest-bdd generate $< > $@
 	@ sed -i  's|features|../features|' $@
-
-
