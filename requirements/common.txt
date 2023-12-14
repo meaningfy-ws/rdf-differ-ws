@@ -4,7 +4,7 @@ sparqlwrapper
 rdflib
 requests
 
-Flask==1.1.4
+Flask==2.2.5
 flask-bootstrap
 Flask-Wtf
 connexion[swagger-ui]==2.9.0
