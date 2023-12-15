@@ -1,18 +1,20 @@
-Click==7.1.2
+Click
 
 sparqlwrapper
 rdflib
 requests
 
-Flask==1.1.4
+Flask==2.2.5
 flask-bootstrap
 Flask-Wtf
-connexion[swagger-ui]==2.9.0
+connexion[swagger-ui]==2.14.2
 
 eds4jinja2
+jsonschema==3.2.0
+pyrsistent==0.16.1
 
-shortuuid==1.0.1  # https://pypi.org/project/shortuuid/
+shortuuid
 
-celery==5.1.2
-redis==3.5.3
+celery
+redis
 flower
