@@ -24,6 +24,7 @@ PREFIX thes: <http://purl.org/iso25964/skos-thes#>
 PREFIX vb: <http://art.uniroma2.it/ontologies/vocbench#>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX shacl: <http://www.w3.org/ns/shacl#>
 
 # Show all movements cross property
 SELECT (count(distinct *) as ?entries)
