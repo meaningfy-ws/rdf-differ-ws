@@ -91,7 +91,7 @@ stop-local-gunicorn:
 build-volumes:
 ifeq ($(OS_DOCKER), 1)
 	@ echo -e '$(BUILD_PRINT)Creating a shared volume for micro-services'
-	@ docker volume create rdf-differ-template
+	@ docker volume create rdf-differ-template-${ENVIRONMENT}
 else
 	@ echo "$(MSG_PRINT)Docker not found"
 	@ echo "$(MSG_PRINT)Please see README for other ways of starting up"
@@ -101,16 +101,28 @@ endif
 build-services:
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Building the RDF Differ micro-services'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build
+	@ docker-compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env build
 else
 	@ echo "$(MSG_PRINT)Docker not found, please see README"
 	false
 endif
 
+build-externals:
+	@ echo -e "$(BUILD_PRINT)Creating the necessary volumes, networks and folders and setting the special rights"
+	@ docker network create proxy-net || true
+
+start-traefik: build-externals
+	@ echo -e "$(BUILD_PRINT)Starting the Traefik services $(END_BUILD_PRINT)"
+	@ docker-compose -p common --file ./docker/traefik/docker-compose.yml --env-file docker/.env up -d
+
+stop-traefik:
+	@ echo -e "$(BUILD_PRINT)Stopping the Traefik services $(END_BUILD_PRINT)"
+	@ docker-compose -p common --file ./docker/traefik/docker-compose.yml --env-file docker/.env down
+
 start-services:
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Starting the RDF Differ micro-services'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d
+	@ docker-compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env up -d
 else
 	@ echo "$(MSG_PRINT)Docker not found, please see README"
 	false
@@ -119,7 +131,7 @@ endif
 stop-services:
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Stopping the RDF Differ micro-services'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env stop
+	@ docker-compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env stop
 else
 	@ echo "$(MSG_PRINT)Docker not found, please see README"
 	false
