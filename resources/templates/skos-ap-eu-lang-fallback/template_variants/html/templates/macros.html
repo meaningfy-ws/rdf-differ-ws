@@ -27,39 +27,46 @@
 
 {% macro pandas_table(df, caption, column_labels={}) -%}
     {% if (df is defined) and (df is not none) %}
-                {% set df = df.fillna(value="") %}
+        {% set df = df.fillna(value="") %}
         <table class="display">
             <thead class="center aligned">
-            <tr>
-                {% for column in df.columns %}
-                    {% if column in column_labels %}
-                        <th>{{ column_labels[column] }}</th>
-                    {% else %}
-                        <th>{{ column }}</th>
-                    {% endif %}
-                {% endfor %}
-            </tr>
-            </thead>
-            <tbody>
-            {% for idx, row in df.iterrows() %}
                 <tr>
-                    {% for colname in df.columns %}
-                        {# handle decimal format: float, float64, float32 #}
-                        {% if 'float' in (df.dtypes[colname] | string) %}
-                            <td class="left aligned collapsing">{{ row[colname] | round(precision=2) }}</td>
-                        {% else %}
-                            <td>{{ row[colname] }}</td>
+                    {% for column in df.columns %}
+                        {% if not (column.endswith('Lang') or column == 'actionType') %}
+                            <th>{{ column_labels.get(column, column) }}</th>
                         {% endif %}
                     {% endfor %}
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for idx, row in df.iterrows() %}
+                    <tr>
+                        {% for colname in df.columns %}
+                            {% if not (colname.endswith('Lang') or colname == 'actionType') %}
+                                {# handle decimal format: float, float64, float32 #}
+                                {% if 'float' in (df.dtypes[colname] | string) %}
+                                    <td class="left aligned collapsing">{{ row[colname] | round(precision=2) }}</td>
+                                {% else %}
+                                    {% set lang_colname = colname ~ 'Lang' %}
+                                    {% if lang_colname in df.columns and row[lang_colname] != '' %}
+                                        <td>{{ row[colname] ~ '@' ~ row[lang_colname] }}</td>
+                                    {% else %}
+                                        <td>{{ row[colname] }}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
             </tbody>
             <caption>{{ caption }}</caption>
         </table>
     {% else %}
-        {{ render_error("How did you get here? did you forget to use 'render_fetch_results' macro?") }}
+        {{ render_error("How did you get here? Did you forget to use 'render_fetch_results' macro?") }}
     {% endif %}
 {%- endmacro %}
+
+
 
 {% macro count_value(df) %}
     {% for idx, row in df.iterrows() %}
@@ -71,7 +78,6 @@
 
     {% endfor %}
 {% endmacro %}
-
 
 {% macro render_namespaces(namesapces_dist) %}
     <table class="display">
