@@ -143,7 +143,7 @@ endif
 #-----------------------------------------------------------------------------
 setup-docker-fuseki: | build-volumes build-externals
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build rdf-differ-fuseki
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env run -p 3030:3030 rdf-differ-fuseki
 
 run-docker-fuseki:
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
