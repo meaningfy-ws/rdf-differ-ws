@@ -83,7 +83,6 @@ services:
 volumes:
   rdf-differ-template:
     external: true
-    name: rdf-differ-template-${ENVIRONMENT}
 
 
 networks:
