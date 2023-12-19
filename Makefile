@@ -92,6 +92,7 @@ build-volumes:
 ifeq ($(OS_DOCKER), 1)
 	@ echo -e '$(BUILD_PRINT)Creating a shared volume for micro-services'
 	@ docker volume create rdf-differ-template-${ENVIRONMENT}
+	@ docker volume create rdf-differ-template
 else
 	@ echo "$(MSG_PRINT)Docker not found"
 	@ echo "$(MSG_PRINT)Please see README for other ways of starting up"
