@@ -153,7 +153,7 @@ run-docker-fuseki:
 # Test commands
 #-----------------------------------------------------------------------------
 
-test-data-fuseki: | setup-docker-fuseki run-docker-fuseki
+test-data-fuseki: | setup-docker-fuseki
 	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" test datasets at http://localhost:$(if $(RDF_DIFFER_FUSEKI_PORT),$(RDF_DIFFER_FUSEKI_PORT),unknown port)/$$/datasets"
 	@ sleep 5
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
