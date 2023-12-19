@@ -141,19 +141,19 @@ endif
 #-----------------------------------------------------------------------------
 # Fuseki control for github actions
 #-----------------------------------------------------------------------------
-setup-docker-fuseki: | build-volumes build-externals
+setup-docker-fuseki: | build-volumes
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
-	@ docker run -d -p 3030:3030 -e ADMIN_PASSWORD=admin stain/jena-fuseki:4.0.0
+	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env build fuseki
 
 run-docker-fuseki:
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
-	@ docker run -d -p 3030:3030 -e ADMIN_PASSWORD=admin stain/jena-fuseki:4.0.0
+	@ docker-compose --file docker/docker-compose-tests.yml--env-file docker/.env up -d fuseki
 
 #-----------------------------------------------------------------------------
 # Test commands
 #-----------------------------------------------------------------------------
 
-test-data-fuseki: | setup-docker-fuseki
+test-data-fuseki: | setup-docker-fuseki run-docker-fuseki
 	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" test datasets at http://localhost:$(if $(RDF_DIFFER_FUSEKI_PORT),$(RDF_DIFFER_FUSEKI_PORT),unknown port)/$$/datasets"
 	@ sleep 5
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
@@ -161,11 +161,11 @@ test-data-fuseki: | setup-docker-fuseki
 
 run-docker-redis:
 	@ echo -e '$(BUILD_PRINT)Starting redis'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d redis
+	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d redis
 
 run-docker-api:
 	@ echo -e '$(BUILD_PRINT)Starting api'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d rdf-differ-api
+	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-api
 
 run-docker-ui:
 	@ echo -e '$(BUILD_PRINT)Starting ui'

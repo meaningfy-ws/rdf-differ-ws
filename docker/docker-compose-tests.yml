@@ -1,0 +1,91 @@
+version: '3.7'
+
+services:
+  rdf-differ-api:
+    container_name: rdf-differ-api
+    build:
+      context: ..
+      dockerfile: ./docker/api/Dockerfile
+    volumes:
+      - ..:/usr/src/app
+      - rdf-differ-template:${RDF_DIFFER_TEMPLATE_LOCATION}
+    ports:
+      - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
+    env_file: .env
+    networks:
+      - mydefault
+    depends_on:
+      - redis
+
+  rdf-differ-ui:
+    container_name: rdf-differ-ui
+    build:
+      context: ..
+      dockerfile: ./docker/ui/Dockerfile
+    volumes:
+      - ..:/usr/src/app
+    ports:
+      - ${RDF_DIFFER_UI_PORT}:${RDF_DIFFER_UI_PORT}
+    env_file: .env
+    networks:
+      - mydefault
+
+  fuseki:
+    container_name: fuseki
+    build:
+      context: ..
+      dockerfile: ./docker/fuseki/Dockerfile
+    volumes:
+      - ${PWD}/${RDF_DIFFER_FUSEKI_DATA_FOLDER}/fuseki:/fuseki
+    env_file: .env
+    environment:
+      - ADMIN_PASSWORD=${RDF_DIFFER_FUSEKI_ADMIN_PASSWORD}
+      - JVM_ARGS=${RDF_DIFFER_FUSEKI_JVM_ARGS}
+    ports:
+      - ${RDF_DIFFER_FUSEKI_PORT}:${RDF_DIFFER_FUSEKI_PORT}
+    networks:
+      - mydefault
+
+  celery-worker:
+    container_name: celery-worker
+    build:
+      context: ..
+      dockerfile: ./docker/api/Dockerfile
+    command: celery -A rdf_differ.adapters.celery.celery_worker worker --loglevel info --logfile ${RDF_DIFFER_CELERY_LOGS}
+    volumes:
+      - ..:/usr/src/app
+    env_file: .env
+    networks:
+      - mydefault
+    depends_on:
+      - rdf-differ-api
+      - redis
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - ${RDF_DIFFER_REDIS_PORT}:${RDF_DIFFER_REDIS_PORT}
+    networks:
+      - mydefault
+
+  dashboard:
+    build:
+      context: ..
+      dockerfile: ./docker/api/Dockerfile
+    command: celery -A rdf_differ.adapters.celery.celery_worker --broker=${RDF_DIFFER_REDIS_LOCATION}:${RDF_DIFFER_REDIS_PORT} flower --port=${RDF_FLOWER_PORT}
+    ports:
+      - ${RDF_FLOWER_PORT}:${RDF_FLOWER_PORT}
+    depends_on:
+      - rdf-differ-api
+      - celery-worker
+      - redis
+    networks:
+      - mydefault
+
+volumes:
+  rdf-differ-template:
+    external: true
+
+networks:
+  mydefault:
+    name: globalnet
