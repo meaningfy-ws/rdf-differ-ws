@@ -143,7 +143,7 @@ endif
 #-----------------------------------------------------------------------------
 setup-docker-fuseki: | build-volumes build-externals
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d --build --force-recreate -p 3030:3030 rdf-differ-fuseki
+	@ docker run -p 3030:3030 -e ADMIN_PASSWORD=admin stain/jena-fuseki:4.0.0
 
 run-docker-fuseki:
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
