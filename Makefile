@@ -147,7 +147,7 @@ setup-docker-fuseki: | build-volumes
 
 run-docker-fuseki:
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
-	@ docker-compose --file docker/docker-compose-tests.yml--env-file docker/.env up -d fuseki
+	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d fuseki
 
 #-----------------------------------------------------------------------------
 # Test commands
