@@ -1,2 +1,6 @@
 data-dev/
 fuseki-data/
+.venv*
+.git*
+venv*
+env*
