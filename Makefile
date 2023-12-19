@@ -141,7 +141,7 @@ endif
 #-----------------------------------------------------------------------------
 # Fuseki control for github actions
 #-----------------------------------------------------------------------------
-setup-docker-fuseki: | build-volumes
+setup-docker-fuseki: | build-volumes build-externals
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
 	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build rdf-differ-fuseki
 
