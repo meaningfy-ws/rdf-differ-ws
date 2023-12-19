@@ -143,11 +143,11 @@ endif
 #-----------------------------------------------------------------------------
 setup-docker-fuseki: | build-volumes
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build fuseki
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env build rdf-differ-fuseki
 
 run-docker-fuseki:
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d fuseki
+	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d rdf-differ-fuseki
 
 #-----------------------------------------------------------------------------
 # Test commands
