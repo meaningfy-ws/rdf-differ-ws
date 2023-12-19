@@ -32,9 +32,7 @@ services:
 
   fuseki:
     container_name: fuseki
-    build:
-      context: ..
-      dockerfile: ./docker/fuseki/Dockerfile
+    image: stain/jena-fuseki:4.0.0
     volumes:
       - ${PWD}/${RDF_DIFFER_FUSEKI_DATA_FOLDER}/fuseki:/fuseki
     env_file: .env
