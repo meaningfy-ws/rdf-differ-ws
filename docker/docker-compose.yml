@@ -78,7 +78,7 @@ services:
       - "traefik.http.routers.${ENVIRONMENT}-fuseki-secured.entrypoints=web-secured" # <== Defining entrypoint for https, **ref: line 31
       - "traefik.http.routers.${ENVIRONMENT}-fuseki-secured.tls.certresolver=mytlschallenge" # <== Defining certsresolvers for https
 
-  celery-worker:
+  rdf-differ-celery-worker:
     container_name: rdf-differ-celery-worker-${ENVIRONMENT}
     build:
       context: ..
@@ -103,7 +103,7 @@ services:
     networks:
       - rdf-differ-net
 
-  rdf-differ-flower:
+  rdf-differ-dashboard:
     container_name: rdf-differ-flower-${ENVIRONMENT}
     build:
       context: ..
@@ -115,7 +115,7 @@ services:
 #      - ${RDF_FLOWER_PORT}:${RDF_FLOWER_PORT}
     depends_on:
       - rdf-differ-api
-      - celery-worker
+      - rdf-differ-celery-worker
       - rdf-differ-redis
     networks:
       - proxy-net
