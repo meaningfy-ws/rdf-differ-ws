@@ -15,7 +15,7 @@ services:
     networks:
       - mydefault
     depends_on:
-      - redis
+      - rdf-differ-redis
 
   rdf-differ-ui:
     container_name: rdf-differ-ui-${ENVIRONMENT}
@@ -57,7 +57,7 @@ services:
       - mydefault
     depends_on:
       - rdf-differ-api
-      - redis
+      - rdf-differ-redis
 
   rdf-differ-redis:
     image: redis:6-alpine
@@ -77,8 +77,8 @@ services:
       - ${RDF_FLOWER_PORT}:${RDF_FLOWER_PORT}
     depends_on:
       - rdf-differ-api
-      - celery-worker
-      - redis
+      - rdf-differ-celery-worker
+      - rdf-differ-redis
     networks:
       - mydefault
 
