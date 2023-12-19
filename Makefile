@@ -144,11 +144,11 @@ endif
 #-----------------------------------------------------------------------------
 setup-docker-fuseki: | build-volumes
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
-	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env-test build fuseki
+	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env build rdf-differ-fuseki
 
 run-docker-fuseki:
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
-	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env-test up -d fuseki
+	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-fuseki
 
 #-----------------------------------------------------------------------------
 # Test commands
@@ -162,15 +162,15 @@ test-data-fuseki: | setup-docker-fuseki run-docker-fuseki
 
 run-docker-redis:
 	@ echo -e '$(BUILD_PRINT)Starting redis'
-	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env-test up -d redis
+	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-redis
 
 run-docker-api:
 	@ echo -e '$(BUILD_PRINT)Starting api'
-	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env-test up -d rdf-differ-api
+	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-api
 
 run-docker-ui:
 	@ echo -e '$(BUILD_PRINT)Starting ui'
-	@ docker-compose --file docker/docker-compose.yml --env-file docker/.env up -d rdf-differ-ui
+	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-ui
 
 test: | install-python-dependencies-dev test-data-fuseki run-docker-redis run-docker-api
 	@ echo "$(BUILD_PRINT)Running the tests using docker services"

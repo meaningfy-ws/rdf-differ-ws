@@ -103,7 +103,7 @@ services:
     networks:
       - rdf-differ-net
 
-  rdf-differ-dashboard:
+  rdf-differ-flower:
     container_name: rdf-differ-flower-${ENVIRONMENT}
     build:
       context: ..

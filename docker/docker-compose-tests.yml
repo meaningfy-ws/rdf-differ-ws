@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   rdf-differ-api:
-    container_name: rdf-differ-api
+    container_name: rdf-differ-api-${ENVIRONMENT}
     build:
       context: ..
       dockerfile: ./docker/api/Dockerfile
@@ -18,7 +18,7 @@ services:
       - redis
 
   rdf-differ-ui:
-    container_name: rdf-differ-ui
+    container_name: rdf-differ-ui-${ENVIRONMENT}
     build:
       context: ..
       dockerfile: ./docker/ui/Dockerfile
@@ -30,8 +30,8 @@ services:
     networks:
       - mydefault
 
-  fuseki:
-    container_name: fuseki
+  rdf-differ-fuseki:
+    container_name: rdf-differ-fuseki-${ENVIRONMENT}
     image: stain/jena-fuseki:4.0.0
     volumes:
       - ${PWD}/${RDF_DIFFER_FUSEKI_DATA_FOLDER}/fuseki:/fuseki
@@ -44,8 +44,8 @@ services:
     networks:
       - mydefault
 
-  celery-worker:
-    container_name: celery-worker
+  rdf-differ-celery-worker:
+    container_name: rdf-differ-celery-worker-${ENVIRONMENT}
     build:
       context: ..
       dockerfile: ./docker/api/Dockerfile
@@ -59,14 +59,16 @@ services:
       - rdf-differ-api
       - redis
 
-  redis:
+  rdf-differ-redis:
     image: redis:6-alpine
+    container_name: rdf-differ-redis-${ENVIRONMENT}
     ports:
       - ${RDF_DIFFER_REDIS_PORT}:${RDF_DIFFER_REDIS_PORT}
     networks:
       - mydefault
 
-  dashboard:
+  rdf-differ-flower:
+    container_name: rdf-differ-flower-${ENVIRONMENT}
     build:
       context: ..
       dockerfile: ./docker/api/Dockerfile
