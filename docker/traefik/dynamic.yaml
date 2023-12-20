@@ -1,0 +1,12 @@
+
+## Setting up the middleware for redirect to https ##
+http:
+  middlewares:
+    redirect:
+      redirectScheme:
+        scheme: https
+
+#tls:
+#  certificates:
+#    - certFile: "/etc/certs/minio.localhost.pem"
+#      keyFile: "/etc/certs/minio.localhost-key.pem"

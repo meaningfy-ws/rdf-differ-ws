@@ -2,90 +2,149 @@ version: '3.7'
 
 services:
   rdf-differ-api:
-    container_name: rdf-differ-api
+    container_name: rdf-differ-api-${ENVIRONMENT}
+    expose:
+      - ${RDF_DIFFER_API_PORT}
     build:
       context: ..
       dockerfile: ./docker/api/Dockerfile
     volumes:
-      - ..:/usr/src/app
+      - rdf-differ-data:/usr/src/app
       - rdf-differ-template:${RDF_DIFFER_TEMPLATE_LOCATION}
-    ports:
-      - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
+#    ports:
+#      - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
     env_file: .env
     networks:
-      - mydefault
+      - proxy-net
+      - rdf-differ-net
     depends_on:
-      - redis
+      - rdf-differ-redis
+    labels:
+      #### Labels define the behavior and rules of the traefik proxy for this container ####
+      - "traefik.enable=true" # <== Enable traefik to proxy this container
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-api.rule=Host(`api.${SUBDOMAIN}${DOMAIN}`)" # <== Your Domain Name goes here for the http rule
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-api.entrypoints=web" # <== Defining the entrypoint for http, **ref: line 30
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-api.middlewares=redirect@file" # <== This is a middleware to redirect to https
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-api-secured.rule=Host(`api.${SUBDOMAIN}${DOMAIN}`)" # <== Your Domain Name for the https rule
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-api-secured.entrypoints=web-secured" # <== Defining entrypoint for https, **ref: line 31
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-api-secured.tls.certresolver=mytlschallenge" # <== Defining certsresolvers for https
 
   rdf-differ-ui:
-    container_name: rdf-differ-ui
+    container_name: rdf-differ-ui-${ENVIRONMENT}
+    expose:
+      - ${RDF_DIFFER_UI_PORT}
     build:
       context: ..
       dockerfile: ./docker/ui/Dockerfile
     volumes:
-      - ..:/usr/src/app
-    ports:
-      - ${RDF_DIFFER_UI_PORT}:${RDF_DIFFER_UI_PORT}
+      - rdf-differ-data:/usr/src/app
+#    ports:
+#      - ${RDF_DIFFER_UI_PORT}:${RDF_DIFFER_UI_PORT}
     env_file: .env
     networks:
-      - mydefault
+      - proxy-net
+      - rdf-differ-net
+    labels:
+      #### Labels define the behavior and rules of the traefik proxy for this container ####
+      - "traefik.enable=true" # <== Enable traefik to proxy this container
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-ui.rule=Host(`rdf.${SUBDOMAIN}${DOMAIN}`)" # <== Your Domain Name goes here for the http rule
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-ui.entrypoints=web" # <== Defining the entrypoint for http, **ref: line 30
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-ui.middlewares=redirect@file" # <== This is a middleware to redirect to https
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-ui-secured.rule=Host(`rdf.${SUBDOMAIN}${DOMAIN}`)" # <== Your Domain Name for the https rule
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-ui-secured.entrypoints=web-secured" # <== Defining entrypoint for https, **ref: line 31
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-ui-secured.tls.certresolver=mytlschallenge" # <== Defining certsresolvers for https
 
-  fuseki:
-    container_name: fuseki
-    build:
-      context: ..
-      dockerfile: ./docker/fuseki/Dockerfile
+  rdf-differ-fuseki:
+    container_name: rdf-differ-fuseki-${ENVIRONMENT}
+    image: stain/jena-fuseki:4.0.0
     volumes:
-      - ${PWD}/${RDF_DIFFER_FUSEKI_DATA_FOLDER}/fuseki:/fuseki
+      - fuseki-rdf-differ-data:/fuseki
     env_file: .env
     environment:
       - ADMIN_PASSWORD=${RDF_DIFFER_FUSEKI_ADMIN_PASSWORD}
       - JVM_ARGS=${RDF_DIFFER_FUSEKI_JVM_ARGS}
-    ports:
-      - ${RDF_DIFFER_FUSEKI_PORT}:${RDF_DIFFER_FUSEKI_PORT}
+#    ports:
+#      - ${RDF_DIFFER_FUSEKI_PORT}:${RDF_DIFFER_FUSEKI_PORT}
     networks:
-      - mydefault
+      - proxy-net
+      - rdf-differ-net
+    labels:
+      #### Labels define the behavior and rules of the traefik proxy for this container ####
+      - "traefik.enable=true" # <== Enable traefik to proxy this container
+      - "traefik.http.routers.${ENVIRONMENT}-fuseki.rule=Host(`fuseki.${SUBDOMAIN}${DOMAIN}`)" # <== Your Domain Name goes here for the http rule
+      - "traefik.http.routers.${ENVIRONMENT}-fuseki.entrypoints=web" # <== Defining the entrypoint for http, **ref: line 30
+      - "traefik.http.routers.${ENVIRONMENT}-fuseki.middlewares=redirect@file" # <== This is a middleware to redirect to https
+      - "traefik.http.routers.${ENVIRONMENT}-fuseki-secured.rule=Host(`fuseki.${SUBDOMAIN}${DOMAIN}`)" # <== Your Domain Name for the https rule
+      - "traefik.http.routers.${ENVIRONMENT}-fuseki-secured.entrypoints=web-secured" # <== Defining entrypoint for https, **ref: line 31
+      - "traefik.http.routers.${ENVIRONMENT}-fuseki-secured.tls.certresolver=mytlschallenge" # <== Defining certsresolvers for https
 
-  celery-worker:
-    container_name: celery-worker
+  rdf-differ-celery-worker:
+    container_name: rdf-differ-celery-worker-${ENVIRONMENT}
     build:
       context: ..
       dockerfile: ./docker/api/Dockerfile
     command: celery -A rdf_differ.adapters.celery.celery_worker worker --loglevel info --logfile ${RDF_DIFFER_CELERY_LOGS}
     volumes:
-      - ..:/usr/src/app
+      - rdf-differ-data:/usr/src/app
     env_file: .env
     networks:
-      - mydefault
+      - rdf-differ-net
     depends_on:
       - rdf-differ-api
-      - redis
+      - rdf-differ-redis
 
-  redis:
+  rdf-differ-redis:
     image: redis:6-alpine
-    ports:
-      - ${RDF_DIFFER_REDIS_PORT}:${RDF_DIFFER_REDIS_PORT}
+    container_name: rdf-differ-redis-${ENVIRONMENT}
+    expose:
+      - ${RDF_DIFFER_REDIS_PORT}
+#    ports:
+#      - ${RDF_DIFFER_REDIS_PORT}:${RDF_DIFFER_REDIS_PORT}
     networks:
-      - mydefault
+      - rdf-differ-net
 
-  dashboard:
+  rdf-differ-flower:
+    container_name: rdf-differ-flower-${ENVIRONMENT}
     build:
       context: ..
       dockerfile: ./docker/api/Dockerfile
-    command: celery -A rdf_differ.adapters.celery.celery_worker --broker=${RDF_DIFFER_REDIS_LOCATION}:${RDF_DIFFER_REDIS_PORT} flower --port=${RDF_FLOWER_PORT}
-    ports:
-      - ${RDF_FLOWER_PORT}:${RDF_FLOWER_PORT}
+    command: celery -A rdf_differ.adapters.celery.celery_worker --broker=${RDF_DIFFER_REDIS_LOCATION}:${RDF_DIFFER_REDIS_PORT} flower --port=${RDF_FLOWER_PORT} --basic-auth=admin:${RDF_FLOWER_ADMIN_PASSWORD}
+    expose:
+      - ${RDF_FLOWER_PORT}
+#    ports:
+#      - ${RDF_FLOWER_PORT}:${RDF_FLOWER_PORT}
     depends_on:
       - rdf-differ-api
-      - celery-worker
-      - redis
+      - rdf-differ-celery-worker
+      - rdf-differ-redis
     networks:
-      - mydefault
+      - proxy-net
+      - rdf-differ-net
+    labels:
+      #### Labels define the behavior and rules of the traefik proxy for this container ####
+      - "traefik.enable=true" # <== Enable traefik to proxy this container
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-flower.rule=Host(`flower.${SUBDOMAIN}${DOMAIN}`)" # <== Your Domain Name goes here for the http rule
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-flower.entrypoints=web" # <== Defining the entrypoint for http, **ref: line 30
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-flower.middlewares=redirect@file" # <== This is a middleware to redirect to https
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-flower-secured.rule=Host(`flower.${SUBDOMAIN}${DOMAIN}`)" # <== Your Domain Name for the https rule
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-flower-secured.entrypoints=web-secured" # <== Defining entrypoint for https, **ref: line 31
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-flower-secured.tls.certresolver=mytlschallenge" # <== Defining certsresolvers for https
+      - "traefik.http.routers.${ENVIRONMENT}-rdf-differ-flower-secured.service=rdf-differ-flower"
+      - "traefik.http.services.rdf-differ-flower.loadbalancer.server.port=5555"
 
 volumes:
   rdf-differ-template:
     external: true
+    name: rdf-differ-template-${ENVIRONMENT}
+  rdf-differ-data:
+    name: rdf-differ-data-${ENVIRONMENT}
+  fuseki-rdf-differ-data:
+    name: fuseki-rdf-differ-data-${ENVIRONMENT}
 
 networks:
-  mydefault:
-    name: globalnet
+  proxy-net:
+    external:
+      name: proxy-net
+  rdf-differ-net:
+    internal: true
+    name: rdf-differ-net-${ENVIRONMENT}

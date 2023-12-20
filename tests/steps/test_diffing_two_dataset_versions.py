@@ -17,6 +17,7 @@ from pytest_bdd import (
     scenario,
     then,
     when,
+    parsers
 )
 
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
@@ -96,7 +97,7 @@ def the_diff_calculator_is_executed():
     assert helper_fuseki_service(http_client=requests, sparql_client=SPARQLRunner()).dataset_description('subdiv')
 
 
-@given('the <property> is missing or incorrect')
+@given(parsers.parse('the {property} is missing or incorrect'))
 def the_property_is_missing_or_incorrect(metadata, property):
     """the <property> is missing or incorrect."""
     metadata[property] = ''
@@ -112,7 +113,7 @@ def the_user_runs_the_incomplete_diff_calculator(metadata):
     metadata['exception'] = exception
 
 
-@then('an error message is generated indicating the <property> problem')
+@then(parsers.parse('an error message is generated indicating the {property} problem'))
 def an_error_message_is_generated_indicating_the_property_problem(metadata, property):
     """an error message is generated indicating the <property> problem."""
     assert property in str(metadata['exception'])
