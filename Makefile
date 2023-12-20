@@ -120,7 +120,7 @@ stop-traefik:
 	@ echo -e "$(BUILD_PRINT)Stopping the Traefik services $(END_BUILD_PRINT)"
 	@ docker-compose -p common --file ./docker/traefik/docker-compose.yml --env-file docker/.env down
 
-start-services:
+start-services: build-volumes
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Starting the RDF Differ micro-services'
 	@ docker-compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env up -d
