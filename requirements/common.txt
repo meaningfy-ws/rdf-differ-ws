@@ -10,8 +10,6 @@ Flask-WTF~=1.2.1
 connexion[swagger-ui]~=2.14.2
 
 eds4jinja2~=0.2.0
-jsonschema~=3.2.0
-pyrsistent~=0.16.1
 
 shortuuid~=1.0.11
 
