@@ -22,7 +22,7 @@ prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 """
 QUERY_DATASET_DESCRIPTION = """
 SELECT ?versionHistoryGraph (?identifier AS ?datasetVersion) ?currentVersionGraph ?schemeURI \
-?versionNamedGraph ?versionId ?description ?created
+?versionNamedGraph ?versionId ?description ?created ?title ?oldFile ?newFile
 WHERE {
   # parameters
   VALUES ( ?versionHistoryGraph ) {
@@ -32,6 +32,15 @@ WHERE {
     ?vhr dsv:hasVersionHistorySet ?vhs .
     OPTIONAL {
         ?vhs dcterms:description ?description
+    }
+    OPTIONAL {
+        ?vhs dcterms:title ?title
+    }
+    OPTIONAL {
+        ?vhs void:oldFile ?oldFile
+    }
+    OPTIONAL {
+        ?vhs void:newFile ?newFile
     }
     OPTIONAL {
         ?vhs dcterms:created ?created
@@ -74,13 +83,16 @@ INSERT
 {
    GRAPH ?versionHistoryGraph {    
      ?vhs dcterms:description ?description;
+      dcterms:title ?title;
+      void:oldFile ?oldFile;
+      void:newFile ?newFile;
       dcterms:created ?currentTime .
   }
 }
 WHERE {
   # parameters
-  VALUES ( ?description ) {
-    ( "~description~"@en )
+  VALUES ( ?description ?title ?oldFile ?newFile ) {
+    ( "~description~"@en "~title~"@en "~oldFile~"@en "~newFile~"@en)
   }
   GRAPH ?versionHistoryGraph {    
      ?vhs a dsv:VersionHistorySet .

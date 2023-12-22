@@ -230,14 +230,18 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         return self._extract_dataset_description(response=query_result, dataset_name=dataset_name,
                                                  query_url=self.make_sparql_endpoint(dataset_name))
 
-    def inject_description(self, dataset_name: str, description: str):
+    def inject_metadata(self, dataset_name: str, metadata: dict):
         """
             Insert data into the dataset
         :param dataset_name: The dataset identifier. This should be short alphanumeric string uniquely
         identifying the dataset
-        :param description: The description to be inserted
+        :param metadata: The metadata to be inserted
         """
-        query_string = QUERY_INSERT_DESCRIPTION.replace('~description~', description)
+        query_string = QUERY_INSERT_DESCRIPTION.replace('~description~', metadata.get('dataset_description', ''))
+        query_string = query_string.replace('~title~', metadata.get('original_name', ''))
+        query_string = query_string.replace('~oldFile~', metadata.get('old_version_file', ''))
+        query_string = query_string.replace('~newFile~', metadata.get('new_version_file', ''))
+
         response = self.execute_update_query(dataset_name=dataset_name,
                                              sparql_query=SKOS_HISTORY_PREFIXES + query_string)
         return response
@@ -321,6 +325,9 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             * dataset_name = The dataset identifier. This should be short alphanumeric string uniquely
                 identifying the dataset.
             * dataset_description = The dataset description. This is a free text description fo the dataset.
+            * original_name = The origina user-provided name for the dataset.
+            * old_version_file = The filename of the user-uploaded old version content.
+            * new_version_file = The filename of the user-uploaded new version content.
             * dataset_uri = The dataset URI. For SKOS datasets this is usually the ConceptSchema URI.
             * diff_date = The date of the calculated diff.
             * old_version_id = Identifier for the older version of the dataset.
@@ -350,6 +357,12 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             'uid': meta.get('uid'),
             'dataset_description': response['results']['bindings'][0]['description']['value'] if
             response['results']['bindings'][0].get('description') else '',
+            'original_name': response['results']['bindings'][0]['title']['value'] if
+            response['results']['bindings'][0].get('title') else '',
+           'old_version_file': response['results']['bindings'][0]['oldFile']['value'] if
+            response['results']['bindings'][0].get('oldFile') else '',
+           'new_version_file': response['results']['bindings'][0]['newFile']['value'] if
+            response['results']['bindings'][0].get('newFile') else '',
             'dataset_uri': response['results']['bindings'][0]['schemeURI']['value'],
             'diff_date': response['results']['bindings'][0]['created']['value'] if response['results']['bindings'][
                 0].get(
