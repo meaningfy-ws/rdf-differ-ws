@@ -16,14 +16,17 @@ OS_DOCKERC=$(shell command -v docker-compose > /dev/null && echo 1)
 # how to set envs to local
 # set -o allexport; source docker/.env; set +o allexport
 
-setup: | install build-volumes start-services
-	@ echo "$(MSG_PRINT)Docker-based services started; make stop-services to stop"
+setup: | install build-volumes start-traefik start-services
+	@ echo "$(MSG_PRINT)Docker-based services started; make stop to stop"
 
-setup-dev: | install-dev build-volumes start-services
-	@ echo "$(MSG_PRINT)Docker-based services started; make stop-services to stop"
+setup-dev: | install-dev build-volumes start-traefik start-services
+	@ echo "$(MSG_PRINT)Docker-based services started; make stop to stop"
 
-start: | build-volumes start-services
-	@ echo "$(MSG_PRINT)Docker-based services started; make stop-services to stop"
+start: | build-volumes start-traefik start-services
+	@ echo "$(MSG_PRINT)Docker-based services started; make stop to stop"
+
+stop: | stop-traefik stop-services
+	@ echo "$(MSG_PRINT)Docker-based services stopped; make start to restart"
 
 install: | install-os-dependencies install-python-dependencies
 	@ echo "$(MSG_PRINT)To get started quickly with docker, make start"
@@ -66,7 +69,7 @@ run-local-api:
 run-local-ui:
 	@ ./bash/run_ui.sh
 
-run-local-redis:
+run-system-redis:
 ifeq ($(DEB_OS), 1)
 # running as root, and replacing a system config, are both bad practices!
 	@ echo "$(WARN_PRINT)Backing up and replacing a system config as root!"
@@ -82,7 +85,7 @@ else
 	false
 endif
 
-stop-local-gunicorn:
+stop-local-applications:
 	@ ./bash/stop_gunicorn.sh
 
 #-----------------------------------------------------------------------------

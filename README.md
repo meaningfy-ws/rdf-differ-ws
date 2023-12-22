@@ -6,7 +6,7 @@ A service for calculating the difference between versions of a given RDF dataset
 [![codecov](https://codecov.io/gh/eu-vocabularies/rdf-differ/branch/master/graph/badge.svg)](https://codecov.io/gh/eu-vocabularies/rdf-differ)
 
 ## Installation
-> **NOTE**: The specified installation instruction are for development purposes only on a GNU/Linux operating system. _(Slight modifications are required for production use, including having a production level Fuseki server and Redis service available.)_
+> **NOTE**: The specified installation instructions are for development purposes only on a GNU/Linux operating system. _(Slight modifications are required for production use, including having a production level Fuseki server and Redis service available.)_
 
 For Red Hat derivative systems, make sure that the EPEL (Extra Packages for Enterprise Linux) repository is enabled and added to the server's package lists. This is not currently handled automatically and can usually be installed by running:
 
@@ -14,15 +14,22 @@ For Red Hat derivative systems, make sure that the EPEL (Extra Packages for Ente
 sudo yum install epel-release
 ```
 
-For Debian derivative systems, no additional package repository should be needed, for at least Ubuntu 18.04.
+For Debian derivative systems, no additional package repository should be needed, for at least Ubuntu 18.04. While we do not test for Windows/WSL2
+or Mac (because of some limitations with GitHub CI), those platforms should work as well.
 
-RDF Differ uses fuseki (as the triplestore/database), celery (for multithreading programming), gunicorn (for serving), and redis (for queue-based pesistent storage).
+RDF Differ uses fuseki (as the triplestore/database), celery (for multithreading programming), gunicorn (for serving), and redis (for queue-based pesistent storage). For the corresponding Docker micro-services, it uses traefik for the networking, _except when running tests_.
 
 The applications are made available (by default) on ports [8030](http:localhost:8030) (ui), [4030](http:localhost:4030) (api), [3030](http:localhost:3030) (triplestore), [6379](http:localhost:6379) (redis), and [5555](http:localhost:5555) (celery). This is configurable via `bash/.env` and `docker/.env`.
 
+> For the docker services with traefik, you have to access these differently, through their local domains instead, for e.g. https://rdf.localhost/ (ui). See https://monitor.localhost > Routers > Explore (`Host(...)`).
+
+> For the docker services with traefik, on Windows/WSL2, `curl` works only _outside_ WSL without SSL/TLS, e.g. via Git Bash `curl https://api.localhost/diffs --insecure`.
+
 For all output except fuseki, see the `logs` folder, e.g. `tail -f logs/api.log` to follow the API output. For fuseki, run `docker logs fuseki` (add `-f` to follow).
 
-[This file](curl-examples.md) contains a list of examples on how to use the api.
+> For the docker services with traefik, you have to get to the logs from inside the container, for example, via ` docker exec -it rdf-differ-api-dev tail -f logs/api.log` where `rdf-differ-api-dev` is the name of the API container (see `docker ps`).
+
+[This file](curl-examples.md) contains a list of examples on how to use the api. (please translate the URLs accordingly for traefik domains as mentioned above)
 
 ### With docker micro-services
 
@@ -34,34 +41,37 @@ make
 
 By default, that runs the first build target, currently `make setup`. You must have `docker` and `docker-compose` installed if you would like to use the micro-services to run everything, everywhere, all at once.
 
-If you only want to install prerequisite packages and dependencies without starting any service or database, run:
+If you only want to install prerequisite software and dependencies without starting any service or database, run:
 
 ```bash
 make install
 ```
 
-In either case, some commands will be **run as root** with _sudo_. If you install operating system (OS) packages yourself (if in case you run an unsupported OS or you don't want to run as root), run:
+**WARNING:** Some commands are **run as root** with _sudo_.
+
+If you install operating system (OS) packages yourself (if in case you run an unsupported OS or you don't want to run as root), run:
 
 ```bash
 make install-python-dependencies # add -dev if you want to run tests
 ```
 
-If you only want to start up ALL the prerequisite docker services (this is already done by default but in case you have already run `install`):
+If you only want to start up ALL the prerequisite docker services (in case you have already run `install`):
 
 ```bash
-make build-volumes
-make start-services
+make start
 ```
 
-This creates the docker images, prerequisite volumes (for file storage mirroring between the local project and the containers), and runs the containers.
+This creates the required local docker images (and fetches some third-party ones from DockerHub), prerequisite volumes (for file storage in the containers), and finally runs all the containers.
 
 To stop ALL docker services at any time:
 
 ```bash
-make stop-services
+make stop
 ```
 
-### With local system services
+> If at any time you think you are experiencing odd behaviour, such as a `500 Internal Server Error` or `404 Not Found`, use your preferred method to completely remove (purge) the docker containers, images and volumes related to this project, files inside `reports` and `fuseki-data`, and redo everything.
+
+### With local and system services
 
 To run the triplestore database (fuseki) server locally and not via docker (on first setup accept the default values):
 
@@ -71,11 +81,15 @@ make run-local-fuseki
 ```
 _leave this terminal session open_
 
-To set up and run a local redis server:
+That will fetch, install in and run fuseki from the current working directory, which can be run as a user _without requiring root_.
+
+To set up and run a _system_ redis server which _does_ need to be **run as root**:
 
 ```bash
-make run-local-redis
+make run-system-redis
 ```
+
+There is currently no local alternative to this to run as a user. If that is a concern, please use the docker micro-services approach.
 
 **WARNING:** Like `setup` and to some extent `install`, this runs as root and additionally replaces a system configuration file. If you get errors about configuration directives, you are likely running an older OS with older redis (e.g. Ubuntu 18.04 does not have the redis version that's required).
 
@@ -91,10 +105,10 @@ To run the ui locally:
 make run-local-ui
 ```
 
-To stop both api and ui servers:
+To stop both api and ui servers (leaving only fuseki and the system redis running, which you must control on your own):
 
 ```bash
-make stop-gunicorn
+make stop-local-applications
 ```
 
 To reiterate, if you are running the project for the first time this would be the commands to run in sequence:
@@ -102,10 +116,10 @@ To reiterate, if you are running the project for the first time this would be th
 ```bash
 make install-os-dependencies
 make install-python-dependencies
-make run-local-redis
-make setup-local-fuseki
+make run-system-redis
 make run-local-api
 make run-local-ui
+make setup-local-fuseki
 ```
 
 In a separate terminal process remember to run and keep open:
@@ -116,13 +130,15 @@ make run-local-fuseki
 
 ## Testing
 
-The test suite spins up required docker services. Run the following to run everything:
+The test suite spins up certain duplicate docker services _without_ traefik, so
+access to those specific services are directly through the localhost and respective
+ports. Run the following to run everything:
 
 ```bash
 make test
 ```
 
-**WARNING**: There may be a conflict with test data and runtime data. If you get weird behaviour, you can clear the `fuseki-data` and `reports` folders. If you do that, you might also need to run `make stop-services`, delete ALL the docker containers and volumes with your preferred method, and then run `make build-volumes && make start-services` again.
+This creates the `subdiv` and `abc` dummy datasets once in the running fuseki service, and a `dataset{ID}` dataset (where `{ID}` is a short random ID) as many times as the tests are run. The `db` folder is populated by the tests.
 
 ## Adding a new Application Profile template
 For adding a new Application Profile (AP) create a new folder under [resources/templates](resources/templates) with the name
