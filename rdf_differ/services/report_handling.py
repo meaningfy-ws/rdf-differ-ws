@@ -35,7 +35,10 @@ def build_report(temp_dir: str, template_location: str, query_files: dict, appli
             "default_endpoint": dataset['query_url'],
             "dataset_name": dataset_name,
             "application_profile": application_profile,
-            "timestamp": timestamp
+            "timestamp": timestamp,
+            "original_name": dataset['original_name'],
+            "old_version_file": dataset['old_version_file'],
+            "new_version_file": dataset['new_version_file']
         }
     }
     logger.debug(f'template location {template_location}')
