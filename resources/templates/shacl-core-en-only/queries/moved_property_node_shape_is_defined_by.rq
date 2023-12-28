@@ -10,7 +10,6 @@ PREFIX lemon: <http://lemon-model.net/lemon#>
 PREFIX lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#>
 PREFIX lexvo: <http://lexvo.org/ontology#>
 PREFIX vann: <http://purl.org/vocab/vann/>
-PREFIX shacl: <http://www.w3.org/ns/shacl#>
 PREFIX oldevo: <http://eurovoc.europa.eu/schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX prov: <http://www.w3.org/ns/prov#>
@@ -25,6 +24,7 @@ PREFIX thes: <http://purl.org/iso25964/skos-thes#>
 PREFIX vb: <http://art.uniroma2.it/ontologies/vocbench#>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX shacl: <http://www.w3.org/ns/shacl#>
 
 # Show all movements cross instances
 SELECT DISTINCT ?oldInstance ?class ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance
