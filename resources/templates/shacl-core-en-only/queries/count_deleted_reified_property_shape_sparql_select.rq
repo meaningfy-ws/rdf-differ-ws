@@ -71,13 +71,13 @@ WHERE {
    # get all deleted reified structures
   GRAPH ?deletionsGraph {
     ?instance ?property ?object .
-    ?object ?objProperty [] .
+    ?object ?objProperty ?value .
   }
   # ... which were not attached to some (other) instance now
   FILTER NOT EXISTS {
     GRAPH ?insertionsGraph {
       ?instance ?property ?object .
-      ?object ?objProperty [].
+      ?object ?objProperty ?value .
     }
   }
     FILTER NOT EXISTS {

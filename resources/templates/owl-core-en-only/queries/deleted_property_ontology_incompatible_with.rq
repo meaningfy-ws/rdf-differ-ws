@@ -69,12 +69,12 @@ WHERE {
   }
   # get all deleted property values
   GRAPH ?deletionsGraph {
-    ?instance ?property [] .
+    ?instance ?property ?value .
   }
   # ... which were not attached to some (other) instance now
   FILTER NOT EXISTS {
     GRAPH ?insertionsGraph {
-     ?instance ?property [] .
+     ?instance ?property ?value .
     }
   }
   GRAPH ?oldVersionGraph {
