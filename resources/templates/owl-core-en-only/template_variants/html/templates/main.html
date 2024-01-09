@@ -6,7 +6,10 @@
     <p>This report is automatically generated from the {{ conf.dataset_name }} RDF dataset on <time>{{ conf.timestamp }}</time>
         and aims at presenting the difference between two versions of an RDFS/OWL ontology following the {{ conf.application_profile }} application profile.</p>
     <p>Report details</p>
-    <p><strong>Dataset used: </strong> {{ conf.dataset_name }}</p>
+    <p><strong>Dataset ID: </strong> {{ conf.dataset_name }}</p>
+    <p><strong>Dataset name: </strong> {{ conf.original_name }}</p>
+    <p><strong>Old version file: </strong> {{ conf.old_version_file }}</p>
+    <p><strong>New version file: </strong> {{ conf.new_version_file }}</p>
     <p><strong>Time: </strong> {{ conf.timestamp }}</p>
     <p><strong>Application profile: </strong> {{ conf.application_profile }}</p>
 

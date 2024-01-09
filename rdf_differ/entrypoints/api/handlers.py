@@ -116,8 +116,12 @@ def create_diff(body: dict, old_version_file_content: FileStorage, new_version_f
         raise Conflict(f'<{body.get("dataset_name")}> name is not acceptable is not empty.'
                        'Dataset name can contain only ASCII letters, numbers, _, :, and -')  # 409
 
+    body['original_name'] = body.get('dataset_name')
     dataset_name = build_unique_name(body.get('dataset_name'))
     body['dataset_name'] = dataset_name
+    body['old_version_file'] = old_version_file_content.filename
+    body['new_version_file'] = new_version_file_content.filename
+
     try:
         dataset = fuseki_adapter.dataset_description(dataset_name=body.get('dataset_name'))
         # if description is {} (empty) then we can create the diff

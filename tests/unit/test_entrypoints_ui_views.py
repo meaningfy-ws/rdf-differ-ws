@@ -17,11 +17,11 @@ def test_index(mock_get_datasets, ui_client):
     mock_get_datasets.return_value = [
                                          {
                                              'uid': 'uid_one',
-                                             'dataset_name': 'dataset_one',
+                                             'original_name': 'dataset_one',
                                          },
                                          {
                                              'uid': 'uid_two',
-                                             'dataset_name': 'dataset_two',
+                                             'original_name': 'dataset_two',
                                          },
                                      ], 200
 
@@ -41,13 +41,17 @@ def test_index(mock_get_datasets, ui_client):
 @patch('rdf_differ.entrypoints.ui.views.get_dataset')
 def test_get_dataset(mock_get_dataset, ui_client):
     dataset_id = 'uid'
-    dataset_name = 'dataset_one'
+    dataset_name = 'dataset_one123456'
+    original_name = 'dataset_one'
+    dataset_description = 'dataset_one is a dataset'
     mock_get_dataset.return_value = {
                                         'dataset_name': f'{dataset_name}',
+                                        'original_name': f'{original_name}',
+                                        'dataset_description': f'{dataset_description}',
                                         'dataset_uri': 'http://dataset.one',
-                                        'new_version_id': 'one_new',
-                                        'old_version_id': 'one_old',
-                                        'dataset_versions': ['one_new', 'one_old'],
+                                        'old_version_file': 'one_old.ttl',
+                                        'new_version_file': 'one_new.ttl',
+                                        'dataset_versions': ['one_old', 'one_new'],
                                         'version_named_graphs': ['http://one.version/one_old',
                                                                  'http://one.version/one_new'],
                                         'diff_date': '2020'
@@ -57,18 +61,20 @@ def test_get_dataset(mock_get_dataset, ui_client):
     soup = BeautifulSoup(response.data, 'html.parser')
 
     title = soup.find('h1')
-    assert 'Name: dataset_one' in title.get_text()
+    assert 'dataset_one' in title.get_text()
 
     table_body = soup.find('tbody')
     rows = table_body.find_all('tr')
-    assert 7 == len(rows)
-    assert 'http://dataset.one' in rows[1].get_text()
-    assert 'one_new' in rows[2].get_text()
-    assert 'one_old' in rows[2].get_text()
-    assert 'http://one.version/one_old' in rows[4].get_text()
-    assert 'http://one.version/one_new' in rows[4].get_text()
-    assert 'one_new' in rows[5].get_text()
-    assert 'one_old' in rows[6].get_text()
+    assert 8 == len(rows)
+    assert 'dataset_one123456' in rows[0].get_text()
+    assert 'dataset_one is a dataset' in rows[1].get_text()
+    assert 'http://dataset.one' in rows[2].get_text()
+    assert 'one_old' in rows[3].get_text()
+    assert 'one_new' in rows[3].get_text()
+    assert 'http://one.version/one_old' in rows[5].get_text()
+    assert 'http://one.version/one_new' in rows[5].get_text()
+    assert 'one_old.ttl' in rows[6].get_text()
+    assert 'one_new.ttl' in rows[7].get_text()
 
 
 @patch('rdf_differ.entrypoints.ui.views.get_dataset')
