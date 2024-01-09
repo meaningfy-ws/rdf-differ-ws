@@ -141,3 +141,4 @@ junit_report.xml
 fuseki
 run
 apache-jena-fuseki*
+docker/traefik/letsencrypt
