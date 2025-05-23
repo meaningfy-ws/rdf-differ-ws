@@ -197,6 +197,35 @@ set-report-template:
 	@ docker rm temp
 
 #-----------------------------------------------------------------------------
+# Template update commands
+#-----------------------------------------------------------------------------
+
+# Default values for environment variables
+TEMPLATE_SRC_DIR ?= ../diff-query-generator
+TEMPLATE_OUTPUT_DIR ?= $(TEMPLATE_SRC_DIR)/output
+TEMPLATE_AP ?= owl-core
+TEMPLATE_TYPE ?= html
+
+# Derived paths
+TEMPLATE_SRC_BASE = $(TEMPLATE_OUTPUT_DIR)/$(TEMPLATE_AP)
+TEMPLATE_QUERIES_SRC = $(TEMPLATE_SRC_BASE)/queries
+TEMPLATE_HTML_SRC = $(TEMPLATE_SRC_BASE)/$(TEMPLATE_TYPE)
+
+TEMPLATE_DEST_BASE = resources/templates/$(TEMPLATE_AP)-en-only
+TEMPLATE_QUERIES_DEST = $(TEMPLATE_DEST_BASE)/queries
+TEMPLATE_HTML_DEST = $(TEMPLATE_DEST_BASE)/template_variants/$(TEMPLATE_TYPE)/templates
+
+update_template:
+	@ echo "$(BUILD_PRINT)Updating templates from $(TEMPLATE_SRC_BASE)"
+	@ mkdir -p $(TEMPLATE_QUERIES_DEST)
+	@ mkdir -p $(TEMPLATE_HTML_DEST)
+	@ echo "$(MSG_PRINT)Copying queries from $(TEMPLATE_QUERIES_SRC) to $(TEMPLATE_QUERIES_DEST)"
+	@ cp -r $(TEMPLATE_QUERIES_SRC)/* $(TEMPLATE_QUERIES_DEST)/
+	@ echo "$(MSG_PRINT)Copying $(TEMPLATE_TYPE) templates from $(TEMPLATE_HTML_SRC) to $(TEMPLATE_HTML_DEST)"
+	@ cp -r $(TEMPLATE_HTML_SRC)/* $(TEMPLATE_HTML_DEST)/
+	@ echo "$(MSG_PRINT)Template update completed"
+
+#-----------------------------------------------------------------------------
 # Run UI dev environment
 #-----------------------------------------------------------------------------
 
