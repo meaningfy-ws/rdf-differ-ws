@@ -4,7 +4,7 @@
 {% block content %}
 
     <p>This report is automatically generated from the {{ conf.dataset_name }} RDF dataset on <time>{{ conf.timestamp }}</time>
-        and aims at presenting the difference between two versions of an RDFS/OWL ontology following the {{ conf.application_profile }} application profile.</p>
+        and aims at presenting the difference between two versions of an RDFS/OWL vocabulary following the {{ conf.application_profile }} application profile.</p>
     <p>Report details</p>
     <p><strong>Dataset ID: </strong> {{ conf.dataset_name }}</p>
     <p><strong>Dataset name: </strong> {{ conf.original_name }}</p>
@@ -532,6 +532,26 @@
         
             {% include "objectproperty/semantic_properties/changed_property_object_property_is_defined_by.html" with context %}
         
+            {% include "objectproperty/semantic_properties/added_property_object_property_domain.html" with context %}
+        
+            {% include "objectproperty/semantic_properties/deleted_property_object_property_domain.html" with context %}
+        
+            {% include "objectproperty/semantic_properties/updated_property_object_property_domain.html" with context %}
+        
+            {% include "objectproperty/semantic_properties/moved_property_object_property_domain.html" with context %}
+        
+            {% include "objectproperty/semantic_properties/changed_property_object_property_domain.html" with context %}
+        
+            {% include "objectproperty/semantic_properties/added_property_object_property_range.html" with context %}
+        
+            {% include "objectproperty/semantic_properties/deleted_property_object_property_range.html" with context %}
+        
+            {% include "objectproperty/semantic_properties/updated_property_object_property_range.html" with context %}
+        
+            {% include "objectproperty/semantic_properties/moved_property_object_property_range.html" with context %}
+        
+            {% include "objectproperty/semantic_properties/changed_property_object_property_range.html" with context %}
+        
     
 
     <h1>Datatype Property</h1>
@@ -700,11 +720,27 @@
         
             {% include "datatypeproperty/semantic_properties/changed_property_datatype_property_is_defined_by.html" with context %}
         
+            {% include "datatypeproperty/semantic_properties/added_property_datatype_property_domain.html" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/deleted_property_datatype_property_domain.html" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/updated_property_datatype_property_domain.html" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/moved_property_datatype_property_domain.html" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/changed_property_datatype_property_domain.html" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/added_property_datatype_property_range.html" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/deleted_property_datatype_property_range.html" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/updated_property_datatype_property_range.html" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/moved_property_datatype_property_range.html" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/changed_property_datatype_property_range.html" with context %}
+        
     
 
-    <h1>Prefixes</h1>
-    <section class="ui basic segment">
-    {{ mc.render_namespaces(namespaces.namespaces_as_dict()) }}
-    </section>
 
 {% endblock %}
