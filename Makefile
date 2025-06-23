@@ -7,7 +7,7 @@ WARN_PRINT = \e[1;34mWARNING: \e[0m
 DEB_OS=$(shell command -v apt > /dev/null && echo 1)
 RPM_OS=$(shell command -v yum > /dev/null && echo 1)
 OS_DOCKER=$(shell command -v docker > /dev/null && echo 1)
-OS_DOCKERC=$(shell command -v docker-compose > /dev/null && echo 1)
+OS_DOCKERC=$(shell command -v docker compose > /dev/null && echo 1)
 
 #-----------------------------------------------------------------------------
 # Install dev environment
@@ -105,7 +105,7 @@ endif
 build-services:
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Building the RDF Differ micro-services'
-	@ docker-compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env build
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env build
 else
 	@ echo "$(MSG_PRINT)Docker not found, please see README"
 	false
@@ -117,16 +117,16 @@ build-externals:
 
 start-traefik: build-externals
 	@ echo -e "$(BUILD_PRINT)Starting the Traefik services $(END_BUILD_PRINT)"
-	@ docker-compose -p common --file ./docker/traefik/docker-compose.yml --env-file docker/.env up -d
+	@ docker compose -p common --file ./docker/traefik/docker-compose.yml --env-file docker/.env up -d
 
 stop-traefik:
 	@ echo -e "$(BUILD_PRINT)Stopping the Traefik services $(END_BUILD_PRINT)"
-	@ docker-compose -p common --file ./docker/traefik/docker-compose.yml --env-file docker/.env down
+	@ docker compose -p common --file ./docker/traefik/docker-compose.yml --env-file docker/.env down
 
 start-services: build-volumes
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Starting the RDF Differ micro-services'
-	@ docker-compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env up -d
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env up -d
 else
 	@ echo "$(MSG_PRINT)Docker not found, please see README"
 	false
@@ -135,7 +135,7 @@ endif
 stop-services:
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Stopping the RDF Differ micro-services'
-	@ docker-compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env stop
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env stop
 else
 	@ echo "$(MSG_PRINT)Docker not found, please see README"
 	false
@@ -147,11 +147,11 @@ endif
 #-----------------------------------------------------------------------------
 setup-docker-fuseki: | build-volumes
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
-	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env build rdf-differ-fuseki
+	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env build rdf-differ-fuseki
 
 run-docker-fuseki:
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
-	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-fuseki
+	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-fuseki
 
 #-----------------------------------------------------------------------------
 # Test commands
@@ -165,15 +165,15 @@ test-data-fuseki: | setup-docker-fuseki run-docker-fuseki
 
 run-docker-redis:
 	@ echo -e '$(BUILD_PRINT)Starting redis'
-	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-redis
+	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-redis
 
 run-docker-api:
 	@ echo -e '$(BUILD_PRINT)Starting api'
-	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-api
+	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-api
 
 run-docker-ui:
 	@ echo -e '$(BUILD_PRINT)Starting ui'
-	@ docker-compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-ui
+	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-ui
 
 test: | install-python-dependencies-dev test-data-fuseki run-docker-redis run-docker-api
 	@ echo "$(BUILD_PRINT)Running the tests using docker services"
