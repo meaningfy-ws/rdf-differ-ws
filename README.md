@@ -2,9 +2,6 @@
 
 A service for calculating the difference between versions of a given RDF dataset. Current implementation is based on the [skos-history tool](https://github.com/eu-vocabularies/skos-history). See the [wiki page of the original repository](https://github.com/jneubert/skos-history/wiki/Tutorial) for more technical details.
 
-![RDF differ test](https://github.com/eu-vocabularies/rdf-differ/workflows/RDF%20differ%20test%20and%20lint/badge.svg)
-[![codecov](https://codecov.io/gh/eu-vocabularies/rdf-differ/branch/master/graph/badge.svg)](https://codecov.io/gh/eu-vocabularies/rdf-differ)
-
 ## Installation
 > **NOTE**: The specified installation instructions are for development purposes only on a GNU/Linux operating system. _(Slight modifications are required for production use, including having a production level Fuseki server and Redis service available.)_
 
