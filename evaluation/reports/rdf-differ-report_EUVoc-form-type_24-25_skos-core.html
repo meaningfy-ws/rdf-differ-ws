@@ -1,0 +1,8132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>RDF Diff report</title>
+
+    <meta name="description" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7/semantic.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/stylesheets/jquery.tocify.min.css"
+          rel="stylesheet"
+          type="text/css">
+    <link href="https://code.jquery.com/ui/1.11.4/themes/redmond/jquery-ui.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+
+
+    <style>
+        .buttons-print {
+            margin-bottom: 0.5em !important;
+        }
+
+        #toc {
+            width: 15%;
+            margin-top: 2.5em;
+            padding: 0.5em;
+        }
+
+        .reportTitle {
+            margin-top: 1em !important;
+        }
+
+        footer {
+            background: #bdbdbd;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 50px;
+            margin: 0;
+        }
+
+        .footerText {
+            margin: revert !important;
+        }
+
+        #printButton{
+            float: right;
+            margin-top: 0.5em;
+        }
+
+        @media print {
+            #toc {
+                visibility: hidden;
+            }
+
+            #print-container {
+                width: 100% !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+
+            footer {
+                display: none;
+            }
+            #printButton {
+                visibility: hidden;
+            }
+            .dataTables_length, .dataTables_filter, .dt-buttons {
+                visibility: hidden !important;
+            }
+            @page {size: landscape !important}
+        }
+
+    </style>
+</head>
+
+<body>
+<main class="ui grid">
+    <div class="three wide column">
+        <div id="toc"></div>
+    </div>
+
+    <div id="print-container" class="ten wide column">
+        <button class="ui button" id="printButton">Print report</button>
+        <h1 class="ui header center aligned reportTitle" id="skip-toc">RDF Diff report</h1>
+        
+
+    <p>This report is automatically generated from the rdf-skos-test-form-typeYHi5WevZ RDF dataset on <time>09-Jul-2025T11:56:27</time>
+        and aims at presenting the difference between two versions of a SKOS vocabulary following the skos-core-en-only application profile.</p>
+    <p>Report details</p>
+    <p><strong>Dataset ID: </strong> rdf-skos-test-form-typeYHi5WevZ</p>
+    <p><strong>Dataset name: </strong> rdf-skos-test-form-type</p>
+    <p><strong>Old version file: </strong> form-type-skos_2024.rdf</p>
+    <p><strong>New version file: </strong> form-type-skos_2025.rdf</p>
+    <p><strong>Time: </strong> 09-Jul-2025T11:56:27</p>
+    <p><strong>Application profile: </strong> skos-core-en-only</p>
+
+
+
+
+
+<h1 class="ui header">Statistics</h1>
+<section class="ui basic segment">
+    
+        <h2>Concept Scheme</h2>
+        
+
+        <table class="display">
+            <thead class="center aligned">
+            <tr>
+                <th>Instance</th>
+                <th>Added</th>
+                <th>Deleted</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Concept Scheme</td>
+                
+                    
+                    
+                    
+        
+            
+
+                    
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                    
+        
+    
+                    
+                
+                    
+                    
+                    
+        
+            
+
+                    
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                    
+        
+    
+                    
+                
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="display">
+            <thead class="center aligned">
+            <tr>
+                <th>Property group</th>
+                <th>Property</th>
+                <th>Added</th>
+                <th>Deleted</th>
+                <th>Updated</th>
+                <th>Moved</th>
+                <th>Changed</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+                
+                
+
+                    <tr>
+                        <td>Labels</td>
+                        <td>skos:prefLabel</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Labels</td>
+                        <td>skos:altLabel</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+            
+                
+                
+
+                    <tr>
+                        <td>Semantic Properties</td>
+                        <td>skos:hasTopConcept</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>2</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+            
+            </tbody>
+        </table>
+
+    
+        <h2>Concept</h2>
+        
+
+        <table class="display">
+            <thead class="center aligned">
+            <tr>
+                <th>Instance</th>
+                <th>Added</th>
+                <th>Deleted</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Concept</td>
+                
+                    
+                    
+                    
+        
+            
+
+                    
+    
+
+        
+            <td>2</td>
+
+        
+
+    
+
+                    
+        
+    
+                    
+                
+                    
+                    
+                    
+        
+            
+
+                    
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                    
+        
+    
+                    
+                
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="display">
+            <thead class="center aligned">
+            <tr>
+                <th>Property group</th>
+                <th>Property</th>
+                <th>Added</th>
+                <th>Deleted</th>
+                <th>Updated</th>
+                <th>Moved</th>
+                <th>Changed</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+                
+                
+
+                    <tr>
+                        <td>Semantic Properties</td>
+                        <td>skos:inScheme</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>2</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Semantic Properties</td>
+                        <td>skos:topConceptOf</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>2</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Semantic Properties</td>
+                        <td>skos:broader</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Semantic Properties</td>
+                        <td>skos:narrower</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Semantic Properties</td>
+                        <td>skos:related</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+            
+                
+                
+
+                    <tr>
+                        <td>Notes</td>
+                        <td>skos:notation</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Notes</td>
+                        <td>skos:changeNote</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Notes</td>
+                        <td>skos:definition</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>2</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Notes</td>
+                        <td>skos:example</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Notes</td>
+                        <td>skos:historyNote</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Notes</td>
+                        <td>skos:scopeNote</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Notes</td>
+                        <td>skos:editorialNote</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+            
+                
+                
+
+                    <tr>
+                        <td>Labels</td>
+                        <td>skos:prefLabel</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>48</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>1</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>1</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Labels</td>
+                        <td>skos:altLabel</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Labels</td>
+                        <td>skos:hiddenLabel</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+            
+                
+                
+
+                    <tr>
+                        <td>Mapping Properties</td>
+                        <td>skos:broadMatch</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Mapping Properties</td>
+                        <td>skos:narrowMatch</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Mapping Properties</td>
+                        <td>skos:closeMatch</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Mapping Properties</td>
+                        <td>skos:exactMatch</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Mapping Properties</td>
+                        <td>skos:relatedMatch</td>
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                            
+                            
+                            
+        
+            
+
+                            
+    
+
+        
+            <td>0</td>
+
+        
+
+    
+
+                            
+        
+    
+                            
+                        
+                    </tr>
+
+                
+            
+            </tbody>
+        </table>
+
+    
+</section>
+
+
+    <h1>Concept Scheme</h1>
+
+
+        
+
+
+    
+    
+
+    
+
+        
+
+
+    
+    
+
+    
+
+
+        <h2>Labels</h2>
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+
+        <h2>Semantic Properties</h2>
+
+            
+
+
+    
+    
+
+    
+        
+            
+    
+    
+<h3 class="ui header">Added has top concepts</h3>
+<section class="ui basic segment">
+    <p>The table below lists the added <strong>skos:hasTopConcept</strong>
+    </p>
+    <p><strong>Query identifier:</strong> added_property_concept_scheme_has_top_concept.rq</p>
+    
+        
+        <table class="display">
+            <thead class="center aligned">
+                <tr>
+                    
+                        
+                            <th>instance</th>
+                        
+                    
+                        
+                            <th>class</th>
+                        
+                    
+                        
+                            <th>prefLabel</th>
+                        
+                    
+                        
+                    
+                        
+                            <th>property</th>
+                        
+                    
+                        
+                            <th>value</th>
+                        
+                    
+                        
+                    
+                        
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>http://publications.europa.eu/resource/authority/form-type</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>http://www.w3.org/2004/02/skos/core#ConceptScheme</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Form type@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:hasTopConcept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>http://publications.europa.eu/resource/authority/form-type/completion</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns1:form-type</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:ConceptScheme</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Form type@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:hasTopConcept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+            </tbody>
+            <caption>Added has top concept</caption>
+        </table>
+    
+</section>
+    
+    
+        
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+
+
+    <h1>Concept</h1>
+
+
+        
+
+
+    
+    
+
+   
+        
+            
+    
+    
+    <h2 class="ui header">Added Concepts</h2>
+    <section class="ui basic segment">
+        <p>The table below lists the added <strong>skos:Concept</strong>
+        </p>
+        <p><strong>Query identifier:</strong> added_instance_concept.rq</p>
+        
+        
+        <table class="display">
+            <thead class="center aligned">
+                <tr>
+                    
+                        
+                            <th>class</th>
+                        
+                    
+                        
+                            <th>instance</th>
+                        
+                    
+                        
+                            <th>prefLabel</th>
+                        
+                    
+                        
+                    
+                        
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+            </tbody>
+            <caption>Added Concepts</caption>
+        </table>
+    
+    </section>
+    
+    
+        
+    
+
+    
+
+        
+
+
+    
+    
+
+    
+
+
+        <h2>Semantic Properties</h2>
+
+            
+
+
+    
+    
+
+    
+        
+            
+    
+    
+<h3 class="ui header">Added in schemes</h3>
+<section class="ui basic segment">
+    <p>The table below lists the added <strong>skos:inScheme</strong>
+    </p>
+    <p><strong>Query identifier:</strong> added_property_concept_in_scheme.rq</p>
+    
+        
+        <table class="display">
+            <thead class="center aligned">
+                <tr>
+                    
+                        
+                            <th>instance</th>
+                        
+                    
+                        
+                            <th>class</th>
+                        
+                    
+                        
+                            <th>prefLabel</th>
+                        
+                    
+                        
+                    
+                        
+                            <th>property</th>
+                        
+                    
+                        
+                            <th>value</th>
+                        
+                    
+                        
+                    
+                        
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:inScheme</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns1:form-type</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:inScheme</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns1:form-type</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+            </tbody>
+            <caption>Added in scheme</caption>
+        </table>
+    
+</section>
+    
+    
+        
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+        
+            
+    
+    
+<h3 class="ui header">Added top concept ofs</h3>
+<section class="ui basic segment">
+    <p>The table below lists the added <strong>skos:topConceptOf</strong>
+    </p>
+    <p><strong>Query identifier:</strong> added_property_concept_top_concept_of.rq</p>
+    
+        
+        <table class="display">
+            <thead class="center aligned">
+                <tr>
+                    
+                        
+                            <th>instance</th>
+                        
+                    
+                        
+                            <th>class</th>
+                        
+                    
+                        
+                            <th>prefLabel</th>
+                        
+                    
+                        
+                    
+                        
+                            <th>property</th>
+                        
+                    
+                        
+                            <th>value</th>
+                        
+                    
+                        
+                    
+                        
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:topConceptOf</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns1:form-type</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:topConceptOf</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns1:form-type</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+            </tbody>
+            <caption>Added top concept of</caption>
+        </table>
+    
+</section>
+    
+    
+        
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+    
+        <h2>Notes</h2>
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+    
+    
+<h3 class="ui header">Added definitions</h3>
+<section class="ui basic segment">
+    <p>The table below lists the added <strong>skos:definition</strong>
+    </p>
+    <p><strong>Query identifier:</strong> added_property_concept_definition.rq</p>
+    
+        
+        <table class="display">
+            <thead class="center aligned">
+                <tr>
+                    
+                        
+                            <th>instance</th>
+                        
+                    
+                        
+                            <th>class</th>
+                        
+                    
+                        
+                            <th>prefLabel</th>
+                        
+                    
+                        
+                    
+                        
+                            <th>property</th>
+                        
+                    
+                        
+                            <th>value</th>
+                        
+                    
+                        
+                    
+                        
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:definition</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Announcement type that officially marks the end of contract.@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:definition</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Announcement type that precedes a procurement process. It is not a call for competition.@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+            </tbody>
+            <caption>Added definition</caption>
+        </table>
+    
+</section>
+    
+    
+        
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+            
+
+
+    
+    
+
+    
+        
+    
+        <h2>Labels</h2>
+
+            
+
+
+    
+    
+
+    
+        
+            
+    
+    
+<h3 class="ui header">Added pref labels</h3>
+<section class="ui basic segment">
+    <p>The table below lists the added <strong>skos:prefLabel</strong>
+    </p>
+    <p><strong>Query identifier:</strong> added_property_concept_pref_label.rq</p>
+    
+        
+        <table class="display">
+            <thead class="center aligned">
+                <tr>
+                    
+                        
+                            <th>instance</th>
+                        
+                    
+                        
+                            <th>class</th>
+                        
+                    
+                        
+                            <th>prefLabel</th>
+                        
+                    
+                        
+                    
+                        
+                            <th>property</th>
+                        
+                    
+                        
+                            <th>value</th>
+                        
+                    
+                        
+                    
+                        
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Abschlussbekanntmachung@de</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Achèvement@fr</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completamento@it</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Conclusão@pt</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Cur i gcrích@ga</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Dokončenie@sk</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Dokončení@cs</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Finalización@es</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Færdiggørelse@da</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Genomfört@sv</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Izpildīts@lv</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Izvršenje@hr</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Lõpuleviimine@et</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Teljesítés@hu</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Tlestija@mt</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Toteutus@fi</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Užbaigimas@lt</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Voltooiing@nl</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Zaključek@sl</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Zakończenie@pl</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Încheiere@ro</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Ολοκλήρωση@el</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:completion</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Completion@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Приключване@bg</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Apspriešanās@lv</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Comhairliúchán@ga</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consulta@es</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consulta@pt</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultare@ro</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@fr</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultazione@it</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Høring@da</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Kartoitus@fi</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Konsultacija@lt</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Konsultacje@pl</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Konsultazzjoni@mt</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Konsulteerimine@et</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Konzultace@cs</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Konzultácia@sk</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Konzultáció@hu</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Posvetovanje@sl</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Provjera@hr</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Raadpleging@nl</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Samråd@sv</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Vorankündigung@de</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Διαβούλευση@el</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:consultation</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Consultation@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Консултация@bg</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+            </tbody>
+            <caption>Added pref label</caption>
+        </table>
+    
+</section>
+    
+    
+        
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+        
+            
+    
+    
+<h3 class="ui header">Deleted pref labels</h3>
+<section class="ui basic segment">
+    <p>The table below lists the deleted <strong>skos:prefLabel</strong>
+    </p>
+    <p><strong>Query identifier:</strong> deleted_property_concept_pref_label.rq</p>
+    
+        
+        <table class="display">
+            <thead class="center aligned">
+                <tr>
+                    
+                        
+                            <th>instance</th>
+                        
+                    
+                        
+                            <th>class</th>
+                        
+                    
+                        
+                            <th>prefLabel</th>
+                        
+                    
+                        
+                    
+                        
+                            <th>property</th>
+                        
+                    
+                        
+                            <th>value</th>
+                        
+                    
+                        
+                    
+                        
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:competition</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Competition@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Aνταγωνισμός@el</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+            </tbody>
+            <caption>Deleted pref label</caption>
+        </table>
+    
+</section>
+    
+    
+        
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+        
+            
+    
+    
+<h3 class="ui header">Updated pref labels</h3>
+<section class="ui basic segment">
+    <p>The table below lists the updated <strong>skos:prefLabel</strong>
+    </p>
+    <p><strong>Query identifier:</strong> updated_property_concept_pref_label.rq</p>
+    
+        
+        <table class="display">
+            <thead class="center aligned">
+                <tr>
+                    
+                        
+                            <th>instance</th>
+                        
+                    
+                        
+                            <th>class</th>
+                        
+                    
+                        
+                            <th>prefLabel</th>
+                        
+                    
+                        
+                    
+                        
+                            <th>property</th>
+                        
+                    
+                        
+                            <th>oldValue</th>
+                        
+                    
+                        
+                    
+                        
+                            <th>newValue</th>
+                        
+                    
+                        
+                    
+                        
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>ns2:competition</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:Concept</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Competition@en</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>skos:prefLabel</td>
+                                    
+                                
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Aνταγωνισμός@el</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                                
+                                
+                                    
+                                    
+                                        <td>Διαγωνισμός@el</td>
+                                    
+                                
+                            
+                        
+                            
+                        
+                            
+                        
+                    </tr>
+                
+            </tbody>
+            <caption>Updated pref label</caption>
+        </table>
+    
+</section>
+    
+    
+        
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+
+        <h2>Mapping Properties</h2>
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+            
+
+
+    
+    
+
+    
+
+
+
+    <h1>Prefixes</h1>
+    <section class="ui basic segment">
+    
+    <table class="display">
+        <thead class="center aligned">
+        <tr>
+            <th>Namespace</th>
+            <th>URI</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+            <tr>
+                <td>brick</td>
+                <td>https://brickschema.org/schema/Brick#</td>
+            </tr>
+        
+            <tr>
+                <td>csvw</td>
+                <td>http://www.w3.org/ns/csvw#</td>
+            </tr>
+        
+            <tr>
+                <td>dc</td>
+                <td>http://purl.org/dc/elements/1.1/</td>
+            </tr>
+        
+            <tr>
+                <td>dcam</td>
+                <td>http://purl.org/dc/dcam/</td>
+            </tr>
+        
+            <tr>
+                <td>dcat</td>
+                <td>http://www.w3.org/ns/dcat#</td>
+            </tr>
+        
+            <tr>
+                <td>dcmitype</td>
+                <td>http://purl.org/dc/dcmitype/</td>
+            </tr>
+        
+            <tr>
+                <td>dcterms</td>
+                <td>http://purl.org/dc/terms/</td>
+            </tr>
+        
+            <tr>
+                <td>doap</td>
+                <td>http://usefulinc.com/ns/doap#</td>
+            </tr>
+        
+            <tr>
+                <td>foaf</td>
+                <td>http://xmlns.com/foaf/0.1/</td>
+            </tr>
+        
+            <tr>
+                <td>geo</td>
+                <td>http://www.opengis.net/ont/geosparql#</td>
+            </tr>
+        
+            <tr>
+                <td>ns1</td>
+                <td>http://publications.europa.eu/resource/authority/</td>
+            </tr>
+        
+            <tr>
+                <td>ns2</td>
+                <td>http://publications.europa.eu/resource/authority/form-type/</td>
+            </tr>
+        
+            <tr>
+                <td>odrl</td>
+                <td>http://www.w3.org/ns/odrl/2/</td>
+            </tr>
+        
+            <tr>
+                <td>org</td>
+                <td>http://www.w3.org/ns/org#</td>
+            </tr>
+        
+            <tr>
+                <td>owl</td>
+                <td>http://www.w3.org/2002/07/owl#</td>
+            </tr>
+        
+            <tr>
+                <td>prof</td>
+                <td>http://www.w3.org/ns/dx/prof/</td>
+            </tr>
+        
+            <tr>
+                <td>prov</td>
+                <td>http://www.w3.org/ns/prov#</td>
+            </tr>
+        
+            <tr>
+                <td>qb</td>
+                <td>http://purl.org/linked-data/cube#</td>
+            </tr>
+        
+            <tr>
+                <td>rdf</td>
+                <td>http://www.w3.org/1999/02/22-rdf-syntax-ns#</td>
+            </tr>
+        
+            <tr>
+                <td>rdfs</td>
+                <td>http://www.w3.org/2000/01/rdf-schema#</td>
+            </tr>
+        
+            <tr>
+                <td>schema</td>
+                <td>https://schema.org/</td>
+            </tr>
+        
+            <tr>
+                <td>sh</td>
+                <td>http://www.w3.org/ns/shacl#</td>
+            </tr>
+        
+            <tr>
+                <td>skos</td>
+                <td>http://www.w3.org/2004/02/skos/core#</td>
+            </tr>
+        
+            <tr>
+                <td>sosa</td>
+                <td>http://www.w3.org/ns/sosa/</td>
+            </tr>
+        
+            <tr>
+                <td>ssn</td>
+                <td>http://www.w3.org/ns/ssn/</td>
+            </tr>
+        
+            <tr>
+                <td>time</td>
+                <td>http://www.w3.org/2006/time#</td>
+            </tr>
+        
+            <tr>
+                <td>vann</td>
+                <td>http://purl.org/vocab/vann/</td>
+            </tr>
+        
+            <tr>
+                <td>void</td>
+                <td>http://rdfs.org/ns/void#</td>
+            </tr>
+        
+            <tr>
+                <td>wgs</td>
+                <td>https://www.w3.org/2003/01/geo/wgs84_pos#</td>
+            </tr>
+        
+            <tr>
+                <td>xml</td>
+                <td>http://www.w3.org/XML/1998/namespace</td>
+            </tr>
+        
+            <tr>
+                <td>xsd</td>
+                <td>http://www.w3.org/2001/XMLSchema#</td>
+            </tr>
+        
+        </tbody>
+        <caption>Prefixes</caption>
+    </table>
+
+    </section>
+
+
+    </div>
+</main>
+<footer>
+    <div class="ui container center aligned">
+        <p class="footerText">Powered by
+            <a href="https://github.com/meaningfy-ws">Meaningfy</a></p>
+    </div>
+</footer>
+
+
+</body>
+</html>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7/semantic.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("table.display").DataTable({
+            dom: 'B<"clear">lfrtip',
+            buttons: [
+                'print'
+            ],
+            "lengthMenu": [[5, 15, 30, -1], [5, 15, 30, "All"]],
+            responsive: {
+                details: true
+            }
+        });
+        $("h2").each(function () {
+            if (!$(this).next().is("section") && !$(this).next().is("h3") && !$(this).next().hasClass("dataTables_wrapper")) {
+                $(this).remove();
+            }
+        });
+        $("h1").not(':first').each(function () {
+            if (!$(this).next().is("h2") && !$(this).next().is("section")) {
+                $(this).remove();
+            }
+        });
+
+        let number_of_headings_one = $('h1').toArray()
+
+        if (number_of_headings_one.length === 3) {
+            $("h1").not(':first').each(function () {
+                    $(this).next().remove()
+                    $(this).remove();
+            });
+            $("#print-container").append("<p><strong>Datasets are identical and no difference was found</strong></p>")
+        }
+
+        $(function () {
+            $("#toc").tocify({
+                selectors: "h1,h2",
+                theme: "jqueryui",
+                hashGenerator: "pretty",
+                ignoreSelector: "#skip-toc",
+                highlightOnScroll: "true",
+                highlightDefault: "true"
+            });
+        });
+
+        $(function () {
+            $("#printButton").click(function () {
+                $("table.display").DataTable().page.len(-1).draw()
+                window.print()
+            })
+        })
+
+
+    });
+
+</script>
