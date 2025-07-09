@@ -2396,6 +2396,102 @@
                     </tr>
 
                 
+
+                    <tr>
+                        <td>Semantic Properties</td>
+                        <td>rdfs:domain</td>
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_object_property_domain.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_object_property_domain.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_object_property_domain.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_object_property_domain.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_object_property_domain.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Semantic Properties</td>
+                        <td>rdfs:range</td>
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_object_property_range.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_object_property_range.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_object_property_range.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_object_property_range.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_object_property_range.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                    </tr>
+
+                
             
             </tbody>
         </table>
@@ -3168,6 +3264,102 @@
                             
                         
                             {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_datatype_property_is_defined_by.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Semantic Properties</td>
+                        <td>rdfs:domain</td>
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_datatype_property_domain.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_datatype_property_domain.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_datatype_property_domain.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_datatype_property_domain.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_datatype_property_domain.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                    </tr>
+
+                
+
+                    <tr>
+                        <td>Semantic Properties</td>
+                        <td>rdfs:range</td>
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_datatype_property_range.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_datatype_property_range.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_datatype_property_range.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_datatype_property_range.rq"]).fetch_tabular() %}
+                            
+                            {% call mc.render_fetch_results(content, error) %}
+
+                            {{ mc.count_value(content) }}
+                            {% endcall %}
+                            
+                        
+                            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_datatype_property_range.rq"]).fetch_tabular() %}
                             
                             {% call mc.render_fetch_results(content, error) %}
 
