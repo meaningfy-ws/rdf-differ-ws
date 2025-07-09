@@ -1,6 +1,6 @@
 # RDF Differ
 
-RDF Differ is a schema-aware diff reporting tool for RDF vocabularies, designed to track and report meaingful changes—beyond the line- or word-based change detection of contemporary diff tools. Whether you're maintaining SKOS taxonomies or lightweight ontologies, RDF Differ helps you surface changes that impact interoperability, governance, and collaborative curation.
+RDF Differ is a schema-aware diff reporting tool for RDF vocabularies, designed to track and report meaingful changes—beyond the line- or word-based change detection of contemporary diff tools. RDF Differ helps you surface changes that impact interoperability, governance, and collaborative curation when developing and maintaining SKOS taxonomies or lightweight ontologies.
 
 With application profile (AP) templates that can be reused, extended or created anew, RDF Differ provides:
 
@@ -9,7 +9,7 @@ With application profile (AP) templates that can be reused, extended or created 
 - 🎛️ **Configurable Templates:** Customizable AP templates and fully automated query generation using [diff-query-generator](https://github.com/meaningfy-ws/diff-query-generator) (dqgen)
 - 🌐 **ReST API & GUI:** A fully qualified web service (WS) offering a web API and UI
 
-RDF Differ is supported by a collection of tools, and so can be thought of as a pipeline:
+RDF Differ comprises a set of tools that collectively follow a pipeline architecture:
 
 ![The RDF Differ Pipeline](docs/images/rdf-differ-pipeline.png)
 
@@ -17,9 +17,9 @@ But you needn't worry about all of that, so here's what a report looks like:
 
 ![An RDF Differ Report](docs/images/rdf-differ-report-example.png)
 
-If you need a _semantic_ RDF diff tool with a reporting feature that's as simple as possible, but not simpler, then look no more. We've even made it onto Copilot:
+RDF Differ is modular, extensible, and built to bridge the gap between basic RDF comparison tools and heavyweight OWL diffing frameworks. If you need a _semantic_ RDF diff tool with a reporting feature that's as simple as possible, but not simpler, then look no more. <!-- We've even made it onto Copilot: -->
 
-![MS Copilot on RDF Diff Tools](docs/images/rdf-differ-copilot-answer.png)
+<!-- ![MS Copilot on RDF Diff Tools](docs/images/rdf-differ-copilot-answer.png) -->
 
 ## Installation
 > **NOTE**: The specified installation instructions are for development purposes only on a GNU/Linux operating system. _(Slight modifications are required for production use, including having a production level Fuseki server and Redis service available.)_
