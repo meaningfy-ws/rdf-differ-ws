@@ -1,0 +1,42 @@
+RDF Differ
+- navigate to creation to upload files and enter some metadata
+- navigate to listing to select profile/format and generate report
+- refresh to download and view report
+
+OWL Difference (Protege plug-in)
+- compares any RDF vocabulary understood by Protege including OWL ontologies and their included imports
+- failed to load reference OWL ontology for comparison due to unresolvable imports, so removed imports
+- order matters (first open the latest one and compare against old/"original")
+- can detect "refactor" operations with different strengths (ignore, conservative, reasonable, apply all algorithms)
+- captures changes at the axiom level, meaning nearly all types of OWL changes including restrictions (presents Manchester-type of syntax for changes)
+- runs in a few milliseconds
+
+OWLDiff (Standalone, CLI, Protege plug-in)
+- requires building from source
+- failed compiling, had to replace http to https for the kbss and tmatesoft repos across two POM files, update Lombok version from 1.18.16 to 1.18.32
+- outdated instructions (paths to and how to run 'owldiff' shell script not specified, JAR file not specified)
+- improper scripts (shell scripts within each module point to author's predefined path)
+- to build CLI, Standalone as shaded/FAT Jar `mvn package shade:shade` otherwise NoClassDefFoundError
+- mvn exec:java `-Dexec.mainClass="cz.cvut.kbss.owldiff.standalone.SwingDiffFrame"
+- make sure to install platform-independent Protege to ensure no JVM conflict between
+- ux not very beginner-friendly, not apparent what changes are where, no tooltips on the menu items
+
+Ecco
+- by the folks at ManU
+- linked web application not available
+- linked thesis not available
+- requires building from source, builds without issue w/ Java 22
+- lacking clear building and running instructions
+- script ecco.bat/ecco.sh expects a target/ecco.jar but it's not produced, rename required
+- file path arguments needs to be absolute and Linux only, did not interpret Windows paths at all
+- ePO comparison failed with `Literals can only use the datatypes from the OWL 2 datatype map`
+- can produce HTML reports with basic interactivity (select, expand, collapse)
+- ux not beginner friendly, terminology very advanced, good only for OWL experts
+
+Quit Diff
+- documented to be installable with Python Pipx but last package released in 2017
+- somewhat active (last update 9 months ago)
+- similar to Jena's rdfdiff or Redland's rdfdiff
+
+SKOS example with known change:
+- Form Type https://op.europa.eu/en/web/eu-vocabularies/dataset/-/resource?uri=http://publications.europa.eu/resource/dataset/form-type (20240612-0 vs. 20250319-0)
