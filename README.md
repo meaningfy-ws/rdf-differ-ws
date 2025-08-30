@@ -147,14 +147,19 @@ make run-local-fuseki
 ## Testing
 
 The test suite spins up certain duplicate docker services _without_ traefik, so
-access to those specific services are directly through the localhost and respective
-ports. Run the following to run everything:
+access to those specific services are directly through the localhost and
+respective ports. Run the following to start everything and also remove the
+duplicate testing containers at the end:
 
 ```bash
-make test
+make ENVIRONMENT=test test teardown-services
 ```
 
-This creates the `subdiv` and `abc` dummy datasets once in the running fuseki service, and a `dataset{ID}` dataset (where `{ID}` is a short random ID) as many times as the tests are run. The `db` folder is populated by the tests.
+This creates the `subdiv` and `abc` dummy datasets once in a new fuseki
+container, and a `dataset{ID}` dataset (where `{ID}` is a short random ID) as
+many times as the tests are run. The `db` folder is populated by the tests and
+it is _not_ removed automatically. Omit `teardown-services` if you want to
+inspect the test containers for any reason after the tests complete.
 
 ## Adding a new Application Profile template
 For adding a new Application Profile (AP) create a new folder under [resources/templates](resources/templates) with the name
