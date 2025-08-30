@@ -4,7 +4,7 @@ title: rdf-differ-ws
 ---
 
 <p align="center">
-  <img src="logo.png" alt="rdf-differ-ws logo" width="240"/>
+  <img src="assets/img/logo.png" alt="rdf-differ-ws logo" width="240"/>
 </p>
 
 <h1 align="center">rdf-differ-ws</h1>
