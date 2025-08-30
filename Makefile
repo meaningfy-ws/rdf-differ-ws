@@ -141,17 +141,25 @@ else
 	false
 endif
 
+teardown-services:
+ifeq ($(OS_DOCKERC), 1)
+	@ echo -e '$(BUILD_PRINT)Tearing down the microservice environment'
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env down --volumes --remove-orphans
+else
+	@ echo "$(MSG_PRINT)Docker not found, please see README"
+	false
+endif
 
 #-----------------------------------------------------------------------------
 # Fuseki control for github actions
 #-----------------------------------------------------------------------------
 setup-docker-fuseki: | build-volumes
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
-	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env build rdf-differ-fuseki
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env build rdf-differ-fuseki
 
 run-docker-fuseki:
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
-	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-fuseki
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-fuseki
 
 #-----------------------------------------------------------------------------
 # Test commands
@@ -165,11 +173,11 @@ test-data-fuseki: | setup-docker-fuseki run-docker-fuseki
 
 run-docker-redis:
 	@ echo -e '$(BUILD_PRINT)Starting redis'
-	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-redis
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-redis
 
 run-docker-api:
 	@ echo -e '$(BUILD_PRINT)Starting api'
-	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-api
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-api
 
 run-docker-ui:
 	@ echo -e '$(BUILD_PRINT)Starting ui'
