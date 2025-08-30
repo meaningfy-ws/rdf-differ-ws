@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RDF Differ</title>
+  <style>
+    :root {
+      --primary: #2196F3;
+      --secondary: #4CAF50;
+      --danger: #E53935;
+      --text: #333;
+      --bg: #fdfdfd;
+    }
+    body {
+      font-family: "Inter", "Segoe UI", sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+    }
+    header img {
+      width: 140px;
+      margin-bottom: 1rem;
+    }
+    header h1 {
+      margin: 0.2em 0;
+      font-size: 2.5rem;
+      color: var(--primary);
+    }
+    header p {
+      font-size: 1.2rem;
+      color: #666;
+    }
+    section {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    h2 {
+      color: var(--primary);
+      border-bottom: 2px solid #eee;
+      padding-bottom: 0.3rem;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: "Fira Code", monospace;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .feature {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+      padding: 2rem 1rem;
+      border-top: 1px solid #eee;
+      margin-top: 3rem;
+    }
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="assets/img/logo.png" alt="rdf-differ-ws logo">
+    <h1>RDF Differ</h1>
+    <p>Compare RDF datasets with precision – spot added, removed, and changed resources</p>
+  </header>
+
+  <section>
+    <h2>🔎 What is it?</h2>
+    <p><strong>rdf-differ-ws</strong> is the heart of the RDF Differ web app --
+    a lightweight web service for computing differences between RDF datasets
+    using application profile (AP) templates. It highlights <em>added, removed,
+    and modified resources</em> (entities like classes and properties or any
+    first-class citizen of your vocabulary) in a simple UI and API, making it
+    easier to track changes in knowledge graph models.</p>
+  </section>
+
+  <section>
+    <h2>🚀 Quickstart</h2>
+    <pre><code># Run with Docker
+make
+</code></pre>
+  </section>
+
+  <section>
+    <h2>📄 Resources</h2>
+    <ul>
+      <li><a href="https://github.com/meaningfy-ws/rdf-differ-ws">GitHub Repository</a></li>
+      <li><a href="https://meaningfy.ws/wp-content/uploads/2025/08/rdf-differ_semantics25_demo_paper.pdf">Demo Paper @ SEMANTiCS 2025</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    Made with ❤️ by <a href="https://meaningfy.ws/">Meaningfy</a>
+  </footer>
+
+</body>
+</html>
