@@ -31,11 +31,11 @@ The applications are made available (by default) on ports [8030](http:localhost:
 
 > For the docker services with Traefik, you have to access these differently, through their local domains instead, for e.g. <https://rdf.localhost/> (ui). See <https://monitor.localhost> > Routers > Explore (`Host(...)`).
 >
-> On Windows/WSL2 with Traefik, `curl` works only _outside_ WSL without SSL/TLS, e.g. via Git Bash `curl https://API.localhost/diffs --insecure`.
+> On Windows/WSL2 with Traefik, `curl` works only _outside_ WSL without SSL/TLS, e.g. via Git Bash `curl https://api.localhost/diffs --insecure`.
 
-For all output except Fuseki, see the `logs` folder, e.g. `tail -f logs/API.log` to follow the API output. For Fuseki, run `docker logs fuseki` (add `-f` to follow).
+For all output except Fuseki, see the `logs` folder, e.g. `tail -f logs/api.log` to follow the API output. For Fuseki, run `docker logs fuseki` (add `-f` to follow).
 
-> For the docker services with Traefik, you have to get to the logs from inside the container, for example, via `docker exec -it rdf-differ-API-dev tail -f logs/API.log` where `rdf-differ-API-dev` is the name of the API container (see `docker ps`).
+> For the docker services with Traefik, you have to get to the logs from inside the container, for example, via `docker exec -it rdf-differ-api-dev tail -f logs/api.log` where `rdf-differ-api-dev` is the name of the API container (see `docker ps`).
 
 [This file](curl-examples.md) contains a list of examples on how to use the API. (please translate the URLs accordingly for Traefik domains as mentioned above)
 
@@ -136,10 +136,10 @@ To reiterate, if you are running the project for the first time this would be th
 ```bash
 make install-os-dependencies
 make install-python-dependencies
-make run-system-Redis
-make run-local-API
+make run-system-redis
+make run-local-api
 make run-local-ui
-make setup-local-Fuseki
+make setup-local-fuseki
 ```
 
 In a separate terminal process remember to run and keep open:
@@ -370,14 +370,13 @@ The example below will show how to add a complete row in the statistics section 
 </tr>
 ```
 
-#### Removing a query/section
+#### Removing a query/section from HTML
 
 To remove a section from the existing report you just need to delete or comment the include statement from the main.html
 file. If you decide to delete the include statement it's recommended to delete the query from the queries folder to avoid
 confusions later on.
 
 ```python
-      Include statement
             {% include "conceptscheme/labels/added_property_concept_scheme_pref_label.html" with context %}
 ```
 
@@ -457,13 +456,13 @@ by the filename and will contain a results key that will represent the result se
 
 ```json
 {
-   --- Metadata
+   //--- Metadata
    
     "dataset_name": "name of dataset",
     "timestamp": "time",
     "application_profile": "application profile namme",
     
-    --- Query result set
+    //--- Query result set
     
     "count_changed_property_concept_definition.rq":
     {
@@ -494,12 +493,11 @@ by the filename and will contain a results key that will represent the result se
 
 ### Adjusting an existing JSON template
 
-#### Removing a query/section
+#### Removing a query/section from JSON
 
 To remove a query result set from the report simply remove the query from the queries folder.
-_Note_ Doing this will also affect the html template and it's recommended to ajust the html template, if this exists as
-a template variant for the application profile that you are working with, following the
-instruction above to avoid errors when generating the hmtl template variant.
+
+_Note: Doing this will also affect the html template and it's recommended to adjust the html template, if this exists as a template variant for the application profile that you are working with, following the instruction above to avoid errors when generating the hmtl template variant._
 
 ## Contributing
 
