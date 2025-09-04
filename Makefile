@@ -16,13 +16,7 @@ OS_DOCKERC=$(shell command -v docker compose > /dev/null && echo 1)
 # how to set envs to local
 # set -o allexport; source docker/.env; set +o allexport
 
-setup: | install build-volumes start-traefik start-services
-	@ echo "$(MSG_PRINT)Docker-based services started; make stop to stop"
-
-setup-dev: | install-dev build-volumes start-traefik start-services
-	@ echo "$(MSG_PRINT)Docker-based services started; make stop to stop"
-
-start: | build-volumes start-traefik start-services
+start: | start-traefik start-services
 	@ echo "$(MSG_PRINT)Docker-based services started; make stop to stop"
 
 stop: | stop-traefik stop-services
@@ -184,7 +178,7 @@ run-docker-ui:
 	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-ui
 
 test: | install-python-dependencies-dev test-data-fuseki run-docker-redis run-docker-api
-	@ echo "$(BUILD_PRINT)Running the tests using docker services"
+	@ echo "$(BUILD_PRINT)Running tests using Docker services"
 	@ pytest
 
 lint:
