@@ -15,7 +15,9 @@ from tests.conftest import helper_create_skos_runner
 
 
 @pytest.mark.parametrize("filename, file_format", [('test.rdf', 'application/rdf+xml'),
-                                                   ('test.trix', 'application/xml'),
+                                                   ('test.owl', 'application/rdf+xml'),
+                                                   ('test.trix', 'application/trix'),
+                                                   ('test.trig', 'application/trig'),
                                                    ('test.nq', 'application/n-quads'),
                                                    ('test.nt', 'application/n-triples'),
                                                    ('test.ttl', 'text/turtle'),
@@ -46,7 +48,7 @@ def test_file_formats_different():
     with pytest.raises(Exception) as exception:
         _ = helper_create_skos_runner(old_version_file='old.rdf', new_version_file='new.trix')
 
-    assert 'File formats are different: application/rdf+xml, application/xml' in str(exception.value)
+    assert 'File formats are different: application/rdf+xml, application/trix' in str(exception.value)
 
 
 def test_uris_creation():

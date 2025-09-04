@@ -157,7 +157,9 @@ def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
 
 INPUT_MIME_TYPES = {
     'rdf': 'application/rdf+xml',
-    'trix': 'application/xml',
+    'owl': 'application/rdf+xml',
+    'trix': 'application/trix',
+    "trig": "application/trig",
     'nq': 'application/n-quads',
     'nt': 'application/n-triples',
     'jsonld': 'application/ld+json',
