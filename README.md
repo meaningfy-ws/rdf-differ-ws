@@ -23,7 +23,7 @@ RDF Differ is modular, extensible, and built to bridge the gap between basic RDF
 
 ## Installation
 
-> **NOTE**: The specified installation instructions are for development purposes only on a GNU/Linux operating system. _(Slight modifications are required for production use, including having a production level Fuseki server and Redis service available.)_
+> **NOTE**: The specified installation instructions are for personal deployment purposes only on a *NIX operating system. _(Slight modifications are required for production use, including having production-level Fuseki and Redis servers available.)_
 
 RDF Differ uses Fuseki (as the triplestore/database), Celery (for multithreading programming), Gunicorn (for serving), and Redis (for queue-based pesistent storage). For the corresponding Docker micro-services, it uses Traefik for the networking, _except when running tests_.
 
@@ -48,39 +48,23 @@ sudo yum install epel-release
 ```
 
 For Debian derivative systems, no additional package repository should be needed, for at least Ubuntu 18.04. While we do not test for Windows/WSL2
-or Mac (because of some limitations with GitHub CI), those platforms should work as well. Even Windows 10/11 alone should work as long as you don't use Make but Python and Docker commands directly, as the Makefile contains ASCII escape sequencies *NIX commands which PowerShell cannot interpret.
+or Mac (because of some limitations with GitHub CI), those platforms should work as well. Even Windows 10/11 alone should work as long as you don't use Make but Python and Docker commands directly, as the Makefile contains ASCII escape sequencies and *NIX commands which PowerShell cannot interpret.
 
 ### Installation with Docker (recommended)
 
-Run the following command to install all required dependencies on either a Debian or Red Hat system, start up required (docker) services -- including databases -- and run the application (API + ui):
+Run the following command to install all required dependencies on either a
+Debian, Red Hat or compatible WSL system, start up required (Docker) services
+-- including databases -- and run the application (API + UI):
 
 ```bash
 make
 ```
 
-By default, that runs the first build target, currently `make setup`. You must have `docker` and `docker-compose` installed if you would like to use the micro-services to run everything, everywhere, all at once.
+By default, that runs the first build target, currently `make start`. You must
+have `docker` and `docker-compose` installed if you would like to use the
+micro-services to run everything, everywhere, all at once.
 
-If you only want to install prerequisite software and dependencies without starting any service or database, run:
-
-```bash
-make install
-```
-
-**WARNING:** Some commands are **run as root** with _sudo_.
-
-If you install operating system (OS) packages yourself (if in case you run an unsupported OS or you don't want to run as root), run:
-
-```bash
-make install-python-dependencies # add -dev if you want to run tests
-```
-
-If you only want to start up ALL the prerequisite docker services (in case you have already run `install`):
-
-```bash
-make start
-```
-
-This creates the required local docker images (and fetches some third-party ones from DockerHub), prerequisite volumes (for file storage in the containers), and finally runs all the containers.
+This creates the required local Docker images (and fetches some third-party ones from DockerHub), prerequisite volumes (for file storage in the containers), and finally runs all the containers.
 
 To stop ALL docker services at any time:
 
@@ -92,7 +76,52 @@ make stop
 
 ### With local and system services
 
-To run the triplestore database (Fuseki) server locally and not via docker (on first setup accept the default values):
+#### Quickstart
+
+If you are running the project for the first time this would be the commands to run in sequence:
+
+```bash
+make install-os-dependencies
+make install-python-dependencies
+make run-system-redis
+make run-local-api
+make run-local-ui
+make setup-local-fuseki # skip if you manage Fuseki
+```
+
+If you use the local Fuseki instance, in a separate terminal process remember
+to run and keep open:
+
+```bash
+make run-local-fuseki
+```
+
+In this case be careful that you don't already have a Fuseki instance running
+from other projects, especially with Docker, as the ports may conflict. Look
+for port `3030`. If you do, you probably fall in the "you manage Fuseki"
+category and probably can reuse the preexisting triplestore.
+
+#### Prerequisites
+
+To install prerequisite operating system (OS) software and dependencies, run:
+
+```bash
+make install # add -dev if you want to run tests
+```
+
+**WARNING:** Some commands are **run as root** with _sudo_.
+
+If you install OS packages yourself (if in case you run an unsupported OS or
+you don't want to run as root), run:
+
+```bash
+make install-python-dependencies # add -dev if you want to run tests
+```
+
+#### Fuseki
+
+To run the triplestore database (Fuseki) server locally and not via Docker (on
+first setup accept the default values):
 
 ```bash
 make setup-local-fuseki
@@ -101,7 +130,20 @@ make run-local-fuseki
 
 _leave this terminal session open._
 
-That will fetch, install in and run Fuseki from the current working directory, which can be run as a user _without requiring root_.
+That will fetch, install in and run Fuseki from the current working directory,
+which can be run as a user _without requiring root_.
+
+You can also choose to only run Fuseki with Docker:
+
+```sh
+make run-docker-fuseki
+```
+
+Alternatively, if you have a separately managed installation of Fuseki, you can
+ignore this step. Simply ensure it is available at `localhost:3030`, or a
+location/port as defined in `bash/.env`.
+
+#### Redis
 
 To set up and run a _system_ Redis server which _does_ need to be **run as root**:
 
@@ -109,9 +151,18 @@ To set up and run a _system_ Redis server which _does_ need to be **run as root*
 make run-system-redis
 ```
 
-There is currently no local alternative to this to run as a user. If that is a concern, please use the docker micro-services approach.
+**WARNING:** This runs as root and replaces a system configuration file. If you
+get errors about configuration directives, you are likely running an older OS
+with older Redis (e.g. Ubuntu 18.04 does not have the Redis version that's
+required).
 
-**WARNING:** Like `setup` and to some extent `install`, this runs as root and additionally replaces a system configuration file. If you get errors about configuration directives, you are likely running an older OS with older Redis (e.g. Ubuntu 18.04 does not have the Redis version that's required).
+There is currently no local alternative to this to run as a user. If that is a concern, you can also choose to run Redis with Docker:
+
+```sh
+make run-docker-redis
+```
+
+#### Application
 
 To run the API (including Celery) locally:
 
@@ -119,41 +170,25 @@ To run the API (including Celery) locally:
 make run-local-api
 ```
 
-To run the ui locally:
+To run the UI locally:
 
 ```bash
 make run-local-ui
 ```
 
-To stop both API and ui servers (leaving only Fuseki and the system Redis running, which you must control on your own):
+To stop both API and UI servers (leaving only Fuseki and the system Redis running, which you must control on your own):
 
 ```bash
 make stop-local-applications
 ```
 
-To reiterate, if you are running the project for the first time this would be the commands to run in sequence:
-
-```bash
-make install-os-dependencies
-make install-python-dependencies
-make run-system-redis
-make run-local-api
-make run-local-ui
-make setup-local-fuseki
-```
-
-In a separate terminal process remember to run and keep open:
-
-```bash
-make run-local-fuseki
-```
-
 ## Testing
 
-The test suite spins up certain duplicate docker services _without_ Traefik, so
-access to those specific services are directly through the localhost and
-respective ports. Run the following to start everything and also remove the
-duplicate testing containers at the end:
+The test suite requires preexisting services _without_ Traefik, where access to
+those specific services are directly through the localhost and respective
+ports. These services can also be spun up with Docker, creating
+development-specific containers. Run the following to start everything and also
+remove the testing containers at the end:
 
 ```bash
 make ENVIRONMENT=test test teardown-services
@@ -164,6 +199,29 @@ container, and a `dataset{ID}` dataset (where `{ID}` is a short random ID) as
 many times as the tests are run. The `db` folder is populated by the tests and
 it is _not_ removed automatically. Omit `teardown-services` if you want to
 inspect the test containers for any reason after the tests complete.
+
+However, if you already had non-development containers running, for e.g. by
+following our setup instructions and using the single `make` command, then
+there will be conflicting ports for Fuseki. In such a case, you might want to
+stop those containers temporarily, either through your Docker interface of
+choice (like Docker Desktop or Podman), or with `make stop`, and then run the
+tests.
+
+Alternatively, if you had used a mixed setup, where you had used only some
+Docker services like Fuseki, or already have a system Fuseki you manage and
+control yourself, and/or are running a local API (not using Docker), you can
+also run the tests directly in your Python environment bypassing Make:
+
+```sh
+pytest
+```
+
+That simply relies on being able to create and query a Fuseki service, usually
+at `localhost:3030`.
+
+> **Note:** Overriding `RDF_DIFFER_FUSEKI_PORT` currently does _not_ help with
+having two running instances of Fuseki for this project (dev and non-dev) --
+you need to stop one to run the other.
 
 ## The Differ UI
 
