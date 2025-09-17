@@ -99,7 +99,15 @@ WHERE {
         ?object ?objProperty ?newValue .
    }
   # the language tag shall be the same
-
-  FILTER( lang(?newValue) = lang(?oldValue) && ?newValue != ?oldValue )
+  FILTER (
+    (
+      # Case 1: Both values are language-tagged literals
+      (isLiteral(?oldValue) && isLiteral(?newValue) && lang(?oldValue) != "" && lang(?newValue) != "" && lang(?oldValue) = lang(?newValue))
+      ||
+      # Case 2: Both values are non-language-tagged literals or URIs
+      ((!isLiteral(?oldValue) || lang(?oldValue) = "") && (!isLiteral(?newValue) || lang(?newValue) = ""))
+    )
+    && ?oldValue != ?newValue
+  )
 }
 ORDER BY ?instance
