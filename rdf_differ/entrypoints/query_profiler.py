@@ -104,9 +104,12 @@ def run_queries(
 def summarise_results(results: Iterable[QueryRunResult]) -> dict:
     """Build basic statistics for the profiled queries."""
 
-    completed = [item for item in results if item.duration is not None]
+    items = list(results)
+    completed = [item for item in items if item.duration is not None]
 
     summary = defaultdict(lambda: None)
+
+    summary["query_count"] = len(items)
 
     if completed:
         total_time = sum(item.duration for item in completed if item.duration is not None)
@@ -323,6 +326,7 @@ def main(cli_args: Optional[List[str]] = None) -> int:
     print(f"  Profile: {args.profile}")
     print(f"  Dataset: {dataset_name}")
     print(f"  Endpoint: {endpoint}")
+    print(f"  Queries ran: {summary.get('query_count', 0)}")
     if old_file:
         print(f"  Old file: {old_file}")
     if new_file:

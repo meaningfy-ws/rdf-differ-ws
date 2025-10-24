@@ -89,6 +89,7 @@ def test_summarise_results_handles_statistics():
 
     summary = summarise_results(results)
 
+    assert summary["query_count"] == 3
     assert pytest.approx(summary["total_time"], rel=1e-3) == 0.6
     assert pytest.approx(summary["average_time"], rel=1e-3) == 0.3
     assert summary["longest"].file_path.name == "c.rq"
