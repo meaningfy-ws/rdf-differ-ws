@@ -16,6 +16,24 @@ from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from rdf_differ.entrypoints.ui import app as ui_app
 
 
+def pytest_addoption(parser):
+    """Register stub options used by the repository configuration."""
+
+    parser.addoption("--cov", action="append", default=[], help="stub coverage option")
+    parser.addoption(
+        "--cov-report", action="append", default=[], help="stub coverage report option"
+    )
+    parser.addoption(
+        "--cucumberjson", action="store", default=None, help="stub cucumber json output"
+    )
+    parser.addoption(
+        "--gherkin-terminal-reporter",
+        action="store_true",
+        default=False,
+        help="stub gherkin terminal reporter",
+    )
+
+
 class FakeSPARQLRunner:
     def __init__(self, result_format: str = 'json'):
         self.return_value = {
