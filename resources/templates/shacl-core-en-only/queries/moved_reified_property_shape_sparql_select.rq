@@ -80,17 +80,17 @@ WHERE {
     
     # fall back to known labels if no preview property
     optional {
-      ?instance rdfs:label ?rdfsLabelEn .
+      ?newInstance rdfs:label ?rdfsLabelEn .
       FILTER(LANG(?rdfsLabelEn) = "" || LANGMATCHES(LANG(?rdfsLabelEn), "en"))
     }
 
     optional {
-      ?instance skos:prefLabel ?skosLabelEn .
+      ?newInstance skos:prefLabel ?skosLabelEn .
       FILTER(LANG(?skosLabelEn) = "" || LANGMATCHES(LANG(?skosLabelEn), "en"))
     }
 
     optional {
-      ?instance shacl:name ?shaclNameEn .
+      ?newInstance shacl:name ?shaclNameEn .
       FILTER(LANG(?shaclNameEn) = "" || LANGMATCHES(LANG(?shaclNameEn), "en"))
     }
 
@@ -112,17 +112,17 @@ WHERE {
     
     # fall back to known labels if no preview property
     optional {
-      ?instance rdfs:label ?rdfsLabelEn .
+      ?oldInstance rdfs:label ?rdfsLabelEn .
       FILTER(LANG(?rdfsLabelEn) = "" || LANGMATCHES(LANG(?rdfsLabelEn), "en"))
     }
 
     optional {
-      ?instance skos:prefLabel ?skosLabelEn .
+      ?oldInstance skos:prefLabel ?skosLabelEn .
       FILTER(LANG(?skosLabelEn) = "" || LANGMATCHES(LANG(?skosLabelEn), "en"))
     }
 
     optional {
-      ?instance shacl:name ?shaclNameEn .
+      ?oldInstance shacl:name ?shaclNameEn .
       FILTER(LANG(?shaclNameEn) = "" || LANGMATCHES(LANG(?shaclNameEn), "en"))
     }
 
