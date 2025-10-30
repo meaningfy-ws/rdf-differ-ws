@@ -25,6 +25,14 @@ def _has_option(parser, name: str) -> bool:
 def pytest_addoption(parser):
     """Register stub options used by the repository configuration if missing."""
 
+    # ``setup.cfg`` configures pytest with coverage and cucumber reporting flags. Those
+    # plugins are not part of the default local development dependencies, so invoking
+    # ``pytest`` without them would normally fail with "unrecognized arguments" errors.
+    # The stubs below provide no-op implementations so the configured command-line flags
+    # are accepted even when the corresponding plugins are absent. When the plugins are
+    # installed they register the real options first, so the guards above keep the stubs
+    # from shadowing their behaviour.
+
     if not _has_option(parser, "--cov"):
         parser.addoption("--cov", action="append", default=[], help="stub coverage option")
     if not _has_option(parser, "--cov-report"):
