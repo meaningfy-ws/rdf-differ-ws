@@ -16,42 +16,6 @@ from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from rdf_differ.entrypoints.ui import app as ui_app
 
 
-def _has_option(parser, name: str) -> bool:
-    """Return True if an option string is already registered on the parser."""
-
-    return any(name in action.option_strings for action in getattr(parser, "_actions", []))
-
-
-def pytest_addoption(parser):
-    """Register stub options used by the repository configuration if missing."""
-
-    # ``setup.cfg`` configures pytest with coverage and cucumber reporting flags. Those
-    # plugins are not part of the default local development dependencies, so invoking
-    # ``pytest`` without them would normally fail with "unrecognized arguments" errors.
-    # The stubs below provide no-op implementations so the configured command-line flags
-    # are accepted even when the corresponding plugins are absent. When the plugins are
-    # installed they register the real options first, so the guards above keep the stubs
-    # from shadowing their behaviour.
-
-    if not _has_option(parser, "--cov"):
-        parser.addoption("--cov", action="append", default=[], help="stub coverage option")
-    if not _has_option(parser, "--cov-report"):
-        parser.addoption(
-            "--cov-report", action="append", default=[], help="stub coverage report option"
-        )
-    if not _has_option(parser, "--cucumberjson"):
-        parser.addoption(
-            "--cucumberjson", action="store", default=None, help="stub cucumber json output"
-        )
-    if not _has_option(parser, "--gherkin-terminal-reporter"):
-        parser.addoption(
-            "--gherkin-terminal-reporter",
-            action="store_true",
-            default=False,
-            help="stub gherkin terminal reporter",
-        )
-
-
 class FakeSPARQLRunner:
     def __init__(self, result_format: str = 'json'):
         self.return_value = {
