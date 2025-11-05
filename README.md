@@ -223,12 +223,86 @@ at `localhost:3030`.
 having two running instances of Fuseki for this project (dev and non-dev) --
 you need to stop one to run the other.
 
+## The Differ CLI
+
+There is a helper script `bash/rdf-differ.sh` that wraps common API call sequences
+for creating diffs and generating reports. Refer to [this file](curl-examples.md)
+for a reference of the underlying API calls.
+
+### Examples
+
+Full workflow (diff + report)
+
+```sh
+./bash/rdf-differ.sh --old files/first.ttl --new files/second.ttl
+```
+
+Just create a diff
+
+```sh
+./bash/rdf-differ.sh --old files/first.ttl --new files/second.ttl diff
+```
+
+Generate report for existing diff
+
+```sh
+./bash/rdf-differ.sh --dataset-id abc123 report
+```
+
+Custom configuration
+
+```sh
+./bash/rdf-differ.sh \
+  --base-url http://custom:8080 \
+  --old first.ttl \
+  --new second.ttl \
+  --ap custom-profile \
+  --template html \
+  --output custom-dir \
+  full
+```
+
+### Demo using test data
+
+- Create a diff and generate a JSON report (full workflow):
+
+```bash
+./bash/rdf-differ.sh --old tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
+                     --new tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
+                     --profile owl-core-en-only --template json
+```
+
+- Create only the diff (prints dataset id and progress):
+
+```bash
+./bash/rdf-differ.sh diff --old tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
+                          --new tests/test_data/owl/ePO_sample-4.0.0.orig.ttl
+```
+
+- Request a report for an existing dataset id, and use a different base URL:
+
+```bash
+./bash/rdf-differ.sh report --dataset-id <DATASET_ID> report --base-url http://localhost:4030
+```
+
+- List existing diffs (GET `/diffs`):
+
+```bash
+./bash/rdf-differ.sh list
+```
+
+Notes:
+
+- When running tests via `make test` the API is available at `http://localhost:4030` (no Traefik). The pytest integration uses the `RDF_DIFFER_BASE_URL` environment variable (defaulting to `http://localhost:4030`).
+- The script accepts both `--ap` and `--profile` for the application profile. The `--template` value controls the report output format (e.g. `json` or `html`).
+- By default the script writes reports to `diff-output/` or to the directory passed with `--output`.
+
 ## The Differ UI
 
-> To create a new diff you can access [http://localhost:8030/create-diff](http://localhost:8030/create-diff)
+To create a new diff you can access [http://localhost:8030/create-diff](http://localhost:8030/create-diff)
 ![list of diffs page](docs/images/create-diff-2020-10.png)
 
-> To list the existing diffs you can access [http://localhost:8030](http://localhost:8030/)
+To list the existing diffs you can access [http://localhost:8030](http://localhost:8030/)
 ![list of diffs page](docs/images/list-diffs-202010.png)
 
 Note: If you see an error for any of the pages, your setup is not right. Please either check your local services, or rebuild the docker services if you are using that (including deleting the created volume). Check also the Celery is running, which is needed for the asynchronous tasks.

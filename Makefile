@@ -177,7 +177,11 @@ run-docker-ui:
 	@ echo -e '$(BUILD_PRINT)Starting ui'
 	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-ui
 
-test: | install-python-dependencies-dev test-data-fuseki run-docker-redis run-docker-api
+run-docker-celery:
+	@ echo -e '$(BUILD_PRINT)Starting celery worker'
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-celery-worker
+
+test: | install-python-dependencies-dev test-data-fuseki run-docker-redis run-docker-api run-docker-celery
 	@ echo "$(BUILD_PRINT)Running tests using Docker services"
 	@ pytest
 
