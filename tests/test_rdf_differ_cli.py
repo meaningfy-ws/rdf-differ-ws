@@ -5,7 +5,7 @@ import json
 
 SCRIPT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../bash/rdf-differ.sh'))
 TESTDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'test_data/owl'))
-OUTDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../reports/cli'))
+OUTDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../diff-output'))
 OLD = os.path.join(TESTDIR, 'ePO_sample-4.0.0.orig.ttl')
 NEW = os.path.join(TESTDIR, 'ePO_sample-4.0.0.upd.ttl')
 PROFILE = 'owl-core-en-only'
