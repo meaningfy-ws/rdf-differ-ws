@@ -229,63 +229,88 @@ you need to stop one to run the other.
 ## The Differ CLI
 
 There is a helper script `bash/rdf-differ.sh` that wraps common API call sequences
-for creating diffs and generating reports. Refer to [this file](curl-examples.md)
-for a reference of the underlying API calls.
+for creating diffs and generating reports, with configurable application profile (AP) and report template.
+Refer to [this file](curl-examples.md) for a reference of the underlying API calls.
+
+The supported APs are:
+
+- owl-core-en-only
+- shacl-core-en-only
+- skos-core-en-only
+
+And the template formats are:
+
+- JSON
+- HTML
 
 ### Examples
 
-Full workflow (diff + report)
+Full workflow (diff + report using default OWL AP in default JSON format)
 
 ```sh
-./bash/rdf-differ.sh --old files/first.ttl --new files/second.ttl
+./bash/rdf-differ.sh --old <first-file> --new <second-file>
 ```
 
-Just create a diff
+Create a diff only (this is useful to reuse the ID to generate reports in different templates/formats)
 
 ```sh
-./bash/rdf-differ.sh --old files/first.ttl --new files/second.ttl diff
+./bash/rdf-differ.sh diff --old <first-file> --new <second-file>
 ```
 
-Generate report for existing diff
+Generate report for an existing diff (using default OWL AP in default JSON format)
 
 ```sh
-./bash/rdf-differ.sh --dataset-id abc123 report
+./bash/rdf-differ.sh report --dataset-id <diff-uid>
 ```
 
 Custom configuration
 
 ```sh
 ./bash/rdf-differ.sh \
-  --base-url http://custom:8080 \
-  --old first.ttl \
-  --new second.ttl \
-  --ap custom-profile \
-  --template html \
+  --base-url http://<host>:<port> \
+  --old <old-file> \
+  --new <new-file> \
+  --ap <desired-profile> \
+  --template <desired-template> \
   --output custom-dir \
   full
 ```
 
+If you have a different setup, say some Docker services and some local services, check if the API itself is available at localhost:
+
+```sh
+curl localhost:4030/diffs
+```
+
+If so, you will need to override the base URL inclusive of the port:
+
+```sh
+./bash/rdf-differ.sh --old <first-file> --new <second-file> --base-url localhost:4030
+```
+
+In the development/production environment where services are running behind Traefik, no such override is required, as the default base URL for the script is `api.localhost`, the Traefik route for the API+port.
+
 ### Demo using test data
 
-- Create a diff and generate a JSON report (full workflow):
+- Create a diff and generate a HTML report saved in `diff-output/` (full workflow):
 
 ```bash
 ./bash/rdf-differ.sh --old tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
-                     --new tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
-                     --profile owl-core-en-only --template json
+                     --new tests/test_data/owl/ePO_sample-4.0.0.upd.ttl \
+                     --profile owl-core-en-only --template HTML
 ```
 
-- Create only the diff (prints dataset id and progress):
+- Create only the diff (prints `dataset_name` and `uid`, the latter of which is needed for report generation):
 
 ```bash
 ./bash/rdf-differ.sh diff --old tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
-                          --new tests/test_data/owl/ePO_sample-4.0.0.orig.ttl
+                          --new tests/test_data/owl/ePO_sample-4.0.0.upd.ttl
 ```
 
-- Request a report for an existing dataset id, and use a different base URL:
+- Request a report for an existing dataset ID (`uid`), and use a different base URL:
 
 ```bash
-./bash/rdf-differ.sh report --dataset-id <DATASET_ID> report --base-url http://localhost:4030
+./bash/rdf-differ.sh report --dataset-id 64000b53-61ac-4b34-8abd-5f77a4cfa453 report --base-url http://localhost:4030
 ```
 
 - List existing diffs (GET `/diffs`):
@@ -299,6 +324,7 @@ Notes:
 - When running tests via `make test` the API is available at `http://localhost:4030` (no Traefik). The pytest integration uses the `RDF_DIFFER_BASE_URL` environment variable (defaulting to `http://localhost:4030`).
 - The script accepts both `--ap` and `--profile` for the application profile. The `--template` value controls the report output format (e.g. `json` or `html`).
 - By default the script writes reports to `diff-output/` or to the directory passed with `--output`.
+- The report file is saved as `diff.<template>`, e.g. `diff.json` or `diff.html`. This is _not_ configurable at the moment.
 
 ## The Differ UI
 
