@@ -135,10 +135,10 @@ _leave this terminal session open._
 That will fetch, install in and run Fuseki from the current working directory,
 which can be run as a user _without requiring root_.
 
-You can also choose to only run Fuseki with Docker:
+You can also choose to only run Fuseki with Docker, reusing the service used for tests:
 
 ```sh
-make run-docker-fuseki
+make run-docker-fuseki-test
 ```
 
 Alternatively, if you have a separately managed installation of Fuseki, you can
@@ -158,10 +158,10 @@ get errors about configuration directives, you are likely running an older OS
 with older Redis (e.g. Ubuntu 18.04 does not have the Redis version that's
 required).
 
-There is currently no local alternative to this to run as a user. If that is a concern, you can also choose to run Redis with Docker:
+There is currently no local alternative to this to run as a user. If that is a concern, you can also choose to run Redis test service with Docker:
 
 ```sh
-make run-docker-redis
+make run-docker-redis-test
 ```
 
 #### Application
@@ -193,6 +193,7 @@ development-specific containers. Run the following to start everything and also
 remove the testing containers at the end:
 
 ```bash
+make start-services-test # run separately to avoid race conditions
 make ENVIRONMENT=test test teardown-services
 ```
 

@@ -22,9 +22,14 @@ jobs:
         with:
           python-version: 3.8
 
+      - name: Start RDF Differ services
+        run: |
+          echo "🚀 Starting required Docker containers"
+          make start-services-test
+
       - name: Test with pytest
         run: |
-          make test
+          make ENVIRONMENT=test test
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

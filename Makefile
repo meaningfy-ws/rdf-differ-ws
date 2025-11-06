@@ -147,11 +147,11 @@ endif
 #-----------------------------------------------------------------------------
 # Fuseki control for github actions
 #-----------------------------------------------------------------------------
-setup-docker-fuseki: | build-volumes
+build-docker-fuseki-test: | build-volumes
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
 	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env build rdf-differ-fuseki
 
-run-docker-fuseki:
+run-docker-fuseki-test: | build-docker-fuseki-test
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
 	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-fuseki
 
@@ -159,29 +159,34 @@ run-docker-fuseki:
 # Test commands
 #-----------------------------------------------------------------------------
 
-test-data-fuseki: | setup-docker-fuseki run-docker-fuseki
+test-data-fuseki:
 	@ echo "$(BUILD_PRINT)Building dummy "subdiv" and "abc" test datasets at http://localhost:$(if $(RDF_DIFFER_FUSEKI_PORT),$(RDF_DIFFER_FUSEKI_PORT),unknown port)/$$/datasets"
 	@ sleep 5
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
 	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'  'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
 
-run-docker-redis:
+run-docker-redis-test:
 	@ echo -e '$(BUILD_PRINT)Starting redis'
 	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-redis
 
-run-docker-api:
+run-docker-api-test:
 	@ echo -e '$(BUILD_PRINT)Starting api'
 	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-api
 
-run-docker-ui:
+run-docker-ui-test:
 	@ echo -e '$(BUILD_PRINT)Starting ui'
-	@ docker compose --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-ui
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-ui
 
-run-docker-celery:
+run-docker-celery-test:
 	@ echo -e '$(BUILD_PRINT)Starting celery worker'
 	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-celery-worker
 
-test: | install-python-dependencies-dev test-data-fuseki run-docker-redis run-docker-api run-docker-celery
+# it is advisable to run this separately before and not as a dependency of the test to ensure no race condition occurs (tests starting before services are ready)
+start-services-test: | run-docker-fuseki-test run-docker-redis-test run-docker-celery-test run-docker-api-test
+	@ echo "$(BUILD_PRINT)All docker services for testing started; waiting 5s for them to stabilize"
+	@ sleep 5
+
+test: | install-python-dependencies-dev test-data-fuseki
 	@ echo "$(BUILD_PRINT)Running tests using Docker services"
 	@ pytest
 
