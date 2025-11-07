@@ -72,7 +72,9 @@ To stop ALL docker services at any time:
 make stop
 ```
 
-> If at any time you think you are experiencing odd behaviour, such as a `500 Internal Server Error` or `404 Not Found`, use your preferred method to completely remove (purge) the docker containers, images and volumes related to this project, files inside `reports` and `fuseki-data`, and redo everything.
+> If at any time you think you are experiencing odd behaviour, such as a `500 Internal Server Error` or `404 Not Found`, use your preferred method to completely remove (purge) the docker containers, images and volumes related to this project, files inside `db`, `reports` and `fuseki-data`, and redo everything.
+>
+> **WARNING:** Do not create files or folders under `db` or `reports` yourself. The tests use these folders and there are certain assumptions the code makes about their structure, which your file or folder may not comply with.
 
 ### With local and system services
 
@@ -133,10 +135,10 @@ _leave this terminal session open._
 That will fetch, install in and run Fuseki from the current working directory,
 which can be run as a user _without requiring root_.
 
-You can also choose to only run Fuseki with Docker:
+You can also choose to only run Fuseki with Docker, reusing the service used for tests:
 
 ```sh
-make run-docker-fuseki
+make run-docker-fuseki-test
 ```
 
 Alternatively, if you have a separately managed installation of Fuseki, you can
@@ -156,10 +158,10 @@ get errors about configuration directives, you are likely running an older OS
 with older Redis (e.g. Ubuntu 18.04 does not have the Redis version that's
 required).
 
-There is currently no local alternative to this to run as a user. If that is a concern, you can also choose to run Redis with Docker:
+There is currently no local alternative to this to run as a user. If that is a concern, you can also choose to run Redis test service with Docker:
 
 ```sh
-make run-docker-redis
+make run-docker-redis-test
 ```
 
 #### Application
@@ -191,6 +193,7 @@ development-specific containers. Run the following to start everything and also
 remove the testing containers at the end:
 
 ```bash
+make start-services-test # run separately to avoid race conditions
 make ENVIRONMENT=test test teardown-services
 ```
 
@@ -223,12 +226,112 @@ at `localhost:3030`.
 having two running instances of Fuseki for this project (dev and non-dev) --
 you need to stop one to run the other.
 
+## The Differ CLI
+
+There is a helper script `bash/rdf-differ.sh` that wraps common API call sequences
+for creating diffs and generating reports, with configurable application profile (AP) and report template.
+Refer to [this file](curl-examples.md) for a reference of the underlying API calls.
+
+The supported APs are:
+
+- owl-core-en-only
+- shacl-core-en-only
+- skos-core-en-only
+
+And the template formats are:
+
+- JSON
+- HTML
+
+### Examples
+
+Full workflow (diff + report using default OWL AP in default JSON format)
+
+```sh
+./bash/rdf-differ.sh --old <first-file> --new <second-file>
+```
+
+Create a diff only (this is useful to reuse the ID to generate reports in different templates/formats)
+
+```sh
+./bash/rdf-differ.sh diff --old <first-file> --new <second-file>
+```
+
+Generate report for an existing diff (using default OWL AP in default JSON format)
+
+```sh
+./bash/rdf-differ.sh report --dataset-id <diff-uid>
+```
+
+Custom configuration
+
+```sh
+./bash/rdf-differ.sh \
+  --base-url http://<host>:<port> \
+  --old <old-file> \
+  --new <new-file> \
+  --ap <desired-profile> \
+  --template <desired-template> \
+  --output custom-dir \
+  full
+```
+
+If you have a different setup, say some Docker services and some local services, check if the API itself is available at localhost:
+
+```sh
+curl localhost:4030/diffs
+```
+
+If so, you will need to override the base URL inclusive of the port:
+
+```sh
+./bash/rdf-differ.sh --old <first-file> --new <second-file> --base-url localhost:4030
+```
+
+In the development/production environment where services are running behind Traefik, no such override is required, as the default base URL for the script is `api.localhost`, the Traefik route for the API+port.
+
+### Demo using test data
+
+- Create a diff and generate a HTML report saved in `diff-output/` (full workflow):
+
+```bash
+./bash/rdf-differ.sh --old tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
+                     --new tests/test_data/owl/ePO_sample-4.0.0.upd.ttl \
+                     --profile owl-core-en-only --template HTML
+```
+
+- Create only the diff (prints `dataset_name` and `uid`, the latter of which is needed for report generation):
+
+```bash
+./bash/rdf-differ.sh diff --old tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
+                          --new tests/test_data/owl/ePO_sample-4.0.0.upd.ttl
+```
+
+- Request a report for an existing dataset ID (`uid`), and use a different base URL:
+
+```bash
+./bash/rdf-differ.sh report --dataset-id 64000b53-61ac-4b34-8abd-5f77a4cfa453 report --base-url http://localhost:4030
+```
+
+- List existing diffs (GET `/diffs`):
+
+```bash
+./bash/rdf-differ.sh list
+```
+
+Notes:
+
+- When running tests via `make test` the API is available at `http://localhost:4030` (no Traefik). The pytest integration uses the `RDF_DIFFER_BASE_URL` environment variable (defaulting to `http://localhost:4030`).
+- The script accepts both `--ap` and `--profile` for the application profile. The `--template` value controls the report output format (e.g. `json` or `html`).
+- By default the script writes reports to `diff-output/` or to the directory passed with `--output`.
+- The report file is saved as `diff.<template>`, e.g. `diff.json` or `diff.html`. This is _not_ configurable at the moment.
+
 ## The Differ UI
 
-> To create a new diff you can access [http://localhost:8030/create-diff](http://localhost:8030/create-diff)
+To create a new diff you can access [http://localhost:8030/create-diff](http://localhost:8030/create-diff)
 ![list of diffs page](docs/images/create-diff-2020-10.png)
 
-> To list the existing diffs you can access [http://localhost:8030](http://localhost:8030/)
+To list the existing diffs you can access [http://localhost:8030](http://localhost:8030/)
 ![list of diffs page](docs/images/list-diffs-202010.png)
 
 Note: If you see an error for any of the pages, your setup is not right. Please either check your local services, or rebuild the docker services if you are using that (including deleting the created volume). Check also the Celery is running, which is needed for the asynchronous tasks.
