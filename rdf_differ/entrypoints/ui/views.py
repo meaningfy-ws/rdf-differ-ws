@@ -85,6 +85,16 @@ def view_dataset(dataset_id: str):
                                             application_profiles]
         form.template_type.choices = [(item, item) for item in
                                       application_profiles[0]['template_variations']]
+
+        preferred_ap = 'owl-core-en-only'
+
+        if not form.application_profile.data and form.application_profile.choices:
+            matched = next(
+                (value for value, _ in form.application_profile.choices if value == preferred_ap),
+                None
+            )
+            form.application_profile.data = matched or form.application_profile.choices[0][0]
+
     except Exception as e:
         logger.exception(str(e))
 
