@@ -62,7 +62,7 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
 
 def build_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
     """
-    Method to send build a report call to api
+    Method to send build a report call to api (with rebuild always)
     :param dataset_id: The dataset identifier.
     :param application_profile: application profile for report
     :param template_type: report variation
@@ -71,7 +71,8 @@ def build_report(dataset_id: str, application_profile: str, template_type: str) 
     data = dumps({
         'dataset_id': dataset_id,
         'application_profile': application_profile,
-        'template_type': template_type
+        'template_type': template_type,
+        'rebuild': 'true'
     })
     headers = {'Content-type': 'application/json'}
     response = requests.post(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs/report', data=data, headers=headers)

@@ -93,8 +93,7 @@ def view_dataset(dataset_id: str):
             response, status = build_report(
                 dataset_id=dataset_id,
                 application_profile=form.application_profile.data,
-                template_type=form.template_type.data,
-                rebuild='true'
+                template_type=form.template_type.data
             )
 
             if status != 200:
