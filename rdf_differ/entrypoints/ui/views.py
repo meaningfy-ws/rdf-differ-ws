@@ -94,6 +94,7 @@ def view_dataset(dataset_id: str):
                 dataset_id=dataset_id,
                 application_profile=form.application_profile.data,
                 template_type=form.template_type.data,
+                rebuild='true'
             )
 
             if status != 200:

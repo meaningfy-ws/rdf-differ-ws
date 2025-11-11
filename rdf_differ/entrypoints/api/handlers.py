@@ -192,7 +192,7 @@ def build_report(body: dict) -> tuple:
     dataset_id = body['dataset_id']
     application_profile = body['application_profile']
     template_type = body['template_type']
-    rebuild = strtobool(body.get('rebuild', 'true'))
+    rebuild = strtobool(body.get('rebuild', 'false'))
 
     logger.debug(f'start build report for {dataset_id} endpoint')
 
