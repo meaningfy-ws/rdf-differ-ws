@@ -53,16 +53,34 @@
             margin-top: 0.5em;
         }
 
+        /* Enable horizontal scrolling for wide tables */
+        #print-container {
+            overflow-x: auto;
+        }
+
+        .dataTables_wrapper {
+            overflow-x: auto;
+        }
+
+        table.display {
+            width: auto;
+            min-width: 100%;
+        }
+
         @media print {
             #toc {
                 visibility: hidden;
             }
 
-            #print-container {
-                width: 100% !important;
-                position: absolute;
-                left: 0;
-                top: 0;
+            #print-container,
+            .dataTables_wrapper,
+            .dataTables_scrollHead,
+            .dataTables_scrollBody {
+                overflow: visible !important;
+                width: auto !important;
+            }
+            table.display {
+                width: auto !important;
             }
 
             footer {
@@ -115,17 +133,32 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        const tables = [];
 
-        $("table.display").DataTable({
-            dom: 'B<"clear">lfrtip',
-            buttons: [
-                'print'
-            ],
-            "lengthMenu": [[5, 15, 30, -1], [5, 15, 30, "All"]],
-            responsive: {
-                details: true
-            }
+        $("table.display").each(function () {
+            const columns = $(this).find("th").map(function () {
+                return { orderable: true };
+            }).get();
+
+            const instance = $(this).DataTable({
+                dom: 'B<"clear">lfrtip',
+                buttons: ['print'],
+                lengthMenu: [[5, 15, 30, -1], [5, 15, 30, "All"]],
+                scrollX: true,
+                autoWidth: false,
+                columns: columns
+            });
+
+            tables.push(instance);
         });
+
+        // Fix column alignment on window resize
+        if (tables.length) {
+            $(window).on('resize', function () {
+                tables.forEach(dt => dt.columns.adjust());
+            });
+        }
+
         $("h2").each(function () {
             if (!$(this).next().is("section") && !$(this).next().is("h3") && !$(this).next().hasClass("dataTables_wrapper")) {
                 $(this).remove();
@@ -147,23 +180,29 @@
             $("#print-container").append("<p><strong>Datasets are identical and no difference was found</strong></p>")
         }
 
-        $(function () {
-            $("#toc").tocify({
-                selectors: "h1,h2",
-                theme: "jqueryui",
-                hashGenerator: "pretty",
-                ignoreSelector: "#skip-toc",
-                highlightOnScroll: "true",
-                highlightDefault: "true"
-            });
+        $("#toc").tocify({
+            selectors: "h1,h2",
+            theme: "jqueryui",
+            hashGenerator: "pretty",
+            ignoreSelector: "#skip-toc",
+            highlightOnScroll: "true",
+            highlightDefault: "true"
         });
 
-        $(function () {
-            $("#printButton").click(function () {
-                $("table.display").DataTable().page.len(-1).draw()
-                window.print()
-            })
-        })
+        $("#printButton").click(function () {
+            // First, expand all tables to show all rows
+            tables.forEach(dt => dt.page.len(-1).draw());
+
+            // Force a reflow so print styles can apply
+            // Then recalculate column widths for print layout
+            setTimeout(function() {
+                tables.forEach(dt => dt.columns.adjust());
+                // Small delay to ensure adjustments complete before print dialog
+                setTimeout(function() {
+                    window.print();
+                }, 50);
+            }, 100);
+        });
 
 
     });
