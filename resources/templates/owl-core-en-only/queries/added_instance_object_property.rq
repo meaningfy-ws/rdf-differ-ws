@@ -36,7 +36,9 @@ PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # identify added instances
-SELECT distinct ?class ?instance ?prefLabel ?prefLabelLang ("addition" as ?actionType)
+
+SELECT distinct ?class ?instance ?prefLabel ?prefLabelLang ?domain ?range ?minCardinality ?maxCardinality ("addition" as ?actionType)
+
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
@@ -101,5 +103,27 @@ WHERE {
       ?instance ?p [] .
     }
   }
+
+  # and we get some domain, range and cardinality information from SHACL shapes if available
+  OPTIONAL {
+    GRAPH ?newVersionGraph {
+      {  
+        ?nodeShape shacl:property ?propertyShape ;
+                   shacl:targetClass ?domain .
+        ?propertyShape shacl:path ?instance ;
+                       shacl:class ?range .
+      }
+      UNION
+      {
+        ?nodeShape shacl:property ?propertyShape ;
+                   shacl:targetClass ?domain .
+        ?propertyShape shacl:path ?instance ;
+                       shacl:node/shacl:property/shacl:hasValue ?range .
+      }
+      OPTIONAL { ?propertyShape shacl:minCount ?minCardinality }
+      OPTIONAL { ?propertyShape shacl:maxCount ?maxCardinality }
+    }
+  }
+
 }
 ORDER BY ?instance
