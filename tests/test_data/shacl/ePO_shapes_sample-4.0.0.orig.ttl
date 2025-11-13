@@ -1,0 +1,307 @@
+@prefix : <http://data.europa.eu/a4g/ontology#> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix at-voc: <http://publications.europa.eu/resource/authority/> .
+@prefix at-voc-new: <http://publications.europa.eu/resource/authority/new/> .
+@prefix cccev: <http://data.europa.eu/m8g/> .
+@prefix core-shape: <http://data.europa.eu/a4g/data-shape#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix locn: <http://www.w3.org/ns/locn#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+core-shape:adms-Identifier a sh:NodeShape ;
+    rdfs:label "Identifier" ;
+    rdfs:comment "A character string to identify and distinguish uniquely, one instance of an object in an identification scheme from all other objects in the same scheme together with relevant supplementary information." ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:property core-shape:adms-Identifier-adms-schemaAgency,
+        core-shape:adms-Identifier-epo-hasScheme,
+        core-shape:adms-Identifier-epo-hasSchemeVersion,
+        core-shape:adms-Identifier-skos-notation ;
+    sh:targetClass adms:Identifier .
+
+core-shape:cccev-Constraint a sh:NodeShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:property core-shape:cccev-Constraint-cccev-constrains,
+        core-shape:cccev-Constraint-epo-hasThresholdType,
+        core-shape:cccev-Constraint-epo-hasThresholdValue ;
+    sh:targetClass cccev:Constraint .
+
+core-shape:cccev-InformationConcept a sh:NodeShape ;
+    rdfs:label "Information concept" ;
+    sh:name "Information concept" ;
+    rdfs:comment "Piece of information that the Evidence provides or the Requirement needs." ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:property core-shape:cccev-InformationConcept-adms-identifier,
+        core-shape:cccev-InformationConcept-dct-description,
+        core-shape:cccev-InformationConcept-skos-prefLabel ;
+    sh:targetClass cccev:InformationConcept .
+
+core-shape:foaf-Person a sh:NodeShape ;
+    rdfs:label "Person" ;
+    rdfs:comment "The Person class represents people. Something is a Person if it is a Person. We don't nitpick about whether they're alive, dead, real, or imaginary. The Person class is a sub-class of the Agent class, since all people are considered 'Agents' in FOAF." ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:property core-shape:foaf-Person-epo-hasCertification ;
+    sh:targetClass foaf:Person .
+
+core-shape:person-Person a sh:NodeShape ;
+    rdfs:label "Person" ;
+    rdfs:comment "A individual human being who may be dead or alive, but not imaginary." ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:property core-shape:person-Person-cv-birthDate,
+        core-shape:person-Person-cv-registeredAddress,
+        core-shape:person-Person-dct-alternative,
+        core-shape:person-Person-epo-hasCountryOfBirth,
+        core-shape:person-Person-epo-hasNationality,
+        core-shape:person-Person-epo-isBeneficialOwnerOf,
+        core-shape:person-Person-foaf-familyName,
+        core-shape:person-Person-foaf-givenName,
+        core-shape:person-Person-foaf-name,
+        core-shape:person-Person-person-birthName,
+        core-shape:person-Person-person-patronymicName ;
+    sh:targetClass foaf:Person .
+
+core-shape:time-Duration a sh:NodeShape ;
+    sh:name "Duration" ;
+    sh:description "Duration of a temporal extent expressed as a number scaled by a temporal unit." ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:targetClass :Period .
+
+core-shape:epo-Period a sh:NodeShape ;
+    rdfs:label "Period" ;
+    rdfs:comment "A time interval or a Duration. (WG approval 28/04/2020)" ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:property core-shape:epo-Period-epo-hasBeginning,
+        core-shape:epo-Period-epo-hasEnd,
+        core-shape:epo-Period-epo-hasTimePeriod ;
+    sh:targetClass time:Duration .
+
+core-shape:epo-Business a sh:NodeShape ;
+    rdfs:label "Business" ;
+    rdfs:comment "A private law company registered in a national registry. WG Approval 28/04/2020" ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:property core-shape:epo-Business-epo-hasBeneficialOwner,
+        core-shape:epo-Business-epo-hasBusinessSize,
+        core-shape:epo-Business-epo-isListedCompany ;
+    sh:targetClass :Business .
+
+core-shape:adms-Identifier-adms-schemaAgency a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype rdf:PlainLiteral ;
+    sh:description "The name of the agency that issued the identifier." ;
+    sh:name "Schema agency" ;
+    sh:path adms:schemaAgency .
+
+core-shape:adms-Identifier-epo-hasScheme a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype rdf:Literal ;
+    sh:description "The name of the identification scheme." ;
+    sh:name "Has scheme" ;
+    sh:path :hasSchema .
+
+core-shape:adms-Identifier-epo-hasSchemeVersion a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype rdf:PlainLiteral ;
+    sh:description "The version of the identification scheme." ;
+    sh:name "Has scheme version" ;
+    sh:path :hasSchemeVersion .
+
+core-shape:adms-Identifier-skos-notation a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype rdf:PlainLiteral ;
+    sh:description "The literal identifying an entity, like a person or an object." ;
+    sh:maxCount 1 ;
+    sh:minCount 1 ;
+    sh:name "Notation" ;
+    sh:path skos:notation .
+
+core-shape:cccev-Constraint-cccev-constrains a sh:PropertyShape ;
+    sh:class cccev:InformationConcept ;
+    rdfs:comment "Information Concept about which a Constraint expresses a limitation. Additional Information: Information Concepts are tools to make Requirements more machine processable: they allow to provide more detail about a Requirement. This way, Constraints can be made very precise, namely the limit that must be achieved, is a limit on the value for the associated Information Concept. For example, the Information Concept would be the age of a person and the Constraint would be the required age in the context of a specific evaluation." ;
+    rdfs:label "Constrains" ;
+    sh:path cccev:constrains ;
+    sh:sparql [ sh:select "SELECT ?this ?that WHERE { ?this <http://data.europa.eu/m8g/constrains> ?that . ?that <http://data.europa.eu/m8g/constrains> ?this .}" ] .
+
+core-shape:cccev-Constraint-epo-hasThresholdType a sh:PropertyShape ;
+    sh:class at-voc:number-threshold ;
+    sh:path :hasThresholdType .
+
+core-shape:cccev-Constraint-epo-hasThresholdValue a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype xsd:decimal ;
+    sh:description "The cut-off level for a given concept. Additional Information: This value is given as e.g. a minimum score, a maximum number of tenders with the highest score passing (see codelist at-voc:number-threshold)." ;
+    sh:maxCount 1 ;
+    sh:minCount 1 ;
+    sh:name "Has threshold value" ;
+    sh:path :hasThresholdValue .
+
+core-shape:foaf-Person-epo-hasCertification a sh:PropertyShape ;
+    sh:class :Certificate ;
+    sh:description "Relation to the proof of conformance. WG approval 30/05/2023" ;
+    sh:name "Has certification" ;
+    sh:path :hasCertification ;
+    sh:sparql [ sh:select "SELECT ?this ?that WHERE { ?this <http://data.europa.eu/a4g/ontology#hasCertification> ?that . ?that <http://data.europa.eu/a4g/ontology#hasCertification> ?this .}" ] .
+
+core-shape:person-Person-cv-birthDate a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype xsd:date ;
+    sh:description "The point in time on which the Person was born." ;
+    sh:maxCount 1 ;
+    sh:name "Birth date" ;
+    sh:path cccev:birthDate .
+
+core-shape:person-Person-cv-registeredAddress a sh:PropertyShape ;
+    sh:class locn:Address ;
+    sh:description "The registered address relationship links a Resource with the legally registered Address. Additional Information: It is the address to which formal communications can be sent, such as the postal address." ;
+    sh:maxCount 1 ;
+    sh:name "Registered address" ;
+    sh:path cccev:registeredAddress ;
+    sh:sparql [ sh:select "SELECT ?this ?that { ?this cccev:registeredAddress ?that . ?that cccev:registeredAddress ?this .}" ] .
+
+core-shape:person-Person-dct-alternative a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype rdf:PlainLiteral ;
+    sh:description "Any name by which an individual is known other than their full name. WG 09/11/2021" ;
+    rdfs:label "Alternative" ;
+    sh:name "Alternative" ;
+    sh:path dcterms:alternative .
+
+core-shape:person-Person-epo-hasCountryOfBirth a sh:PropertyShape ;
+    sh:class at-voc:country ;
+    sh:description "The country in which the Person was born." ;
+    sh:maxCount 1 ;
+    sh:name "Has country of birth" ;
+    sh:path :hasNationality .
+
+core-shape:person-Person-epo-hasNationality a sh:PropertyShape ;
+    sh:class at-voc:country ;
+    sh:description "" ;
+    sh:name "Has nationality" ;
+    sh:path :hasCountryOfBirth .
+
+core-shape:person-Person-epo-isBeneficialOwnerOf a sh:PropertyShape ;
+    sh:class :Business ;
+    sh:description "A role of any natural person(s) who ultimately owns or controls the organisation or on whose behalf a transaction or activity is being conducted. Additional Information: This role is defined in the directive EU 2015/849 and it's beyond the scope for public eProcurement domain. WG approval 14/09/2021" ;
+    sh:name "Is beneficial owner of" ;
+    sh:path :isBeneficialOwnerOf ;
+    sh:sparql [ sh:select "SELECT ?this ?that WHERE { ?this <http://data.europa.eu/a4g/ontology#isBeneficialOwnerOf> ?that . ?that <http://data.europa.eu/a4g/ontology#isBeneficialOwnerOf> ?this .}" ] .
+
+core-shape:person-Person-foaf-familyName a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype rdf:PlainLiteral ;
+    sh:description "The hereditary surname of a family." ;
+    sh:name "Family name" ;
+    sh:path foaf:familyName .
+
+core-shape:person-Person-foaf-givenName a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype rdf:PlainLiteral ;
+    sh:description "The name(s) that identify the Person within a family with a common surname." ;
+    sh:name "Given name" ;
+    sh:path foaf:givenName .
+
+core-shape:person-Person-foaf-name a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype rdf:PlainLiteral ;
+    sh:description "The complete name of the Person as one string." ;
+    sh:name "Name" ;
+    sh:path foaf:name .
+
+core-shape:person-Person-person-birthName a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype rdf:PlainLiteral ;
+    sh:description "Family name of the Person given upon their birth. WG Approval 09/11/2021" ;
+    sh:name "Birth name" ;
+    sh:path person:birthName .
+
+core-shape:person-Person-person-patronymicName a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype rdf:PlainLiteral ;
+    sh:description "Name based on the given name of the Person's father. WG Approval 09/11/2021" ;
+    sh:name "Patronymic name" ;
+    sh:path person:patronymicName .
+
+core-shape:epo-Period-epo-hasBeginning a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype xsd:dateTime ;
+    sh:description "The date and time on which this period begins." ;
+    sh:maxCount 1 ;
+    sh:name "Has beginning" ;
+    sh:path :hasBeginning .
+
+core-shape:epo-Period-epo-hasEnd a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype xsd:dateTime ;
+    sh:description "The date and time at which this period ends." ;
+    sh:maxCount 1 ;
+    sh:name "Has end" ;
+    sh:path :hasEnd .
+
+core-shape:epo-Period-epo-hasTimePeriod a sh:PropertyShape ;
+    sh:class at-voc:timeperiod ;
+    sh:description "" ;
+    sh:minCount 1 ;
+    sh:name "Has time period" ;
+    sh:path :hasTimePeriod .
+
+core-shape:epo-Business-epo-hasBeneficialOwner a sh:PropertyShape ;
+    sh:class person:Person ;
+    sh:description "A role of any natural person(s) who ultimately owns or controls the organisation or on whose behalf a transaction or activity is being conducted. Additional Information: This role is defined in the directive EU 2015/849 and it's beyond the scope for public eProcurement domain. WG approval 14/09/2021" ;
+    sh:name "Has beneficial owner" ;
+    sh:path :hasBeneficialOwner ;
+    sh:sparql [ sh:select "SELECT ?this ?that WHERE { ?this <http://data.europa.eu/a4g/ontology#hasBeneficialOwner> ?that . ?that <http://data.europa.eu/a4g/ontology#hasBeneficialOwner> ?this .}" ] .
+
+core-shape:epo-Business-epo-hasBusinessSize a sh:PropertyShape ;
+    sh:class at-voc:economic-operator-size ;
+    sh:description "The category of the business depending on number of employees and turnover. Additional information: See Commission Recommendation of 6 May 2003 concerning the definition of micro, small and medium-sized enterprises. WG Approval 28/05/2020" ;
+    sh:maxCount 1 ;
+    sh:name "Has business size" ;
+    sh:path :hasBusinessSize .
+
+core-shape:epo-Business-epo-isListedCompany a sh:PropertyShape ;
+    rdfs:isDefinedBy core-shape:core-shape ;
+    sh:datatype xsd:boolean ;
+    sh:description "Public companies listed on a stock exchange and subject to disclosure requirements (either by stock exchange rules or through law or enforceable means), which impose requirements to ensure adequate transparency of beneficial ownership. <u>Additional Information:</u> In eForms this indicator is used when the nationality of beneficial owner is not provided because the Economic Operator is registered in a regulated market that is subject to disclosure requirements consistent with Union law or subject to equivalent international standards which ensure adequate transparency of ownership information. WG Approval 21/11/2019" ;
+    sh:maxCount 1 ;
+    sh:name "Is listed company" ;
+    sh:path :isListedCompany .
+
+core-shape:core-shape a owl:Ontology ;
+    rdfs:label "eProcurement Ontology - core shapes"@en ;
+    dcterms:created "2021-06-01"^^xsd:date ;
+    dcterms:description "The eProcurement Ontology core shapes provides the generic datashape specifications for the eProcurement Ontology core."@en ;
+    dcterms:issued "2023-11-09"^^xsd:date ;
+    dcterms:license "© European Union, 2014. Unless otherwise noted, the reuse of the Ontology is authorised under the European Union Public Licence v1.2 (https://eupl.eu/)." ;
+    dcterms:publisher "http://publications.europa.eu/resource/authority/corporate-body/PUBL" ;
+    dcterms:title "eProcurement Ontology - core shapes"@en ;
+    vann:preferredNamespacePrefix "epo" ;
+    vann:preferredNamespaceUri "http://data.europa.eu/a4g/ontology#" ;
+    rdfs:comment "This version is automatically generated from ePO_core.xml on 2023-11-09" ;
+    rdfs:seeAlso <https://docs.ted.europa.eu/home/index.html>,
+        <https://github.com/OP-TED/ePO/releases>,
+        <https://joinup.ec.europa.eu/collection/eprocurement/solution/eprocurement-ontology/about>,
+        <https://op.europa.eu/en/web/eu-vocabularies/e-procurement> ;
+    owl:imports :core,
+        :core-restriction,
+        cccev:,
+        dcterms:,
+        vann:,
+        <http://www.w3.org/2004/02/skos/core>,
+        <http://www.w3.org/2006/time>,
+        <http://www.w3.org/ns/adms>,
+        <http://www.w3.org/ns/locn>,
+        org:,
+        <http://www.w3.org/ns/person>,
+        foaf: ;
+    owl:incompatibleWith "3.1.0" ;
+    owl:priorVersion "http://data.europa.eu/a4g/data-shape#core-shape-3.1.0" ;
+    owl:versionIRI core-shape:core-shape-4.0.0 ;
+    owl:versionInfo "4.0.0" .
