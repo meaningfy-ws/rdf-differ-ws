@@ -1,0 +1,756 @@
+
+{% extends "layout.adoc" %}
+{% import "macros.adoc" as mc %}
+{% block content %}
+
+This report is automatically generated from the {{ conf.dataset_name }} RDF dataset on {{ conf.timestamp }}
+and aims at presenting the difference between two versions of an RDFS/OWL vocabulary following the {{ conf.application_profile }} application profile.
+
+== Report details
+
+*Dataset ID:* {{ conf.dataset_name }}
+
+*Dataset name:* {{ conf.original_name }}
+
+*Old version file:* {{ conf.old_version_file }}
+
+*New version file:* {{ conf.new_version_file }}
+
+*Time:* {{ conf.timestamp }}
+
+*Application profile:* {{ conf.application_profile }}
+
+
+{% set namespaces = namespace_inventory({}) %}
+{% include "statistics.adoc" %}
+
+
+== Ontology
+    
+    
+        {% include "ontology/added_instance_ontology.adoc" with context %}
+    
+        {% include "ontology/deleted_instance_ontology.adoc" with context %}
+    
+    
+=== Labels
+        
+            {% include "ontology/labels/added_property_ontology_label.adoc" with context %}
+        
+            {% include "ontology/labels/deleted_property_ontology_label.adoc" with context %}
+        
+            {% include "ontology/labels/updated_property_ontology_label.adoc" with context %}
+        
+            {% include "ontology/labels/moved_property_ontology_label.adoc" with context %}
+        
+            {% include "ontology/labels/changed_property_ontology_label.adoc" with context %}
+        
+            {% include "ontology/labels/added_property_ontology_title.adoc" with context %}
+        
+            {% include "ontology/labels/deleted_property_ontology_title.adoc" with context %}
+        
+            {% include "ontology/labels/updated_property_ontology_title.adoc" with context %}
+        
+            {% include "ontology/labels/moved_property_ontology_title.adoc" with context %}
+        
+            {% include "ontology/labels/changed_property_ontology_title.adoc" with context %}
+        
+    
+=== Notes
+        
+            {% include "ontology/notes/added_property_ontology_comment.adoc" with context %}
+        
+            {% include "ontology/notes/deleted_property_ontology_comment.adoc" with context %}
+        
+            {% include "ontology/notes/updated_property_ontology_comment.adoc" with context %}
+        
+            {% include "ontology/notes/moved_property_ontology_comment.adoc" with context %}
+        
+            {% include "ontology/notes/changed_property_ontology_comment.adoc" with context %}
+        
+            {% include "ontology/notes/added_property_ontology_description.adoc" with context %}
+        
+            {% include "ontology/notes/deleted_property_ontology_description.adoc" with context %}
+        
+            {% include "ontology/notes/updated_property_ontology_description.adoc" with context %}
+        
+            {% include "ontology/notes/moved_property_ontology_description.adoc" with context %}
+        
+            {% include "ontology/notes/changed_property_ontology_description.adoc" with context %}
+        
+    
+=== Evolution Properties
+        
+            {% include "ontology/evolution_properties/added_property_ontology_version_info.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_version_info.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_version_info.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_version_info.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_version_info.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/added_property_ontology_version_iri.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_version_iri.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_version_iri.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_version_iri.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_version_iri.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/added_property_ontology_prior_version.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_prior_version.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_prior_version.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_prior_version.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_prior_version.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/added_property_ontology_incompatible_with.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_incompatible_with.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_incompatible_with.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_incompatible_with.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_incompatible_with.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/added_property_ontology_created.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_created.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_created.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_created.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_created.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/added_property_ontology_issued.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_issued.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_issued.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_issued.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_issued.adoc" with context %}
+        
+    
+=== Miscellaneous
+        
+            {% include "ontology/miscellaneous/added_property_ontology_imports.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_imports.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_imports.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_imports.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_imports.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/added_property_ontology_see_also.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_see_also.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_see_also.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_see_also.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_see_also.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/added_property_ontology_license.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_license.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_license.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_license.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_license.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/added_property_ontology_publisher.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_publisher.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_publisher.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_publisher.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_publisher.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/added_property_ontology_preferred_namespace_prefix.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_preferred_namespace_prefix.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_preferred_namespace_prefix.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_preferred_namespace_prefix.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_preferred_namespace_prefix.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/added_property_ontology_preferred_namespace_uri.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_preferred_namespace_uri.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_preferred_namespace_uri.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_preferred_namespace_uri.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_preferred_namespace_uri.adoc" with context %}
+        
+    
+
+== Class
+    
+    
+        {% include "class/added_instance_class.adoc" with context %}
+    
+        {% include "class/deleted_instance_class.adoc" with context %}
+    
+    
+=== Labels
+        
+            {% include "class/labels/added_property_class_label.adoc" with context %}
+        
+            {% include "class/labels/deleted_property_class_label.adoc" with context %}
+        
+            {% include "class/labels/updated_property_class_label.adoc" with context %}
+        
+            {% include "class/labels/moved_property_class_label.adoc" with context %}
+        
+            {% include "class/labels/changed_property_class_label.adoc" with context %}
+        
+            {% include "class/labels/added_property_class_pref_label.adoc" with context %}
+        
+            {% include "class/labels/deleted_property_class_pref_label.adoc" with context %}
+        
+            {% include "class/labels/updated_property_class_pref_label.adoc" with context %}
+        
+            {% include "class/labels/moved_property_class_pref_label.adoc" with context %}
+        
+            {% include "class/labels/changed_property_class_pref_label.adoc" with context %}
+        
+            {% include "class/labels/added_property_class_alt_label.adoc" with context %}
+        
+            {% include "class/labels/deleted_property_class_alt_label.adoc" with context %}
+        
+            {% include "class/labels/updated_property_class_alt_label.adoc" with context %}
+        
+            {% include "class/labels/moved_property_class_alt_label.adoc" with context %}
+        
+            {% include "class/labels/changed_property_class_alt_label.adoc" with context %}
+        
+            {% include "class/labels/added_property_class_hidden_label.adoc" with context %}
+        
+            {% include "class/labels/deleted_property_class_hidden_label.adoc" with context %}
+        
+            {% include "class/labels/updated_property_class_hidden_label.adoc" with context %}
+        
+            {% include "class/labels/moved_property_class_hidden_label.adoc" with context %}
+        
+            {% include "class/labels/changed_property_class_hidden_label.adoc" with context %}
+        
+    
+=== Notes
+        
+            {% include "class/notes/added_property_class_comment.adoc" with context %}
+        
+            {% include "class/notes/deleted_property_class_comment.adoc" with context %}
+        
+            {% include "class/notes/updated_property_class_comment.adoc" with context %}
+        
+            {% include "class/notes/moved_property_class_comment.adoc" with context %}
+        
+            {% include "class/notes/changed_property_class_comment.adoc" with context %}
+        
+            {% include "class/notes/added_property_class_description.adoc" with context %}
+        
+            {% include "class/notes/deleted_property_class_description.adoc" with context %}
+        
+            {% include "class/notes/updated_property_class_description.adoc" with context %}
+        
+            {% include "class/notes/moved_property_class_description.adoc" with context %}
+        
+            {% include "class/notes/changed_property_class_description.adoc" with context %}
+        
+            {% include "class/notes/added_property_class_definition.adoc" with context %}
+        
+            {% include "class/notes/deleted_property_class_definition.adoc" with context %}
+        
+            {% include "class/notes/updated_property_class_definition.adoc" with context %}
+        
+            {% include "class/notes/moved_property_class_definition.adoc" with context %}
+        
+            {% include "class/notes/changed_property_class_definition.adoc" with context %}
+        
+            {% include "class/notes/added_property_class_example.adoc" with context %}
+        
+            {% include "class/notes/deleted_property_class_example.adoc" with context %}
+        
+            {% include "class/notes/updated_property_class_example.adoc" with context %}
+        
+            {% include "class/notes/moved_property_class_example.adoc" with context %}
+        
+            {% include "class/notes/changed_property_class_example.adoc" with context %}
+        
+            {% include "class/notes/added_property_class_note.adoc" with context %}
+        
+            {% include "class/notes/deleted_property_class_note.adoc" with context %}
+        
+            {% include "class/notes/updated_property_class_note.adoc" with context %}
+        
+            {% include "class/notes/moved_property_class_note.adoc" with context %}
+        
+            {% include "class/notes/changed_property_class_note.adoc" with context %}
+        
+            {% include "class/notes/added_property_class_scope_note.adoc" with context %}
+        
+            {% include "class/notes/deleted_property_class_scope_note.adoc" with context %}
+        
+            {% include "class/notes/updated_property_class_scope_note.adoc" with context %}
+        
+            {% include "class/notes/moved_property_class_scope_note.adoc" with context %}
+        
+            {% include "class/notes/changed_property_class_scope_note.adoc" with context %}
+        
+            {% include "class/notes/added_property_class_change_note.adoc" with context %}
+        
+            {% include "class/notes/deleted_property_class_change_note.adoc" with context %}
+        
+            {% include "class/notes/updated_property_class_change_note.adoc" with context %}
+        
+            {% include "class/notes/moved_property_class_change_note.adoc" with context %}
+        
+            {% include "class/notes/changed_property_class_change_note.adoc" with context %}
+        
+            {% include "class/notes/added_property_class_history_note.adoc" with context %}
+        
+            {% include "class/notes/deleted_property_class_history_note.adoc" with context %}
+        
+            {% include "class/notes/updated_property_class_history_note.adoc" with context %}
+        
+            {% include "class/notes/moved_property_class_history_note.adoc" with context %}
+        
+            {% include "class/notes/changed_property_class_history_note.adoc" with context %}
+        
+            {% include "class/notes/added_property_class_editorial_note.adoc" with context %}
+        
+            {% include "class/notes/deleted_property_class_editorial_note.adoc" with context %}
+        
+            {% include "class/notes/updated_property_class_editorial_note.adoc" with context %}
+        
+            {% include "class/notes/moved_property_class_editorial_note.adoc" with context %}
+        
+            {% include "class/notes/changed_property_class_editorial_note.adoc" with context %}
+        
+    
+=== Semantic Properties
+        
+            {% include "class/semantic_properties/added_property_class_sub_class_of.adoc" with context %}
+        
+            {% include "class/semantic_properties/deleted_property_class_sub_class_of.adoc" with context %}
+        
+            {% include "class/semantic_properties/updated_property_class_sub_class_of.adoc" with context %}
+        
+            {% include "class/semantic_properties/moved_property_class_sub_class_of.adoc" with context %}
+        
+            {% include "class/semantic_properties/changed_property_class_sub_class_of.adoc" with context %}
+        
+            {% include "class/semantic_properties/added_property_class_is_defined_by.adoc" with context %}
+        
+            {% include "class/semantic_properties/deleted_property_class_is_defined_by.adoc" with context %}
+        
+            {% include "class/semantic_properties/updated_property_class_is_defined_by.adoc" with context %}
+        
+            {% include "class/semantic_properties/moved_property_class_is_defined_by.adoc" with context %}
+        
+            {% include "class/semantic_properties/changed_property_class_is_defined_by.adoc" with context %}
+        
+    
+
+== Object Property
+    
+    
+        {% include "objectproperty/added_instance_object_property.adoc" with context %}
+    
+        {% include "objectproperty/deleted_instance_object_property.adoc" with context %}
+    
+    
+=== Labels
+        
+            {% include "objectproperty/labels/added_property_object_property_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/deleted_property_object_property_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/updated_property_object_property_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/moved_property_object_property_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/changed_property_object_property_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/added_property_object_property_pref_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/deleted_property_object_property_pref_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/updated_property_object_property_pref_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/moved_property_object_property_pref_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/changed_property_object_property_pref_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/added_property_object_property_alt_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/deleted_property_object_property_alt_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/updated_property_object_property_alt_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/moved_property_object_property_alt_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/changed_property_object_property_alt_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/added_property_object_property_hidden_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/deleted_property_object_property_hidden_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/updated_property_object_property_hidden_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/moved_property_object_property_hidden_label.adoc" with context %}
+        
+            {% include "objectproperty/labels/changed_property_object_property_hidden_label.adoc" with context %}
+        
+    
+=== Notes
+        
+            {% include "objectproperty/notes/added_property_object_property_comment.adoc" with context %}
+        
+            {% include "objectproperty/notes/deleted_property_object_property_comment.adoc" with context %}
+        
+            {% include "objectproperty/notes/updated_property_object_property_comment.adoc" with context %}
+        
+            {% include "objectproperty/notes/moved_property_object_property_comment.adoc" with context %}
+        
+            {% include "objectproperty/notes/changed_property_object_property_comment.adoc" with context %}
+        
+            {% include "objectproperty/notes/added_property_object_property_description.adoc" with context %}
+        
+            {% include "objectproperty/notes/deleted_property_object_property_description.adoc" with context %}
+        
+            {% include "objectproperty/notes/updated_property_object_property_description.adoc" with context %}
+        
+            {% include "objectproperty/notes/moved_property_object_property_description.adoc" with context %}
+        
+            {% include "objectproperty/notes/changed_property_object_property_description.adoc" with context %}
+        
+            {% include "objectproperty/notes/added_property_object_property_definition.adoc" with context %}
+        
+            {% include "objectproperty/notes/deleted_property_object_property_definition.adoc" with context %}
+        
+            {% include "objectproperty/notes/updated_property_object_property_definition.adoc" with context %}
+        
+            {% include "objectproperty/notes/moved_property_object_property_definition.adoc" with context %}
+        
+            {% include "objectproperty/notes/changed_property_object_property_definition.adoc" with context %}
+        
+            {% include "objectproperty/notes/added_property_object_property_example.adoc" with context %}
+        
+            {% include "objectproperty/notes/deleted_property_object_property_example.adoc" with context %}
+        
+            {% include "objectproperty/notes/updated_property_object_property_example.adoc" with context %}
+        
+            {% include "objectproperty/notes/moved_property_object_property_example.adoc" with context %}
+        
+            {% include "objectproperty/notes/changed_property_object_property_example.adoc" with context %}
+        
+            {% include "objectproperty/notes/added_property_object_property_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/deleted_property_object_property_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/updated_property_object_property_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/moved_property_object_property_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/changed_property_object_property_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/added_property_object_property_scope_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/deleted_property_object_property_scope_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/updated_property_object_property_scope_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/moved_property_object_property_scope_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/changed_property_object_property_scope_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/added_property_object_property_change_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/deleted_property_object_property_change_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/updated_property_object_property_change_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/moved_property_object_property_change_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/changed_property_object_property_change_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/added_property_object_property_history_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/deleted_property_object_property_history_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/updated_property_object_property_history_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/moved_property_object_property_history_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/changed_property_object_property_history_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/added_property_object_property_editorial_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/deleted_property_object_property_editorial_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/updated_property_object_property_editorial_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/moved_property_object_property_editorial_note.adoc" with context %}
+        
+            {% include "objectproperty/notes/changed_property_object_property_editorial_note.adoc" with context %}
+        
+    
+=== Semantic Properties
+        
+            {% include "objectproperty/semantic_properties/added_property_object_property_sub_property_of.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/deleted_property_object_property_sub_property_of.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/updated_property_object_property_sub_property_of.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/moved_property_object_property_sub_property_of.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/changed_property_object_property_sub_property_of.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/added_property_object_property_is_defined_by.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/deleted_property_object_property_is_defined_by.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/updated_property_object_property_is_defined_by.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/moved_property_object_property_is_defined_by.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/changed_property_object_property_is_defined_by.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/added_property_object_property_domain.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/deleted_property_object_property_domain.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/updated_property_object_property_domain.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/moved_property_object_property_domain.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/changed_property_object_property_domain.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/added_property_object_property_range.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/deleted_property_object_property_range.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/updated_property_object_property_range.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/moved_property_object_property_range.adoc" with context %}
+        
+            {% include "objectproperty/semantic_properties/changed_property_object_property_range.adoc" with context %}
+        
+    
+
+== Datatype Property
+    
+    
+        {% include "datatypeproperty/added_instance_datatype_property.adoc" with context %}
+    
+        {% include "datatypeproperty/deleted_instance_datatype_property.adoc" with context %}
+    
+    
+=== Labels
+        
+            {% include "datatypeproperty/labels/added_property_datatype_property_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/deleted_property_datatype_property_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/updated_property_datatype_property_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/moved_property_datatype_property_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/changed_property_datatype_property_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/added_property_datatype_property_pref_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/deleted_property_datatype_property_pref_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/updated_property_datatype_property_pref_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/moved_property_datatype_property_pref_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/changed_property_datatype_property_pref_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/added_property_datatype_property_alt_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/deleted_property_datatype_property_alt_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/updated_property_datatype_property_alt_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/moved_property_datatype_property_alt_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/changed_property_datatype_property_alt_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/added_property_datatype_property_hidden_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/deleted_property_datatype_property_hidden_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/updated_property_datatype_property_hidden_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/moved_property_datatype_property_hidden_label.adoc" with context %}
+        
+            {% include "datatypeproperty/labels/changed_property_datatype_property_hidden_label.adoc" with context %}
+        
+    
+=== Notes
+        
+            {% include "datatypeproperty/notes/added_property_datatype_property_comment.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/deleted_property_datatype_property_comment.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/updated_property_datatype_property_comment.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/moved_property_datatype_property_comment.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/changed_property_datatype_property_comment.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/added_property_datatype_property_description.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/deleted_property_datatype_property_description.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/updated_property_datatype_property_description.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/moved_property_datatype_property_description.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/changed_property_datatype_property_description.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/added_property_datatype_property_definition.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/deleted_property_datatype_property_definition.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/updated_property_datatype_property_definition.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/moved_property_datatype_property_definition.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/changed_property_datatype_property_definition.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/added_property_datatype_property_example.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/deleted_property_datatype_property_example.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/updated_property_datatype_property_example.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/moved_property_datatype_property_example.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/changed_property_datatype_property_example.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/added_property_datatype_property_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/deleted_property_datatype_property_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/updated_property_datatype_property_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/moved_property_datatype_property_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/changed_property_datatype_property_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/added_property_datatype_property_scope_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/deleted_property_datatype_property_scope_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/updated_property_datatype_property_scope_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/moved_property_datatype_property_scope_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/changed_property_datatype_property_scope_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/added_property_datatype_property_change_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/deleted_property_datatype_property_change_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/updated_property_datatype_property_change_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/moved_property_datatype_property_change_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/changed_property_datatype_property_change_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/added_property_datatype_property_history_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/deleted_property_datatype_property_history_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/updated_property_datatype_property_history_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/moved_property_datatype_property_history_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/changed_property_datatype_property_history_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/added_property_datatype_property_editorial_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/deleted_property_datatype_property_editorial_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/updated_property_datatype_property_editorial_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/moved_property_datatype_property_editorial_note.adoc" with context %}
+        
+            {% include "datatypeproperty/notes/changed_property_datatype_property_editorial_note.adoc" with context %}
+        
+    
+=== Semantic Properties
+        
+            {% include "datatypeproperty/semantic_properties/added_property_datatype_property_sub_property_of.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/deleted_property_datatype_property_sub_property_of.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/updated_property_datatype_property_sub_property_of.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/moved_property_datatype_property_sub_property_of.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/changed_property_datatype_property_sub_property_of.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/added_property_datatype_property_is_defined_by.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/deleted_property_datatype_property_is_defined_by.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/updated_property_datatype_property_is_defined_by.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/moved_property_datatype_property_is_defined_by.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/changed_property_datatype_property_is_defined_by.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/added_property_datatype_property_domain.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/deleted_property_datatype_property_domain.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/updated_property_datatype_property_domain.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/moved_property_datatype_property_domain.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/changed_property_datatype_property_domain.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/added_property_datatype_property_range.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/deleted_property_datatype_property_range.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/updated_property_datatype_property_range.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/moved_property_datatype_property_range.adoc" with context %}
+        
+            {% include "datatypeproperty/semantic_properties/changed_property_datatype_property_range.adoc" with context %}
+        
+    
+
+
+== Prefixes
+{{ mc.render_namespaces(namespaces.namespaces_as_dict()) }}
+{% endblock %}

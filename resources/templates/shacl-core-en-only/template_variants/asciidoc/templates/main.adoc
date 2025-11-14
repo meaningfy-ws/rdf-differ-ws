@@ -1,0 +1,496 @@
+
+{% extends "layout.adoc" %}
+{% import "macros.adoc" as mc %}
+{% block content %}
+
+This report is automatically generated from the {{ conf.dataset_name }} RDF dataset on {{ conf.timestamp }}
+and aims at presenting the difference between two versions of an RDFS/OWL vocabulary following the {{ conf.application_profile }} application profile.
+
+== Report details
+
+*Dataset ID:* {{ conf.dataset_name }}
+
+*Dataset name:* {{ conf.original_name }}
+
+*Old version file:* {{ conf.old_version_file }}
+
+*New version file:* {{ conf.new_version_file }}
+
+*Time:* {{ conf.timestamp }}
+
+*Application profile:* {{ conf.application_profile }}
+
+
+{% set namespaces = namespace_inventory({}) %}
+{% include "statistics.adoc" %}
+
+
+== Node Shape
+    
+    
+        {% include "nodeshape/added_instance_node_shape.adoc" with context %}
+    
+        {% include "nodeshape/deleted_instance_node_shape.adoc" with context %}
+    
+    
+=== Labels
+        
+            {% include "nodeshape/labels/added_property_node_shape_label.adoc" with context %}
+        
+            {% include "nodeshape/labels/deleted_property_node_shape_label.adoc" with context %}
+        
+            {% include "nodeshape/labels/updated_property_node_shape_label.adoc" with context %}
+        
+            {% include "nodeshape/labels/moved_property_node_shape_label.adoc" with context %}
+        
+            {% include "nodeshape/labels/changed_property_node_shape_label.adoc" with context %}
+        
+    
+=== Notes
+        
+            {% include "nodeshape/notes/added_property_node_shape_comment.adoc" with context %}
+        
+            {% include "nodeshape/notes/deleted_property_node_shape_comment.adoc" with context %}
+        
+            {% include "nodeshape/notes/updated_property_node_shape_comment.adoc" with context %}
+        
+            {% include "nodeshape/notes/moved_property_node_shape_comment.adoc" with context %}
+        
+            {% include "nodeshape/notes/changed_property_node_shape_comment.adoc" with context %}
+        
+    
+=== Node Constraints
+        
+            {% include "nodeshape/node_constraints/added_property_node_shape_target_class.adoc" with context %}
+        
+            {% include "nodeshape/node_constraints/deleted_property_node_shape_target_class.adoc" with context %}
+        
+            {% include "nodeshape/node_constraints/updated_property_node_shape_target_class.adoc" with context %}
+        
+            {% include "nodeshape/node_constraints/moved_property_node_shape_target_class.adoc" with context %}
+        
+            {% include "nodeshape/node_constraints/changed_property_node_shape_target_class.adoc" with context %}
+        
+            {% include "nodeshape/node_constraints/added_property_node_shape_property.adoc" with context %}
+        
+            {% include "nodeshape/node_constraints/deleted_property_node_shape_property.adoc" with context %}
+        
+            {% include "nodeshape/node_constraints/updated_property_node_shape_property.adoc" with context %}
+        
+            {% include "nodeshape/node_constraints/moved_property_node_shape_property.adoc" with context %}
+        
+            {% include "nodeshape/node_constraints/changed_property_node_shape_property.adoc" with context %}
+        
+    
+=== Semantic Properties
+        
+            {% include "nodeshape/semantic_properties/added_property_node_shape_is_defined_by.adoc" with context %}
+        
+            {% include "nodeshape/semantic_properties/deleted_property_node_shape_is_defined_by.adoc" with context %}
+        
+            {% include "nodeshape/semantic_properties/updated_property_node_shape_is_defined_by.adoc" with context %}
+        
+            {% include "nodeshape/semantic_properties/moved_property_node_shape_is_defined_by.adoc" with context %}
+        
+            {% include "nodeshape/semantic_properties/changed_property_node_shape_is_defined_by.adoc" with context %}
+        
+    
+
+== Property Shape
+    
+    
+        {% include "propertyshape/added_instance_property_shape.adoc" with context %}
+    
+        {% include "propertyshape/deleted_instance_property_shape.adoc" with context %}
+    
+    
+=== Labels
+        
+            {% include "propertyshape/labels/added_property_property_shape_name.adoc" with context %}
+        
+            {% include "propertyshape/labels/deleted_property_property_shape_name.adoc" with context %}
+        
+            {% include "propertyshape/labels/updated_property_property_shape_name.adoc" with context %}
+        
+            {% include "propertyshape/labels/moved_property_property_shape_name.adoc" with context %}
+        
+            {% include "propertyshape/labels/changed_property_property_shape_name.adoc" with context %}
+        
+    
+=== Notes
+        
+            {% include "propertyshape/notes/added_property_property_shape_description.adoc" with context %}
+        
+            {% include "propertyshape/notes/deleted_property_property_shape_description.adoc" with context %}
+        
+            {% include "propertyshape/notes/updated_property_property_shape_description.adoc" with context %}
+        
+            {% include "propertyshape/notes/moved_property_property_shape_description.adoc" with context %}
+        
+            {% include "propertyshape/notes/changed_property_property_shape_description.adoc" with context %}
+        
+    
+=== Property Constraints
+        
+            {% include "propertyshape/property_constraints/added_property_property_shape_path.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/deleted_property_property_shape_path.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/updated_property_property_shape_path.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/moved_property_property_shape_path.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/changed_property_property_shape_path.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/added_property_property_shape_class.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/deleted_property_property_shape_class.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/updated_property_property_shape_class.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/moved_property_property_shape_class.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/changed_property_property_shape_class.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/added_property_property_shape_datatype.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/deleted_property_property_shape_datatype.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/updated_property_property_shape_datatype.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/moved_property_property_shape_datatype.adoc" with context %}
+        
+            {% include "propertyshape/property_constraints/changed_property_property_shape_datatype.adoc" with context %}
+        
+    
+=== Cardinality Constraints
+        
+            {% include "propertyshape/cardinality_constraints/added_property_property_shape_min_count.adoc" with context %}
+        
+            {% include "propertyshape/cardinality_constraints/deleted_property_property_shape_min_count.adoc" with context %}
+        
+            {% include "propertyshape/cardinality_constraints/updated_property_property_shape_min_count.adoc" with context %}
+        
+            {% include "propertyshape/cardinality_constraints/moved_property_property_shape_min_count.adoc" with context %}
+        
+            {% include "propertyshape/cardinality_constraints/changed_property_property_shape_min_count.adoc" with context %}
+        
+            {% include "propertyshape/cardinality_constraints/added_property_property_shape_max_count.adoc" with context %}
+        
+            {% include "propertyshape/cardinality_constraints/deleted_property_property_shape_max_count.adoc" with context %}
+        
+            {% include "propertyshape/cardinality_constraints/updated_property_property_shape_max_count.adoc" with context %}
+        
+            {% include "propertyshape/cardinality_constraints/moved_property_property_shape_max_count.adoc" with context %}
+        
+            {% include "propertyshape/cardinality_constraints/changed_property_property_shape_max_count.adoc" with context %}
+        
+    
+=== Range Constraints
+        
+            {% include "propertyshape/range_constraints/added_property_property_shape_min_inclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/deleted_property_property_shape_min_inclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/updated_property_property_shape_min_inclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/moved_property_property_shape_min_inclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/changed_property_property_shape_min_inclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/added_property_property_shape_max_inclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/deleted_property_property_shape_max_inclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/updated_property_property_shape_max_inclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/moved_property_property_shape_max_inclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/changed_property_property_shape_max_inclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/added_property_property_shape_min_exclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/deleted_property_property_shape_min_exclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/updated_property_property_shape_min_exclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/moved_property_property_shape_min_exclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/changed_property_property_shape_min_exclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/added_property_property_shape_max_exclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/deleted_property_property_shape_max_exclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/updated_property_property_shape_max_exclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/moved_property_property_shape_max_exclusive.adoc" with context %}
+        
+            {% include "propertyshape/range_constraints/changed_property_property_shape_max_exclusive.adoc" with context %}
+        
+    
+=== String Constraints
+        
+            {% include "propertyshape/string_constraints/added_property_property_shape_min_length.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/deleted_property_property_shape_min_length.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/updated_property_property_shape_min_length.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/moved_property_property_shape_min_length.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/changed_property_property_shape_min_length.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/added_property_property_shape_max_length.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/deleted_property_property_shape_max_length.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/updated_property_property_shape_max_length.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/moved_property_property_shape_max_length.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/changed_property_property_shape_max_length.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/added_property_property_shape_pattern.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/deleted_property_property_shape_pattern.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/updated_property_property_shape_pattern.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/moved_property_property_shape_pattern.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/changed_property_property_shape_pattern.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/added_property_property_shape_language_in.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/deleted_property_property_shape_language_in.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/updated_property_property_shape_language_in.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/moved_property_property_shape_language_in.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/changed_property_property_shape_language_in.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/added_property_property_shape_unique_lang.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/deleted_property_property_shape_unique_lang.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/updated_property_property_shape_unique_lang.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/moved_property_property_shape_unique_lang.adoc" with context %}
+        
+            {% include "propertyshape/string_constraints/changed_property_property_shape_unique_lang.adoc" with context %}
+        
+    
+=== Query Constraints
+        
+            {% include "propertyshape/query_constraints/added_reified_property_shape_sparql_select.adoc" with context %}
+        
+            {% include "propertyshape/query_constraints/deleted_reified_property_shape_sparql_select.adoc" with context %}
+        
+            {% include "propertyshape/query_constraints/updated_reified_property_shape_sparql_select.adoc" with context %}
+        
+            {% include "propertyshape/query_constraints/moved_reified_property_shape_sparql_select.adoc" with context %}
+        
+            {% include "propertyshape/query_constraints/changed_reified_property_shape_sparql_select.adoc" with context %}
+        
+    
+=== Semantic Properties
+        
+            {% include "propertyshape/semantic_properties/added_property_property_shape_is_defined_by.adoc" with context %}
+        
+            {% include "propertyshape/semantic_properties/deleted_property_property_shape_is_defined_by.adoc" with context %}
+        
+            {% include "propertyshape/semantic_properties/updated_property_property_shape_is_defined_by.adoc" with context %}
+        
+            {% include "propertyshape/semantic_properties/moved_property_property_shape_is_defined_by.adoc" with context %}
+        
+            {% include "propertyshape/semantic_properties/changed_property_property_shape_is_defined_by.adoc" with context %}
+        
+    
+
+== Ontology
+    
+    
+        {% include "ontology/added_instance_ontology.adoc" with context %}
+    
+        {% include "ontology/deleted_instance_ontology.adoc" with context %}
+    
+    
+=== Labels
+        
+            {% include "ontology/labels/added_property_ontology_label.adoc" with context %}
+        
+            {% include "ontology/labels/deleted_property_ontology_label.adoc" with context %}
+        
+            {% include "ontology/labels/updated_property_ontology_label.adoc" with context %}
+        
+            {% include "ontology/labels/moved_property_ontology_label.adoc" with context %}
+        
+            {% include "ontology/labels/changed_property_ontology_label.adoc" with context %}
+        
+            {% include "ontology/labels/added_property_ontology_title.adoc" with context %}
+        
+            {% include "ontology/labels/deleted_property_ontology_title.adoc" with context %}
+        
+            {% include "ontology/labels/updated_property_ontology_title.adoc" with context %}
+        
+            {% include "ontology/labels/moved_property_ontology_title.adoc" with context %}
+        
+            {% include "ontology/labels/changed_property_ontology_title.adoc" with context %}
+        
+    
+=== Notes
+        
+            {% include "ontology/notes/added_property_ontology_comment.adoc" with context %}
+        
+            {% include "ontology/notes/deleted_property_ontology_comment.adoc" with context %}
+        
+            {% include "ontology/notes/updated_property_ontology_comment.adoc" with context %}
+        
+            {% include "ontology/notes/moved_property_ontology_comment.adoc" with context %}
+        
+            {% include "ontology/notes/changed_property_ontology_comment.adoc" with context %}
+        
+            {% include "ontology/notes/added_property_ontology_description.adoc" with context %}
+        
+            {% include "ontology/notes/deleted_property_ontology_description.adoc" with context %}
+        
+            {% include "ontology/notes/updated_property_ontology_description.adoc" with context %}
+        
+            {% include "ontology/notes/moved_property_ontology_description.adoc" with context %}
+        
+            {% include "ontology/notes/changed_property_ontology_description.adoc" with context %}
+        
+    
+=== Evolution Properties
+        
+            {% include "ontology/evolution_properties/added_property_ontology_version_info.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_version_info.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_version_info.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_version_info.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_version_info.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/added_property_ontology_version_iri.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_version_iri.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_version_iri.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_version_iri.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_version_iri.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/added_property_ontology_prior_version.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_prior_version.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_prior_version.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_prior_version.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_prior_version.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/added_property_ontology_incompatible_with.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_incompatible_with.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_incompatible_with.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_incompatible_with.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_incompatible_with.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/added_property_ontology_created.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_created.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_created.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_created.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_created.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/added_property_ontology_issued.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/deleted_property_ontology_issued.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/updated_property_ontology_issued.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/moved_property_ontology_issued.adoc" with context %}
+        
+            {% include "ontology/evolution_properties/changed_property_ontology_issued.adoc" with context %}
+        
+    
+=== Miscellaneous
+        
+            {% include "ontology/miscellaneous/added_property_ontology_imports.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_imports.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_imports.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_imports.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_imports.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/added_property_ontology_see_also.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_see_also.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_see_also.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_see_also.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_see_also.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/added_property_ontology_license.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_license.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_license.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_license.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_license.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/added_property_ontology_publisher.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_publisher.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_publisher.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_publisher.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_publisher.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/added_property_ontology_preferred_namespace_prefix.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_preferred_namespace_prefix.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_preferred_namespace_prefix.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_preferred_namespace_prefix.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_preferred_namespace_prefix.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/added_property_ontology_preferred_namespace_uri.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/deleted_property_ontology_preferred_namespace_uri.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/updated_property_ontology_preferred_namespace_uri.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/moved_property_ontology_preferred_namespace_uri.adoc" with context %}
+        
+            {% include "ontology/miscellaneous/changed_property_ontology_preferred_namespace_uri.adoc" with context %}
+        
+    
+
+
+== Prefixes
+{{ mc.render_namespaces(namespaces.namespaces_as_dict()) }}
+{% endblock %}

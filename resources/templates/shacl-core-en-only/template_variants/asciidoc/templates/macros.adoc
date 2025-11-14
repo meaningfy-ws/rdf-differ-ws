@@ -1,0 +1,76 @@
+{# Default way of showing errors #}
+{% macro render_error(message) -%}
+[NOTE]
+====
+*Error*
+
+{{ message|e }}
+====
+{%- endmacro %}
+
+{# Default macro for showing/wrapping the fetch results #}
+{% macro render_fetch_results(content, error) -%}
+    {% if error %}
+        {{ render_error(error) }}
+    {% else %}
+        {% if content is undefined %}
+            {{ render_error("Some content expected but none was found.") }}
+        {% else %}
+            {{ caller() }}
+        {% endif %}
+    {% endif %}
+{%- endmacro %}
+
+{% macro pandas_table(df, caption, column_labels={}) -%}
+    {% if (df is defined) and (df is not none) %}
+        {% set df = df.fillna(value="") %}
+.{{ caption }}
+[cols="{{ df.columns|length }}*", options="header"]
+|===
+        {% for column in df.columns %}
+            {% if column in column_labels %}
+|{{ column_labels[column] }}
+            {% else %}
+|{{ column }}
+            {% endif %}
+        {% endfor %}
+
+        {% for idx, row in df.iterrows() %}
+        {% for colname in df.columns %}
+            {# handle decimal format: float, float64, float32 #}
+            {% if 'float' in (df.dtypes[colname] | string) %}
+|{{ row[colname] | round(precision=2) }}
+            {% else %}
+|{{ row[colname] }}
+            {% endif %}
+        {% endfor %}
+
+        {% endfor %}
+|===
+    {% else %}
+        {{ render_error("How did you get here? did you forget to use 'render_fetch_results' macro?") }}
+    {% endif %}
+{%- endmacro %}
+
+{% macro count_value(df) %}
+    {% for idx, row in df.iterrows() %}
+        {% for colname in df.columns %}
+|{{ row[colname] }}
+        {% endfor %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro render_namespaces(namesapces_dist) %}
+.Prefixes
+[cols="1,3", options="header"]
+|===
+|Namespace
+|URI
+
+        {% for prefix, uri in namesapces_dist|dictsort %}
+|{{ prefix }}
+|{{ uri }}
+
+        {% endfor %}
+|===
+{% endmacro %}
