@@ -214,17 +214,19 @@ set-report-template:
 # Default values for environment variables
 TEMPLATE_SRC_DIR ?= ../diff-query-generator
 TEMPLATE_OUTPUT_DIR ?= $(TEMPLATE_SRC_DIR)/output
-TEMPLATE_AP ?= owl-core
-TEMPLATE_TYPE ?= html
+DEFAULT_PROFILE ?= owl-core
+DEFAULT_TEMPLATE ?= html
+PREFERRED_PROFILES ?= owl-core shacl-core skos-core
+PREFERRED_TEMPLATES ?= html asciidoc
 
 # Derived paths
-TEMPLATE_SRC_BASE = $(TEMPLATE_OUTPUT_DIR)/$(TEMPLATE_AP)
+TEMPLATE_SRC_BASE = $(TEMPLATE_OUTPUT_DIR)/$(DEFAULT_PROFILE)
 TEMPLATE_QUERIES_SRC = $(TEMPLATE_SRC_BASE)/queries
-TEMPLATE_HTML_SRC = $(TEMPLATE_SRC_BASE)/$(TEMPLATE_TYPE)
+TEMPLATE_HTML_SRC = $(TEMPLATE_SRC_BASE)/$(DEFAULT_TEMPLATE)
 
-TEMPLATE_DEST_BASE = resources/templates/$(TEMPLATE_AP)-en-only
+TEMPLATE_DEST_BASE = resources/templates/$(DEFAULT_PROFILE)-en-only
 TEMPLATE_QUERIES_DEST = $(TEMPLATE_DEST_BASE)/queries
-TEMPLATE_HTML_DEST = $(TEMPLATE_DEST_BASE)/template_variants/$(TEMPLATE_TYPE)/templates
+TEMPLATE_HTML_DEST = $(TEMPLATE_DEST_BASE)/template_variants/$(DEFAULT_TEMPLATE)/templates
 
 update_template:
 	@ echo "$(BUILD_PRINT)Updating templates from $(TEMPLATE_SRC_BASE)"
@@ -232,9 +234,29 @@ update_template:
 	@ mkdir -p $(TEMPLATE_HTML_DEST)
 	@ echo "$(MSG_PRINT)Copying queries from $(TEMPLATE_QUERIES_SRC) to $(TEMPLATE_QUERIES_DEST)"
 	@ cp -r $(TEMPLATE_QUERIES_SRC)/* $(TEMPLATE_QUERIES_DEST)/
-	@ echo "$(MSG_PRINT)Copying $(TEMPLATE_TYPE) templates from $(TEMPLATE_HTML_SRC) to $(TEMPLATE_HTML_DEST)"
+	@ echo "$(MSG_PRINT)Copying $(DEFAULT_TEMPLATE) templates from $(TEMPLATE_HTML_SRC) to $(TEMPLATE_HTML_DEST)"
 	@ cp -r $(TEMPLATE_HTML_SRC)/* $(TEMPLATE_HTML_DEST)/
 	@ echo "$(MSG_PRINT)Template update completed"
+
+update_all_templates:
+	@ for profile in $(PREFERRED_PROFILES); do \
+		for type in $(PREFERRED_TEMPLATES); do \
+			echo "$(BUILD_PRINT)Updating $$type templates for $$profile"; \
+			src_base=$(TEMPLATE_OUTPUT_DIR)/$$profile; \
+			queries_src=$$src_base/queries; \
+			type_src=$$src_base/$$type; \
+			dest_base=resources/templates/$$profile-en-only; \
+			queries_dest=$$dest_base/queries; \
+			type_dest=$$dest_base/template_variants/$$type/templates; \
+			mkdir -p $$queries_dest; \
+			mkdir -p $$type_dest; \
+			echo "$(MSG_PRINT)Copying queries from $$queries_src to $$queries_dest"; \
+			cp -r $$queries_src/* $$queries_dest/; \
+			echo "$(MSG_PRINT)Copying $$type templates from $$type_src to $$type_dest"; \
+			cp -r $$type_src/* $$type_dest/; \
+			echo "$(MSG_PRINT)Template update for $$profile ($$type) completed"; \
+		done \
+	done
 
 #-----------------------------------------------------------------------------
 # Run UI dev environment
