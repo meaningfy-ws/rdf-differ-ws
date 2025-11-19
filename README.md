@@ -7,13 +7,13 @@ With application profile (AP) templates that can be reused, extended or created 
 - 🧠 **Semantic Change Detection:** SPARQL-based diffing technique inspired by [skos-history](https://github.com/jneubert/skos-history)
 - 🧰 **Templated Reporting:** HTML/JSON report generation with the SPARQL-enabled [eds4jinja2](https://github.com/meaningfy-ws/eds4jinja2) Jinja extension
 - 🎛️ **Configurable Templates:** Customizable AP templates and fully automated query generation using [diff-query-generator](https://github.com/meaningfy-ws/diff-query-generator) (dqgen)
-- 🌐 **ReST API & GUI:** A fully qualified web service (WS) offering a web API and UI
+- 🌐 **ReST API, GUI & CLI:** A fully qualified web service (WS) offering a web API and UI, plus a CLI wrapper script
 
 RDF Differ comprises a set of tools that collectively follow a pipeline architecture:
 
 ![The RDF Differ Pipeline](docs/images/rdf-differ-pipeline.png)
 
-But you needn't worry about all of that, so here's what a report looks like:
+But you needn't worry about all of that, so here's what a report looks like (for you to decide if it's worth moving on to the usage and installation instructions):
 
 ![An RDF Differ Report](docs/images/rdf-differ-report-example.png)
 
@@ -21,9 +21,52 @@ RDF Differ is modular, extensible, and built to bridge the gap between basic RDF
 
 <!-- ![MS Copilot on RDF Diff Tools](docs/images/rdf-differ-copilot-answer.png) -->
 
+## Usage
+
+_This section is provided before the installation instructions as that one could be a long read._
+
+RDF Differ can be used via its ReST API, web UI, or command-line interface (CLI) script. The API and UI can be run locally or via Docker containers, while the CLI script can interact with any running instance of the API.
+
+The key concepts to be aware of when using RDF Differ are:
+
+- **Diff:** The process of comparing two RDF datasets (old vs. new) to identify changes. But in the tool's context, "creating a diff" simply means loading both datasets into the triplestore and preparing them for change detection.
+- **Report:** A structured summary of the identified changes, generated based on a specified application profile (AP) and template format (e.g. HTML). One can produce different reports from the same diff by varying the AP and template.
+- **Application Profile (AP):** A predefined set of SPARQL queries and templates that define how to detect and report changes for specific RDF vocabularies or use cases.
+
+The currently suppported APs are:
+
+- `owl-core-en-only`: For OWL ontologies with English labels
+- `shacl-core-en-only`: For SHACL shapes with English labels
+- `skos-core-en-only`: For SKOS vocabularies with English labels
+
+The language for labels matter for display purposes only. If you have another language, you will just miss the human-readable labels in the report, but the diffing will still work.
+
+The currently supported report templates are:
+
+- `JSON`: A machine-readable JSON format (based on [SPARQL Query Results JSON Format](https://www.w3.org/TR/sparql12-results-json/))
+- `HTML`: A human-readable HTML format (styled with CSS and interactive JavaScript tables)
+
+All AP templates can be edited or extended, and new ones can be created as needed. See the section on [Adding a new Application Profile template](#adding-a-new-application-profile-template) for more details. For modifications beyond a few lines or files, we recommend updating the existing meta-templates or introducing new ones in [dqgen](https://github.com/meaningfy-ws/diff-query-generator/tree/main/dqgen/resources), which is used to generate the queries and templates for RDF Differ, aside from defining the AP itself (in [CSV files](https://github.com/meaningfy-ws/diff-query-generator/tree/main/dqgen/resources/aps)).
+
+### Embedded SHACL in OWL TTL files
+
+There is special support in RDF Differ for handling OWL files (in RDF format, Turtle syntax) that have embedded SHACL shapes. The `bash/merge-owl-shacl.sh` script can be used to merge an OWL file and a SHACL file into a single OWL file. Merge both old and new files before passing the new "combined" file to the tool for diffing.
+
+This is to facilitate the retrieval of certain advanced information from the SHACL shapes, such as property domains, ranges and cardinalities, mainly for added instances of properties. This would otherwise not be doable with the current OWL-core profile.
+
+Example command using an actual lightweight ontology (ePO):
+
+```sh
+./bash/merge-owl-shacl.sh \
+  evaluation/vocabularies/ePO_core-4.2.0.ttl \ evaluation/vocabularies/ePO_core_shapes-4.2.0.ttl \
+  evaluation/vocabularies/ePO_core_combined-4.2.0.ttl
+```
+
+> **NOTE:** The script supports only Turtle syntax files (`.ttl` extension) at the moment. If you have another format, use a tool like [riot](https://jena.apache.org/documentation/io/#command-line-tools) (which is a requirement to run the script) to convert it to Turtle first.
+
 ## Installation
 
-> **NOTE**: The specified installation instructions are for personal deployment purposes only on a *NIX operating system. _(Slight modifications are required for production use, including having production-level Fuseki and Redis servers available.)_
+> The specified installation instructions are for personal deployment purposes only on a *NIX operating system. _(Slight modifications are required for production use, including having production-level Fuseki and Redis servers available.)_
 
 RDF Differ uses Fuseki (as the triplestore/database), Celery (for multithreading programming), Gunicorn (for serving), and Redis (for queue-based pesistent storage). For the corresponding Docker micro-services, it uses Traefik for the networking, _except when running tests_.
 
@@ -334,7 +377,7 @@ To create a new diff you can access [http://localhost:8030/create-diff](http://l
 To list the existing diffs you can access [http://localhost:8030](http://localhost:8030/)
 ![list of diffs page](docs/images/list-diffs-202010.png)
 
-Note: If you see an error for any of the pages, your setup is not right. Please either check your local services, or rebuild the docker services if you are using that (including deleting the created volume). Check also the Celery is running, which is needed for the asynchronous tasks.
+> **Note:** If you see an error for any of the pages, your setup is not right. Please either check your local services, or rebuild the docker services if you are using that (including deleting the created volume). Check also the Celery is running, which is needed for the asynchronous tasks.
 
 ## Change type inventory
 
@@ -658,7 +701,7 @@ by the filename and will contain a results key that will represent the result se
 
 To remove a query result set from the report simply remove the query from the queries folder.
 
-_Note: Doing this will also affect the html template and it's recommended to adjust the html template, if this exists as a template variant for the application profile that you are working with, following the instruction above to avoid errors when generating the hmtl template variant._
+> **NOTE:** Doing this will also affect the html template and it's recommended to adjust the html template, if this exists as a template variant for the application profile that you are working with, following the instruction above to avoid errors when generating the hmtl template variant._
 
 ## Contributing
 
