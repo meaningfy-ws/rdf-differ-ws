@@ -1,0 +1,4 @@
+= {{ conf.title }}
+
+{% block content %}
+{% endblock %}
