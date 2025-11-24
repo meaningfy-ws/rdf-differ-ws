@@ -30,7 +30,7 @@ or may not be a bug:
 1. class **epo:AcquiringCentralPurchasingBody** deleted `skos:prefLabel` (redundant, from changed property)
 1. class **epo:Document** added `skos:prefLabel` lang _es_
 1. class **epo:AccessTerm** deleted `skos:prefLabel`
-1. class **epo:AwardCriteriaSummary** updated `skos:prefLabel` (new value; original value moved to `skos:altLabel`)
+1. class **epo:AwardCriteriaSummary** updated `skos:prefLabel` (new value "Award criteria summarization"; original value "Award criteria summary" moved to `skos:altLabel`)
 1. class **epo:AwardCriteriaSummary** changed `skos:prefLabel` to `skos:altLabel` (cross-property move of original `skos:prefLabel` to `skos:altLabel`; could be ignored as the original property was retained with a new value)
 1. class **epo:AwardCriteriaSummary** added `skos:altLabel` (redundant, from changed property; could be considered non-redundant if the cross-property move is ignored)
 1. added objectProperty **epo:followsRulesSetBy** with domain `epo:PurchaseContract`, range `epo:FrameworkAgreement` and maxCardinality 1

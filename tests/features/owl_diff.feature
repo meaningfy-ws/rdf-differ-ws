@@ -6,10 +6,15 @@ Feature: OWL diffing
 
   Scenario Outline: Diffing example resources in the OWL sample
     When the diff is run
-    Then the report should contain the change for "<type>","<instance>","<operation>","<parent>","<new_value>"
+    Then the report should contain the change for "<resource_type>","<instance>","<operation>","<predicate>","<old_value>","<new_value>"
 
     Examples:
-      | type            | instance              | operation | parent                             | new_value  |
-      | class           | epo:AwardCriterion    | added     |                                    |            |
-      | data_property   | skos:prefLabel        | changed   | epo:AcquiringCentralPurchasingBody | rdfs:label |
-      | object_property | epo:followsRulesSetBy | added     |                                    |            |
+      | resource_type     | instance                                 | operation | predicate      | old_value              | new_value                    |
+      | class             | epo:AwardCriterion                       | added     |                |                        |                              |
+      | class             | epo:AdHocChannel                         | deleted   |                |                        |                              |
+      | class             | epo:AcquiringCentralPurchasingBody       | changed   | skos:prefLabel |                        | rdfs:label                   |
+      | class             | epo:AwardCriteriaSummary                 | updated   | skos:prefLabel | Award criteria summary | Award criteria summarization |
+      | datatype_property | epo:describesObjectiveParticipationRules | added     |                |                        |                              |
+      | datatype_property | epo:describesProfessionRelevantLaw       | deleted   |                |                        |                              |
+      | object_property   | epo:followsRulesSetBy                    | added     |                |                        |                              |
+      | object_property   | epo:exposesChannel                       | deleted   |                |                        |                              |

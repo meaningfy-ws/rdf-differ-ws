@@ -1,7 +1,7 @@
+from enum import Enum
 import json
 import os
 import subprocess
-import parse
 from pathlib import Path
 
 import pytest
@@ -17,6 +17,7 @@ REUSE_SAVED_REPORT = os.environ.get(
 # trick to run diffing only once and not for all scenarios
 _diff_cache = {}
 
+SUPPORTED_TYPES = ("class", "datatype_property", "object_property")
 
 @scenario("../features/owl_diff.feature", "Diffing example resources in the OWL sample")
 def test_owl_diff_feature():
@@ -126,8 +127,11 @@ def camel_to_snake(name: str) -> str:
             out += ch
     return out
 
+def build_query_key(operation: str, resource_type: str, prop_snake: str) -> str:
+    normalized = resource_type.replace("datatype_", "").replace("object_", "")
+    return f"{operation}_property_{normalized}_{prop_snake}.rq"
 
-# this is only possible in Behave (e.g. {parent:NullableString})
+# this is only possible in Behave (e.g. {predicate:NullableString})
 # @parse.with_pattern(r'.*')
 # def parse_nullable_string(text):
 #     return text
@@ -135,48 +139,51 @@ def camel_to_snake(name: str) -> str:
 
 
 # pytest-bdd currently lacks support for optional parameters (empty cells in the feature) in parse, so we use a regex trick
-# @then(parsers.parse('the report should contain the change for "{type}","{instance}","{operation}","{parent}","{new_value}"'))
+# @then(parsers.parse('the report should contain the change for "{type}","{instance}","{operation}","{predicate}","{old_value}","{new_value}"'))
 @then(
     parsers.re(
-        r'the report should contain the change for "(?P<type>[^"]*)","(?P<instance>[^"]*)","(?P<operation>[^"]*)","(?P<parent>[^"]*)","(?P<new_value>[^"]*)"'
+        r'the report should contain the change for "(?P<resource_type>[^"]*)","(?P<instance>[^"]*)","(?P<operation>[^"]*)","(?P<predicate>[^"]*)","(?P<old_value>[^"]*)","(?P<new_value>[^"]*)"'
     )
 )
-def assert_report_contains(ctx, type, instance, operation, parent, new_value):
+def assert_report_contains(ctx, resource_type, instance, operation, predicate, old_value, new_value):
     report = ctx.get("report")
     prefixes = ctx.get("prefixes")
 
     assert report is not None, "Report not found in context"
 
-    # empty strings in table become '', map them to None
-    parent = parent.strip() or None
+    # normalize inputs
+    predicate = predicate.strip() or None
     new_value = new_value.strip() or None
+    old_value = old_value.strip() or None
+    if resource_type == "data_property":
+        resource_type = "datatype_property"
 
-    if type == "class" and operation == "added":
-        key = "added_instance_class.rq"
+    if operation in ("added", "deleted") and resource_type in SUPPORTED_TYPES:
+        # unified handling for added/deleted instances
+        key = f"{operation}_instance_{resource_type}.rq"
         assert key in report, f"Missing key {key} in report"
         full_instance = expand(instance, prefixes)
         bindings = report[key].get("results", {}).get("bindings", [])
         assert any(
             b.get("instance", {}).get("value") == full_instance for b in bindings
-        ), f"Added class {full_instance} not found in {key}"
+        ), f"{operation.capitalize()} {resource_type} {full_instance} not found in {key}"
 
-    elif type in ("data_property", "object_property") and operation == "changed":
-        # instance here is the property (prefixed), parent is the class instance
-        prop_prefix, prop_local = instance.split(":", 1)
+    elif operation == "changed" and resource_type in SUPPORTED_TYPES:
+        prop_prefix, prop_local = predicate.split(":", 1)
         prop_snake = camel_to_snake(prop_local)
-        key = f"changed_property_class_{prop_snake}.rq"
+        key = build_query_key(operation, resource_type, prop_snake)
         assert key in report, f"Missing key {key} in report"
-        full_parent = expand(parent, prefixes)
+        full_instance = expand(instance, prefixes)
         bindings = report[key].get("results", {}).get("bindings", [])
-        # find binding for the parent instance
-        binding = None
-        for b in bindings:
-            if b.get("instance", {}).get("value") == full_parent:
-                binding = b
-                break
-        assert binding is not None, f"No binding for parent {full_parent} in {key}"
-        # check oldProperty and newProperty values
-        expected_old = expand(instance, prefixes)
+        binding = next(
+            (b for b in bindings if b.get("instance", {}).get("value") == full_instance),
+            None,
+        )
+        assert binding is not None, f"No binding for instance {full_instance} in {key}"
+        # check oldProperty and newProperty values for the given instance
+        # where the given predicate is oldProperty
+        # and the given newValue is newProperty
+        expected_old = expand(predicate, prefixes)
         expected_new = expand(new_value, prefixes)
         assert (
             binding.get("oldProperty", {}).get("value") == expected_old
@@ -184,17 +191,28 @@ def assert_report_contains(ctx, type, instance, operation, parent, new_value):
         assert (
             binding.get("newProperty", {}).get("value") == expected_new
         ), f"newProperty mismatch: expected {expected_new}, got {binding.get('newProperty', {}).get('value')}"
-
-    elif type in ("data_property", "object_property") and operation == "added":
-        key = f"added_instance_{'datatype_property' if type=='data_property' else 'object_property'}.rq"
+    elif operation == "updated" and resource_type in SUPPORTED_TYPES:
+        prop_prefix, prop_local = predicate.split(":", 1)
+        prop_snake = camel_to_snake(prop_local)
+        key = build_query_key(operation, resource_type, prop_snake)
         assert key in report, f"Missing key {key} in report"
         full_instance = expand(instance, prefixes)
         bindings = report[key].get("results", {}).get("bindings", [])
-        assert any(
-            b.get("instance", {}).get("value") == full_instance for b in bindings
-        ), f"Added property {full_instance} not found in {key}"
-
+        binding = next(
+            (b for b in bindings if b.get("instance", {}).get("value") == full_instance),
+            None,
+        )
+        assert binding is not None, f"No binding for instance {full_instance} in {key}"
+        # check oldValue and newValue values for the given predicate of the given instance
+        expected_old = old_value.strip() if old_value else None
+        expected_new = new_value.strip() if new_value else None
+        assert (
+            binding.get("oldValue", {}).get("value") == expected_old
+        ), f"oldValue mismatch: expected {expected_old}, got {binding.get('oldValue', {}).get('value')}"
+        assert (
+            binding.get("newValue", {}).get("value") == expected_new
+        ), f"newValue mismatch: expected {expected_new}, got {binding.get('newValue', {}).get('value')}"
     else:
         raise AssertionError(
-            f"Unsupported combination: type={type}, operation={operation}"
+            f"Unsupported combination: resource_type={resource_type}, operation={operation}"
         )
