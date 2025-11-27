@@ -236,7 +236,7 @@ development-specific containers. Run the following to start everything and also
 remove the testing containers at the end:
 
 ```bash
-make start-services-test # run separately to avoid race conditions
+make ENVIRONMENT=test start-services-test # run separately to avoid race conditions
 make ENVIRONMENT=test test teardown-services
 ```
 
