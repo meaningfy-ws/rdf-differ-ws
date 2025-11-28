@@ -69,7 +69,7 @@ The following information is currently retrieved for reporting added instances o
 - Property range(s) via `sh:datatype`, `sh:class` and `sh:node/sh:property/sh:hasValue`
 - Property cardinality constraints (min/max) via `sh:minCount` and `sh:maxCount`
 
-> **NOTE:** The script supports only Turtle syntax files (`.ttl` extension) at the moment. If you have another format, use a tool like [riot](https://jena.apache.org/documentation/io/#command-line-tools) (which is a requirement to run the script) to convert it to Turtle first.
+> **NOTE:** The script supports only Turtle syntax files (`.ttl` extension) at the moment. If you have another format, use a tool like [riot](https://jena.apache.org/documentation/tools/#riot-and-related) (which is a requirement to run the script) to convert it to Turtle first.
 
 ## Installation
 
@@ -102,7 +102,9 @@ or Mac (because of some limitations with GitHub CI), those platforms should work
 
 #### Optional dependencies
 
-If you would like to run the `bash/merge-owl-shacl.sh` script for merging OWL and SHACL files to report embedded constraint information, you need to have Apache Jena's Riot command-line tool installed. Download [Jena](https://jena.apache.org/download/) to get access to its CLI tools (you will want to put them in your `PATH` to run them directly as commands).
+If you would like to run the `bash/merge-owl-shacl.sh` script for merging OWL and SHACL files to report embedded constraint information, you need to have Apache Jena's `riot` command-line tool installed.
+
+Download [Jena](https://jena.apache.org/download/) to get access to its CLI tools (you will want to [put them in your `PATH`](https://jena.apache.org/documentation/tools/#common-issues-with-running-the-tools) to be able to run them as commands). If you are looking to integrate this into your GitHub CI/CD pipelines, you can also use a [third-party GitHub Action](https://github.com/marketplace/actions/setup-apache-jena).
 
 ### Installation with Docker (recommended)
 
