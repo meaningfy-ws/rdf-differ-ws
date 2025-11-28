@@ -7,12 +7,12 @@
    {% call mc.render_fetch_results(content, error) %}
     {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
     
-    <h2 class="ui header">Deleted Node Shapes</h2>
+    <h2 class="ui header">Deleted Node Shape</h2>
     <section class="ui basic segment">
         <p>The table below lists the deleted <strong>shacl:NodeShape</strong>
         </p>
         <p><strong>Query identifier:</strong> deleted_instance_node_shape.rq</p>
-        {{ mc.pandas_table(content, "Deleted Node Shapes") }}
+        {{ mc.pandas_table(content, "Deleted Node Shape") }}
     </section>
     
     {% endcall %}

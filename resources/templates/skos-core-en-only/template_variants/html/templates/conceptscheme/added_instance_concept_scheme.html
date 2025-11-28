@@ -7,12 +7,12 @@
    {% call mc.render_fetch_results(content, error) %}
     {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
     
-    <h2 class="ui header">Added Concept Schemes</h2>
+    <h2 class="ui header">Added Concept Scheme</h2>
     <section class="ui basic segment">
         <p>The table below lists the added <strong>skos:ConceptScheme</strong>
         </p>
         <p><strong>Query identifier:</strong> added_instance_concept_scheme.rq</p>
-        {{ mc.pandas_table(content, "Added Concept Schemes") }}
+        {{ mc.pandas_table(content, "Added Concept Scheme") }}
     </section>
     
     {% endcall %}

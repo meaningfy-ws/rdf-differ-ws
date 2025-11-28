@@ -7,12 +7,12 @@
    {% call mc.render_fetch_results(content, error) %}
     {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
     
-    <h2 class="ui header">Deleted Concepts</h2>
+    <h2 class="ui header">Deleted Concept</h2>
     <section class="ui basic segment">
         <p>The table below lists the deleted <strong>skos:Concept</strong>
         </p>
         <p><strong>Query identifier:</strong> deleted_instance_concept.rq</p>
-        {{ mc.pandas_table(content, "Deleted Concepts") }}
+        {{ mc.pandas_table(content, "Deleted Concept") }}
     </section>
     
     {% endcall %}

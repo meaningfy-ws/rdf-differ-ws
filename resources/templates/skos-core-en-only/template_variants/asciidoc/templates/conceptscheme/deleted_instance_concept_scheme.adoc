@@ -7,8 +7,8 @@
    {% call mc.render_fetch_results(content, error) %}
     {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
     
-=== Deleted Concept Schemes
-    {{ mc.pandas_table(content, "Deleted Concept Schemes") }}
+=== Deleted Concept Scheme
+    {{ mc.pandas_table(content, "Deleted Concept Scheme") }}
     
     {% endcall %}
 {% endif %}
