@@ -33,6 +33,18 @@ The key concepts to be aware of when using RDF Differ are:
 - **Report:** A structured summary of the identified changes, generated based on a specified application profile (AP) and template format (e.g. HTML). One can produce different reports from the same diff by varying the AP and template.
 - **Application Profile (AP):** A predefined set of SPARQL queries and templates that define how to detect and report changes for specific RDF vocabularies or use cases.
 
+## Change Types
+
+The currently detected change types are:
+
+- Added resource
+- Deleted resource
+- Updated (property value change)
+- Moved (property with value moved from one resource to another)
+- Changed (value moved from one property to another within the same resource)
+
+> The term "resource" and "instance" are used interchangeably in the rdf-differ suite of tools to refer to the RDF subjects of change detection, i.e. in the case of an OWL ontology, the entities with T-Box declarations of `a owl:Class`, `a owl:DatatypeProperty` or `a owl:ObjectProperty`. Not to be confused with instance in the OWL A-Box sense (i.e. "individuals" of the aforementioned).
+
 The currently suppported APs are:
 
 - `owl-core-en-only`: For OWL ontologies with English labels
@@ -43,8 +55,9 @@ The language for labels matter for display purposes only. If you have another la
 
 The currently supported report templates are:
 
-- `JSON`: A machine-readable JSON format (based on [SPARQL Query Results JSON Format](https://www.w3.org/TR/sparql12-results-json/))
-- `HTML`: A human-readable HTML format (styled with CSS and interactive JavaScript tables)
+- `JSON`: A machine-readable format (based on [SPARQL Query Results JSON Format](https://www.w3.org/TR/sparql12-results-json/))
+- `HTML`: The world's standard Web markup format (styled with CSS and interactive JavaScript tables)
+- `AsciiDoc`: A human-readable plain-text markup format (opens various conversion possibilities including HTML)
 
 All AP templates can be edited or extended, and new ones can be created as needed. See the section on [Adding a new Application Profile template](#adding-a-new-application-profile-template) for more details. For modifications beyond a few lines or files, we recommend updating the existing meta-templates or introducing new ones in [dqgen](https://github.com/meaningfy-ws/diff-query-generator/tree/main/dqgen/resources), which is used to generate the queries and templates for RDF Differ, aside from defining the AP itself (in [CSV files](https://github.com/meaningfy-ws/diff-query-generator/tree/main/dqgen/resources/aps)).
 
