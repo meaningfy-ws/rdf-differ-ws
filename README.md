@@ -58,9 +58,16 @@ Example command using an actual lightweight ontology (ePO):
 
 ```sh
 ./bash/merge-owl-shacl.sh \
-  evaluation/vocabularies/ePO_core-4.2.0.ttl \ evaluation/vocabularies/ePO_core_shapes-4.2.0.ttl \
+  evaluation/vocabularies/ePO_core-4.2.0.ttl \
+  evaluation/vocabularies/ePO_core_shapes-4.2.0.ttl \
   evaluation/vocabularies/ePO_core_combined-4.2.0.ttl
 ```
+
+The following information is currently retrieved for reporting added instances of properties:
+
+- Property domain(s) via `sh:targetClass`
+- Property range(s) via `sh:datatype`, `sh:class` and `sh:node/sh:property/sh:hasValue`
+- Property cardinality constraints (min/max) via `sh:minCount` and `sh:maxCount`
 
 > **NOTE:** The script supports only Turtle syntax files (`.ttl` extension) at the moment. If you have another format, use a tool like [riot](https://jena.apache.org/documentation/io/#command-line-tools) (which is a requirement to run the script) to convert it to Turtle first.
 
@@ -92,6 +99,10 @@ sudo yum install epel-release
 
 For Debian derivative systems, no additional package repository should be needed, for at least Ubuntu 18.04. While we do not test for Windows/WSL2
 or Mac (because of some limitations with GitHub CI), those platforms should work as well. Even Windows 10/11 alone should work as long as you don't use Make but Python and Docker commands directly, as the Makefile contains ASCII escape sequencies and *NIX commands which PowerShell cannot interpret.
+
+#### Optional dependencies
+
+If you would like to run the `bash/merge-owl-shacl.sh` script for merging OWL and SHACL files to report embedded constraint information, you need to have Apache Jena's Riot command-line tool installed. Download [Jena](https://jena.apache.org/download/) to get access to its CLI tools (you will want to put them in your `PATH` to run them directly as commands).
 
 ### Installation with Docker (recommended)
 
