@@ -165,7 +165,7 @@ def assert_report_contains(ctx, resource_type, instance, operation, predicate, o
         full_instance = expand(instance, prefixes)
         bindings = report[key].get("results", {}).get("bindings", [])
         assert any(
-            b.get("instance", {}).get("value") == full_instance for b in bindings
+            b.get("resource", {}).get("value") == full_instance for b in bindings
         ), f"{operation.capitalize()} {resource_type} {full_instance} not found in {key}"
 
     elif operation == "changed" and resource_type in SUPPORTED_TYPES:
@@ -176,7 +176,7 @@ def assert_report_contains(ctx, resource_type, instance, operation, predicate, o
         full_instance = expand(instance, prefixes)
         bindings = report[key].get("results", {}).get("bindings", [])
         binding = next(
-            (b for b in bindings if b.get("instance", {}).get("value") == full_instance),
+            (b for b in bindings if b.get("resource", {}).get("value") == full_instance),
             None,
         )
         assert binding is not None, f"No binding for instance {full_instance} in {key}"
@@ -199,7 +199,7 @@ def assert_report_contains(ctx, resource_type, instance, operation, predicate, o
         full_instance = expand(instance, prefixes)
         bindings = report[key].get("results", {}).get("bindings", [])
         binding = next(
-            (b for b in bindings if b.get("instance", {}).get("value") == full_instance),
+            (b for b in bindings if b.get("resource", {}).get("value") == full_instance),
             None,
         )
         assert binding is not None, f"No binding for instance {full_instance} in {key}"

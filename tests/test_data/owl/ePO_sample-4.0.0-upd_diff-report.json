@@ -2,36 +2,26 @@
   "added_instance_class.rq": {
     "head": {
       "vars": [
-        "class",
-        "instance",
-        "prefLabel",
-        "prefLabelLang",
-        "actionType"
+        "resource",
+        "label",
+        "labelLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AwardCriterion"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Award criterion",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AwardCriterion"
           }
         }
       ]
@@ -40,40 +30,30 @@
   "added_instance_datatype_property.rq": {
     "head": {
       "vars": [
-        "class",
-        "instance",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "domain",
         "range",
         "minCardinality",
-        "maxCardinality",
-        "actionType"
+        "maxCardinality"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#DatatypeProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#describesObjectiveParticipationRules"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Describes objective participation rules",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#describesObjectiveParticipationRules"
           }
         }
       ]
@@ -82,53 +62,43 @@
   "added_instance_object_property.rq": {
     "head": {
       "vars": [
-        "class",
-        "instance",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "domain",
         "range",
         "minCardinality",
-        "maxCardinality",
-        "actionType"
+        "maxCardinality"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#ObjectProperty"
-          },
           "domain": {
             "type": "uri",
             "value": "http://data.europa.eu/a4g/ontology#PurchaseContract"
           },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#followsRulesSetBy"
+          "label": {
+            "type": "literal",
+            "value": "Follows rules set by",
+            "xml:lang": "en"
+          },
+          "labelLang": {
+            "type": "literal",
+            "value": "en"
           },
           "maxCardinality": {
             "datatype": "http://www.w3.org/2001/XMLSchema#integer",
             "type": "literal",
             "value": "1"
           },
-          "prefLabel": {
-            "type": "literal",
-            "value": "Follows rules set by",
-            "xml:lang": "en"
-          },
-          "prefLabelLang": {
-            "type": "literal",
-            "value": "en"
-          },
           "range": {
             "type": "uri",
             "value": "http://data.europa.eu/a4g/ontology#FrameworkAgreement"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#followsRulesSetBy"
           }
         }
       ]
@@ -138,43 +108,33 @@
   "added_property_class_alt_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AwardCriteriaSummary"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Award criteria summarization",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#altLabel"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AwardCriteriaSummary"
           },
           "value": {
             "type": "literal",
@@ -194,43 +154,33 @@
   "added_property_class_definition.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AwardCriterion"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Award criterion",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#definition"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AwardCriterion"
           },
           "value": {
             "type": "literal",
@@ -253,43 +203,33 @@
   "added_property_class_is_defined_by.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AwardCriterion"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Award criterion",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AwardCriterion"
           },
           "value": {
             "type": "uri",
@@ -302,43 +242,33 @@
   "added_property_class_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AcquiringCentralPurchasingBody"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Acquiring central purchasing body",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AcquiringCentralPurchasingBody"
           },
           "value": {
             "type": "literal",
@@ -357,43 +287,33 @@
   "added_property_class_pref_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AwardCriterion"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Award criterion",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AwardCriterion"
           },
           "value": {
             "type": "literal",
@@ -406,30 +326,22 @@
           }
         },
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#Document"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Document",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#Document"
           },
           "value": {
             "type": "literal",
@@ -448,43 +360,33 @@
   "added_property_class_sub_class_of.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AwardCriterion"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Award criterion",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#subClassOf"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AwardCriterion"
           },
           "value": {
             "type": "uri",
@@ -507,43 +409,33 @@
   "added_property_datatype_property_is_defined_by.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#DatatypeProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#describesObjectiveParticipationRules"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Describes objective participation rules",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#describesObjectiveParticipationRules"
           },
           "value": {
             "type": "uri",
@@ -556,43 +448,33 @@
   "added_property_datatype_property_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#DatatypeProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#describesProfession"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Describes profession",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#describesProfession"
           },
           "value": {
             "type": "literal",
@@ -610,43 +492,33 @@
   "added_property_datatype_property_pref_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#DatatypeProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#describesObjectiveParticipationRules"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Describes objective participation rules",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#describesObjectiveParticipationRules"
           },
           "value": {
             "type": "literal",
@@ -667,43 +539,33 @@
   "added_property_object_property_alt_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#ObjectProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#describesResultNotice"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Describes result notice",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#altLabel"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#describesResultNotice"
           },
           "value": {
             "type": "literal",
@@ -730,43 +592,33 @@
   "added_property_object_property_is_defined_by.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#ObjectProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#followsRulesSetBy"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Follows rules set by",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#followsRulesSetBy"
           },
           "value": {
             "type": "uri",
@@ -779,43 +631,33 @@
   "added_property_object_property_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#ObjectProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#exposesInvoiceeChannel"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Exposes invoicee channel",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#exposesInvoiceeChannel"
           },
           "value": {
             "type": "literal",
@@ -834,43 +676,33 @@
   "added_property_object_property_pref_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "addition"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#ObjectProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#followsRulesSetBy"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Follows rules set by",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#followsRulesSetBy"
           },
           "value": {
             "type": "literal",
@@ -920,31 +752,26 @@
   "changed_property_class_pref_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "oldProperty",
         "newProperty",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
+          "label": {
             "type": "literal",
-            "value": "changed"
+            "value": "Acquiring central purchasing body",
+            "xml:lang": "en"
           },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AcquiringCentralPurchasingBody"
+          "labelLang": {
+            "type": "literal",
+            "value": "en"
           },
           "newProperty": {
             "type": "uri",
@@ -954,14 +781,9 @@
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
           },
-          "prefLabel": {
-            "type": "literal",
-            "value": "Acquiring central purchasing body",
-            "xml:lang": "en"
-          },
-          "prefLabelLang": {
-            "type": "literal",
-            "value": "en"
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AcquiringCentralPurchasingBody"
           },
           "value": {
             "type": "literal",
@@ -974,17 +796,14 @@
           }
         },
         {
-          "actionType": {
+          "label": {
             "type": "literal",
-            "value": "changed"
+            "value": "Award criteria summarization",
+            "xml:lang": "en"
           },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AwardCriteriaSummary"
+          "labelLang": {
+            "type": "literal",
+            "value": "en"
           },
           "newProperty": {
             "type": "uri",
@@ -994,14 +813,9 @@
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
           },
-          "prefLabel": {
-            "type": "literal",
-            "value": "Award criteria summarization",
-            "xml:lang": "en"
-          },
-          "prefLabelLang": {
-            "type": "literal",
-            "value": "en"
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AwardCriteriaSummary"
           },
           "value": {
             "type": "literal",
@@ -7062,40 +6876,30 @@
       ]
     }
   },
-  "dataset_name": "test_owl_20251117194751_404546",
+  "dataset_name": "diffuscPpuFE22",
   "deleted_instance_class.rq": {
     "head": {
       "vars": [
-        "class",
-        "instance",
-        "prefLabel",
-        "prefLabelLang",
-        "actionType"
+        "resource",
+        "label",
+        "labelLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AdHocChannel"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Ad hoc channel",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AdHocChannel"
           }
         }
       ]
@@ -7104,36 +6908,26 @@
   "deleted_instance_datatype_property.rq": {
     "head": {
       "vars": [
-        "class",
-        "instance",
-        "prefLabel",
-        "prefLabelLang",
-        "actionType"
+        "resource",
+        "label",
+        "labelLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#DatatypeProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#describesProfessionRelevantLaw"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Describes profession relevant law",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#describesProfessionRelevantLaw"
           }
         }
       ]
@@ -7142,36 +6936,26 @@
   "deleted_instance_object_property.rq": {
     "head": {
       "vars": [
-        "class",
-        "instance",
-        "prefLabel",
-        "prefLabelLang",
-        "actionType"
+        "resource",
+        "label",
+        "labelLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#ObjectProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#exposesChannel"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Exposes channel",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#exposesChannel"
           }
         }
       ]
@@ -7184,43 +6968,33 @@
   "deleted_property_class_definition.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AdHocChannel"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Ad hoc channel",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#definition"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AdHocChannel"
           },
           "value": {
             "type": "literal",
@@ -7243,43 +7017,33 @@
   "deleted_property_class_is_defined_by.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AdHocChannel"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Ad hoc channel",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AdHocChannel"
           },
           "value": {
             "type": "uri",
@@ -7294,44 +7058,34 @@
   "deleted_property_class_pref_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
+          "label": {
             "type": "literal",
-            "value": "deletion"
+            "value": "Access term",
+            "xml:lang": "en"
           },
-          "class": {
+          "labelLang": {
+            "type": "literal",
+            "value": "en"
+          },
+          "property": {
             "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
+            "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
           },
-          "instance": {
+          "resource": {
             "type": "uri",
             "value": "http://data.europa.eu/a4g/ontology#AccessTerm"
           },
-          "prefLabel": {
-            "type": "literal",
-            "value": "Access term",
-            "xml:lang": "en"
-          },
-          "prefLabelLang": {
-            "type": "literal",
-            "value": "en"
-          },
-          "property": {
-            "type": "uri",
-            "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
-          },
           "value": {
             "type": "literal",
             "value": "Access term",
@@ -7343,31 +7097,23 @@
           }
         },
         {
-          "actionType": {
+          "label": {
             "type": "literal",
-            "value": "deletion"
+            "value": "Acquiring central purchasing body",
+            "xml:lang": "en"
           },
-          "class": {
+          "labelLang": {
+            "type": "literal",
+            "value": "en"
+          },
+          "property": {
             "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
+            "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
           },
-          "instance": {
+          "resource": {
             "type": "uri",
             "value": "http://data.europa.eu/a4g/ontology#AcquiringCentralPurchasingBody"
           },
-          "prefLabel": {
-            "type": "literal",
-            "value": "Acquiring central purchasing body",
-            "xml:lang": "en"
-          },
-          "prefLabelLang": {
-            "type": "literal",
-            "value": "en"
-          },
-          "property": {
-            "type": "uri",
-            "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
-          },
           "value": {
             "type": "literal",
             "value": "Acquiring central purchasing body",
@@ -7379,31 +7125,23 @@
           }
         },
         {
-          "actionType": {
+          "label": {
             "type": "literal",
-            "value": "deletion"
+            "value": "Ad hoc channel",
+            "xml:lang": "en"
           },
-          "class": {
+          "labelLang": {
+            "type": "literal",
+            "value": "en"
+          },
+          "property": {
             "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
+            "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
           },
-          "instance": {
+          "resource": {
             "type": "uri",
             "value": "http://data.europa.eu/a4g/ontology#AdHocChannel"
           },
-          "prefLabel": {
-            "type": "literal",
-            "value": "Ad hoc channel",
-            "xml:lang": "en"
-          },
-          "prefLabelLang": {
-            "type": "literal",
-            "value": "en"
-          },
-          "property": {
-            "type": "uri",
-            "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
-          },
           "value": {
             "type": "literal",
             "value": "Ad hoc channel",
@@ -7415,30 +7153,22 @@
           }
         },
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AwardCriteriaSummary"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Award criteria summary",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AwardCriteriaSummary"
           },
           "value": {
             "type": "literal",
@@ -7457,43 +7187,33 @@
   "deleted_property_class_sub_class_of.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AdHocChannel"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Ad hoc channel",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#subClassOf"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AdHocChannel"
           },
           "value": {
             "type": "uri",
@@ -7516,43 +7236,33 @@
   "deleted_property_datatype_property_is_defined_by.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#DatatypeProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#describesProfessionRelevantLaw"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Describes profession relevant law",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#describesProfessionRelevantLaw"
           },
           "value": {
             "type": "uri",
@@ -7567,43 +7277,33 @@
   "deleted_property_datatype_property_pref_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#DatatypeProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#describesProfessionRelevantLaw"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Describes profession relevant law",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#describesProfessionRelevantLaw"
           },
           "value": {
             "type": "literal",
@@ -7634,43 +7334,33 @@
   "deleted_property_object_property_is_defined_by.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#ObjectProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#exposesChannel"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Exposes channel",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#exposesChannel"
           },
           "value": {
             "type": "uri",
@@ -7685,44 +7375,34 @@
   "deleted_property_object_property_pref_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "value",
-        "valueLang",
-        "actionType"
+        "valueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
+          "label": {
             "type": "literal",
-            "value": "deletion"
+            "value": "Acts on behalf of",
+            "xml:lang": "en"
           },
-          "class": {
+          "labelLang": {
+            "type": "literal",
+            "value": "en"
+          },
+          "property": {
             "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#ObjectProperty"
+            "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
           },
-          "instance": {
+          "resource": {
             "type": "uri",
             "value": "http://data.europa.eu/a4g/ontology#actsOnBehalfOf"
           },
-          "prefLabel": {
-            "type": "literal",
-            "value": "Acts on behalf of",
-            "xml:lang": "en"
-          },
-          "prefLabelLang": {
-            "type": "literal",
-            "value": "en"
-          },
-          "property": {
-            "type": "uri",
-            "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
-          },
           "value": {
             "type": "literal",
             "value": "Acts on behalf of",
@@ -7734,31 +7414,23 @@
           }
         },
         {
-          "actionType": {
+          "label": {
             "type": "literal",
-            "value": "deletion"
+            "value": "Distributes offer",
+            "xml:lang": "en"
           },
-          "class": {
+          "labelLang": {
+            "type": "literal",
+            "value": "en"
+          },
+          "property": {
             "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#ObjectProperty"
+            "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
           },
-          "instance": {
+          "resource": {
             "type": "uri",
             "value": "http://data.europa.eu/a4g/ontology#distributesOffer"
           },
-          "prefLabel": {
-            "type": "literal",
-            "value": "Distributes offer",
-            "xml:lang": "en"
-          },
-          "prefLabelLang": {
-            "type": "literal",
-            "value": "en"
-          },
-          "property": {
-            "type": "uri",
-            "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
-          },
           "value": {
             "type": "literal",
             "value": "Distributes offer",
@@ -7770,30 +7442,22 @@
           }
         },
         {
-          "actionType": {
-            "type": "literal",
-            "value": "deletion"
-          },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#ObjectProperty"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#exposesChannel"
-          },
-          "prefLabel": {
+          "label": {
             "type": "literal",
             "value": "Exposes channel",
             "xml:lang": "en"
           },
-          "prefLabelLang": {
+          "labelLang": {
             "type": "literal",
             "value": "en"
           },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#exposesChannel"
           },
           "value": {
             "type": "literal",
@@ -7892,7 +7556,7 @@
   "moved_property_ontology_title.rq": "No changes found.",
   "moved_property_ontology_version_info.rq": "No changes found.",
   "moved_property_ontology_version_iri.rq": "No changes found.",
-  "timestamp": "17-Nov-2025T20:47:52",
+  "timestamp": "28-Nov-2025T20:39:39",
   "updated_property_class_alt_label.rq": "No changes found.",
   "updated_property_class_change_note.rq": "No changes found.",
   "updated_property_class_comment.rq": "No changes found.",
@@ -7908,32 +7572,27 @@
   "updated_property_class_pref_label.rq": {
     "head": {
       "vars": [
-        "instance",
-        "class",
-        "prefLabel",
-        "prefLabelLang",
+        "resource",
+        "label",
+        "labelLang",
         "property",
         "oldValue",
         "oldValueLang",
         "newValue",
-        "newValueLang",
-        "actionType"
+        "newValueLang"
       ]
     },
     "results": {
       "bindings": [
         {
-          "actionType": {
+          "label": {
             "type": "literal",
-            "value": "updated"
+            "value": "Award criteria summarization",
+            "xml:lang": "en"
           },
-          "class": {
-            "type": "uri",
-            "value": "http://www.w3.org/2002/07/owl#Class"
-          },
-          "instance": {
-            "type": "uri",
-            "value": "http://data.europa.eu/a4g/ontology#AwardCriteriaSummary"
+          "labelLang": {
+            "type": "literal",
+            "value": "en"
           },
           "newValue": {
             "type": "literal",
@@ -7953,18 +7612,13 @@
             "type": "literal",
             "value": "en"
           },
-          "prefLabel": {
-            "type": "literal",
-            "value": "Award criteria summarization",
-            "xml:lang": "en"
-          },
-          "prefLabelLang": {
-            "type": "literal",
-            "value": "en"
-          },
           "property": {
             "type": "uri",
             "value": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          },
+          "resource": {
+            "type": "uri",
+            "value": "http://data.europa.eu/a4g/ontology#AwardCriteriaSummary"
           }
         }
       ]

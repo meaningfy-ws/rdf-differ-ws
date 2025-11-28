@@ -37,8 +37,10 @@ PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 
 # Show all movements cross instance for reified structures
-SELECT DISTINCT ?oldInstance ?class ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance ?newInstancePrefLabel
-  ?newInstancePrefLabelLang ?property ?object ?objProperty ?value ?valueLang ("moved" as ?actionType)
+SELECT DISTINCT
+  (?oldInstance AS ?oldResource) (?oldInstancePrefLabel AS ?oldResourceLabel) (?oldInstancePrefLabelLang AS ?oldResourceLabelLang)
+  (?newInstance AS ?newResource) (?newInstancePrefLabel AS ?newResourceLabel) (?newInstancePrefLabelLang AS ?newResourceLabelLang)
+  ?property ?object ?objProperty ?value ?valueLang
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
