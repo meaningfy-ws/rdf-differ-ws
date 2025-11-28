@@ -128,7 +128,7 @@ To stop ALL docker services at any time:
 make stop
 ```
 
-> If at any time you think you are experiencing odd behaviour, such as a `500 Internal Server Error` or `404 Not Found`, use your preferred method to completely remove (purge) the docker containers, images and volumes related to this project, files inside `db`, `reports` and `fuseki-data`, and redo everything.
+> If at any time you think you are experiencing odd behaviour, such as a `500 Internal Server Error` or `404 Not Found`, use your preferred method to completely remove (purge) the docker containers, images and volumes related to this project, files inside `db`, `reports`, `fuseki-data` and `logs` (sometimes file permissions can differ when switching between normal and testing environments and this can prevent startup), and redo everything.
 >
 > **WARNING:** Do not create files or folders under `db` or `reports` yourself. The tests use these folders and there are certain assumptions the code makes about their structure, which your file or folder may not comply with.
 
