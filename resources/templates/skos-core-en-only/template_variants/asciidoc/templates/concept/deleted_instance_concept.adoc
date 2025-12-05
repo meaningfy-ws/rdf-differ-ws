@@ -7,8 +7,8 @@
    {% call mc.render_fetch_results(content, error) %}
     {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
     
-=== Deleted Concepts
-    {{ mc.pandas_table(content, "Deleted Concepts") }}
+=== Deleted Concept
+    {{ mc.pandas_table(content, "Deleted Concept") }}
     
     {% endcall %}
 {% endif %}

@@ -7,8 +7,8 @@
    {% call mc.render_fetch_results(content, error) %}
     {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
     
-=== Added Ontologys
-    {{ mc.pandas_table(content, "Added Ontologys") }}
+=== Added Ontology
+    {{ mc.pandas_table(content, "Added Ontology") }}
     
     {% endcall %}
 {% endif %}

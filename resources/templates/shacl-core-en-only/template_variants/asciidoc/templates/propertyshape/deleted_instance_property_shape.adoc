@@ -7,8 +7,8 @@
    {% call mc.render_fetch_results(content, error) %}
     {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
     
-=== Deleted Property Shapes
-    {{ mc.pandas_table(content, "Deleted Property Shapes") }}
+=== Deleted Property Shape
+    {{ mc.pandas_table(content, "Deleted Property Shape") }}
     
     {% endcall %}
 {% endif %}
