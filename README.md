@@ -21,11 +21,9 @@ RDF Differ is modular, extensible, and built to bridge the gap between basic RDF
 
 <!-- ![MS Copilot on RDF Diff Tools](docs/images/rdf-differ-copilot-answer.png) -->
 
-## Usage
+## Overview
 
-_This section is provided before the installation instructions as that one could be a long read._
-
-RDF Differ can be used via its ReST API, web UI, or command-line interface (CLI) script. The API and UI can be run locally or via Docker containers, while the CLI script can interact with any running instance of the API.
+RDF Differ can be used via a ReST API, web UI, or command-line interface (CLI). The API and UI can be run locally or via Docker containers, while the CLI scripts can interact with any running instance of the API.
 
 The key concepts to be aware of when using RDF Differ are:
 
@@ -33,7 +31,7 @@ The key concepts to be aware of when using RDF Differ are:
 - **Report:** A structured summary of the identified changes, generated based on a specified application profile (AP) and template format (e.g. HTML). One can produce different reports from the same diff by varying the AP and template.
 - **Application Profile (AP):** A predefined set of SPARQL queries and templates that define how to detect and report changes for specific RDF vocabularies or use cases.
 
-## Change Types
+### Change Types
 
 The currently detected change types are:
 
@@ -43,13 +41,19 @@ The currently detected change types are:
 - Moved (property with value moved from one resource to another)
 - Changed (value moved from one property to another within the same resource)
 
+The _updated_, _moved_ and _changed_ types are essentially details about "modified resources", but they are reported separately to provide more granular insights into the nature of the changes. Therefore, modifications are currently not reported for the resource as a whole (with statistics), but rather for each property that has changed.
+
 > The term "resource" and "instance" are used interchangeably in the rdf-differ suite of tools to refer to the RDF subjects of change detection, i.e. in the case of an OWL ontology, the entities with T-Box declarations of `a owl:Class`, `a owl:DatatypeProperty` or `a owl:ObjectProperty`. Not to be confused with instance in the OWL A-Box sense (i.e. "individuals" of the aforementioned).
+
+### Application Profiles and Report Templates
+
+RDF Differ uses application profiles (APs) to define how to detect and report changes for specific RDF vocabularies or use cases. Each AP consists of a set of SPARQL queries and templates that are used to generate the diff reports. The AP itself has its own template structure, which is defined in [dqgen](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/).
 
 The currently suppported APs are:
 
-- `owl-core-en-only`: For OWL ontologies with English labels
-- `shacl-core-en-only`: For SHACL shapes with English labels
-- `skos-core-en-only`: For SKOS vocabularies with English labels
+- [owl-core](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/owl-core.csv)-en-only: For OWL ontologies with English labels
+- [shacl-core](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/shacl-core.csv)-en-only: For SHACL shapes with English labels
+- [skos-core](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/skos-core.csv)-en-only: For SKOS vocabularies with English labels
 
 The language for labels matter for display purposes only. If you have another language, you will just miss the human-readable labels in the report, but the diffing will still work.
 
@@ -63,26 +67,17 @@ All AP templates can be edited or extended, and new ones can be created as neede
 
 ### Embedded SHACL in OWL TTL files
 
-There is special support in RDF Differ for handling OWL files (in RDF format, Turtle syntax) that have embedded SHACL shapes. The `bash/merge-owl-shacl.sh` script can be used to merge an OWL file and a SHACL file into a single OWL file. Merge both old and new files before passing the new "combined" file to the tool for diffing.
+There is special support in RDF Differ for handling OWL files (in RDF format, Turtle syntax) that have embedded SHACL shapes. This is to facilitate the retrieval of certain advanced information from the SHACL shapes, such as property domains, ranges and cardinalities, mainly for _added instances of properties_. This would otherwise not be doable with the current OWL-core profile, which is geared towards _lightweight_ ontologies that typically do not involve such expressions, or are not consistent in how they do so (whereas SHACL has a consistent pattern for these).
 
-This is to facilitate the retrieval of certain advanced information from the SHACL shapes, such as property domains, ranges and cardinalities, mainly for added instances of properties. This would otherwise not be doable with the current OWL-core profile.
-
-Example command using an actual lightweight ontology (ePO):
-
-```sh
-./bash/merge-owl-shacl.sh \
-  evaluation/vocabularies/ePO_core-4.2.0.ttl \
-  evaluation/vocabularies/ePO_core_shapes-4.2.0.ttl \
-  evaluation/vocabularies/ePO_core_combined-4.2.0.ttl
-```
-
-The following information is currently retrieved for reporting added instances of properties:
+The following information is currently retrieved when reporting added instances of properties:
 
 - Property domain(s) via `sh:targetClass`, represented as `domain` in the report
 - Property range(s) via `sh:datatype`, `sh:class` and `sh:node/sh:property/sh:hasValue`, represented as `range` in the report
 - Property cardinality constraints (min/max) via `sh:minCount` and `sh:maxCount`, represented as `minCardinality` and `maxCardinality` in the report
 
-> **NOTE:** The script supports only Turtle syntax files (`.ttl` extension) at the moment. If you have another format, use a tool like [riot](https://jena.apache.org/documentation/tools/#riot-and-related) (which is a requirement to run the script) to convert it to Turtle first.
+To reiterate, this information is only _retrieved_, i.e. there is no support for change detection of these properties or the constraints themselves. The purpose is to enrich the report with additional context about the added resources.
+
+> **NOTE:** This is supported for only Turtle syntax files (`.ttl` extension) at the moment. If you have another format, use a tool like [riot](https://jena.apache.org/documentation/tools/#riot-and-related) to convert it to Turtle first.
 
 ## Installation
 
@@ -146,8 +141,6 @@ make stop
 > **WARNING:** Do not create files or folders under `db` or `reports` yourself. The tests use these folders and there are certain assumptions the code makes about their structure, which your file or folder may not comply with.
 
 ### With local and system services
-
-#### Quickstart
 
 If you are running the project for the first time this would be the commands to run in sequence:
 
@@ -297,20 +290,23 @@ you need to stop one to run the other.
 
 ## The Differ CLI
 
-There is a helper script `bash/rdf-differ.sh` that wraps common API call sequences
-for creating diffs and generating reports, with configurable application profile (AP) and report template.
-Refer to [this file](curl-examples.md) for a reference of the underlying API calls.
+For users who would rather not deal with the web UI, RDF Differ offers an HTTP ReST API. However, the API is _asynchronous_, meaning that calls are processed in the background, and one needs to _poll_ for the status of diff creation and report generation.
 
-The supported APs are:
+It is for this reason that we provide `bash/rdf-differ.sh`, a CLI helper script with a rudimentary but sufficient polling mechanism, to make it easier to use the tool from the command line. The script wraps common API call sequences for creating diffs and generating reports, with parameters for the AP and report template.
 
-- owl-core-en-only
-- shacl-core-en-only
-- skos-core-en-only
+The supported AP values are:
 
-And the template formats are:
+- `owl-core-en-only`
+- `shacl-core-en-only`
+- `skos-core-en-only`
 
-- JSON
-- HTML
+And the supported template format values are:
+
+- `json`
+- `html`
+- `asciidoc`
+
+In adddition, there is the `bash/merge-owl-shacl.sh` script that can be used to merge an OWL file and a SHACL file into a single OWL file. Merge both old and new files before passing the new "combined" file to the tool for diffing, and to report advanced constraint information from the embedded SHACL shapes.
 
 ### Examples
 
@@ -345,21 +341,20 @@ Custom configuration
   full
 ```
 
-If you have a different setup, say some Docker services and some local services, check if the API itself is available at localhost:
+Merge an OWL and SHACL file into a combined OWL file with embedded SHACL shapes:
 
 ```sh
-curl localhost:4030/diffs
+./bash/merge-owl-shacl.sh [input-owl-file] [input-shacl-file] <output-combined-file>
 ```
 
-If so, you will need to override the base URL inclusive of the port:
+Notes:
 
-```sh
-./bash/rdf-differ.sh --old <first-file> --new <second-file> --base-url localhost:4030
-```
+- When running tests via `make test` the API is available at `http://localhost:4030` (no Traefik). The pytest integration uses the `RDF_DIFFER_BASE_URL` environment variable (defaulting to `http://localhost:4030`).
+- The script accepts both `--ap` and `--profile` for the application profile. The `--template` value controls the report output format (e.g. `json` or `html`).
+- By default the script writes reports to `diff-output/` or to the directory passed with `--output`.
+- The report file is saved as `diff.<template>`, e.g. `diff.json` or `diff.html`. This is _not_ configurable at the moment.
 
-In the development/production environment where services are running behind Traefik, no such override is required, as the default base URL for the script is `api.localhost`, the Traefik route for the API+port.
-
-### Demo using test data
+### Demo using sample data
 
 - Create a diff and generate a HTML report saved in `diff-output/` (full workflow):
 
@@ -388,22 +383,56 @@ In the development/production environment where services are running behind Trae
 ./bash/rdf-differ.sh list
 ```
 
-Notes:
+- Merge the OWL and SHACL artefacts of an actual lightweight ontology (ePO):
 
-- When running tests via `make test` the API is available at `http://localhost:4030` (no Traefik). The pytest integration uses the `RDF_DIFFER_BASE_URL` environment variable (defaulting to `http://localhost:4030`).
-- The script accepts both `--ap` and `--profile` for the application profile. The `--template` value controls the report output format (e.g. `json` or `html`).
-- By default the script writes reports to `diff-output/` or to the directory passed with `--output`.
-- The report file is saved as `diff.<template>`, e.g. `diff.json` or `diff.html`. This is _not_ configurable at the moment.
+```sh
+./bash/merge-owl-shacl.sh \
+  evaluation/vocabularies/ePO_core-4.2.0.ttl \
+  evaluation/vocabularies/ePO_core_shapes-4.2.0.ttl \
+  evaluation/vocabularies/ePO_core_combined-4.2.0.ttl
+```
+
+### API endpoint configuration
+
+If you have a different setup, say some Docker services and some local services, check if the API itself is available at localhost:
+
+```sh
+curl localhost:4030/diffs
+```
+
+If so, you will need to override the base URL inclusive of the port:
+
+```sh
+./bash/rdf-differ.sh --old <first-file> --new <second-file> --base-url localhost:4030
+```
+
+In the development/production environment where services are running behind Traefik, no such override is required, as the default base URL for the script is `api.localhost`, the Traefik route for the API+port.
 
 ## The Differ UI
 
-To create a new diff you can access [http://localhost:8030/create-diff](http://localhost:8030/create-diff)
-![list of diffs page](docs/images/create-diff-2020-10.png)
+To create a new diff, click on **Create diff** and fill in all of the metadata fields along with uploading the old and new RDF files to diff.
 
-To list the existing diffs you can access [http://localhost:8030](http://localhost:8030/)
-![list of diffs page](docs/images/list-diffs-202010.png)
+![Create diff page](docs/images/create-diff.png)
 
-> **Note:** If you see an error for any of the pages, your setup is not right. Please either check your local services, or rebuild the docker services if you are using that (including deleting the created volume). Check also the Celery is running, which is needed for the asynchronous tasks.
+To list existing diffs, click on **List diffs** and select a diff to view its details and generate reports.
+
+![List diffs page](docs/images/list-diffs.png)
+
+To create reports, select an AP and report format from the two dropdowns, and then click on **Build report**.
+
+![Create reports page](docs/images/create-reports.png)
+
+To see running processes for diff creation and report generation, click on **List active tasks**.
+
+![Create reports page](docs/images/list-tasks.png)
+
+Depending on the size of your data and number of items in your AP, this may take a while (a few mins for 500KB, considered relatively large for text files). You may refresh the page to see if the report is ready.
+
+Once ready (the task has disappeared), navigate back to the diff, and a new section for the selected AP with a download link will have now appeared.
+
+![Download reports page](docs/images/download-reports.png)
+
+> **Note:** If you see an error for any of the pages, your setup is not right. Please either check your local services, or rebuild the Docker services if you are using that (including deleting the associated volumes). Check also that Celery is running, which is needed for the asynchronous tasks.
 
 ## Change type inventory
 
@@ -470,7 +499,9 @@ resources/templates
 │       └───json        <--- folder that contains files needed for a json template
 ```
 
-### Html template variant
+### HTML template variant
+
+#### HTML folder structure
 
 ```text
 html                 <--- the template_variants subfolder 
@@ -487,7 +518,7 @@ html                 <--- the template_variants subfolder
 
 _Note_ Make sure that in the templates folder there is an entrypoint file named the same as the one defined in the config.json file (i.e `"template": "main.html"`)
 
-### HTML template structure
+#### HTML template structure
 
 The HTML template is built be combining four major parts as layout, main, macros and sections. The layout file (layout.html)
 will have the rules of how the report will look like in terms of positioning and styling. Macros will contain all the
@@ -510,7 +541,7 @@ Example
 _Note_ The system has in place an autodiscover process for the SPARQL queries in the queries folder. Make sure that the file
 name added for the variable above (`added_instance_concept.rq`) exists in the queries folder.
 
-### Adjusting an existing Html template
+### Adjusting an existing HTML template
 
 #### Adding a new query/section
 
@@ -660,9 +691,9 @@ To remove a row from the statistics section just delete or comment the `<tr>` bl
 </tr>
 ```
 
-## JSON template variant
+### JSON template variant
 
-### Folder structure
+#### JSON folder structure
 
 ```text
 json                 <--- the template_variants subfolder
@@ -677,7 +708,7 @@ json                 <--- the template_variants subfolder
 
 _Note_ Make sure that in the templates folder there is an entrypoint file named the same as the one defined in the config.json file (i.e `"template": "main.json"`)
 
-### Template structure
+### JSON template structure
 
 The JSON report is automatically built by running all queries that are found in the queries folder as the system has
 autodiscover process for this. In the beginning of this report there will be 3 keys that will show the metadata of the
@@ -731,9 +762,9 @@ To remove a query result set from the report simply remove the query from the qu
 
 ## Contributing
 
-You are more than welcome to help expand and mature this project. We adhere to [Apache code of conduct](https://www.apache.org/foundation/policies/conduct), please follow it in all your interactions on the project.
+You are more than welcome to help expand and mature this project. We adhere to the [Apache Code of Conduct](https://www.apache.org/foundation/policies/conduct), please follow it in all your interactions on the project.
 
-When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the maintainers of this repository before making a change.
+When contributing to this repository, you are welcome to fork and make a pull request, or discuss the change you wish to make via issue, email, or any other method with the maintainers of this repository.
 
 ----
 _Made with love by [Meaningfy](https://meaningfy.ws)._
