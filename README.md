@@ -33,6 +33,18 @@ The key concepts to be aware of when using RDF Differ are:
 - **Report:** A structured summary of the identified changes, generated based on a specified application profile (AP) and template format (e.g. HTML). One can produce different reports from the same diff by varying the AP and template.
 - **Application Profile (AP):** A predefined set of SPARQL queries and templates that define how to detect and report changes for specific RDF vocabularies or use cases.
 
+## Change Types
+
+The currently detected change types are:
+
+- Added resource
+- Deleted resource
+- Updated (property value change)
+- Moved (property with value moved from one resource to another)
+- Changed (value moved from one property to another within the same resource)
+
+> The term "resource" and "instance" are used interchangeably in the rdf-differ suite of tools to refer to the RDF subjects of change detection, i.e. in the case of an OWL ontology, the entities with T-Box declarations of `a owl:Class`, `a owl:DatatypeProperty` or `a owl:ObjectProperty`. Not to be confused with instance in the OWL A-Box sense (i.e. "individuals" of the aforementioned).
+
 The currently suppported APs are:
 
 - `owl-core-en-only`: For OWL ontologies with English labels
@@ -43,8 +55,9 @@ The language for labels matter for display purposes only. If you have another la
 
 The currently supported report templates are:
 
-- `JSON`: A machine-readable JSON format (based on [SPARQL Query Results JSON Format](https://www.w3.org/TR/sparql12-results-json/))
-- `HTML`: A human-readable HTML format (styled with CSS and interactive JavaScript tables)
+- `JSON`: A machine-readable format (based on [SPARQL Query Results JSON Format](https://www.w3.org/TR/sparql12-results-json/))
+- `HTML`: The world's standard Web markup format (styled with CSS and interactive JavaScript tables)
+- `AsciiDoc`: A human-readable plain-text markup format (opens various conversion possibilities including HTML)
 
 All AP templates can be edited or extended, and new ones can be created as needed. See the section on [Adding a new Application Profile template](#adding-a-new-application-profile-template) for more details. For modifications beyond a few lines or files, we recommend updating the existing meta-templates or introducing new ones in [dqgen](https://github.com/meaningfy-ws/diff-query-generator/tree/main/dqgen/resources), which is used to generate the queries and templates for RDF Differ, aside from defining the AP itself (in [CSV files](https://github.com/meaningfy-ws/diff-query-generator/tree/main/dqgen/resources/aps)).
 
@@ -58,11 +71,18 @@ Example command using an actual lightweight ontology (ePO):
 
 ```sh
 ./bash/merge-owl-shacl.sh \
-  evaluation/vocabularies/ePO_core-4.2.0.ttl \ evaluation/vocabularies/ePO_core_shapes-4.2.0.ttl \
+  evaluation/vocabularies/ePO_core-4.2.0.ttl \
+  evaluation/vocabularies/ePO_core_shapes-4.2.0.ttl \
   evaluation/vocabularies/ePO_core_combined-4.2.0.ttl
 ```
 
-> **NOTE:** The script supports only Turtle syntax files (`.ttl` extension) at the moment. If you have another format, use a tool like [riot](https://jena.apache.org/documentation/io/#command-line-tools) (which is a requirement to run the script) to convert it to Turtle first.
+The following information is currently retrieved for reporting added instances of properties:
+
+- Property domain(s) via `sh:targetClass`, represented as `domain` in the report
+- Property range(s) via `sh:datatype`, `sh:class` and `sh:node/sh:property/sh:hasValue`, represented as `range` in the report
+- Property cardinality constraints (min/max) via `sh:minCount` and `sh:maxCount`, represented as `minCardinality` and `maxCardinality` in the report
+
+> **NOTE:** The script supports only Turtle syntax files (`.ttl` extension) at the moment. If you have another format, use a tool like [riot](https://jena.apache.org/documentation/tools/#riot-and-related) (which is a requirement to run the script) to convert it to Turtle first.
 
 ## Installation
 
@@ -93,6 +113,12 @@ sudo yum install epel-release
 For Debian derivative systems, no additional package repository should be needed, for at least Ubuntu 18.04. While we do not test for Windows/WSL2
 or Mac (because of some limitations with GitHub CI), those platforms should work as well. Even Windows 10/11 alone should work as long as you don't use Make but Python and Docker commands directly, as the Makefile contains ASCII escape sequencies and *NIX commands which PowerShell cannot interpret.
 
+#### Optional dependencies
+
+If you would like to run the `bash/merge-owl-shacl.sh` script for merging OWL and SHACL files to report embedded constraint information, you need to have Apache Jena's `riot` command-line tool installed.
+
+Download [Jena](https://jena.apache.org/download/) to get access to its CLI tools (you will want to [put them in your `PATH`](https://jena.apache.org/documentation/tools/#common-issues-with-running-the-tools) to be able to run them as commands). If you are looking to integrate this into your GitHub CI/CD pipelines, you can also use a [third-party GitHub Action](https://github.com/marketplace/actions/setup-apache-jena).
+
 ### Installation with Docker (recommended)
 
 Run the following command to install all required dependencies on either a
@@ -115,7 +141,7 @@ To stop ALL docker services at any time:
 make stop
 ```
 
-> If at any time you think you are experiencing odd behaviour, such as a `500 Internal Server Error` or `404 Not Found`, use your preferred method to completely remove (purge) the docker containers, images and volumes related to this project, files inside `db`, `reports` and `fuseki-data`, and redo everything.
+> If at any time you think you are experiencing odd behaviour, such as a `500 Internal Server Error` or `404 Not Found`, use your preferred method to completely remove (purge) the docker containers, images and volumes related to this project, files inside `db`, `reports`, `fuseki-data` and `logs` (sometimes file permissions can differ when switching between normal and testing environments and this can prevent startup), and redo everything.
 >
 > **WARNING:** Do not create files or folders under `db` or `reports` yourself. The tests use these folders and there are certain assumptions the code makes about their structure, which your file or folder may not comply with.
 
@@ -236,7 +262,7 @@ development-specific containers. Run the following to start everything and also
 remove the testing containers at the end:
 
 ```bash
-make start-services-test # run separately to avoid race conditions
+make ENVIRONMENT=test start-services-test # run separately to avoid race conditions
 make ENVIRONMENT=test test teardown-services
 ```
 
