@@ -78,9 +78,9 @@ Example command using an actual lightweight ontology (ePO):
 
 The following information is currently retrieved for reporting added instances of properties:
 
-- Property domain(s) via `sh:targetClass`
-- Property range(s) via `sh:datatype`, `sh:class` and `sh:node/sh:property/sh:hasValue`
-- Property cardinality constraints (min/max) via `sh:minCount` and `sh:maxCount`
+- Property domain(s) via `sh:targetClass`, represented as `domain` in the report
+- Property range(s) via `sh:datatype`, `sh:class` and `sh:node/sh:property/sh:hasValue`, represented as `range` in the report
+- Property cardinality constraints (min/max) via `sh:minCount` and `sh:maxCount`, represented as `minCardinality` and `maxCardinality` in the report
 
 > **NOTE:** The script supports only Turtle syntax files (`.ttl` extension) at the moment. If you have another format, use a tool like [riot](https://jena.apache.org/documentation/tools/#riot-and-related) (which is a requirement to run the script) to convert it to Turtle first.
 
