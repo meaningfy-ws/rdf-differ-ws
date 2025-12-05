@@ -27,9 +27,10 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX shacl: <http://www.w3.org/ns/shacl#>
 
 # Show all movements cross instances
-SELECT DISTINCT ?oldInstance ?class ?oldInstancePrefLabel ?oldInstancePrefLabelLang ?newInstance
-    ?newInstancePrefLabel
-    ?newInstancePrefLabelLang ?property ?value ?valueLang ("moved" as ?actionType)
+SELECT DISTINCT 
+    (?oldInstance AS ?oldResource) (?oldInstancePrefLabel AS ?oldResourceLabel) (?oldInstancePrefLabelLang AS ?oldResourceLabelLang)
+    (?newInstance AS ?newResource) (?newInstancePrefLabel AS ?newResourceLabel) (?newInstancePrefLabelLang AS ?newResourceLabelLang)
+    ?property ?value ?valueLang
 WHERE {
           GRAPH ?versionHistoryGraph {
     # parameters

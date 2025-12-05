@@ -36,7 +36,7 @@ PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
 PREFIX sh: <http://purl.org/skos-history/>
 PREFIX xhv: <http://www.w3.org/1999/xhtml/vocab#>
 # Show all deleted reified structures
-SELECT DISTINCT ?instance ?class ?prefLabel ?prefLabelLang ?property ?object ?objProperty ?value ?valueLang ("deletion" as ?actionType)
+SELECT DISTINCT (?instance AS ?resource) (?prefLabel as ?label) (?prefLabelLang AS ?labelLang) ?property ?object ?objProperty ?value ?valueLang
 WHERE {
   GRAPH ?versionHistoryGraph {
     # parameters
