@@ -77,7 +77,7 @@ The following information is currently retrieved when reporting added instances 
 - Property range(s) via `sh:datatype`, `sh:class` and `sh:node/sh:property/sh:hasValue`, represented as `range` in the report
 - Property cardinality constraints (min/max) via `sh:minCount` and `sh:maxCount`, represented as `minCardinality` and `maxCardinality` in the report
 
-To reiterate, this information is only _retrieved_, i.e. there is no support for change detection of these properties or the constraints themselves. The purpose is to enrich the report with additional context about the added resources.
+To reiterate, this information is only _retrieved_, i.e. there is no support for change detection of these properties or the constraints themselves. The purpose is to enrich the report with additional context about the added resources. And in order to exploit this feature, the SHACL shapes must be _embedded_ in the OWL file, i.e. both the OWL declarations and SHACL shapes must be present in the same RDF file. For usage instructions, refer to the [CLI section](#examples).
 
 > **NOTE:** This is supported for only Turtle syntax files (`.ttl` extension) at the moment. If you have another format, use a tool like [riot](https://jena.apache.org/documentation/tools/#riot-and-related) to convert it to Turtle first.
 
@@ -397,6 +397,92 @@ Once ready (the task has disappeared), navigate back to the diff, and a new sect
 ### The Differ API
 
 Using the API directly is not expected to be a common use case. For advanced users or developers intending to integrate the differ, [this file](curl-examples.md) contains a list of examples on how to use the API. You will have to translate the URLs accordingly for Traefik domains as mentioned in the [installation instructions](#installation).
+
+## The Diff Reports
+
+RDF Differ generates diff reports in multiple formats based on the specified profile and template. The content of a report is dependent on the AP, which dictates what delta queries are involved, while the layout is dependent on the visual template (e.g. HTML, JSON or AsciiDoc), which dictates how information is presented.
+
+### General Report Structure
+
+In general, the APs and templates currently shipped with the tool by default follow a similar structure, which is mainly based around presenting a summary statistics, followed by detailed sections grouped by resource type, property category and change type. The layout can be understood to have four main components, as follows:
+
+- **Summary Statistics:** An overview of the number of `Added` and `Deleted` resources, followed by the number of modified resources by property and change type. Sectioned by the resource type, with two tables per section, with the following columns:
+  - **Category** the property group or category (e.g. `Labels`, `Notes`)
+  - **Property** the property involved in the change of a resource (e.g. `rdfs:label`, `skos:prefLabel`)
+  - **Added** the number of added instances of this property
+  - **Deleted** the number of deleted instances of this property
+  - **Updated** the number of updated instances of this property
+  - **Moved** the number of instances of this property that moved from one resource to another
+  - **Changed** the number of instances of this property that changed from one property to another within the same resource
+
+- **Detailed Resource Sections:** The main body of the report, divided into sections by resource type (e.g. `Class`, `Object Property`, `Concept`).
+
+- **Overview of Changed Resources:** For each resource type section, subsections for listing all `Added` and `Deleted` resources, followed by subsections listing modifications of those resources by category. The former two subsections have the following columns:
+  - **resource** the name or URI of the added or deleted resource
+  - **label** the human-readable label of the resource (if available)
+  - **labelLang** the language of the label (if available)
+  - For added properties with [embedded SHACL shapes](#embedded-shacl-in-owl-ttl-files), the following additional columns are included (empty if not applicable):
+    - **domain** the domain of the property
+    - **range** the range of the property
+    - **minCardinality** the minimum cardinality constraint of the property
+    - **maxCardinality** the maximum cardinality constraint of the property
+
+- **Detailed Property Change Sections:** For each resource type section, and following the `Added` and `Deleted` subsections, further subsections presenting granular modifications on _properties of those resources_, grouped by the property category (e.g. `Labels`, `Notes`). Each subsection contains tables for each change type (`Added`, `Updated`, `Moved`, `Changed`), listing the affected resources and relevant details. The columns therefore vary by the change type, but generally include:
+  - **resource** the name or URI of the modified resource
+  - **label** the human-readable label of the resource (if available)
+  - **labelLang** the language of the resource label (if available)
+  - **property** the property involved in the change (representing the subsection)
+  - **value** the value of the property
+  - **valueLang** the language of the property value (if applicable)
+  - For `Updated` changes, the following additional columns are included:
+    - **oldValue** the previous value of the property
+    - **oldValueLang** the language of the previous property value (if applicable)
+    - **newValue** the new value of the property
+    - **newValueLang** the language of the new property value (if applicable)
+  - For `Moved` changes, the following additional columns are included:
+    - **oldInstance** the resource from which the property value was moved
+    - **newInstance** the resource to which the property value was moved
+  - For `Changed` changes, the following additional columns are included:
+    - **oldProperty** the previous property from which the value was changed
+    - **newProperty** the new property to which the value was changed
+- **Prefixe Section:** A list of all prefixes used in the report template for compact URIs. This list may _not_ contain prefixes in the vocabularies themselves -- only those defined in the template.
+
+> Note: The column names of tables in the reports are only changeable through changing the SPARQL queries of the template, namely the `SELECT` variables.
+
+### The HTML Report
+
+The HTML report is the most user-friendly format, with interactive tables that allow for sorting, searching, and pagination. It is styled with CSS for better readability. See [evaluation/reports/rdf-differ-report_ePO_4.1-4.2_owl-core.html](evaluation/reports/rdf-differ-report_ePO_4.1-4.2_owl-core.html) for an example using the eProcurement ontology (ePO).
+
+_Summary statistics view of a HTML report_
+![Summary statistics view of a HTML report](docs/images/html-report-summary.png)
+
+_Details view of a HTML report_
+![Details view of a HTML report](docs/images/html-report-details.png)
+
+### The AsciiDoc Report
+
+The AsciiDoc report is a plain-text format that is human-readable and can be converted to other formats (like HTML or PDF) using AsciiDoc tools. It follows the same structure as the HTML report but without the interactive features (so full tables are presented outright without paging). See [tests/test_data/owl/ePO_sample-4.0.0-upd_diff-report.adoc](tests/test_data/owl/ePO_sample-4.0.0-upd_diff-report.adoc) for an example using the eProcurement ontology (ePO).
+
+Note that all markup, not unlike the HTML, is visible in the raw text and may contain a lot of undesireable white (empty) spaces and lines, mainly because of the underlying [Jinja](https://jinja.palletsprojects.com/en/stable/) (specifically [eds4jinja2](https://github.com/meaningfy-ws/eds4jinja2)) code. The HTML report would normally not be viewed directly, but rather in a web browser. Similarly, the AsciiDoc report is best viewed converted into a more user-friendly format using tools like [Antora](https://antora.org/), or by pasting the raw content into an online tool like [AsciiDoc Alive](https://asciidocalive.docswriter.com/).
+
+_Preview of an AsciiDoc report on AsciiDoc Alive_
+![Preview of an AsciiDoc report on AsciiDoc Alive](docs/images/asciidoc-report-preview.png)
+
+### The JSON Report
+
+The JSON report is a machine-readable format suitable for programmatic consumption and further processing. At the root of the JSON object, keys represent the delta query file name, with the general naming scheme `{change-type}_{resource-type}[_modified-resource-type_property-name].rq`, where the part in square brackets only applies for modified resources, as follows:
+
+- `{x}_instance_{y}.rq` where `x` is either `added` or `deleted`, for all `y` resource types defined in the AP, for e.g. `added_instance_class.rq` for added classes, `added_instance_datatype_property.rq` for added datatype resources, and so on.
+
+- `{x}_property_{y}_{z}.rq` where `x` is one of `added`, `deleted`, `updated`, `moved` or `changed`, for all `y` resource types and `z` properties defined in the AP, for e.g. `updated_property_class_description.rq` for updated `dct:description` of any `owl:Class`, `moved_property_object_property_editorial_note.rq` for moved `skos:editorialNote` of any `owl:ObjectProperty`, and so on.
+
+Within each of those keys, the value is an array of objects representing the results of the corresponding SPARQL query, with each object containing key-value pairs for the selected variables. This structure conforms to SPARQL JSON, with an initial `head` section defining the variables, followed by a `results` section containing the actual data under `bindings`.
+
+Refer to the [SPARQL Query Results JSON Format](https://www.w3.org/TR/sparql12-results-json/) for more details, and follow the variable naming conventions as per the table columns described in the [General Report Structure](#general-report-structure) section for what keys to expect in the bindings.
+
+In addition, there are the count variants of the above, with the same naming scheme but with a `count_` prefix, for e.g. `count_added_instance_class.rq` or `count_updated_property_class_description.rq`. Here the `bindings` contain a single `entries` result object/column with a `value` variable representing the number of results for the corresponding query.
+
+See [tests/test_data/owl/ePO_sample-4.0.0-upd_diff-report.json](tests/test_data/owl/ePO_sample-4.0.0-upd_diff-report.json) for an example to follow along.
 
 ## Testing
 
