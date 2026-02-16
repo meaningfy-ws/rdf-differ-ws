@@ -250,6 +250,7 @@ case ${COMMAND} in
     full)
         echo "🔬 Using ${BASE_URL}"
         echo "🔄 Performing full diff and report workflow..."
+        create_diff "${OLD_FILE}" "${NEW_FILE}" print
         DATASET_ID=$(create_diff "${OLD_FILE}" "${NEW_FILE}")
         generate_report "${DATASET_ID}" "${PROFILE}" "${TEMPLATE}" "${OUTPUT_DIR}"
         ;;
