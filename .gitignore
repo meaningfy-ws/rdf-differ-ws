@@ -144,3 +144,7 @@ apache-jena-fuseki*
 docker/traefik/letsencrypt
 diff-output
 .gitnexus
+/temp
+/data-dev
+/fuseki-data
+/Dataset
