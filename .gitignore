@@ -143,3 +143,4 @@ run
 apache-jena-fuseki*
 docker/traefik/letsencrypt
 diff-output
+.gitnexus
