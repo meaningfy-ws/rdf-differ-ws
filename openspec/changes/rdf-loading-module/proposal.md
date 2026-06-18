@@ -1,16 +1,20 @@
 # EPIC: Rewrite the SKOS-History version-loading & delta-computation script in Python (RDF Loading Module)
 
-> Verbatim-first port of the legacy `docs/spec/rewriting-sh-to-python/EPIC-rdf-loading-module.md`
-> "Part 1 — Specification" into the spine. The original EPIC, PLAN, Gherkin, deep spec, synthesis
-> and seed brief are preserved under `inputs/`. Refinement happens later.
+> Shaped to its final agreed form. Grounded in the legacy EPIC/PLAN/Gherkin/deep-spec/synthesis/seed
+> brief preserved verbatim under `inputs/`. Where the final decisions diverge from the legacy ADRs,
+> `design.md` records the override explicitly.
 
 ## Appetite
 
-**Medium–Large, parked.** The EPIC is shaped to "Ready" (legacy status: Phase Ready, 2026-06-15) and
-broken into 10 reviewable TDD tasks (see `tasks.md`). It is **parked** on its own branch
-(`feature/rewrite-load-versions-to-python`), separate from the modernization work, and lands as its
-own PR. The budget is fixed: each task ships test-first, layer by layer, always green; if a task
-overruns (notably the dual-mode parity and the script cutover) it is deferred rather than forced.
+**Large.** This is no longer a thin script port: the epic bundles the RDF Loading Module **plus** a
+package-wide cleanup (full `rdf_differ/utils/` dissolution, stricter import-linter, migration of the
+existing hand-written `rdf_differ/domain/model.py` to pydantic), and it takes on an **external
+dependency** — the in-memory full-report path needs an eds4jinja2 enhancement shipped from its own
+repo in a separate thread. The work is broken into reviewable TDD tasks (see `tasks.md`), landing
+test-first, layer by layer, always green. The budget is bounded by a clean seam: the **remote core +
+in-memory diff artifacts** always ship; the **in-memory full report** is gated on the eds4jinja2
+release and degrades gracefully to remote-only if that release is absent — never forced, never
+reworking the core. It lands as its own PR off `feature/rdf-loading-module`.
 
 ## Why
 
@@ -22,6 +26,14 @@ store. It supports N versions but the wrapper only ever exercises two. We want a
 fully testable Python implementation — and, critically, the ability to run a diff entirely in memory
 without any server.
 
+While we are in here, two adjacent debts make the rewrite both safer and cheaper to do **now** rather
+than later: the legacy `rdf_differ/utils/` grab-bag (filesystem helpers, MIME types, name validation,
+report-location helpers, RDF conversion, `strtobool`) violates the layering the new module must obey,
+and the existing hand-written domain models (`Dataset`, `DatasetVersion`, `VersionsDelta`) carry no
+validation. Folding the utils dissolution, a stricter import-linter, and a pydantic migration of the
+domain into this epic lets the loading module land into a clean, contract-enforced package instead of
+fighting the old one.
+
 ## Solution outline (Description)
 
 The RDF Loading Module replaces the legacy shell script with a clean, layered, fully testable Python
@@ -30,20 +42,36 @@ computes triple-level **insertions** and **deletions** between version pairs (th
 four-graph delta pattern), and materialises the version-history metadata that downstream tools
 (`diff-query-generator`-produced queries, the report builder) rely on.
 
-The single most important new capability is **dual-mode operation**:
+The single most important new capability is **dual-mode operation** behind a single `GraphStorePort`
+interface with **three** config-selected implementations:
 
-1. **Remote mode** — load and diff against an existing SPARQL 1.1 triple store (Apache Jena Fuseki
-   today), preserving current production behaviour.
-2. **In-memory mode** — load and diff entirely in-process (no triple store required), exposed through
-   a CLI, for temporary / ephemeral / CI / local diffs.
+1. **Remote mode** (`RemoteSparqlStore`) — load and diff against **any SPARQL 1.1 endpoint** (Apache
+   Jena Fuseki today, but not Fuseki-specific) via Graph Store Protocol `PUT` + SPARQL Update/Query
+   over HTTP. This is the always-ships core, preserving current production behaviour.
+2. **In-memory mode, oxigraph** (`PyoxigraphStore`) — load and diff entirely in-process via
+   `pyoxigraph` (no triple store required).
+3. **In-memory mode, rdflib** (`RdflibStore`) — the same, backed by `rdflib`, as a dependency-light
+   reference engine.
 
-Both modes execute the **same** delta-computation logic against the **same** named-graph contract,
-selected by dependency injection behind a single `GraphStorePort` interface.
+Both in-memory engines exist and are selected by config/flag (`remote|oxigraph|rdflib`) — this
+**overrides legacy ADR-2**, which chose pyoxigraph only. All three modes execute the **same**
+delta-computation logic against the **same** named-graph contract, selected by dependency injection.
+Services depend only on `GraphStorePort` (DIP) and never import `pyoxigraph`, `rdflib`, `requests`,
+`SPARQLWrapper`, or `eds4jinja2` directly.
 
-This EPIC owns **version loading + low-level delta-graph construction + version-history metadata**. It
-does **not** own higher-level change-category reporting — that remains the responsibility of the
-`diff-query-generator`-produced SPARQL queries and the existing report builder. The contract between
-the two is the four named graphs plus the version-history graph (see Glossary).
+The in-memory side splits at a clean seam into two deliverables:
+
+- **In-memory diff artifacts** — the four named graphs serialisable to files, plus insertion/deletion
+  counts and validation. **No external dependency**; lands with the core.
+- **In-memory full report** — depends on an **external, separately-shipped eds4jinja2 enhancement**
+  (its own epic in the eds4jinja2 repo, implemented in a different thread). If that enhancement is
+  absent, in-memory reporting **degrades gracefully** to remote-only with no rework of the core.
+
+This EPIC owns **version loading + low-level delta-graph construction + version-history metadata**,
+**plus** the utils dissolution, the stricter import-linter contracts, and the pydantic migration of
+the domain. It does **not** own higher-level change-category reporting — that remains the
+responsibility of the `diff-query-generator`-produced SPARQL queries and the existing report builder.
+The contract between the two is the four named graphs plus the version-history graph (see Glossary).
 
 ## Glossary
 
@@ -56,10 +84,13 @@ the two is the four named graphs plus the version-history graph (see Glossary).
 | **Insertions graph** | Named graph with `triples(new) − triples(old)`; component typed `skos-history:SchemeDeltaInsertions`. |
 | **Deletions graph** | Named graph with `triples(old) − triples(new)`; component typed `skos-history:SchemeDeltaDeletions`. |
 | **Named-graph contract** | The set `{version graphs, insertions graph, deletions graph, version-history graph}` plus their `sd:NamedGraph`/`sd:name` descriptions — the interface consumed by `diff-query-generator` queries. |
-| **`GraphStorePort`** | The single secondary-adapter interface the loading service depends on; implemented by an in-memory adapter and a remote-SPARQL adapter. |
-| **Remote mode** | `GraphStorePort` backed by HTTP (SPARQL 1.1 Graph Store Protocol + SPARQL Update) against Fuseki/GraphDB. |
-| **In-memory mode** | `GraphStorePort` backed by an in-process `pyoxigraph.Store`. |
-| **Blank-node policy** | The rule deciding whether blank nodes participate in deltas. Default: exclude (IRI subjects only; IRI/literal objects). |
+| **`GraphStorePort`** | The single secondary-adapter interface the loading service depends on; methods `put_graph`, `clear_graph`, `update`, `query`, `serialize`. Three implementations: `RemoteSparqlStore`, `PyoxigraphStore`, `RdflibStore`. |
+| **Remote mode** | `GraphStorePort` backed by HTTP (SPARQL 1.1 Graph Store Protocol `PUT` + SPARQL Update/Query) against any SPARQL 1.1 endpoint (Fuseki today). The always-ships core. |
+| **In-memory mode** | `GraphStorePort` backed by an in-process store; engine is config-selected — `PyoxigraphStore` or `RdflibStore`. |
+| **In-memory diff artifacts** | The four named graphs serialisable to files + counts + validation; no external dependency. |
+| **In-memory full report** | A full eds4jinja2-rendered report over the in-process store; depends on the external eds4jinja2 enhancement (graceful fallback to remote-only otherwise). |
+| **eds4jinja2 enhancement** | An upstream eds4jinja2 release adding `ReportBuilder(external_data_source_builders=…)` + an engine-agnostic `InMemorySPARQLDataSource`; authored as its own epic in the eds4jinja2 repo. A dependency of this epic, not built here. |
+| **Blank-node policy** | The rule deciding how blank nodes participate in deltas, via a pluggable `BlankNodeStrategy` (DEC-9). `exclude` (default — IRI subjects only; IRI/literal objects), `document-only` (no filter), `skolemise` (deterministic W3C `.well-known/genid/` IRIs via rdflib). |
 | **Delta pair set** | The set of `(old, new)` version pairs deltas are computed for: consecutive pairs (required) plus optional direct-to-current pairs. |
 
 ## Algorithm / Flow
@@ -82,7 +113,8 @@ flowchart TD
     L --> M[Return load result / report]
 ```
 
-The same flow runs unchanged in both modes; only the `GraphStorePort` implementation differs.
+The same flow runs unchanged in all three modes; only the `GraphStorePort` implementation differs
+(`RemoteSparqlStore`, `PyoxigraphStore`, or `RdflibStore`), selected by config/flag.
 
 > Note: the legacy script computes `deletions` before `insertions` and swaps minuend/subtrahend
 > (`load_versions.sh:245-258`). This module computes `insertions = new − old` first, then
@@ -114,7 +146,7 @@ The same flow runs unchanged in both modes; only the `GraphStorePort` implementa
 | # | Limitation | Impact | Remediation in this Epic |
 |---|------------|--------|--------------------------|
 | L1 | **Bash + curl**, untestable; failures hidden by `--silent ... > /dev/null` | Silent data corruption; no unit/BDD coverage | Pure-Python, layered, ≥80% coverage; explicit error matrix |
-| L2 | **Hard dependency on an external triple store** | Cannot run a quick/local/CI diff; every diff needs Fuseki + admin creds | `GraphStorePort` + `pyoxigraph` in-memory adapter; CLI in-memory mode (the core bet) |
+| L2 | **Hard dependency on an external triple store** | Cannot run a quick/local/CI diff; every diff needs Fuseki + admin creds | `GraphStorePort` + two in-memory adapters (`PyoxigraphStore`, `RdflibStore`); CLI in-memory mode (the core bet) |
 | L3 | **Subprocess invocation** from Python (`Popen`) | OS/PATH brittleness, shebang reliance, opaque error surface | Eliminate subprocess; call Python service directly |
 | L4 | **Free-string SPARQL** interpolated from shell vars (and `.replace('~description~')` in `diff_adapter.py`) | Injection surface, magic strings, fragile | Parametrised query templates as named constants; URIs built by a `UriBuilder`; values bound, not concatenated |
 | L5 | **Non-idempotent deltas** — uses `INSERT` (not `CLEAR`+`INSERT`) for delta graphs | Stale triples accumulate on re-run | `CLEAR GRAPH` before each delta recompute; `PUT` for version graphs |
@@ -142,12 +174,12 @@ The same flow runs unchanged in both modes; only the `GraphStorePort` implementa
 
 ## Concrete Examples
 
-**Input config (YAML, in-memory mode):**
+**Input config (YAML, in-memory oxigraph engine):**
 ```yaml
 dataset_id: stw
 scheme_uri: http://zbw.eu/stw
 base_version_iri: http://zbw.eu/stw/version
-mode: in_memory
+engine: oxigraph        # remote | oxigraph | rdflib
 blank_node_policy: exclude
 compute_direct_to_current: true
 versions:
@@ -157,7 +189,9 @@ versions:
 
 **CLI:**
 ```
-rdf-diff load --config stw.yaml --mode in-memory --out ./out
+rdf-diff load --config stw.yaml --engine oxigraph --out ./out          # in-memory diff artifacts
+rdf-diff load --config stw.yaml --engine oxigraph --report --out ./out # + full report (gated on eds4jinja2)
+rdf-diff load --config stw.yaml --engine remote                        # into a SPARQL endpoint
 ```
 
 **Expected output (in-memory mode):** serialised named graphs + a machine-readable result:
@@ -177,11 +211,12 @@ Fuseki, identical in structure to today's `load_versions.sh` output; `count_inse
 
 ## No-gos
 
-Derived from the EPIC's "Anti-Patterns (DO NOT)" table and the module-boundary scope (ADR-4).
+Derived from the EPIC's "Anti-Patterns (DO NOT)" table, the module-boundary scope (ADR-4), and the
+final agreed decisions.
 
 | Don't | Do Instead | Why |
 |-------|-----------|-----|
-| Call `pyoxigraph`/`requests`/`SPARQLWrapper` from `services/` | Depend on `GraphStorePort` | Keeps modes swappable (DIP); protects the core dual-mode bet |
+| Import `pyoxigraph`/`rdflib`/`requests`/`SPARQLWrapper`/`eds4jinja2` from `services/` | Depend on `GraphStorePort` | Keeps the three engines swappable (DIP); protects the core dual-mode bet (enforced by import-linter) |
 | Build SPARQL by f-string-concatenating user values | Bind values / use named template constants + `UriBuilder` | Removes injection surface and magic strings (L4) |
 | Keep `INSERT`-only delta writes | `CLEAR GRAPH` then `INSERT` | Guarantees idempotency (L5) |
 | Re-introduce `subprocess`/`Popen` or shell out to curl | In-process Python calls | Removes OS/PATH brittleness (L1, L3) |
@@ -189,12 +224,20 @@ Derived from the EPIC's "Anti-Patterns (DO NOT)" table and the module-boundary s
 | Assume exactly two versions | Support the computed delta-pair set (N versions) | Direct-to-current correctness (L9) |
 | Skip post-load validation | Run structural + content `ASK` checks | Fail fast on corrupt graphs (L8) |
 | Put report/change-category logic here | Leave it to dqgen queries + report builder | Preserve module boundary (ADR-4) |
+| Adopt **FastAPI** | Keep Flask/Connexion; UI unchanged | Out of scope; no framework churn |
+| Introduce **LinkML** / generate the domain | Hand-write pydantic v2 models | Out of scope; DEC-3 chooses hand-written pydantic |
+| Edit `diff-query-generator` templates | Preserve the four-graph contract so generated queries keep working | dqgen is a build-time generator, not ours to fork (ADR-4) |
+| Fork or vendor **eds4jinja2** inside rdf-differ for in-memory reporting | Depend on its upstream release; fall back to remote-only if absent | DEC-5 — the enhancement is its own epic in the eds4jinja2 repo |
 
 **Out of scope (module boundary, ADR-4):** higher-level change-category reporting stays in the
 `diff-query-generator`-produced SPARQL queries and the existing report builder. This module produces
 only the four named graphs + version-history graph and the triple-level deltas. `SKOLEMISE`
-blank-node handling is reserved for a future release (ADR-5) — selecting it is rejected, not silently
-treated as `DOCUMENT_ONLY`.
+blank-node handling **is supported in this epic** (DEC-9, overriding the legacy ADR-5 "future" note):
+a pluggable `BlankNodeStrategy` seam with an initial **KISS, deterministic, W3C-compliant** rdflib
+implementation (`to_canonical_graph` → `skolemize` to `.well-known/genid/` IRIs), built to be improved
+later behind the same interface. **Not in this epic:** FastAPI (Flask stays, UI unchanged), LinkML/code
+generation, editing dqgen templates, and building the eds4jinja2 enhancement itself (depended upon,
+not built here).
 
 ## Test Case Specifications
 
@@ -240,11 +283,22 @@ The CLI prints the raised exception's message verbatim and exits non-zero; no st
 
 - **Code:** new module under `rdf_differ/{domain,adapters,services,entrypoints}/loading/`; rewires
   `FusekiDiffAdapter.create_diff`; retires `resources/load_versions.sh` and the subprocess path in
-  `rdf_differ/adapters/skos_history_wrapper.py`.
-- **APIs:** the HTTP/CLI surface gains a `load` CLI; the existing API/Celery diff flow is preserved
-  via the remote adapter (four-graph contract unchanged).
-- **Dependencies:** add `pyoxigraph` (in-memory store) and `import-linter` (contracts).
-- **Out of scope / parked:** higher-level change-category reporting (dqgen + report builder).
+  `rdf_differ/adapters/skos_history_wrapper.py`. **Dissolves `rdf_differ/utils/`** into the right
+  layers (see `design.md` dissolution map) and updates its consumers (incl. `tests/steps/*.py` and
+  `services/report_handling.py`). **Migrates `rdf_differ/domain/model.py`** (`Dataset`,
+  `DatasetVersion`, `VersionsDelta`) to pydantic v2.
+- **APIs:** the HTTP/CLI surface gains a `load` CLI (`--engine remote|oxigraph|rdflib [--report]`);
+  the existing API create-diff endpoint gains an `engine`/`mode` parameter and runs async over the
+  existing Celery+Redis channel (status + revoke/cancel queue in `adapters/redis.py`). The existing
+  diff flow is preserved via `RemoteSparqlStore` (four-graph contract unchanged).
+- **Dependencies:** add `pyoxigraph` (in-memory store) and `import-linter` (contracts); `rdflib` is
+  already present (second in-memory engine). **External dependency:** the eds4jinja2 enhancement for
+  the in-memory full report (separate epic/release; graceful fallback if absent).
+- **Architecture:** stricter import-linter — keep the (now utils-free) layers contract; add a
+  forbidden contract barring `services` from store/report libs, a forbidden contract barring `domain`
+  from I/O frameworks, and an independence contract between the three store adapters.
+- **Out of scope / parked:** higher-level change-category reporting (dqgen + report builder); FastAPI;
+  LinkML; building the eds4jinja2 enhancement itself.
 
 ## References
 

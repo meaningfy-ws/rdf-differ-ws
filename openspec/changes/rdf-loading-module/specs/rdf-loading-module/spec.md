@@ -10,40 +10,48 @@ four-named-graph contract (`proposal.md` / `inputs/delta_graphs_loading_and_comp
 ### Requirement: GraphStorePort store abstraction
 
 The loading service SHALL depend only on a single secondary-adapter interface, `GraphStorePort`, for
-all triple-store interaction, and SHALL NOT import `pyoxigraph`, `requests`, or `SPARQLWrapper`
-directly. Concrete stores SHALL be selected by dependency injection at the entrypoint, so the same
-delta-computation logic runs unchanged behind any conforming adapter.
+all triple-store interaction, and SHALL NOT import `pyoxigraph`, `rdflib`, `requests`, `SPARQLWrapper`,
+or `eds4jinja2` directly. Concrete stores SHALL be selected by dependency injection at the entrypoint,
+so the same delta-computation logic runs unchanged behind any conforming adapter.
 
 #### Scenario: Service depends only on the port
 
 - **WHEN** the loading service computes deltas
-- **THEN** it issues all store operations through `GraphStorePort` (`load_graph`, `run_update`, `ask`, `count_graph`, `serialize_graph`, `clear_graph`)
-- **AND** it imports no concrete triple-store library
+- **THEN** it issues all store operations through `GraphStorePort` (`put_graph`, `clear_graph`, `update`, `query`, `serialize`)
+- **AND** it imports no concrete triple-store or report library
 
 #### Scenario: Concrete store chosen by injection
 
-- **WHEN** the entrypoint runs a load with a selected mode
+- **WHEN** the entrypoint runs a load with a selected engine
 - **THEN** it constructs the matching `GraphStorePort` implementation and injects it into the service
 - **AND** the service code is identical regardless of which implementation is injected
 
-### Requirement: Dual-mode operation (in-memory and remote)
+### Requirement: Config-selected storage backend (remote, oxigraph, rdflib)
 
-The module SHALL support two interchangeable modes behind `GraphStorePort`: an **in-memory** mode
-backed by an in-process `pyoxigraph.Store` (no triple store required) and a **remote** mode backed by
-the SPARQL 1.1 Graph Store Protocol plus SPARQL 1.1 Update against an existing endpoint (Fuseki). Both
-modes SHALL produce equivalent results.
+The module SHALL support three interchangeable `GraphStorePort` implementations, the backend chosen by
+configuration: a **remote** backend (`RemoteSparqlStore`) targeting any SPARQL 1.1 endpoint via the
+Graph Store Protocol `PUT` plus SPARQL 1.1 Update/Query over HTTP; and two **in-memory** backends
+requiring no triple store — `PyoxigraphStore` (via `pyoxigraph`) and `RdflibStore` (via `rdflib`). All
+three backends SHALL produce equivalent results for the same configuration. The remote backend SHALL
+NOT be specific to any single triple-store product.
 
 #### Scenario: Run a temporary diff in memory without any triple store
 
-- **WHEN** the user runs a valid load with versions "8.14" and "9.0" in in-memory mode and no triple store is available
+- **WHEN** the user runs a valid load with versions "8.14" and "9.0" using an in-memory engine ("oxigraph" or "rdflib") and no triple store is available
 - **THEN** the load completes successfully
 - **AND** the insertions and deletions graphs can be exported as RDF files
 
-#### Scenario: Produce the same result in memory and against a triple store
+#### Scenario: Produce equivalent results across all three backends
 
-- **WHEN** the user runs the same valid configuration in in-memory mode and in remote mode
-- **THEN** the insertion and deletion counts match between the two modes
-- **AND** the same set of named graphs is produced in both modes
+- **WHEN** the user runs the same valid configuration with the "remote", "oxigraph", and "rdflib" engines
+- **THEN** the insertion and deletion counts match across the engines
+- **AND** the same set of named graphs is produced by each engine
+
+#### Scenario: Select the backend from configuration
+
+- **WHEN** the configuration (or CLI flag) selects an engine of "remote", "oxigraph", or "rdflib"
+- **THEN** the entrypoint constructs the matching `GraphStorePort` implementation
+- **AND** an unknown engine value is rejected before any load begins
 
 ### Requirement: Triple-level delta computation
 
@@ -66,10 +74,12 @@ configured blank-node policy. Identical versions SHALL yield empty insertions an
 
 ### Requirement: Configurable blank-node policy
 
-The module SHALL apply a configurable `BlankNodePolicy` during delta computation. The default
-`EXCLUDE` policy SHALL drop statements with a blank-node subject (matching the legacy script);
-`DOCUMENT_ONLY` SHALL apply no filter; `SKOLEMISE` is reserved for a future release and selecting it
-SHALL be rejected at configuration time rather than silently treated as `DOCUMENT_ONLY`.
+The module SHALL apply a configurable `BlankNodePolicy` through a pluggable `BlankNodeStrategy` seam
+during delta computation. The default `EXCLUDE` policy SHALL drop statements with a blank-node subject
+(matching the legacy script); `DOCUMENT_ONLY` SHALL apply no filter; `SKOLEMISE` SHALL replace blank
+nodes with W3C RDF 1.1 Skolem IRIs (`.well-known/genid/`) deterministically, so that the same input
+yields identical Skolem IRIs across runs. The strategy SHALL be replaceable behind a stable interface
+so the skolemisation algorithm can be improved later without changing callers.
 
 #### Scenario: Exclude policy drops a blank-node statement
 
@@ -81,18 +91,25 @@ SHALL be rejected at configuration time rather than silently treated as `DOCUMEN
 - **WHEN** a new version adds one statement with a blank-node subject and the policy is "document-only"
 - **THEN** the blank-node statement is present in the insertions graph
 
+#### Scenario: Skolemise policy replaces blank nodes deterministically
+
+- **WHEN** a version containing a blank-node subject is loaded with the policy "skolemise"
+- **THEN** each blank node is replaced by a W3C `.well-known/genid/` Skolem IRI
+- **AND** loading the same input again yields identical Skolem IRIs (the transform is deterministic)
+
 ### Requirement: Configuration validation before any write
 
 The module SHALL validate the loading configuration before writing any graph, and SHALL reject
 configurations that have fewer than two versions, duplicate version identifiers, a missing version
-file, a relative (non-absolute) scheme or base IRI, mixed RDF file formats, or that select the
-unsupported skolemise policy. The reason SHALL be reported to the user.
+file, a relative (non-absolute) scheme or base IRI, or mixed RDF file formats. The configuration model
+SHALL be a typed value object that validates its own invariants at construction time, so an invalid
+configuration cannot be represented. The reason SHALL be reported to the user.
 
 #### Scenario: Reject invalid configurations before any data is written
 
-- **WHEN** the user requests a load with a configuration that is invalid (missing one of two versions, duplicate version ids, a missing file, a relative scheme URI, mixed RDF formats, or the skolemise policy)
+- **WHEN** the user requests a load with a configuration that is invalid (missing one of two versions, duplicate version ids, a missing file, a relative scheme URI, or mixed RDF formats)
 - **THEN** the load is rejected before any graph is written
-- **AND** the user is told the reason (e.g. "at least two versions are required", "version identifiers must be unique", "version file does not exist", "scheme URI must be an absolute IRI", "all version files must share one format", "skolemise policy is not yet supported")
+- **AND** the user is told the reason (e.g. "at least two versions are required", "version identifiers must be unique", "version file does not exist", "scheme URI must be an absolute IRI", "all version files must share one format")
 
 ### Requirement: Delta-pair set covers consecutive and direct-to-current pairs
 
@@ -210,3 +227,58 @@ construct SPARQL by concatenating caller-supplied values as free strings. It SHA
 
 - **WHEN** the module loads versions and computes deltas
 - **THEN** all store interaction happens through in-process Python calls via `GraphStorePort`, with no `subprocess`/`Popen` or `curl`
+
+### Requirement: In-memory diff artifacts with no external dependency
+
+When run with an in-memory engine the module SHALL produce diff artifacts — the version, insertions,
+and deletions named graphs serialisable to RDF files, plus the insertion and deletion counts and a
+validation outcome — without requiring a triple store and without requiring any reporting library. This
+deliverable SHALL NOT depend on the eds4jinja2 report capability.
+
+#### Scenario: Export diff artifacts from an in-memory run
+
+- **WHEN** the user runs a valid load with an in-memory engine and requests diff artifacts only
+- **THEN** the four named graphs are serialised to RDF files
+- **AND** a machine-readable result reports the insertion and deletion counts and a validation outcome
+- **AND** no triple store and no reporting library are required
+
+### Requirement: Exposure through CLI and the async API
+
+The module SHALL expose loading through a Click CLI accepting a configuration file, an engine
+selection of "remote", "oxigraph", or "rdflib", and an optional report flag; and through the existing
+create-diff API endpoint, which SHALL accept an engine/mode parameter and run asynchronously over the
+existing task channel, reporting status and honouring the existing cancel/revoke path. For in-memory
+engines the asynchronous worker SHALL build the store within the task lifetime.
+
+#### Scenario: Run a load from the CLI selecting an engine
+
+- **WHEN** the user runs the CLI with a valid configuration and an engine of "oxigraph", "rdflib", or "remote"
+- **THEN** the matching backend is used and the load runs to completion
+- **AND** the CLI writes the serialised graphs and a result document
+
+#### Scenario: Run an asynchronous load through the API
+
+- **WHEN** a client calls the create-diff endpoint with a valid configuration and an engine parameter
+- **THEN** the load runs asynchronously on the existing task channel with observable status
+- **AND** a cancellation request is honoured through the existing revoke path
+
+### Requirement: In-memory full report depends on the eds4jinja2 capability with graceful fallback
+
+The in-memory **full report** SHALL depend on an external eds4jinja2 capability that allows an
+in-process SPARQL data source to be injected so report templates can query the in-process store. When
+that capability is present, the module SHALL render the full report from the in-memory store with the
+report templates unchanged. When that capability is absent, the module SHALL NOT fail the core load:
+an in-memory run requesting a report SHALL degrade to remote-only and inform the user, and the
+in-memory diff-artifacts deliverable SHALL remain unaffected.
+
+#### Scenario: Render the in-memory full report when the capability is present
+
+- **WHEN** the user requests a full report with an in-memory engine and the eds4jinja2 in-process data-source capability is available
+- **THEN** the report is rendered by querying the in-process store
+- **AND** the report templates are used unchanged
+
+#### Scenario: Degrade gracefully when the capability is absent
+
+- **WHEN** the user requests a full report with an in-memory engine and the eds4jinja2 in-process data-source capability is not available
+- **THEN** the core load and the in-memory diff artifacts still succeed
+- **AND** the report request degrades to remote-only and the user is informed
