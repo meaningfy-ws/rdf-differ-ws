@@ -1,5 +1,5 @@
 #!/bin/bash
-set -o allexport; source bash/.env; set +o allexport
+set -o allexport; source infra/scripts/.env; set +o allexport
 
 # run celery
 celery -A rdf_differ.services.celery.celery_worker worker --loglevel ${RDF_DIFFER_LOG_LEVEL} --logfile ${RDF_DIFFER_CELERY_LOGS} --detach

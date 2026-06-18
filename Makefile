@@ -1,6 +1,17 @@
 # Optional: a fresh clone has no infra/.env yet — copy infra/.env.example first.
 -include infra/.env
 
+.PHONY: help start stop install install-dev install-os-dependencies \
+	install-python-dependencies install-python-dependencies-dev \
+	setup-local-fuseki run-local-fuseki run-local-api run-local-ui \
+	run-system-redis stop-local-applications build-volumes build-services \
+	build-externals start-traefik stop-traefik start-services stop-services \
+	teardown-services build-docker-fuseki-test run-docker-fuseki-test \
+	test-data-fuseki run-docker-redis-test run-docker-api-test run-docker-ui-test \
+	run-docker-celery-test start-services-test test test-unit test-feature \
+	generate-models lint format format-check typecheck check-architecture \
+	check-quality check-all check ci set-report-template run-dev-ui
+
 BUILD_PRINT = \e[1;34mSTEP: \e[0m
 MSG_PRINT = \e[1;34mINFO: \e[0m
 WARN_PRINT = \e[1;34mWARNING: \e[0m
@@ -9,6 +20,25 @@ DEB_OS=$(shell command -v apt > /dev/null && echo 1)
 RPM_OS=$(shell command -v yum > /dev/null && echo 1)
 OS_DOCKER=$(shell command -v docker > /dev/null && echo 1)
 OS_DOCKERC=$(shell command -v docker compose > /dev/null && echo 1)
+
+.DEFAULT_GOAL := help
+
+help:
+	@ echo "RDF Differ — common make targets:"
+	@ echo ""
+	@ echo "  Setup:    install            runtime deps (Poetry, main only)"
+	@ echo "            install-dev        all dependency groups (dev,test,lint,docs)"
+	@ echo "  Quality:  lint               Ruff lint    | format  Ruff format (write)"
+	@ echo "            typecheck          mypy         | check-architecture  import-linter"
+	@ echo "            check (=check-quality)  lint + typecheck + check-architecture"
+	@ echo "            ci    (=check-all)      check + full test suite"
+	@ echo "  Tests:    test               full suite w/ coverage (needs services)"
+	@ echo "            test-unit          unit only    | test-feature  BDD only"
+	@ echo "            start-services-test  bring up Docker test stack"
+	@ echo "  Models:   generate-models    LinkML -> Pydantic preview (DEC-6 seam)"
+	@ echo "  Docker:   start / stop       traefik + services up/down"
+	@ echo ""
+	@ echo "  Run 'grep ^<name>: Makefile' to inspect any target."
 
 #-----------------------------------------------------------------------------
 # Install dev environment
@@ -51,16 +81,16 @@ install-python-dependencies-dev:
 	@ poetry install --with dev,test,lint,docs
 
 setup-local-fuseki:
-	@ ./bash/setup_fuseki.sh
+	@ ./infra/scripts/setup_fuseki.sh
 
 run-local-fuseki:
 	@ ./fuseki/fuseki-server -q
 
 run-local-api:
-	@ ./bash/run_api.sh
+	@ ./infra/scripts/run_api.sh
 
 run-local-ui:
-	@ ./bash/run_ui.sh
+	@ ./infra/scripts/run_ui.sh
 
 run-system-redis:
 ifeq ($(DEB_OS), 1)
@@ -79,7 +109,7 @@ else
 endif
 
 stop-local-applications:
-	@ ./bash/stop_gunicorn.sh
+	@ ./infra/scripts/stop_gunicorn.sh
 
 #-----------------------------------------------------------------------------
 # Service commands
@@ -211,6 +241,10 @@ format:
 	@ echo "$(BUILD_PRINT)Formatting the code (Ruff)"
 	@ poetry run ruff format rdf_differ tests
 
+format-check:
+	@ echo "$(BUILD_PRINT)Checking formatting (Ruff)"
+	@ poetry run ruff format --check rdf_differ tests
+
 typecheck:
 	@ echo "$(BUILD_PRINT)Type-checking (mypy)"
 	@ poetry run mypy rdf_differ
@@ -219,11 +253,15 @@ check-architecture:
 	@ echo "$(BUILD_PRINT)Checking architecture boundaries (import-linter)"
 	@ poetry run lint-imports --config .importlinter
 
-# Aggregate quality gate: lint + types + architecture (all green).
-check-quality: lint typecheck check-architecture
+# Aggregate quality gate: format + lint + types + architecture (all green).
+check-quality: format-check lint typecheck check-architecture
 
 check-all: check-quality
 	@ $(MAKE) test
+
+# Convention aliases (Meaningfy standard names).
+check: check-quality
+ci: check-all
 
 #-----------------------------------------------------------------------------
 # Template commands
@@ -239,83 +277,8 @@ set-report-template:
 	@ docker rm temp
 
 #-----------------------------------------------------------------------------
-# Template update commands
-#-----------------------------------------------------------------------------
-
-# Default values for environment variables
-TEMPLATE_SRC_DIR ?= ../diff-query-generator
-TEMPLATE_OUTPUT_DIR ?= $(TEMPLATE_SRC_DIR)/output
-DEFAULT_PROFILE ?= owl-core
-DEFAULT_TEMPLATE ?= html
-PREFERRED_PROFILES ?= owl-core shacl-core skos-core
-PREFERRED_TEMPLATES ?= html asciidoc
-
-# Derived paths
-TEMPLATE_SRC_BASE = $(TEMPLATE_OUTPUT_DIR)/$(DEFAULT_PROFILE)
-TEMPLATE_QUERIES_SRC = $(TEMPLATE_SRC_BASE)/queries
-TEMPLATE_HTML_SRC = $(TEMPLATE_SRC_BASE)/$(DEFAULT_TEMPLATE)
-
-TEMPLATE_DEST_BASE = resources/templates/$(DEFAULT_PROFILE)-en-only
-TEMPLATE_QUERIES_DEST = $(TEMPLATE_DEST_BASE)/queries
-TEMPLATE_HTML_DEST = $(TEMPLATE_DEST_BASE)/template_variants/$(DEFAULT_TEMPLATE)/templates
-
-update_template:
-	@ echo "$(BUILD_PRINT)Updating templates from $(TEMPLATE_SRC_BASE)"
-	@ mkdir -p $(TEMPLATE_QUERIES_DEST)
-	@ mkdir -p $(TEMPLATE_HTML_DEST)
-	@ echo "$(MSG_PRINT)Copying queries from $(TEMPLATE_QUERIES_SRC) to $(TEMPLATE_QUERIES_DEST)"
-	@ cp -r $(TEMPLATE_QUERIES_SRC)/* $(TEMPLATE_QUERIES_DEST)/
-	@ echo "$(MSG_PRINT)Copying $(DEFAULT_TEMPLATE) templates from $(TEMPLATE_HTML_SRC) to $(TEMPLATE_HTML_DEST)"
-	@ cp -r $(TEMPLATE_HTML_SRC)/* $(TEMPLATE_HTML_DEST)/
-	@ echo "$(MSG_PRINT)Template update completed"
-
-update_all_templates:
-	@ for profile in $(PREFERRED_PROFILES); do \
-		for type in $(PREFERRED_TEMPLATES); do \
-			echo "$(BUILD_PRINT)Updating $$type templates for $$profile"; \
-			src_base=$(TEMPLATE_OUTPUT_DIR)/$$profile; \
-			queries_src=$$src_base/queries; \
-			type_src=$$src_base/$$type; \
-			dest_base=resources/templates/$$profile-en-only; \
-			queries_dest=$$dest_base/queries; \
-			type_dest=$$dest_base/template_variants/$$type/templates; \
-			mkdir -p $$queries_dest; \
-			mkdir -p $$type_dest; \
-			echo "$(MSG_PRINT)Copying queries from $$queries_src to $$queries_dest"; \
-			cp -r $$queries_src/* $$queries_dest/; \
-			echo "$(MSG_PRINT)Copying $$type templates from $$type_src to $$type_dest"; \
-			cp -r $$type_src/* $$type_dest/; \
-			echo "$(MSG_PRINT)Template update for $$profile ($$type) completed"; \
-		done \
-	done
-
-#-----------------------------------------------------------------------------
 # Run UI dev environment
 #-----------------------------------------------------------------------------
 
 run-dev-ui:
-	@ export FLASK_APP=rdf_differ.entrypoints.ui.run
-	@ export FLASK_ENV=development
-	@ flask run
-
-#-----------------------------------------------------------------------------
-# Gherkin feature and acceptance test generation commands
-#-----------------------------------------------------------------------------
-
-FEATURES_FOLDER = tests/features
-STEPS_FOLDER = tests/steps
-FEATURE_FILES := $(wildcard $(FEATURES_FOLDER)/*.feature)
-EXISTENT_TEST_FILES = $(wildcard $(STEPS_FOLDER)/*.py)
-HYPOTHETICAL_TEST_FILES :=  $(addprefix $(STEPS_FOLDER)/test_, $(notdir $(FEATURE_FILES:.feature=.py)))
-TEST_FILES := $(filter-out $(EXISTENT_TEST_FILES),$(HYPOTHETICAL_TEST_FILES))
-
-generate-tests-from-features: $(TEST_FILES)
-	@ echo "$(BUILD_PRINT)The following test files should be generated: $(TEST_FILES)"
-	@ echo "$(BUILD_PRINT)Done generating missing feature files"
-	@ echo "$(BUILD_PRINT)Verifying if there are any missing step implementations"
-	@ py.test --generate-missing --feature $(FEATURES_FOLDER)
-
-$(addprefix $(STEPS_FOLDER)/test_, $(notdir $(STEPS_FOLDER)/%.py)): $(FEATURES_FOLDER)/%.feature
-	@ echo "$(BUILD_PRINT)Generating the testfile "$@"  from "$<" feature file"
-	@ pytest-bdd generate $< > $@
-	@ sed -i  's|features|../features|' $@
+	@ FLASK_APP=rdf_differ.entrypoints.ui.run FLASK_DEBUG=1 poetry run flask run

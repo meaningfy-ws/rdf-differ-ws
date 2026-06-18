@@ -152,10 +152,15 @@ diff-output
 test-results*.xml
 lint_report.txt
 
+# Runtime data dirs — created on demand by the app; only *.example/templates are tracked
+/db/
+/logs/
+/reports/
+
 # Local secret env files — commit ONLY *.example templates (never real values)
 .env
 .env-test
-bash/.env
+infra/scripts/.env
 !*.example
 
 # Stale Enterprise-Architect HTML export scratch

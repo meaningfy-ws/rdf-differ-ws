@@ -87,7 +87,7 @@ To reiterate, this information is only _retrieved_, i.e. there is no support for
 
 RDF Differ uses Fuseki (as the triplestore/database), Celery (for multithreading programming), Gunicorn (for serving), and Redis (for queue-based pesistent storage). For the corresponding Docker micro-services, it uses Traefik for the networking, _except when running tests_.
 
-The applications are made available (by default) on ports [8030](http:localhost:8030) (ui), [4030](http:localhost:4030) (API; [4030/ui](http:localhost:4030/ui) for Swagger), [3030](http:localhost:3030) (triplestore), [6379](http:localhost:6379) (Redis), and [5555](http:localhost:5555) (Celery). This is configurable via `bash/.env` and `infra/.env`.
+The applications are made available (by default) on ports [8030](http:localhost:8030) (ui), [4030](http:localhost:4030) (API; [4030/ui](http:localhost:4030/ui) for Swagger), [3030](http:localhost:3030) (triplestore), [6379](http:localhost:6379) (Redis), and [5555](http:localhost:5555) (Celery). This is configurable via `infra/scripts/.env` and `infra/.env`.
 
 > For the docker services with Traefik, you have to access these differently, through their local domains instead, for e.g. <https://rdf.localhost/> (ui). See <https://monitor.localhost> > Routers > Explore (`Host(...)`).
 >
@@ -110,7 +110,7 @@ or Mac (because of some limitations with GitHub CI), those platforms should work
 
 #### Optional dependencies
 
-If you would like to run the `bash/merge-owl-shacl.sh` script for merging OWL and SHACL files to report embedded constraint information, you need to have Apache Jena's `riot` command-line tool installed.
+If you would like to run the `infra/scripts/merge-owl-shacl.sh` script for merging OWL and SHACL files to report embedded constraint information, you need to have Apache Jena's `riot` command-line tool installed.
 
 Download [Jena](https://jena.apache.org/download/) to get access to its CLI tools (you will want to [put them in your `PATH`](https://jena.apache.org/documentation/tools/#common-issues-with-running-the-tools) to be able to run them as commands). If you are looking to integrate this into your GitHub CI/CD pipelines, you can also use a [third-party GitHub Action](https://github.com/marketplace/actions/setup-apache-jena).
 
@@ -205,7 +205,7 @@ make run-docker-fuseki-test
 
 Alternatively, if you have a separately managed installation of Fuseki, you can
 ignore this step. Simply ensure it is available at `localhost:3030`, or a
-location/port as defined in `bash/.env`.
+location/port as defined in `infra/scripts/.env`.
 
 #### Redis
 
@@ -252,7 +252,7 @@ make stop-local-applications
 
 For users who would rather not deal with the web UI, RDF Differ offers an HTTP ReST API. However, the API is _asynchronous_, meaning that calls are processed in the background, and one needs to _poll_ for the status of diff creation and report generation.
 
-It is for this reason that we provide `bash/rdf-differ.sh`, a CLI helper script with a rudimentary but sufficient polling mechanism, to make it easier to use the tool from the command line. The script wraps common API call sequences for creating diffs and generating reports, with parameters for the AP and report template.
+It is for this reason that we provide `infra/scripts/rdf-differ.sh`, a CLI helper script with a rudimentary but sufficient polling mechanism, to make it easier to use the tool from the command line. The script wraps common API call sequences for creating diffs and generating reports, with parameters for the AP and report template.
 
 The supported AP values are:
 
@@ -266,32 +266,32 @@ And the supported template format values are:
 - `html`
 - `asciidoc`
 
-In adddition, there is the `bash/merge-owl-shacl.sh` script that can be used to merge an OWL file and a SHACL file into a single OWL file. Merge both old and new files before passing the new "combined" file to the tool for diffing, and to report advanced constraint information from the embedded SHACL shapes.
+In adddition, there is the `infra/scripts/merge-owl-shacl.sh` script that can be used to merge an OWL file and a SHACL file into a single OWL file. Merge both old and new files before passing the new "combined" file to the tool for diffing, and to report advanced constraint information from the embedded SHACL shapes.
 
 #### Examples
 
 Full workflow (diff + report using default OWL AP in default JSON format)
 
 ```sh
-./bash/rdf-differ.sh --old <first-file> --new <second-file>
+./infra/scripts/rdf-differ.sh --old <first-file> --new <second-file>
 ```
 
 Create a diff only (this is useful to reuse the ID to generate reports in different templates/formats)
 
 ```sh
-./bash/rdf-differ.sh diff --old <first-file> --new <second-file>
+./infra/scripts/rdf-differ.sh diff --old <first-file> --new <second-file>
 ```
 
 Generate report for an existing diff (using default OWL AP in default JSON format)
 
 ```sh
-./bash/rdf-differ.sh report --dataset-id <diff-uid>
+./infra/scripts/rdf-differ.sh report --dataset-id <diff-uid>
 ```
 
 Custom configuration
 
 ```sh
-./bash/rdf-differ.sh \
+./infra/scripts/rdf-differ.sh \
   --base-url http://<host>:<port> \
   --old <old-file> \
   --new <new-file> \
@@ -304,7 +304,7 @@ Custom configuration
 Merge an OWL and SHACL file into a combined OWL file with embedded SHACL shapes:
 
 ```sh
-./bash/merge-owl-shacl.sh [input-owl-file] [input-shacl-file] <output-combined-file>
+./infra/scripts/merge-owl-shacl.sh [input-owl-file] [input-shacl-file] <output-combined-file>
 ```
 
 Notes:
@@ -319,7 +319,7 @@ Notes:
 - Create a diff and generate a HTML report saved in `diff-output/` (full workflow):
 
 ```bash
-./bash/rdf-differ.sh --old tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
+./infra/scripts/rdf-differ.sh --old tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
                      --new tests/test_data/owl/ePO_sample-4.0.0.upd.ttl \
                      --profile owl-core-en-only --template HTML
 ```
@@ -327,26 +327,26 @@ Notes:
 - Create only the diff (prints `dataset_name` and `uid`, the latter of which is needed for report generation):
 
 ```bash
-./bash/rdf-differ.sh diff --old tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
+./infra/scripts/rdf-differ.sh diff --old tests/test_data/owl/ePO_sample-4.0.0.orig.ttl \
                           --new tests/test_data/owl/ePO_sample-4.0.0.upd.ttl
 ```
 
 - Request a report for an existing dataset ID (`uid`), and use a different base URL:
 
 ```bash
-./bash/rdf-differ.sh report --dataset-id 64000b53-61ac-4b34-8abd-5f77a4cfa453 report --base-url http://localhost:4030
+./infra/scripts/rdf-differ.sh report --dataset-id 64000b53-61ac-4b34-8abd-5f77a4cfa453 report --base-url http://localhost:4030
 ```
 
 - List existing diffs (GET `/diffs`):
 
 ```bash
-./bash/rdf-differ.sh list
+./infra/scripts/rdf-differ.sh list
 ```
 
 - Merge the OWL and SHACL artefacts of an actual lightweight ontology (ePO):
 
 ```sh
-./bash/merge-owl-shacl.sh \
+./infra/scripts/merge-owl-shacl.sh \
   evaluation/vocabularies/ePO_core-4.2.0.ttl \
   evaluation/vocabularies/ePO_core_shapes-4.2.0.ttl \
   evaluation/vocabularies/ePO_core_combined-4.2.0.ttl
@@ -363,7 +363,7 @@ curl localhost:4030/diffs
 If so, you will need to override the base URL inclusive of the port:
 
 ```sh
-./bash/rdf-differ.sh --old <first-file> --new <second-file> --base-url localhost:4030
+./infra/scripts/rdf-differ.sh --old <first-file> --new <second-file> --base-url localhost:4030
 ```
 
 In the development/production environment where services are running behind Traefik, no such override is required, as the default base URL for the script is `api.localhost`, the Traefik route for the API+port.

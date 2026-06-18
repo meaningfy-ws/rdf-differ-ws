@@ -152,7 +152,9 @@ def create_diff(
     body["new_version_file"] = new_version_file_content.filename
 
     try:
-        dataset = fuseki_adapter.dataset_description(dataset_name=cast(str, body.get("dataset_name")))
+        dataset = fuseki_adapter.dataset_description(
+            dataset_name=cast(str, body.get("dataset_name"))
+        )
         # if description is {} (empty) then we can create the diff
         can_create = not bool(dataset)
         logger.debug(f"dataset exists. empty: {not can_create}")
@@ -271,9 +273,7 @@ def build_report(body: dict) -> tuple:
         }, 406
 
 
-def get_report(
-    dataset_id: str, application_profile: str, template_type: str
-) -> tuple | Response:
+def get_report(dataset_id: str, application_profile: str, template_type: str) -> tuple | Response:
     """
         Get a dataset diff report
     :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset
