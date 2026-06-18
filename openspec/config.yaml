@@ -1,0 +1,22 @@
+schema: meaningfy
+
+# Project context — injected (wrapped in <context>) into every artifact's instructions.
+# The durable truth is openspec/specs/; this string is the orientation index.
+context: |
+  Repo: RDF Differ (rdf-differ).
+  Architecture: cosmic-python layering (domain, adapters, services, entrypoints);
+  innermost layer is `domain`. Enforced by .importlinter (`make check-architecture`).
+  Top-level package: rdf_differ (no /src). Default branch: master.
+  Commits: Conventional Commits (imperative, no trailing punctuation).
+  Artifact vocabulary: EPIC ≡ proposal.md (Shape-Up work shape);
+  PLAN ≡ design.md + tasks.md (clarity gate scores the pair ≥9/10);
+  normative requirements ≡ specs/ deltas (RFC-2119 SHALL + Given/When/Then, no EARS).
+
+# Per-artifact rules — THIN by design. Only the 3 hard rules.
+rules:
+  proposal:
+    - The EPIC MUST state an Appetite and a No-gos section (an EPIC without no-gos is unshaped).
+  specs:
+    - Use RFC-2119 SHALL/MUST; every requirement MUST have at least one #### Scenario (WHEN/THEN). No EARS.
+  tasks:
+    - The PLAN MUST cite its parent EPIC id on the first line (golden thread — cite your parent).
