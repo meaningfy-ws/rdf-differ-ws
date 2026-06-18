@@ -16,13 +16,19 @@ branch; this change is a separate branch off `master`.
 **Goals:**
 - Every Meaningfy non-negotiable satisfied: no `/src` (already true), all tool config in root, canonical
   `CLAUDE.md` + `AGENTS.md` symlink, minimal `pyproject.toml`, `openspec/` spine projected.
-- Canonical stack adopted (Poetry, Ruff, mypy, pytest+bdd, coverage ≥80%, import-linter, Antora, Make).
+- Canonical stack adopted (Poetry, Ruff, mypy, pytest+bdd, coverage gate, import-linter, Antora, Make).
+  The coverage gate is wired at the current measured level (the ≥80% target is a deferred follow-up).
 - Python floor 3.12; dependencies on current majors.
 - `make install && make check-all` green at the end of every slice.
 
 **Non-Goals:**
 - No runtime behaviour change; no new features; the `load_versions` rewrite stays parked.
 - No `domain → models` rename (DEC-2); no `/src` lift; no LinkML codegen (DEC-6); no live deploy (DEC-7).
+- **No new tests in this change** (slice 6 only restructures + moves existing tests). Raising coverage to
+  ≥80% with new tests is a deferred follow-up task — this change sets the coverage `fail_under` to the
+  current measured level so the gate never regresses but does not demand new tests.
+- **No re-layering of `utils/`** beyond what import-linter forces; eliminating `rdf_differ/utils/` by
+  redistributing its code is a deferred follow-up (TODO recorded in slice 7).
 
 ## Decisions
 
@@ -34,8 +40,11 @@ branch; this change is a separate branch off `master`.
 - **Dependency bump bound to the Python bump** (DEC-3): do 3.8→3.12 and the major bumps in one focused
   slice *after* tooling/tests exist, so the test suite catches regressions. Bumps that break and can't
   be fixed within appetite get pinned + a follow-up issue, not a rushed rewrite.
-- **import-linter two-step** (DEC, architecture-guardrails): start with a permissive contract that only
-  asserts the layered order; harden to per-layer forbidden-import contracts once layers are stable.
+- **import-linter — discover then implement properly** (DEC, architecture-guardrails): slice 1 lands a
+  permissive ordering contract only as a placeholder; slice 7 **discovers the real import graph**
+  (gitnexus/grep), infers the correct dependency direction, and authors the proper per-layer
+  forbidden-import contracts — implemented to how the architecture *should* be, not merely the loosest
+  rule that passes.
 - **CD as a stub** (DEC-7): `deploy.yaml` is a marked TODO; `ci.yaml` + `docs.yaml` are live.
 
 ## Algorithm / approach

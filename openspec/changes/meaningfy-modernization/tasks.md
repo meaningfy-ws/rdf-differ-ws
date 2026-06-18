@@ -44,18 +44,19 @@ Ordered least-risk first. Each numbered group is one reviewable slice; every sli
 - [ ] 5.4 Bump Celery / redis / flower; fix worker wiring; `make check-all`
 - [ ] 5.5 Pin-and-defer any dep that exceeds appetite (open follow-up); record in CHANGELOG
 
-## 6. Test tree reorganization
+## 6. Test tree reorganization (structure only — NO new tests)
 
 - [ ] 6.1 Introduce `tests/{unit,feature,e2e,integration}/` with the marker-injection `conftest.py`
 - [ ] 6.2 Move existing `tests/unit/*` and `tests/features/*` + `tests/steps/*` into the new layout
-- [ ] 6.3 Wire coverage gate `--cov-fail-under=80`; untrack committed artifacts (junit/cucumber/.coverage)
-- [ ] 6.4 `make test` green with the gate
+- [ ] 6.3 Untrack committed artifacts (junit/cucumber/.coverage); set coverage `fail_under` to the CURRENT measured level (NOT 80% — raising it needs new tests)
+- [ ] 6.4 `make test` green; **add no new tests** — raising coverage to ≥80% is a separate follow-up task (deferred)
 
-## 7. Architecture tightening
+## 7. Architecture tightening (discover real rules, implement properly)
 
-- [ ] 7.1 Harden `.importlinter` to real per-layer forbidden-import contracts (entrypoints→services→domain; adapters→domain)
-- [ ] 7.2 Resolve violations (esp. `utils/` placement) in dedicated commits — only where the linter forces it
-- [ ] 7.3 `make check-architecture` green
+- [ ] 7.1 Discover the actual import graph (gitnexus/grep) across `domain/ adapters/ services/ entrypoints/ utils/`; infer the correct dependency direction
+- [ ] 7.2 Author the proper per-layer `.importlinter` contracts from that discovery (not just permissive ordering) — entrypoints→services→domain; adapters→domain; domain imports nothing inward
+- [ ] 7.3 Resolve real violations the contracts surface, in dedicated commits; add a **TODO to eliminate `rdf_differ/utils/`** by redistributing its code into the right layers (deferred follow-up)
+- [ ] 7.4 `make check-architecture` green on the real contracts
 
 ## 8. Pillars — docs, infra, model seam
 
@@ -71,7 +72,7 @@ Ordered least-risk first. Each numbered group is one reviewable slice; every sli
 
 ## Roadmap
 
-- [ ] 1.1 · [ ] 1.2 · [ ] 1.3 · [ ] 2.1 · [ ] 2.2 · [ ] 2.3 · [ ] 2.4 · [ ] 3.1 · [ ] 3.2 · [ ] 3.3 · [ ] 3.4 · [ ] 3.5 · [ ] 4.1 · [ ] 4.2 · [ ] 4.3 · [ ] 5.1 · [ ] 5.2 · [ ] 5.3 · [ ] 5.4 · [ ] 5.5 · [ ] 6.1 · [ ] 6.2 · [ ] 6.3 · [ ] 6.4 · [ ] 7.1 · [ ] 7.2 · [ ] 7.3 · [ ] 8.1 · [ ] 8.2 · [ ] 8.3 · [ ] 9.1 · [ ] 9.2 · [ ] 9.3
+- [ ] 1.1 · [ ] 1.2 · [ ] 1.3 · [ ] 2.1 · [ ] 2.2 · [ ] 2.3 · [ ] 2.4 · [ ] 3.1 · [ ] 3.2 · [ ] 3.3 · [ ] 3.4 · [ ] 3.5 · [ ] 4.1 · [ ] 4.2 · [ ] 4.3 · [ ] 5.1 · [ ] 5.2 · [ ] 5.3 · [ ] 5.4 · [ ] 5.5 · [ ] 6.1 · [ ] 6.2 · [ ] 6.3 · [ ] 6.4 · [ ] 7.1 · [ ] 7.2 · [ ] 7.3 · [ ] 7.4 · [ ] 8.1 · [ ] 8.2 · [ ] 8.3 · [ ] 9.1 · [ ] 9.2 · [ ] 9.3
 
 ## Verification
 

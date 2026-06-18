@@ -23,12 +23,12 @@ zero-risk additive files outward to the high-blast-radius moves:
 
 1. Additive standalone configs (Ruff, mypy, pytest, coverage, import-linter, pre-commit, sonar).
 2. The OpenSpec spine (this change projects it).
-3. Agentic files — canonical `CLAUDE.md` + `AGENTS.md` symlink, `.claude/memory` index.
+3. Agentic files — canonical `CLAUDE.md` + `AGENTS.md` only referring to claude.md, `.claude/memory` index.
 4. `pyproject.toml` / Poetry migration (deps from `requirements/*` + `setup.cfg`).
 5. Tooling swap — Ruff/mypy replace flake8; fix surfaced debt in dedicated commits.
 6. **Python 3.8 → 3.12 + dependency bumps** (Flask/Connexion/Celery/rdflib/SPARQLWrapper etc.).
-7. Test tree reorg — type-split dirs, marker-injection conftest, coverage gate ≥80%.
-8. `.importlinter` hardened from permissive to real per-layer contracts.
+7. Test tree reorg — type-split dirs, marker-injection conftest, coverage gate ≥80%. But add no tests now, this will be a separate task later. deferr only upgrade. 
+8. `.importlinter` hardened from permissive to real per-layer contracts. Make sure to discover and write proper rules, based on what is to infer what is needed and how it should be. Implement how it should be. 
 9. Pillars — Antora docs (port from Sphinx), `docker/ → infra/`, conditional `model/` (LinkML).
 
 ## Key decisions
@@ -58,7 +58,7 @@ zero-risk additive files outward to the high-blast-radius moves:
 - **Sphinx → Antora.** Port the *information architecture* (Diátaxis) and the essential content; do
   **not** hand-migrate every legacy page 1:1. The big `README.md` and `db/` report samples stay.
 - **`utils/` placement.** Resist a deep re-layering of `rdf_differ/utils/` — relocate into the right
-  layer/commons only where import-linter forces it; otherwise leave it.
+  layer/commons only where import-linter forces it; otherwise leave it. Add a TODO to eliminate this utils by properly re-drstributing the code. 
 
 ## No-gos
 
