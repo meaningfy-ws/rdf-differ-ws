@@ -5,9 +5,8 @@ DEC-1…DEC-9). Each task is test-first (write failing test → run/verify fail 
 verify pass → commit) and stays within its cosmic-python layer. Order: domain models+config → URIs +
 delta-pair math → port + query templates → the three store adapters → loader → validation → in-memory
 diff artifacts → CLI → API/Celery → remote-mode cutover → utils dissolution → stricter import-linter →
-[gated] in-memory full report. Core port-and-engine algorithmic detail is preserved verbatim in
-`inputs/IMPLEMENTATION-PLAN-rdf-loading-module.md`; ADRs/decisions, file structure, the
-`GraphStorePort` interface, migration and self-review are in `design.md`.
+[gated] in-memory full report. ADRs/decisions, file structure, the `GraphStorePort` interface,
+migration and self-review are in `design.md`.
 
 > **For agentic workers:** use superpowers:subagent-driven-development (fresh subagent per task,
 > review between tasks) or superpowers:executing-plans.

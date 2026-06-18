@@ -1,8 +1,9 @@
 # EPIC: Rewrite the SKOS-History version-loading & delta-computation script in Python (RDF Loading Module)
 
-> Shaped to its final agreed form. Grounded in the legacy EPIC/PLAN/Gherkin/deep-spec/synthesis/seed
-> brief preserved verbatim under `inputs/`. Where the final decisions diverge from the legacy ADRs,
-> `design.md` records the override explicitly.
+> Shaped to its final agreed form. The original EPIC/PLAN that seeded this change are **superseded**
+> by this `proposal.md` + `design.md` + `tasks.md`; the unique reference seeds (Gherkin, deep delta
+> spec, synthesis, seed brief) remain under `inputs/`. Where the final decisions diverge from the
+> legacy ADRs, `design.md` records the override explicitly.
 
 ## Appetite
 
@@ -309,6 +310,6 @@ The CLI prints the raised exception's message verbatim and exits non-zero; no st
 - Config: `rdf_differ/config.py:32-37` (Fuseki), `:17` (filename)
 - Deep spec: `inputs/delta_graphs_loading_and_computation_spec.md` §7 (delta rules), §8 (process), §10 (validation)
 - Synthesis: `inputs/on-using-version-graphs-synthesis.md`
-- Implementation plan: `inputs/IMPLEMENTATION-PLAN-rdf-loading-module.md` (mirrored in `design.md` + `tasks.md`)
+- Plan: this change's `design.md` (decisions) + `tasks.md` (TDD task checklist)
 - Gherkin: `inputs/rdf_loading_module.feature`
 - Seed brief: `inputs/EPIC-analyse-how-torewrite-sh-to-python.md`

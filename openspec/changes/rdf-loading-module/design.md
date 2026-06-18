@@ -2,9 +2,10 @@
 
 > Derived from EPIC "Rewrite the SKOS-History version-loading & delta-computation script in Python"
 > (this change's `proposal.md`). This is the decisions/"how" half of the PLAN; the executable task
-> breakdown is in `tasks.md`. The legacy implementation plan
-> (`inputs/IMPLEMENTATION-PLAN-rdf-loading-module.md`) is preserved verbatim under `inputs/`; this
-> design records the **final agreed decisions**, marking where they **override** the legacy ADRs.
+> breakdown is in `tasks.md`. The original EPIC/PLAN that seeded this change are **superseded** by
+> `proposal.md` + this `design.md` + `tasks.md`; the unique reference seeds (deep delta spec,
+> synthesis, Gherkin, seed brief) remain under `inputs/`. This design records the **final agreed
+> decisions**, marking where they **override** the legacy ADRs.
 
 **Goal:** Replace `resources/load_versions.sh` (run via subprocess from `skos_history_wrapper.py`)
 with a layered, fully-tested Python RDF Loading Module that loads RDF versions and computes
@@ -131,7 +132,7 @@ Encodes spec §7.2 as an explicit, testable choice rather than a hard-coded filt
 ## Final agreed decisions (override the legacy ADRs where noted)
 
 These are the decisions the developer must **not** relitigate. They supersede the conflicting legacy
-ADRs above; the override is stated explicitly so the golden thread to the legacy `inputs/` is intact.
+ADRs above; the override is stated explicitly so the golden thread from the original shaping is intact.
 
 ### DEC-1 — Scope: one epic = loading module + utils dissolution + stricter import-linter + pydantic domain migration
 
@@ -385,6 +386,5 @@ Retired at cutover: `resources/load_versions.sh`, the subprocess path in
   Tasks 1–15; only Task 16 (in-memory full report) is **gated** on the external eds4jinja2 epic and
   carries the remote-only fallback (DEC-5).
 
-> Per-task algorithmic detail (failing tests + minimal implementations) for the core port-and-engine
-> work is preserved verbatim in `inputs/IMPLEMENTATION-PLAN-rdf-loading-module.md`; `tasks.md` is the
-> checklist view, re-sequenced for the final shape.
+> `tasks.md` is the checklist view of the per-task work, re-sequenced for the final shape; each task
+> is executed test-first.
