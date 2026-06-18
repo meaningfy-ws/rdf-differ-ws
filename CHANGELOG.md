@@ -55,9 +55,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   renamed from `tests/steps/`), new `tests/e2e/` + `tests/integration/`, and a
   marker-injection `conftest.py` (markers applied by path; `pytest -m unit`). Strict
   markers enabled. Coverage gate wired at the current level (`fail_under=65`, ≈68%
-  measured; the ≥80% target with new tests is deferred). Deduped two shadowed test
-  names (F811). No new tests added. (TODO: reclassify the API-dependent UI tests from
-  `unit/` into `integration/`.)
+  measured). Deduped two shadowed test names (F811).
+- **Coverage raised to ≥80%** (gate `fail_under=80`): added focused unit tests for the
+  previously-untested domain model and for `services/{queue,tasks}`, `adapters/sparql`,
+  `utils/rdf_converter`, `ui/api_wrapper`, the query-profiler helpers, the task/AP API
+  handlers, and `report_handling.build_report`. 153 unit tests, ~80.6% coverage.
 - **Architecture boundaries fixed and enforced** (import-linter): the Celery task module
   moved `adapters/celery.py → services/celery.py` (task orchestration is the services
   layer); the pure path/IO helpers `build_dataset_reports_location` + `read_meta_file`

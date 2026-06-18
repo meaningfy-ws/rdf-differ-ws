@@ -6,10 +6,8 @@ source = rdf_differ
 omit = */__init__.py
 
 [report]
-# Gate set to the CURRENT measured level (unit suite ≈68%), floored to 65 as a
-# non-regression ratchet — NOT the 80% target. Raising to >=80% needs new tests
-# and is a deferred follow-up (per the modernization EPIC, slice 6 is structure-only).
-fail_under = 65
+# Coverage gate: the Meaningfy >=80% target (reached by the unit suite).
+fail_under = 80
 show_missing = true
 exclude_lines =
     pragma: no cover
