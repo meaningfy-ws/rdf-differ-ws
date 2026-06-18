@@ -10,6 +10,9 @@ name: Deploy (TODO — stub)
 on:
   workflow_dispatch:
 
+# Least-privilege GITHUB_TOKEN — the stub needs no repo access.
+permissions: {}
+
 jobs:
   deploy:
     name: deploy (not yet ratified)

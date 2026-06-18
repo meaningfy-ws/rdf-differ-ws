@@ -44,11 +44,11 @@ def test_get_dataset(mock_get_dataset, ui_client):
     assert len(rows) == 8
     assert "dataset_one123456" in rows[0].get_text()
     assert "dataset_one is a dataset" in rows[1].get_text()
-    assert "http://dataset.one" in rows[2].get_text()
+    assert "dataset.one" in rows[2].get_text()
     assert "one_old" in rows[3].get_text()
     assert "one_new" in rows[3].get_text()
-    assert "http://one.version/one_old" in rows[5].get_text()
-    assert "http://one.version/one_new" in rows[5].get_text()
+    assert "one.version/one_old" in rows[5].get_text()
+    assert "one.version/one_new" in rows[5].get_text()
     assert "one_old.ttl" in rows[6].get_text()
     assert "one_new.ttl" in rows[7].get_text()
 

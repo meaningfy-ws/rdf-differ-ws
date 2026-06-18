@@ -6,6 +6,10 @@ name: E2E (opt-in)
 on:
   workflow_dispatch:
 
+# Least-privilege GITHUB_TOKEN.
+permissions:
+  contents: read
+
 jobs:
   e2e:
     name: browser smoke
