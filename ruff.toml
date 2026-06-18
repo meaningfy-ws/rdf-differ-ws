@@ -31,10 +31,8 @@ ignore = [
 max-complexity = 10
 
 [lint.per-file-ignores]
-# Tests: B008 = pytest fixtures legitimately use callables as argument defaults;
-#        F811 = two duplicate test-function names shadow each other — a real smell,
-#        TODO: dedupe in the test-tree reorg (slice 6).
-"tests/**/*.py" = ["B008", "F811"]
+# Tests: B008 = pytest fixtures legitimately use callables as argument defaults.
+"tests/**/*.py" = ["B008"]
 # Example: a config module whose method names mirror env-var names.
 # "rdf_differ/__init__.py" = ["N802"]
 

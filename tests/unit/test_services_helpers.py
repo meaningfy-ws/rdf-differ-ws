@@ -7,7 +7,7 @@ def test_list_folders_from_path(sample_ap_root_folder):
     assert "ap1", "ap2" in folders
 
 
-def test_list_folders_from_path(sample_ap_root_folder):
+def test_list_files_from_path(sample_ap_root_folder):
     files = list_files_from_path(sample_ap_root_folder / "ap1")
     assert isinstance(files, list)
     assert len(files) == 0

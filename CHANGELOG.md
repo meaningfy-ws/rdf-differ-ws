@@ -26,6 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   debt. Added `make` targets `format`, `typecheck`, `check-architecture`, `check-quality`,
   `check-all`. mypy wired (canonical config) with a ~62-error legacy baseline tracked as debt
   (not yet gating).
+- **Test tree reorganized** to the Meaningfy layout: `tests/feature/` (BDD step defs,
+  renamed from `tests/steps/`), new `tests/e2e/` + `tests/integration/`, and a
+  marker-injection `conftest.py` (markers applied by path; `pytest -m unit`). Strict
+  markers enabled. Coverage gate wired at the current level (`fail_under=65`, ≈68%
+  measured; the ≥80% target with new tests is deferred). Deduped two shadowed test
+  names (F811). No new tests added. (TODO: reclassify the API-dependent UI tests from
+  `unit/` into `integration/`.)
 - **Temporary:** vendored a pin-relaxed copy of `eds4jinja2` under `vendor/eds4jinja2/`
   so it installs on 3.12 (upstream 0.2.0 caps pandas/numpy below their cp312 wheels).
   Remove once `eds4jinja2 >= 0.3.0` ships — see the upstream fix spec in the change.

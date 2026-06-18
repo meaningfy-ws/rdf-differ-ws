@@ -147,3 +147,7 @@ run
 apache-jena-fuseki*
 docker/traefik/letsencrypt
 diff-output
+
+# test reports
+test-results*.xml
+lint_report.txt

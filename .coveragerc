@@ -6,10 +6,10 @@ source = rdf_differ
 omit = */__init__.py
 
 [report]
-# Slice 1 (modernization): gate disabled (0) so it never breaks the existing
-# `pytest --cov` driven by setup.cfg. Slice 6 raises this to the measured level;
-# reaching >=80% with new tests is a deferred follow-up task.
-fail_under = 0
+# Gate set to the CURRENT measured level (unit suite ≈68%), floored to 65 as a
+# non-regression ratchet — NOT the 80% target. Raising to >=80% needs new tests
+# and is a deferred follow-up (per the modernization EPIC, slice 6 is structure-only).
+fail_under = 65
 show_missing = true
 exclude_lines =
     pragma: no cover

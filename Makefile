@@ -186,7 +186,15 @@ start-services-test: | run-docker-fuseki-test run-docker-redis-test run-docker-c
 
 test: | install-python-dependencies-dev test-data-fuseki
 	@ echo "$(BUILD_PRINT)Running tests using Docker services"
-	@ poetry run pytest
+	@ poetry run pytest --cov=rdf_differ --cov-report=term-missing --cov-report=xml
+
+test-unit:
+	@ echo "$(BUILD_PRINT)Running unit tests"
+	@ poetry run pytest tests/unit -m unit
+
+test-feature:
+	@ echo "$(BUILD_PRINT)Running BDD feature tests"
+	@ poetry run pytest tests/feature -m feature
 
 lint:
 	@ echo "$(BUILD_PRINT)Linting the code (Ruff)"

@@ -136,17 +136,6 @@ def test_get_diff_404(mock_dataset_description):
     assert "<dataset> does not exist." in str(e.value)
 
 
-@patch("rdf_differ.entrypoints.api.handlers.find_dataset_name_by_id")
-@patch.object(FusekiDiffAdapter, "delete_dataset")
-def test_delete_diff_200(mock_delete_dataset, mock_find_dataset_name_by_id):
-    mock_delete_dataset.return_value = "", 200
-
-    response, status = delete_diff("dataset")
-
-    assert "<dataset> deleted successfully." in response
-    assert status == 200
-
-
 @pytest.mark.parametrize("exception", [ValueError, IndexError])
 @patch("rdf_differ.entrypoints.api.handlers.read_meta_file")
 @patch("rdf_differ.entrypoints.api.handlers.build_dataset_reports_location")

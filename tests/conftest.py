@@ -132,3 +132,18 @@ def helper_create_diff(file_1=None, file_2=None, body=None):
         }
     )
     return file_1, file_2, body
+
+
+# Marker injection by path (Meaningfy convention): a test's directory decides its
+# marker — never add a per-file `pytestmark`. Run a layer with e.g. `pytest -m unit`.
+_MARKER_BY_DIR = ("unit", "feature", "e2e", "integration")
+
+
+def pytest_collection_modifyitems(config, items):
+    root = str(config.rootpath).replace("\\", "/")
+    for item in items:
+        rel = str(item.path).replace("\\", "/").replace(root, "")
+        for layer in _MARKER_BY_DIR:
+            if f"/tests/{layer}/" in rel:
+                item.add_marker(getattr(pytest.mark, layer))
+                break
