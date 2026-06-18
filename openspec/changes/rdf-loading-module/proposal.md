@@ -159,17 +159,19 @@ The same flow runs unchanged in all three modes; only the `GraphStorePort` imple
 
 ## Code of practice (constraints the implementation must honour)
 
-- **Layering** (cosmic-python): `models/` (pure domain: config, URIs, version/delta value objects),
-  `adapters/` (`GraphStorePort` + two implementations, query templates), `services/`
-  (loading orchestration, validation), `entrypoints/` (CLI; reuse by the existing API/Celery path).
-  Dependency direction `entrypoints → services → models`, `adapters → models`; **models import no framework**.
+- **Layering** (cosmic-python): `domain/` (pure: config, URIs, version/delta value objects, the
+  `BlankNodeStrategy` interface), `adapters/` (`GraphStorePort` + its **three** implementations, query
+  templates, the rdflib skolemiser), `services/` (loading orchestration, validation), `entrypoints/`
+  (CLI; reuse by the existing API/Celery path). Dependency direction
+  `entrypoints → services → domain`, `adapters → domain`; **`domain` imports no I/O framework**.
 - **No free strings**: SPARQL templates, prefixes, graph roles, blank-node policies, and MIME types
   are constants/enums, not inline literals.
 - **DIP at the store seam**: services depend only on `GraphStorePort`; never on `pyoxigraph`,
-  `requests`, or `SPARQLWrapper` directly.
+  `rdflib`, `requests`, `SPARQLWrapper`, or `eds4jinja2` directly.
 - **Tests first**: unit tests per layer + BDD features (the Gherkin is preserved in `inputs/`).
 - **Idempotency**: re-running the pipeline yields equivalent graph state.
-- **importlinter contracts** added to enforce the layering (none exist today).
+- **importlinter contracts**: **tighten the existing** `.importlinter` (two contracts today, from the
+  modernization) per DEC-8 — the epic adds contracts, not the tool.
 - **Backward compatibility**: remote mode reproduces the current four-graph contract so
   `diff-query-generator` queries and the report builder keep working unchanged.
 
@@ -188,11 +190,17 @@ versions:
   - { id: "9.0",  file: "data/stw-9.0.ttl",  date: "2025-01-01" }
 ```
 
+> The YAML carries only the **dataset shape** (versions, IRIs, engine, blank-node policy) — portable
+> and env-independent. The **remote store connection** (endpoint, update/query/data paths, credentials,
+> timeouts/retries) is a separate typed `StoreSettings` read from the environment (`RDF_DIFFER_FUSEKI_*`),
+> per-invocation overridable; in-memory engines need no connection settings (DEC-10).
+
 **CLI:**
 ```
 rdf-diff load --config stw.yaml --engine oxigraph --out ./out          # in-memory diff artifacts
 rdf-diff load --config stw.yaml --engine oxigraph --report --out ./out # + full report (gated on eds4jinja2)
-rdf-diff load --config stw.yaml --engine remote                        # into a SPARQL endpoint
+rdf-diff load --config stw.yaml --engine remote                        # remote: connection from RDF_DIFFER_FUSEKI_* env
+rdf-diff load --config stw.yaml --engine remote --endpoint http://fuseki:3030/ds  # …or override the endpoint
 ```
 
 **Expected output (in-memory mode):** serialised named graphs + a machine-readable result:
@@ -249,7 +257,7 @@ not built here).
 | T3 | Delta computation (services + in-memory adapter) | old graph O, new graph N | insertions = N−O, deletions = O−N; blank nodes excluded | identical versions → empty deltas; only-bnode changes → empty |
 | T4 | Delta-pair set (models) | `[8.12,8.13,8.14,9.0]`, direct-to-current on | consecutive + `8.12→9.0`, `8.13→9.0` (no dup of penultimate) | 2 versions → single pair, no direct-to-current |
 | T5 | Idempotency (services) | run pipeline twice | identical graph state & counts | partial prior run leaves stale delta triples → cleared |
-| T6 | Mode parity (services) | same config in both modes | identical counts & named-graph contract | large graph; remote endpoint error → `GraphStoreError` |
+| T6 | Engine parity (services) | same config across all three engines | identical counts & named-graph contract | large graph; remote endpoint error → `GraphStoreError` |
 | T7 | Store validation (services) | store with empty version graph | `ValidationError` non-empty graph expected | invalid insertion triple present |
 | T8 | Remote adapter (adapters) | GSP PUT + SPARQL Update | correct HTTP verbs/bodies (mocked) | 4xx/5xx → `GraphStoreError`; timeout |
 
@@ -292,9 +300,11 @@ The CLI prints the raised exception's message verbatim and exits non-zero; no st
   the existing API create-diff endpoint gains an `engine`/`mode` parameter and runs async over the
   existing Celery+Redis channel (status + revoke/cancel queue in `adapters/redis.py`). The existing
   diff flow is preserved via `RemoteSparqlStore` (four-graph contract unchanged).
-- **Dependencies:** add `pyoxigraph` (in-memory store) and `import-linter` (contracts); `rdflib` is
-  already present (second in-memory engine). **External dependency:** the eds4jinja2 enhancement for
-  the in-memory full report (separate epic/release; graceful fallback if absent).
+- **Dependencies:** add `pyoxigraph` (in-memory store) and `pydantic-settings` (typed env-driven
+  `StoreSettings`); `rdflib` already present (second in-memory engine); `import-linter` already present
+  (modernization) — this epic **tightens** its contracts (DEC-8), it does not add the tool. **External
+  dependency:** the eds4jinja2 enhancement for the in-memory full report (separate epic/release;
+  graceful fallback if absent).
 - **Architecture:** stricter import-linter — keep the (now utils-free) layers contract; add a
   forbidden contract barring `services` from store/report libs, a forbidden contract barring `domain`
   from I/O frameworks, and an independence contract between the three store adapters.

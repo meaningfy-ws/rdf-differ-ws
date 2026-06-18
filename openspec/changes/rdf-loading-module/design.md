@@ -24,10 +24,10 @@ the in-memory full report depends on an external eds4jinja2 enhancement with a r
 
 **Tech Stack:** Python 3.12+, `pyoxigraph` (new, in-memory engine), `rdflib` (already present, second
 in-memory engine + parsing), `requests` + `SPARQLWrapper` (already present, remote transport),
-`click` (CLI, already present), **pydantic v2** (config + value objects + domain migration — see
-DEC-3, overriding the legacy frozen-dataclasses choice), `eds4jinja2` (external; in-memory report
+`click` (CLI, already present), **pydantic v2** + **pydantic-settings** (config/value objects/domain
+migration — DEC-3; `StoreSettings` env binding — DEC-10), `eds4jinja2` (external; in-memory report
 path only, via its upstream enhancement), `pytest` + `pytest-bdd` (tests), `import-linter`
-(new, contracts).
+(already present from the modernization; this epic **tightens** its contracts — DEC-8).
 
 ---
 
@@ -263,6 +263,27 @@ a **later improvement behind the same `BlankNodeStrategy` interface** — the se
 (pure). The rdflib-backed `SKOLEMISE` transform lives in **`adapters`** (RDF I/O) because it imports
 `rdflib`, which DEC-8 forbids in `domain`.
 
+### DEC-10 — Store connection is a typed settings concern, separate from dataset config
+
+**Decision.** Cleanly separate two concerns the legacy script conflated:
+
+- **`VersionStoreConfig`** (pydantic, from YAML) describes the **dataset/diff shape** only — versions,
+  IRIs, `engine`, blank-node policy. Portable, environment-independent; it carries **no endpoint or
+  credentials**.
+- **`StoreSettings`** (pydantic-settings `BaseSettings`, env `RDF_DIFFER_*`) describes the **remote
+  store connection** — base endpoint, GSP `/data`, update/query paths, credentials, timeouts/retries.
+  In-memory engines ignore it.
+
+A **`build_graph_store(engine, settings) -> GraphStorePort`** factory at the composition root selects
+and constructs the adapter, used **identically by the CLI and the API/Celery path**. The CLI may
+override individual settings (e.g. `--endpoint`), but the environment is canonical (12-factor).
+`RemoteSparqlStore` receives its connection via injected `StoreSettings` and **never reads env
+itself**. This keeps `services` pure (DIP), the YAML portable, and connection config consistent across
+all entrypoints.
+
+**Layering.** `StoreSettings` (reads env = I/O) and the factory live in **`adapters`/composition
+root**, never in `domain`.
+
 ---
 
 ## `GraphStorePort` interface
@@ -314,7 +335,9 @@ New module rooted at `rdf_differ/` following the existing layers. **No `models/`
 | `rdf_differ/adapters/loading/skolemizer.py` | rdflib `SKOLEMISE` transform — `to_canonical_graph` + `skolemize(.well-known/genid)` (DEC-9) |
 | `rdf_differ/adapters/loading/in_memory_oxigraph_store.py` | `PyoxigraphStore(GraphStorePort)` |
 | `rdf_differ/adapters/loading/in_memory_rdflib_store.py` | `RdflibStore(GraphStorePort)` |
-| `rdf_differ/adapters/loading/remote_store.py` | `RemoteSparqlStore(GraphStorePort)` (GSP `PUT` + Update/Query; any SPARQL 1.1 endpoint) |
+| `rdf_differ/adapters/loading/remote_store.py` | `RemoteSparqlStore(GraphStorePort)` (GSP `PUT` + Update/Query; any SPARQL 1.1 endpoint; takes injected `StoreSettings`) |
+| `rdf_differ/adapters/loading/settings.py` | `StoreSettings` (pydantic-settings, env `RDF_DIFFER_*`) — remote connection (DEC-10) |
+| `rdf_differ/adapters/loading/store_factory.py` | `build_graph_store(engine, settings)` → `GraphStorePort` (composition-root helper; DEC-10) |
 | `rdf_differ/adapters/filesystem.py` | filesystem ops from `utils/file_utils` + `rdf_converter` RDF I/O (DEC-7) |
 | `rdf_differ/services/loading/loader.py` | `VersionStoreLoader` — orchestration |
 | `rdf_differ/services/loading/validation.py` | structural + content validation (spec §10) |
@@ -359,7 +382,7 @@ Retired at cutover: `resources/load_versions.sh`, the subprocess path in
   | Feature | Task(s) | Feature | Task(s) |
   |---------|---------|---------|---------|
   | F1 config | 1 | F9 delta MINUS | 4 (`delta_update`), 5/6/8 |
-  | F2 GSP PUT | 7 | F10 bnode filter | 4 (`BLANK_NODE_FILTERS`), ADR-5 |
+  | F2 GSP PUT | 7 | F10 bnode filter | 4 (`BLANK_NODE_FILTERS`) + 4b (skolemise, DEC-9) |
   | F3 BASEURI | 2 (`UriBuilder`) | F11 delta metadata | 4 (`delta_metadata_update`), 8 |
   | F4 service desc | 4 (`service_description_update`), 8 | F12 two-pass order | 8 (asserted in test) |
   | F5 history set | 4 (`history_set_update`), 8 | F13 delta pairs | 3 |
@@ -374,7 +397,9 @@ Retired at cutover: `resources/load_versions.sh`, the subprocess path in
 - **Decision coverage:** DEC-1→utils + import-linter + pydantic tasks; DEC-2→three store adapters
   (overrides ADR-2); DEC-3→pydantic config + domain migration (overrides legacy Task-1); DEC-4→remote
   cutover; DEC-5→artifacts task (ships) + gated report task (external dep, fallback); DEC-6→CLI +
-  API/Celery tasks; DEC-7→utils dissolution task; DEC-8→stricter import-linter task.
+  API/Celery tasks; DEC-7→utils dissolution task; DEC-8→stricter import-linter task;
+  DEC-9→`BlankNodeStrategy` + skolemiser (Task 4b, overrides ADR-5); DEC-10→`StoreSettings` +
+  `build_graph_store` factory (Tasks 7, 11).
 - **Type consistency:** `GraphStorePort` method names (`put_graph`, `clear_graph`, `update`, `query`,
   `serialize`) are identical across all adapters and the loader; `delta_update`/`clear_graph` query
   helpers used consistently; pydantic `VersionStoreConfig` validation runs at construction.

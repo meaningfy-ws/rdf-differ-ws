@@ -1,7 +1,7 @@
 > EPIC: rdf-loading-module — Rewrite the SKOS-History version-loading & delta-computation script in Python (this change's `proposal.md`)
 
 The TDD task checklist for the RDF Loading Module in its **final agreed shape** (see `design.md`
-DEC-1…DEC-9). Each task is test-first (write failing test → run/verify fail → minimal implementation →
+DEC-1…DEC-10). Each task is test-first (write failing test → run/verify fail → minimal implementation →
 verify pass → commit) and stays within its cosmic-python layer. Order: domain models+config → URIs +
 delta-pair math → port + query templates → the three store adapters → loader → validation → in-memory
 diff artifacts → CLI → API/Celery → remote-mode cutover → utils dissolution → stricter import-linter →
@@ -65,12 +65,13 @@ migration and self-review are in `design.md`.
 - [ ] *Layers:* adapters. Independent of `in_memory_oxigraph_store` and `remote_store` (DEC-8). *Deps:* 2, 4. *AC:* engine parity with Task 5 on the same fixtures
 - [ ] Commit: `feat(loading): rdflib in-memory GraphStore adapter`
 
-## Task 7: RemoteSparqlStore adapter — DEC-2/DEC-4
+## Task 7: RemoteSparqlStore adapter + store settings/factory — DEC-2/DEC-4/DEC-10
 
-- [ ] Write failing tests (mocked HTTP): `put_graph` uses GSP `PUT ?graph=`; `update` POSTs SPARQL Update; `query` GETs ASK/COUNT; ≥400 status → `GraphStoreError`; transient failures retried per policy
-- [ ] Implement `rdf_differ/adapters/loading/remote_store.py` — `RemoteSparqlStore` against **any SPARQL 1.1 endpoint** (injected `http_client`)
-- [ ] *Layers:* adapters. Independent of the two in-memory adapters (DEC-8). *Deps:* 2, 4. *AC:* T8 passes (mocked)
-- [ ] Commit: `feat(loading): remote SPARQL GraphStore adapter (GSP + Update)`
+- [ ] Write failing tests (mocked HTTP): `put_graph` uses GSP `PUT ?graph=`; `update` POSTs SPARQL Update; `query` GETs ASK/COUNT; ≥400 status → `GraphStoreError`; transient failures retried per policy; `StoreSettings` binds `RDF_DIFFER_*` env; `build_graph_store(engine, settings)` returns the right adapter (in-memory engines ignore settings)
+- [ ] Implement `rdf_differ/adapters/loading/remote_store.py` — `RemoteSparqlStore` against **any SPARQL 1.1 endpoint**, connection via **injected `StoreSettings`** (never reads env itself), injected `http_client`
+- [ ] Implement `rdf_differ/adapters/loading/settings.py` (`StoreSettings`, pydantic-settings, env `RDF_DIFFER_*`) and `store_factory.py` (`build_graph_store`); add `pydantic-settings` to deps (DEC-10)
+- [ ] *Layers:* adapters. Independent of the two in-memory adapters (DEC-8). *Deps:* 2, 4, 5, 6. *AC:* T8 passes (mocked); factory selects all three engines
+- [ ] Commit: `feat(loading): remote SPARQL adapter + StoreSettings/build_graph_store factory`
 
 ## Task 8: VersionStoreLoader service
 
@@ -94,11 +95,11 @@ migration and self-review are in `design.md`.
 - [ ] *Layers:* services. *Deps:* 5, 6, 8, 9. *AC:* artifacts produced in-memory with no triple store and no eds4jinja2
 - [ ] Commit: `feat(loading): in-memory diff artifacts output`
 
-## Task 11: CLI entrypoint — DEC-6
+## Task 11: CLI entrypoint — DEC-6/DEC-10
 
-- [ ] Write failing test with `click.testing.CliRunner`: `load --config x.yaml --engine oxigraph --out dir` → exit 0, `result.json` with `validation: passed`; `--engine rdflib` likewise; `--engine remote` wires the remote store
-- [ ] Implement `rdf_differ/entrypoints/cli/load.py` — parse YAML → validate config → build store by `--engine` → run loader → validate → write serialised graphs + `result.json` (entrypoint only parses/wires/formats)
-- [ ] *Layers:* entrypoints. *Deps:* 5–7, 10. *AC:* in-memory CLI happy path on both engines
+- [ ] Write failing test with `click.testing.CliRunner`: `load --config x.yaml --engine oxigraph --out dir` → exit 0, `result.json` with `validation: passed`; `--engine rdflib` likewise; `--engine remote` builds the remote store from `StoreSettings` (env), and `--endpoint …` overrides it
+- [ ] Implement `rdf_differ/entrypoints/cli/load.py` — parse YAML → validate `VersionStoreConfig` → `build_graph_store(engine, StoreSettings(...))` (with CLI overrides) → run loader → validate → write serialised graphs + `result.json` (entrypoint only parses/wires/formats)
+- [ ] *Layers:* entrypoints. *Deps:* 5–7, 10. *AC:* in-memory CLI happy path on both engines; remote uses env settings with `--endpoint` override
 - [ ] Commit: `feat(loading): CLI for remote and in-memory diffs`
 
 ## Task 12: API + Celery integration — DEC-6
