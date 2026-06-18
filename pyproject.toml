@@ -30,14 +30,14 @@ classifiers = [
 dependencies = [
     "click>=8.1,<9",
     "SPARQLWrapper>=2.0,<3",
-    "rdflib>=7.1,<8",
-    "requests>=2.32,<3",
+    # Bounded by eds4jinja2 0.3.1's pins (rdflib ~=7.0, requests ~=2.31); widen here
+    # to compatible ranges so resolution succeeds. Raise once eds4jinja2 relaxes them.
+    "rdflib>=7.0,<8",
+    "requests>=2.31,<3",
     "Flask>=3.1,<4",
     "Flask-WTF>=1.2,<2",
     "connexion[flask,swagger-ui,uvicorn]>=3.2,<4",
-    # eds4jinja2 is enriched as a vendored path dependency in [tool.poetry.dependencies]
-    # (temporary 3.12 workaround — see vendor/eds4jinja2/VENDORED.md). No PyPI version pin here.
-    "eds4jinja2",
+    "eds4jinja2>=0.3.1,<0.4",
     "shortuuid>=1.0,<2",
     "celery>=5.4,<6",
     "redis>=5,<6",
@@ -75,12 +75,6 @@ docs = [
 packages = [
     { include = "rdf_differ" }
 ]
-
-[tool.poetry.dependencies]
-# Enrich the eds4jinja2 entry from [project.dependencies] as a vendored path dependency.
-# TEMPORARY 3.12 workaround until eds4jinja2 >= 0.3.0 ships — see
-# openspec/changes/meaningfy-modernization/eds4jinja2-upstream-fix.md
-eds4jinja2 = { path = "vendor/eds4jinja2", develop = false }
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

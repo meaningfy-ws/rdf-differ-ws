@@ -48,6 +48,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Python-3.8 `test.yml`/`package.yml`. Wrote the normative `specs/` deltas for the new capabilities
   (`project-tooling`, `spec-spine`, `agentic-setup`) so the change validates strictly.
   (Antora `docs.yaml` deferred with the docs pillar, slice 8.)
-- **Temporary:** vendored a pin-relaxed copy of `eds4jinja2` under `vendor/eds4jinja2/`
-  so it installs on 3.12 (upstream 0.2.0 caps pandas/numpy below their cp312 wheels).
-  Remove once `eds4jinja2 >= 0.3.0` ships — see the upstream fix spec in the change.
+- **eds4jinja2 upgraded to the real `0.3.1`** from PyPI (3.12-compatible: pandas ~=2.2, numpy ~=1.26);
+  the temporary `vendor/eds4jinja2/` workaround is removed. eds4jinja2 0.3.1 still pins `rdflib ~=7.0`
+  and `requests ~=2.31`, so those are held at 7.0.x / 2.31.x here (raise once eds4jinja2 relaxes them).

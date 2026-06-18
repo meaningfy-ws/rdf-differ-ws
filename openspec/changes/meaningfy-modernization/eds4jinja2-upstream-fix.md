@@ -1,5 +1,11 @@
 # Upstream fix spec — make eds4jinja2 Python 3.12-compatible
 
+> ✅ **RESOLVED (2026-06-18):** `eds4jinja2 0.3.1` is published on PyPI (requires-python ≥3.11,
+> `pandas~=2.2`, `numpy~=1.26`). rdf-differ now depends on `eds4jinja2>=0.3.1,<0.4` and the
+> `vendor/eds4jinja2/` workaround has been removed. Residual: 0.3.1 still pins `rdflib~=7.0` and
+> `requests~=2.31`, which hold those deps at 7.0.x / 2.31.x in rdf-differ — a minor follow-up for a
+> future eds4jinja2 release. The original spec is kept below as the historical record.
+
 > Hand-off spec for the **`meaningfy-ws/eds4jinja2`** repo (a *separate* repository). This is the
 > PROPER fix for the blocker recorded in `inputs/dep-bump-blocker.md`. rdf-differ currently uses a
 > temporary **vendored, pin-relaxed copy** of eds4jinja2 (see `vendor/eds4jinja2/`) to unblock its own
