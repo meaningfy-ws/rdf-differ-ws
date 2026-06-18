@@ -1,4 +1,5 @@
-include infra/.env
+# Optional: a fresh clone has no infra/.env yet — copy infra/.env.example first.
+-include infra/.env
 
 BUILD_PRINT = \e[1;34mSTEP: \e[0m
 MSG_PRINT = \e[1;34mINFO: \e[0m

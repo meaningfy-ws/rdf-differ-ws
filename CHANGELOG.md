@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `gunicorn -k uvicorn.workers.UvicornWorker` on the ASGI app (`api.run:connexion_app`); the UI stays
   gunicorn WSGI. `bash/run_api.sh` updated (and its stale `adapters.celery` path fixed). Smoke-tested:
   the API boots under the Uvicorn worker and `GET /diffs`, `/ui/`, `/openapi.json` all return 200.
+- **Secrets removed from version control:** `bash/.env`, `infra/.env`, `infra/.env-test` are
+  untracked + git-ignored; committed `*.example` templates (placeholder values) added. `.gitignore`
+  now blocks `.env`/`.env-test`; the Makefile `-include infra/.env` tolerates a fresh clone.
+  ⚠️ Old secret values remain in git history — rotate `SECRET_KEY_*` and the Fuseki/Flower passwords.
 - **LinkML `model/` seam** added (`model/schema.yaml` mirroring the domain + `make generate-models`).
   Seam only — generation is opt-in and not yet authoritative (DEC-6); the hand-written
   `rdf_differ/domain/model.py` remains the source of truth.
