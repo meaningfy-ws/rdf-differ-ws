@@ -13,6 +13,7 @@ FusekiDiffAdapter - for the Fuseki triple store (more info here: https://jena.ap
 """
 
 from abc import ABC, abstractmethod
+from contextlib import suppress
 from json import loads
 from pathlib import Path
 from urllib.parse import urljoin
@@ -20,16 +21,21 @@ from urllib.parse import urljoin
 from requests.auth import HTTPBasicAuth
 
 from rdf_differ import config
-from rdf_differ.adapters import SKOS_HISTORY_PREFIXES, QUERY_DATASET_DESCRIPTION, QUERY_INSERTIONS_COUNT, \
-    QUERY_DELETIONS_COUNT, QUERY_INSERT_DESCRIPTION
+from rdf_differ.adapters import (
+    QUERY_DATASET_DESCRIPTION,
+    QUERY_DELETIONS_COUNT,
+    QUERY_INSERT_DESCRIPTION,
+    QUERY_INSERTIONS_COUNT,
+    SKOS_HISTORY_PREFIXES,
+)
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from rdf_differ.config import RDF_DIFFER_REPORTS_DB
-from rdf_differ.services.report_handling import read_meta_file, build_dataset_reports_location
+from rdf_differ.services.report_handling import build_dataset_reports_location, read_meta_file
 
 
 class AbstractDiffAdapter(ABC):
     """
-        An abstract class that return information about the available diffs.
+    An abstract class that return information about the available diffs.
     """
 
     @abstractmethod
@@ -58,9 +64,16 @@ class AbstractDiffAdapter(ABC):
         """
 
     @abstractmethod
-    def create_diff(self, dataset: str, dataset_uri: str, temp_dir: Path,
-                    old_version_id: str, new_version_id: str,
-                    old_version_file: Path, new_version_file: Path) -> bool:
+    def create_diff(
+        self,
+        dataset: str,
+        dataset_uri: str,
+        temp_dir: Path,
+        old_version_id: str,
+        new_version_id: str,
+        old_version_file: Path,
+        new_version_file: Path,
+    ) -> bool:
         """
             Create a dataset diff using the data from the provided files.
         :param dataset: the name used for the dataset
@@ -110,12 +123,11 @@ class AbstractDiffAdapter(ABC):
 
 class FusekiException(Exception):
     """
-        An exception when Fuseki server interaction has failed.
+    An exception when Fuseki server interaction has failed.
     """
 
 
 class FusekiDiffAdapter(AbstractDiffAdapter):
-
     def __init__(self, triplestore_service_url: str, http_client, sparql_client):
         self.triplestore_service_url = triplestore_service_url
         self.sparql_client = sparql_client
@@ -128,8 +140,9 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         identifying the dataset
         :return: inserted triples count
         """
-        query_result = self.execute_query(dataset_name=dataset_name,
-                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_INSERTIONS_COUNT)
+        query_result = self.execute_query(
+            dataset_name=dataset_name, sparql_query=SKOS_HISTORY_PREFIXES + QUERY_INSERTIONS_COUNT
+        )
         return self._extract_insertion_count(query_result)
 
     def count_deleted_triples(self, dataset_name: str) -> int:
@@ -139,13 +152,21 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         identifying the dataset
         :return: deleted triples count
         """
-        query_result = self.execute_query(dataset_name=dataset_name,
-                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT)
+        query_result = self.execute_query(
+            dataset_name=dataset_name, sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DELETIONS_COUNT
+        )
         return self._extract_deletion_count(query_result)
 
-    def create_diff(self, dataset: str, dataset_uri: str, temp_dir: Path,
-                    old_version_id: str, new_version_id: str,
-                    old_version_file: Path, new_version_file: Path) -> bool:
+    def create_diff(
+        self,
+        dataset: str,
+        dataset_uri: str,
+        temp_dir: Path,
+        old_version_id: str,
+        new_version_id: str,
+        old_version_file: Path,
+        new_version_file: Path,
+    ) -> bool:
         """
             Create a dataset diff using the data from the provided files.
         :param dataset: the name used for the dataset
@@ -157,13 +178,15 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :param new_version_id: name used for diff upload
         :return: true if diff created successfully
         """
-        SKOSHistoryRunner(dataset=dataset,
-                          basedir=str(temp_dir / 'basedir'),
-                          scheme_uri=dataset_uri,
-                          old_version_id=old_version_id,
-                          new_version_id=new_version_id,
-                          old_version_file=str(old_version_file),
-                          new_version_file=str(new_version_file)).run()
+        SKOSHistoryRunner(
+            dataset=dataset,
+            basedir=str(temp_dir / "basedir"),
+            scheme_uri=dataset_uri,
+            old_version_id=old_version_id,
+            new_version_id=new_version_id,
+            old_version_file=str(old_version_file),
+            new_version_file=str(new_version_file),
+        ).run()
 
         return True
 
@@ -175,21 +198,24 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :return: true if dataset was created
         """
         if not dataset_name:
-            raise ValueError('Dataset name cannot be empty.')
+            raise ValueError("Dataset name cannot be empty.")
 
         data = {
-            'dbType': 'tdb',  # assuming that all databases are created persistent across restart
-            'dbName': dataset_name
+            "dbType": "tdb",  # assuming that all databases are created persistent across restart
+            "dbName": dataset_name,
         }
 
-        response = self.http_client.post(urljoin(self.triplestore_service_url, f"/$/datasets"),
-                                         auth=HTTPBasicAuth(config.RDF_DIFFER_FUSEKI_USERNAME,
-                                                            config.RDF_DIFFER_FUSEKI_PASSWORD),
-                                         data=data)
+        response = self.http_client.post(
+            urljoin(self.triplestore_service_url, "/$/datasets"),
+            auth=HTTPBasicAuth(
+                config.RDF_DIFFER_FUSEKI_USERNAME, config.RDF_DIFFER_FUSEKI_PASSWORD
+            ),
+            data=data,
+        )
 
         if response.status_code == 409:
             # TODO: change exception if better one found
-            raise FusekiException('A dataset with this name already exists.')
+            raise FusekiException("A dataset with this name already exists.")
 
         return True
 
@@ -200,13 +226,16 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         identifying the dataset
         :return: true if dataset was deleted
         """
-        response = self.http_client.delete(urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
-                                           auth=HTTPBasicAuth(config.RDF_DIFFER_FUSEKI_USERNAME,
-                                                              config.RDF_DIFFER_FUSEKI_PASSWORD))
+        response = self.http_client.delete(
+            urljoin(self.triplestore_service_url, f"/$/datasets/{dataset_name}"),
+            auth=HTTPBasicAuth(
+                config.RDF_DIFFER_FUSEKI_USERNAME, config.RDF_DIFFER_FUSEKI_PASSWORD
+            ),
+        )
 
         if response.status_code == 404:
             # TODO: change exception if better one found
-            raise FusekiException('The dataset doesn\'t exist.')
+            raise FusekiException("The dataset doesn't exist.")
 
         return True
 
@@ -224,11 +253,16 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             * versionIds = list of versionIds as provided in the configurations file
             * versionNamedGraphs = named graphs where the versions of datasets are loaded
         """
-        query_result = self.execute_query(dataset_name=dataset_name,
-                                          sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION)
+        query_result = self.execute_query(
+            dataset_name=dataset_name,
+            sparql_query=SKOS_HISTORY_PREFIXES + QUERY_DATASET_DESCRIPTION,
+        )
 
-        return self._extract_dataset_description(response=query_result, dataset_name=dataset_name,
-                                                 query_url=self.make_sparql_endpoint(dataset_name))
+        return self._extract_dataset_description(
+            response=query_result,
+            dataset_name=dataset_name,
+            query_url=self.make_sparql_endpoint(dataset_name),
+        )
 
     def inject_metadata(self, dataset_name: str, metadata: dict):
         """
@@ -237,13 +271,16 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         identifying the dataset
         :param metadata: The metadata to be inserted
         """
-        query_string = QUERY_INSERT_DESCRIPTION.replace('~description~', metadata.get('dataset_description', ''))
-        query_string = query_string.replace('~title~', metadata.get('original_name', ''))
-        query_string = query_string.replace('~oldFile~', metadata.get('old_version_file', ''))
-        query_string = query_string.replace('~newFile~', metadata.get('new_version_file', ''))
+        query_string = QUERY_INSERT_DESCRIPTION.replace(
+            "~description~", metadata.get("dataset_description", "")
+        )
+        query_string = query_string.replace("~title~", metadata.get("original_name", ""))
+        query_string = query_string.replace("~oldFile~", metadata.get("old_version_file", ""))
+        query_string = query_string.replace("~newFile~", metadata.get("new_version_file", ""))
 
-        response = self.execute_update_query(dataset_name=dataset_name,
-                                             sparql_query=SKOS_HISTORY_PREFIXES + query_string)
+        response = self.execute_update_query(
+            dataset_name=dataset_name, sparql_query=SKOS_HISTORY_PREFIXES + query_string
+        )
         return response
 
     def list_datasets(self) -> list:
@@ -252,13 +289,18 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :return: the list of the dataset names
         :rtype: list
         """
-        response = self.http_client.get(urljoin(self.triplestore_service_url, "/$/datasets"),
-                                        auth=HTTPBasicAuth(config.RDF_DIFFER_FUSEKI_USERNAME,
-                                                           config.RDF_DIFFER_FUSEKI_PASSWORD))
+        response = self.http_client.get(
+            urljoin(self.triplestore_service_url, "/$/datasets"),
+            auth=HTTPBasicAuth(
+                config.RDF_DIFFER_FUSEKI_USERNAME, config.RDF_DIFFER_FUSEKI_PASSWORD
+            ),
+        )
 
         # investigate what codes can fuseki return for this endpoint
         if response.status_code != 200:
-            raise FusekiException(f"Fuseki server request ({response.url}) got response {response.status_code}")
+            raise FusekiException(
+                f"Fuseki server request ({response.url}) got response {response.status_code}"
+            )
 
         return self._select_dataset_names_from_fuseki_response(response_text=response.text)
 
@@ -270,8 +312,9 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :param sparql_query: query to be executed
         :return: SPARQLWrapper query response
         """
-        return self.sparql_client.execute(endpoint_url=self.make_sparql_endpoint(dataset_name),
-                                          query_text=sparql_query)
+        return self.sparql_client.execute(
+            endpoint_url=self.make_sparql_endpoint(dataset_name), query_text=sparql_query
+        )
 
     def execute_update_query(self, dataset_name: str, sparql_query: str) -> dict:
         """
@@ -281,10 +324,12 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :param sparql_query: query to be executed
         :return: SPARQLWrapper query response
         """
-        return self.sparql_client.execute_update(endpoint_url=self.make_sparql_update_endpoint(dataset_name),
-                                                 query_text=sparql_query,
-                                                 login=config.RDF_DIFFER_FUSEKI_USERNAME,
-                                                 password=config.RDF_DIFFER_FUSEKI_PASSWORD)
+        return self.sparql_client.execute_update(
+            endpoint_url=self.make_sparql_update_endpoint(dataset_name),
+            query_text=sparql_query,
+            login=config.RDF_DIFFER_FUSEKI_USERNAME,
+            password=config.RDF_DIFFER_FUSEKI_PASSWORD,
+        )
 
     def make_sparql_endpoint(self, dataset_name: str) -> str:
         """
@@ -313,7 +358,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         """
         result = loads(response_text)
         # the [1:] removes the `/` from the beginning of the dataset name
-        return [d_item['ds.name'][1:] for d_item in result['datasets']]
+        return [d_item["ds.name"][1:] for d_item in result["datasets"]]
 
     @staticmethod
     def _extract_dataset_description(response: dict, dataset_name: str, query_url: str) -> dict:
@@ -339,42 +384,54 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
             * dataset_versions = list of loaded dataset versions as declared by the datasets themselves,
             * version_named_graphs = named graphs where the versions of datasets are loaded
         """
-        if not response['results']['bindings']:
+        if not response["results"]["bindings"]:
             return {}
 
-        helper_current_version = [item['currentVersionGraph']['value'] for item in response['results']['bindings'] if
-                                  'currentVersionGraph' in item and item['currentVersionGraph']['value']]
+        helper_current_version = [
+            item["currentVersionGraph"]["value"]
+            for item in response["results"]["bindings"]
+            if "currentVersionGraph" in item and item["currentVersionGraph"]["value"]
+        ]
 
         meta = {}
-        try:
-            meta = read_meta_file(build_dataset_reports_location(dataset_name, RDF_DIFFER_REPORTS_DB))
-        except:
-            # todo: handle meta file missing
-            pass
+        # todo: handle meta file missing
+        with suppress(Exception):
+            meta = read_meta_file(
+                build_dataset_reports_location(dataset_name, RDF_DIFFER_REPORTS_DB)
+            )
 
         return {
-            'dataset_name': dataset_name,
-            'uid': meta.get('uid'),
-            'dataset_description': response['results']['bindings'][0]['description']['value'] if
-            response['results']['bindings'][0].get('description') else '',
-            'original_name': response['results']['bindings'][0]['title']['value'] if
-            response['results']['bindings'][0].get('title') else '',
-           'old_version_file': response['results']['bindings'][0]['oldFile']['value'] if
-            response['results']['bindings'][0].get('oldFile') else '',
-           'new_version_file': response['results']['bindings'][0]['newFile']['value'] if
-            response['results']['bindings'][0].get('newFile') else '',
-            'dataset_uri': response['results']['bindings'][0]['schemeURI']['value'],
-            'diff_date': response['results']['bindings'][0]['created']['value'] if response['results']['bindings'][
-                0].get(
-                'created') else '',
-            'old_version_id': response['results']['bindings'][0]['versionId']['value'],
-            'new_version_id': response['results']['bindings'][1]['versionId']['value'],
-            'query_url': query_url,
-
-            'version_history_graph': response['results']['bindings'][0]['versionHistoryGraph']['value'],
-            'current_version_graph': helper_current_version[0] if helper_current_version else None,
-            'dataset_versions': [item['datasetVersion']['value'] for item in response['results']['bindings']],
-            'version_named_graphs': [item['versionNamedGraph']['value'] for item in response['results']['bindings']],
+            "dataset_name": dataset_name,
+            "uid": meta.get("uid"),
+            "dataset_description": response["results"]["bindings"][0]["description"]["value"]
+            if response["results"]["bindings"][0].get("description")
+            else "",
+            "original_name": response["results"]["bindings"][0]["title"]["value"]
+            if response["results"]["bindings"][0].get("title")
+            else "",
+            "old_version_file": response["results"]["bindings"][0]["oldFile"]["value"]
+            if response["results"]["bindings"][0].get("oldFile")
+            else "",
+            "new_version_file": response["results"]["bindings"][0]["newFile"]["value"]
+            if response["results"]["bindings"][0].get("newFile")
+            else "",
+            "dataset_uri": response["results"]["bindings"][0]["schemeURI"]["value"],
+            "diff_date": response["results"]["bindings"][0]["created"]["value"]
+            if response["results"]["bindings"][0].get("created")
+            else "",
+            "old_version_id": response["results"]["bindings"][0]["versionId"]["value"],
+            "new_version_id": response["results"]["bindings"][1]["versionId"]["value"],
+            "query_url": query_url,
+            "version_history_graph": response["results"]["bindings"][0]["versionHistoryGraph"][
+                "value"
+            ],
+            "current_version_graph": helper_current_version[0] if helper_current_version else None,
+            "dataset_versions": [
+                item["datasetVersion"]["value"] for item in response["results"]["bindings"]
+            ],
+            "version_named_graphs": [
+                item["versionNamedGraph"]["value"] for item in response["results"]["bindings"]
+            ],
         }
 
     @staticmethod
@@ -384,7 +441,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :param response: sparql query result
         :return: insertion count
         """
-        return int(response['results']['bindings'][0]['triplesInInsertionGraph']['value'])
+        return int(response["results"]["bindings"][0]["triplesInInsertionGraph"]["value"])
 
     @staticmethod
     def _extract_deletion_count(response: dict) -> int:
@@ -393,4 +450,4 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :param response: sparql query result
         :return: deletion count
         """
-        return int(response['results']['bindings'][0]['triplesInDeletionGraph']['value'])
+        return int(response["results"]["bindings"][0]["triplesInDeletionGraph"]["value"])

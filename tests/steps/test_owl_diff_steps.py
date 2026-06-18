@@ -1,23 +1,25 @@
-from enum import Enum
 import json
 import os
 import subprocess
 from pathlib import Path
 
 import pytest
-from pytest_bdd import given, when, then, scenario, parsers
+from pytest_bdd import given, parsers, scenario, then, when
 
 SCRIPT_PATH = "../../bash/rdf-differ.sh"
 BASE_URL = os.environ.get("RDF_DIFFER_BASE_URL", "http://localhost:4030")
 SAVED_REPORT = "../test_data/owl/ePO_sample-4.0.0-upd_diff-report.json"
-REUSE_SAVED_REPORT = os.environ.get(
-    "RDF_DIFFER_REUSE_SAVED_REPORT", "true"
-).lower() in ["1", "true", "yes"]
+REUSE_SAVED_REPORT = os.environ.get("RDF_DIFFER_REUSE_SAVED_REPORT", "true").lower() in [
+    "1",
+    "true",
+    "yes",
+]
 
 # trick to run diffing only once and not for all scenarios
 _diff_cache = {}
 
 SUPPORTED_TYPES = ("class", "datatype_property", "object_property")
+
 
 @scenario("../features/owl_diff.feature", "Diffing example resources in the OWL sample")
 def test_owl_diff_feature():
@@ -66,9 +68,7 @@ def run_diff(ctx):
 
     if REUSE_SAVED_REPORT:
         # use pre-existing report -- for faster testing/debugging of this test skipping the building of the report
-        report_file = Path(
-            os.path.abspath(os.path.join(os.path.dirname(__file__), SAVED_REPORT))
-        )
+        report_file = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), SAVED_REPORT)))
     else:
         # run full workflow producing JSON output into temporary dir -- this should be the normal way
         # WARNING: as this runs an async call, sometimes this can fail due to race conditions
@@ -94,9 +94,7 @@ def run_diff(ctx):
             text=True,
         )
 
-        assert (
-            result.returncode == 0
-        ), f"Diff script failed: {result.stderr}\n{result.stdout}"
+        assert result.returncode == 0, f"Diff script failed: {result.stderr}\n{result.stdout}"
         report_file = Path(outdir) / "diff.json"
 
     assert report_file.exists(), f"Report file not found: {report_file}"
@@ -127,9 +125,11 @@ def camel_to_snake(name: str) -> str:
             out += ch
     return out
 
+
 def build_query_key(operation: str, resource_type: str, prop_snake: str) -> str:
     normalized = resource_type.replace("datatype_", "").replace("object_", "")
     return f"{operation}_property_{normalized}_{prop_snake}.rq"
+
 
 # this is only possible in Behave (e.g. {predicate:NullableString})
 # @parse.with_pattern(r'.*')
@@ -145,7 +145,9 @@ def build_query_key(operation: str, resource_type: str, prop_snake: str) -> str:
         r'the report should contain the change for "(?P<resource_type>[^"]*)","(?P<instance>[^"]*)","(?P<operation>[^"]*)","(?P<predicate>[^"]*)","(?P<old_value>[^"]*)","(?P<new_value>[^"]*)"'
     )
 )
-def assert_report_contains(ctx, resource_type, instance, operation, predicate, old_value, new_value):
+def assert_report_contains(
+    ctx, resource_type, instance, operation, predicate, old_value, new_value
+):
     report = ctx.get("report")
     prefixes = ctx.get("prefixes")
 
@@ -164,9 +166,9 @@ def assert_report_contains(ctx, resource_type, instance, operation, predicate, o
         assert key in report, f"Missing key {key} in report"
         full_instance = expand(instance, prefixes)
         bindings = report[key].get("results", {}).get("bindings", [])
-        assert any(
-            b.get("resource", {}).get("value") == full_instance for b in bindings
-        ), f"{operation.capitalize()} {resource_type} {full_instance} not found in {key}"
+        assert any(b.get("resource", {}).get("value") == full_instance for b in bindings), (
+            f"{operation.capitalize()} {resource_type} {full_instance} not found in {key}"
+        )
 
     elif operation == "changed" and resource_type in SUPPORTED_TYPES:
         prop_prefix, prop_local = predicate.split(":", 1)
@@ -185,12 +187,12 @@ def assert_report_contains(ctx, resource_type, instance, operation, predicate, o
         # and the given newValue is newProperty
         expected_old = expand(predicate, prefixes)
         expected_new = expand(new_value, prefixes)
-        assert (
-            binding.get("oldProperty", {}).get("value") == expected_old
-        ), f"oldProperty mismatch: expected {expected_old}, got {binding.get('oldProperty', {}).get('value')}"
-        assert (
-            binding.get("newProperty", {}).get("value") == expected_new
-        ), f"newProperty mismatch: expected {expected_new}, got {binding.get('newProperty', {}).get('value')}"
+        assert binding.get("oldProperty", {}).get("value") == expected_old, (
+            f"oldProperty mismatch: expected {expected_old}, got {binding.get('oldProperty', {}).get('value')}"
+        )
+        assert binding.get("newProperty", {}).get("value") == expected_new, (
+            f"newProperty mismatch: expected {expected_new}, got {binding.get('newProperty', {}).get('value')}"
+        )
     elif operation == "updated" and resource_type in SUPPORTED_TYPES:
         prop_prefix, prop_local = predicate.split(":", 1)
         prop_snake = camel_to_snake(prop_local)
@@ -206,12 +208,12 @@ def assert_report_contains(ctx, resource_type, instance, operation, predicate, o
         # check oldValue and newValue values for the given predicate of the given instance
         expected_old = old_value.strip() if old_value else None
         expected_new = new_value.strip() if new_value else None
-        assert (
-            binding.get("oldValue", {}).get("value") == expected_old
-        ), f"oldValue mismatch: expected {expected_old}, got {binding.get('oldValue', {}).get('value')}"
-        assert (
-            binding.get("newValue", {}).get("value") == expected_new
-        ), f"newValue mismatch: expected {expected_new}, got {binding.get('newValue', {}).get('value')}"
+        assert binding.get("oldValue", {}).get("value") == expected_old, (
+            f"oldValue mismatch: expected {expected_old}, got {binding.get('oldValue', {}).get('value')}"
+        )
+        assert binding.get("newValue", {}).get("value") == expected_new, (
+            f"newValue mismatch: expected {expected_new}, got {binding.get('newValue', {}).get('value')}"
+        )
     else:
         raise AssertionError(
             f"Unsupported combination: resource_type={resource_type}, operation={operation}"

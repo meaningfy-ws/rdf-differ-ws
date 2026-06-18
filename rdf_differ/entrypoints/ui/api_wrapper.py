@@ -8,6 +8,7 @@
 """
 Service to consume RDF diff API.
 """
+
 import re
 from json import dumps
 from pathlib import Path
@@ -24,7 +25,7 @@ def get_datasets() -> tuple:
     :return: the list of dataset diffs
     :rtype: list, int
     """
-    response = requests.get(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs')
+    response = requests.get(rdf_differ.config.RDF_DIFFER_API_SERVICE + "/diffs")
     return response.json(), response.status_code
 
 
@@ -35,7 +36,7 @@ def get_dataset(dataset_id: str) -> tuple:
     :return: dataset description (as specified in the rdf_differ.adapters.diff_adapter.py)
     :rtype: dict, int
     """
-    response = requests.get(rdf_differ.config.RDF_DIFFER_API_SERVICE + f'/diffs/{dataset_id}')
+    response = requests.get(rdf_differ.config.RDF_DIFFER_API_SERVICE + f"/diffs/{dataset_id}")
     return response.json(), response.status_code
 
 
@@ -48,13 +49,15 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
     :return: html report
     :rtype: file, int
     """
-    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs/report',
-                            params={
-                                'dataset_id': dataset_id,
-                                'application_profile': application_profile,
-                                'template_type': template_type
-                            })
-    d = response.headers['content-disposition']
+    response = requests.get(
+        url=rdf_differ.config.RDF_DIFFER_API_SERVICE + "/diffs/report",
+        params={
+            "dataset_id": dataset_id,
+            "application_profile": application_profile,
+            "template_type": template_type,
+        },
+    )
+    d = response.headers["content-disposition"]
     # the regex search results in an extraneous double-quote, so strip that out
     file_extension = Path(re.findall("filename=(.+)", d)[0]).suffix.strip('"')
     return response.content, file_extension, response.status_code
@@ -68,20 +71,30 @@ def build_report(dataset_id: str, application_profile: str, template_type: str) 
     :param template_type: report variation
     :return: task and dataset ids
     """
-    data = dumps({
-        'dataset_id': dataset_id,
-        'application_profile': application_profile,
-        'template_type': template_type,
-        'rebuild': 'true'
-    })
-    headers = {'Content-type': 'application/json'}
-    response = requests.post(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs/report', data=data, headers=headers)
+    data = dumps(
+        {
+            "dataset_id": dataset_id,
+            "application_profile": application_profile,
+            "template_type": template_type,
+            "rebuild": "true",
+        }
+    )
+    headers = {"Content-type": "application/json"}
+    response = requests.post(
+        rdf_differ.config.RDF_DIFFER_API_SERVICE + "/diffs/report", data=data, headers=headers
+    )
     return response.text, response.status_code
 
 
-def create_diff(dataset_name: str, dataset_description: str, dataset_uri: str,
-                old_version_id: str, old_version_file: FileStorage,
-                new_version_id: str, new_version_file: FileStorage) -> tuple:
+def create_diff(
+    dataset_name: str,
+    dataset_description: str,
+    dataset_uri: str,
+    old_version_id: str,
+    old_version_file: FileStorage,
+    new_version_id: str,
+    new_version_file: FileStorage,
+) -> tuple:
     """
     Method to connect to the RDF diff api to create a dataset diff
     :param dataset_name: The dataset identifier.
@@ -95,17 +108,27 @@ def create_diff(dataset_name: str, dataset_description: str, dataset_uri: str,
     :rtype: str, int
     """
     files = {
-        'old_version_file_content': (old_version_file.filename, old_version_file.stream, old_version_file.mimetype),
-        'new_version_file_content': (new_version_file.filename, new_version_file.stream, new_version_file.mimetype),
+        "old_version_file_content": (
+            old_version_file.filename,
+            old_version_file.stream,
+            old_version_file.mimetype,
+        ),
+        "new_version_file_content": (
+            new_version_file.filename,
+            new_version_file.stream,
+            new_version_file.mimetype,
+        ),
     }
     data = {
-        'dataset_name': dataset_name,
-        'dataset_description': dataset_description,
-        'dataset_uri': dataset_uri,
-        'old_version_id': old_version_id,
-        'new_version_id': new_version_id
+        "dataset_name": dataset_name,
+        "dataset_description": dataset_description,
+        "dataset_uri": dataset_uri,
+        "old_version_id": old_version_id,
+        "new_version_id": new_version_id,
     }
-    response = requests.post(rdf_differ.config.RDF_DIFFER_API_SERVICE + '/diffs', data=data, files=files)
+    response = requests.post(
+        rdf_differ.config.RDF_DIFFER_API_SERVICE + "/diffs", data=data, files=files
+    )
     return response.text, response.status_code
 
 
@@ -115,7 +138,7 @@ def get_application_profiles() -> tuple:
     :return: applicaiton profiles
     :rtype list, int
     """
-    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + '/aps')
+    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + "/aps")
     return response.json(), response.status_code
 
 
@@ -125,7 +148,7 @@ def get_active_tasks() -> tuple:
     :return: active celery tasks
     :rtype list, int
     """
-    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + '/tasks/active')
+    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + "/tasks/active")
     return response.json(), response.status_code
 
 
@@ -136,5 +159,5 @@ def revoke_task(task_id: str) -> tuple:
     :return: api response
     :rtype: dict, int
     """
-    response = requests.delete(url=f'{rdf_differ.config.RDF_DIFFER_API_SERVICE}/tasks/{task_id}')
+    response = requests.delete(url=f"{rdf_differ.config.RDF_DIFFER_API_SERVICE}/tasks/{task_id}")
     return response.json(), response.status_code

@@ -13,7 +13,6 @@ import shutil
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Union
 from uuid import uuid4
 
 import shortuuid
@@ -25,7 +24,7 @@ from rdf_differ.config import RDF_DIFFER_LOGGER
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
-def dir_exists(path: Union[str, Path]) -> bool:
+def dir_exists(path: str | Path) -> bool:
     """
     Method to check the existence of the dir from the indicated path.
     :param path: str or Path
@@ -36,7 +35,7 @@ def dir_exists(path: Union[str, Path]) -> bool:
     return Path(path).is_dir()
 
 
-def dir_is_empty(path: Union[str, Path]) -> bool:
+def dir_is_empty(path: str | Path) -> bool:
     """
     Method to check if the directory is empty.
     :param path: str or Path
@@ -51,7 +50,7 @@ def dir_is_empty(path: Union[str, Path]) -> bool:
     return False
 
 
-def empty_directory(path: Union[str, Path]) -> None:
+def empty_directory(path: str | Path) -> None:
     """
     Method to remove all files from a directory
     :param path: directory to clean
@@ -61,7 +60,7 @@ def empty_directory(path: Union[str, Path]) -> None:
             item.unlink()
 
 
-def file_exists(path: Union[str, Path]) -> bool:
+def file_exists(path: str | Path) -> bool:
     """
     Method to check the existence of the file from the indicated path.
     :param path: str or Path
@@ -88,15 +87,15 @@ def check_files_exist(file_a: FileStorage, file_b: FileStorage) -> None:
 
 
 def check_dataset_name_validity(name: str) -> bool:
-    return bool(re.match(r'^[\w\d_:-]*$', name, flags=re.A))
+    return bool(re.match(r"^[\w\d_:-]*$", name, flags=re.A))
 
 
 def build_unique_name(base: str, length_added: int = 8) -> str:
     if length_added > 22:
-        logger.warning('currently max accepted length_added is 22')
+        logger.warning("currently max accepted length_added is 22")
         length_added = 22
 
-    return f'{base}{shortuuid.uuid()[:length_added]}'
+    return f"{base}{shortuuid.uuid()[:length_added]}"
 
 
 def build_secure_filename(location: str, filename: str) -> str:
@@ -104,7 +103,7 @@ def build_secure_filename(location: str, filename: str) -> str:
 
 
 @contextmanager
-def save_files(old_file: FileStorage, new_file: FileStorage, location: str = ''):
+def save_files(old_file: FileStorage, new_file: FileStorage, location: str = ""):
     """
     Context manager that accepts 2 files and saved them in the specified directory
     :param old_file: file to be saved
@@ -156,15 +155,15 @@ def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
 
 
 INPUT_MIME_TYPES = {
-    'rdf': 'application/rdf+xml',
-    'owl': 'application/rdf+xml',
-    'trix': 'application/trix',
+    "rdf": "application/rdf+xml",
+    "owl": "application/rdf+xml",
+    "trix": "application/trix",
     "trig": "application/trig",
-    'nq': 'application/n-quads',
-    'nt': 'application/n-triples',
-    'jsonld': 'application/ld+json',
-    'n3': 'text/n3',
-    'ttl': 'text/turtle',
+    "nq": "application/n-quads",
+    "nt": "application/n-triples",
+    "jsonld": "application/ld+json",
+    "n3": "text/n3",
+    "ttl": "text/turtle",
 }
 
 

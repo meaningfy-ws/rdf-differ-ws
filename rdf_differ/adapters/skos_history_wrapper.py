@@ -8,13 +8,12 @@
 import logging
 from pathlib import Path
 from shutil import copy
-from subprocess import Popen, PIPE
-from typing import Union
-from urllib.parse import urljoin, quote
+from subprocess import PIPE, Popen
+from urllib.parse import quote, urljoin
 
 from rdflib.util import guess_format
 
-from rdf_differ.config import RDF_DIFFER_FUSEKI_SERVICE, RDF_DIFFER_FILENAME
+from rdf_differ.config import RDF_DIFFER_FILENAME, RDF_DIFFER_FUSEKI_SERVICE
 from rdf_differ.utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
 
 CONFIG_TEMPLATE = """#!/bin/bash
@@ -35,14 +34,24 @@ INPUT_MIME_TYPE=\"{input_type}\""""
 
 class SubprocessFailure(Exception):
     """
-        An exception for SKOSHistoryRunner.
+    An exception for SKOSHistoryRunner.
     """
 
 
 class SKOSHistoryRunner:
-    def __init__(self, dataset: str, scheme_uri: str, old_version_file: str, new_version_file: str, old_version_id: str,
-                 new_version_id: str, basedir: str, filename: str = None, endpoint: str = None,
-                 config_template: str = CONFIG_TEMPLATE):
+    def __init__(
+        self,
+        dataset: str,
+        scheme_uri: str,
+        old_version_file: str,
+        new_version_file: str,
+        old_version_id: str,
+        new_version_id: str,
+        basedir: str,
+        filename: str = None,
+        endpoint: str = None,
+        config_template: str = CONFIG_TEMPLATE,
+    ):
         """
         Class for running the skos-history shell script.
         It includes folder structure creation and config file population.
@@ -62,14 +71,23 @@ class SKOSHistoryRunner:
         file_format: format of the files used, as defined in INPUT_MIME_TYPES
         file_extension: extension of the files used, as defined in INPUT_MIME_TYPES
         """
-        if not (dataset and scheme_uri and old_version_file and old_version_id and new_version_file and new_version_id):
-            raise ValueError('These parameters cannot be empty:'
-                             f'{" dataset" if not dataset else ""}'
-                             f'{" scheme_uri" if not scheme_uri else ""}'
-                             f'{" old_version_file" if not old_version_file else ""}'
-                             f'{" old_version_id" if not old_version_id else ""}'
-                             f'{" new_version_file" if not new_version_file else ""}'
-                             f'{" new_version_id." if not new_version_id else "."}')
+        if not (
+            dataset
+            and scheme_uri
+            and old_version_file
+            and old_version_id
+            and new_version_file
+            and new_version_id
+        ):
+            raise ValueError(
+                "These parameters cannot be empty:"
+                f"{' dataset' if not dataset else ''}"
+                f"{' scheme_uri' if not scheme_uri else ''}"
+                f"{' old_version_file' if not old_version_file else ''}"
+                f"{' old_version_id' if not old_version_id else ''}"
+                f"{' new_version_file' if not new_version_file else ''}"
+                f"{' new_version_id.' if not new_version_id else '.'}"
+            )
 
         self.config_template = config_template
         self.dataset = quote(dataset)
@@ -96,7 +114,7 @@ class SKOSHistoryRunner:
         :return: str
             PUT URI
         """
-        return urljoin(self.endpoint, '/'.join([self.dataset, 'data']))
+        return urljoin(self.endpoint, "/".join([self.dataset, "data"]))
 
     @property
     def update_uri(self) -> str:
@@ -114,7 +132,7 @@ class SKOSHistoryRunner:
         :return: str
             query URI
         """
-        return urljoin(self.endpoint, '/'.join([self.dataset, 'query']))
+        return urljoin(self.endpoint, "/".join([self.dataset, "query"]))
 
     def run(self):
         """
@@ -147,16 +165,16 @@ class SKOSHistoryRunner:
         content = self.config_template.format(
             dataset=self.dataset,
             scheme_uri=self.scheme_uri,
-            versions='({} {})'.format(self.old_version_id, self.new_version_id),
+            versions=f"({self.old_version_id} {self.new_version_id})",
             basedir=self.basedir,
             filename=self._get_full_filename(),
             put_uri=self.put_uri,
             update_uri=self.update_uri,
             query_uri=self.query_uri,
-            input_type=self.file_format
+            input_type=self.file_format,
         )
-        location = Path(self.basedir) / f'{self.dataset}.config'
-        with open(location, 'w') as file:
+        location = Path(self.basedir) / f"{self.dataset}.config"
+        with open(location, "w") as file:
             file.write(content)
 
         return str(location)
@@ -166,7 +184,7 @@ class SKOSHistoryRunner:
         Helper method to generate full file name (name + extension)
         :return: full filename
         """
-        return '{}{}'.format(self.filename, self.file_extension)
+        return f"{self.filename}{self.file_extension}"
 
     def _check_file_formats(self) -> str:
         """
@@ -177,7 +195,7 @@ class SKOSHistoryRunner:
         new_format = self.get_file_format(self.new_version_file)
 
         if old_format != new_format:
-            raise ValueError(f'File formats are different: {old_format}, {new_format}')
+            raise ValueError(f"File formats are different: {old_format}, {new_format}")
 
         return old_format
 
@@ -186,30 +204,28 @@ class SKOSHistoryRunner:
         Helper method to check whether the indicated directory for the structure generation is empty.
         """
         if dir_exists(self.basedir) and not dir_is_empty(self.basedir):
-            raise ValueError('Root path is not empty.')
+            raise ValueError("Root path is not empty.")
 
     @classmethod
-    def execute_subprocess(cls, config_location: Union[str, Path]) -> str:
+    def execute_subprocess(cls, config_location: str | Path) -> str:
         """
         Method to execute the shell script.
         :param config_location: path - location of the config
         :return: the script's output
         """
-        script_location = Path(__file__).parents[2] / 'resources/load_versions.sh'
+        script_location = Path(__file__).parents[2] / "resources/load_versions.sh"
 
-        logging.info('Subprocess: run load_versions.sh start.')
+        logging.info("Subprocess: run load_versions.sh start.")
 
-        process = Popen(
-            [script_location, '-f', config_location],
-            stdout=PIPE)
+        process = Popen([script_location, "-f", config_location], stdout=PIPE)
         output, _ = process.communicate()
 
         if process.returncode != 0:
-            logging.info('Subprocess: load_versions.sh failed.')
-            logging.info(f'Subprocess: {output.decode()}')
+            logging.info("Subprocess: load_versions.sh failed.")
+            logging.info(f"Subprocess: {output.decode()}")
             raise SubprocessFailure(output)
 
-        logging.info('Subprocess: load_versions.sh finished successful.')
+        logging.info("Subprocess: load_versions.sh finished successful.")
         return output.decode()
 
     @staticmethod
@@ -222,6 +238,6 @@ class SKOSHistoryRunner:
         """
         file_format = guess_format(str(file), INPUT_MIME_TYPES)
         if file_format is None:
-            raise ValueError('Format of "{}" is not supported.'.format(file))
+            raise ValueError(f'Format of "{file}" is not supported.')
 
         return file_format

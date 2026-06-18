@@ -14,15 +14,20 @@ from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from tests.conftest import helper_create_skos_runner
 
 
-@pytest.mark.parametrize("filename, file_format", [('test.rdf', 'application/rdf+xml'),
-                                                   ('test.owl', 'application/rdf+xml'),
-                                                   ('test.trix', 'application/trix'),
-                                                   ('test.trig', 'application/trig'),
-                                                   ('test.nq', 'application/n-quads'),
-                                                   ('test.nt', 'application/n-triples'),
-                                                   ('test.ttl', 'text/turtle'),
-                                                   ('test.n3', 'text/n3'),
-                                                   ('test.jsonld', 'application/ld+json')])
+@pytest.mark.parametrize(
+    "filename, file_format",
+    [
+        ("test.rdf", "application/rdf+xml"),
+        ("test.owl", "application/rdf+xml"),
+        ("test.trix", "application/trix"),
+        ("test.trig", "application/trig"),
+        ("test.nq", "application/n-quads"),
+        ("test.nt", "application/n-triples"),
+        ("test.ttl", "text/turtle"),
+        ("test.n3", "text/n3"),
+        ("test.jsonld", "application/ld+json"),
+    ],
+)
 def test_input_file_mime_supported(filename, file_format):
     skos_runner = helper_create_skos_runner(filename=filename)
 
@@ -30,7 +35,7 @@ def test_input_file_mime_supported(filename, file_format):
 
 
 def test_input_file_mime_not_supported():
-    filename = 'tests.doc'
+    filename = "tests.doc"
     skos_runner = helper_create_skos_runner()
     with pytest.raises(Exception) as exception:
         _ = skos_runner.get_file_format(filename)
@@ -39,40 +44,42 @@ def test_input_file_mime_not_supported():
 
 
 def test_file_formats_equal():
-    skos_runner = helper_create_skos_runner(old_version_file='old.rdf', new_version_file='new.rdf')
+    skos_runner = helper_create_skos_runner(old_version_file="old.rdf", new_version_file="new.rdf")
 
-    assert skos_runner.file_format == 'application/rdf+xml'
+    assert skos_runner.file_format == "application/rdf+xml"
 
 
 def test_file_formats_different():
     with pytest.raises(Exception) as exception:
-        _ = helper_create_skos_runner(old_version_file='old.rdf', new_version_file='new.trix')
+        _ = helper_create_skos_runner(old_version_file="old.rdf", new_version_file="new.trix")
 
-    assert 'File formats are different: application/rdf+xml, application/trix' in str(exception.value)
+    assert "File formats are different: application/rdf+xml, application/trix" in str(
+        exception.value
+    )
 
 
 def test_uris_creation():
-    skos_runner = helper_create_skos_runner(dataset='dataset', endpoint='http://test.point')
+    skos_runner = helper_create_skos_runner(dataset="dataset", endpoint="http://test.point")
 
-    assert skos_runner.put_uri == 'http://test.point/dataset/data'
-    assert skos_runner.update_uri == 'http://test.point/dataset'
-    assert skos_runner.query_uri == 'http://test.point/dataset/query'
+    assert skos_runner.put_uri == "http://test.point/dataset/data"
+    assert skos_runner.update_uri == "http://test.point/dataset"
+    assert skos_runner.query_uri == "http://test.point/dataset/query"
 
 
 def test_skos_history_folder_setup_basedir_exist_is_not_empty(tmpdir):
-    basedir = tmpdir.mkdir('basedir')
-    file = basedir.join('file')
-    file.write('')
+    basedir = tmpdir.mkdir("basedir")
+    file = basedir.join("file")
+    file.write("")
     with pytest.raises(Exception) as exception:
         _ = helper_create_skos_runner(basedir=str(basedir))
 
-    assert 'Root path is not empty' in str(exception.value)
+    assert "Root path is not empty" in str(exception.value)
 
 
 def test_skos_history_execute_subprocess(tmpdir):
     skos_runner = helper_create_skos_runner()
     # get absolute path as script is wonky when relative path is used
-    test_data_location = Path(__file__).parent.parent / 'test_data/original/subdivisions_sh_ds/data'
+    test_data_location = Path(__file__).parent.parent / "test_data/original/subdivisions_sh_ds/data"
     config_content = f"""#!/bin/bash
 DATASET=ds-subdivision
 SCHEMEURI="http://publications.europa.eu/resource/authority/subdivision"
@@ -87,20 +94,29 @@ QUERY_URI=http://localhost:3030/subdiv/query
 
 INPUT_MIME_TYPE="application/rdf+xml"
 """
-    config_file = tmpdir.join('tests.config')
+    config_file = tmpdir.join("tests.config")
     config_file.write(config_content)
 
     output = skos_runner.execute_subprocess(config_file)
 
-    assert 'Initializing the version history graph with the current version' in output
-    assert 'Loading version http://publications.europa.eu/resource/authority/subdivision/version/v1' in output
-    assert 'Loading version http://publications.europa.eu/resource/authority/subdivision/version/v2' in output
-    assert 'Creating the delta http://publications.europa.eu/resource/authority/subdivision/version/v1/delta/v2' in output
+    assert "Initializing the version history graph with the current version" in output
+    assert (
+        "Loading version http://publications.europa.eu/resource/authority/subdivision/version/v1"
+        in output
+    )
+    assert (
+        "Loading version http://publications.europa.eu/resource/authority/subdivision/version/v2"
+        in output
+    )
+    assert (
+        "Creating the delta http://publications.europa.eu/resource/authority/subdivision/version/v1/delta/v2"
+        in output
+    )
 
 
-@patch.object(SKOSHistoryRunner, 'execute_subprocess')
-@patch.object(SKOSHistoryRunner, 'generate_config')
-@patch.object(SKOSHistoryRunner, 'generate_structure')
+@patch.object(SKOSHistoryRunner, "execute_subprocess")
+@patch.object(SKOSHistoryRunner, "generate_config")
+@patch.object(SKOSHistoryRunner, "generate_structure")
 def test_skos_history_run(mock_generate_structure, mock_generate_config, mock_execute_subprocess):
     skos_runner = helper_create_skos_runner()
     skos_runner.run()

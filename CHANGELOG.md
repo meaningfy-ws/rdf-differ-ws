@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   bumped to current majors — Flask 3, Connexion 3 (API app construction updated),
   Celery 5.4+, rdflib 7.1+, pandas 2.2+, etc.
 - Dropped **Flask-Bootstrap** (unused; UI uses Materialize CSS via CDN).
+- **Linting/formatting swapped to Ruff** (replaces flake8): auto-fixed ~77 issues, fixed
+  bare-excepts/lambda/contextlib.suppress; deferred B904/N818 and test B008/F811 as documented
+  debt. Added `make` targets `format`, `typecheck`, `check-architecture`, `check-quality`,
+  `check-all`. mypy wired (canonical config) with a ~62-error legacy baseline tracked as debt
+  (not yet gating).
 - **Temporary:** vendored a pin-relaxed copy of `eds4jinja2` under `vendor/eds4jinja2/`
   so it installs on 3.12 (upstream 0.2.0 caps pandas/numpy below their cp312 wheels).
   Remove once `eds4jinja2 >= 0.3.0` ships — see the upstream fix spec in the change.

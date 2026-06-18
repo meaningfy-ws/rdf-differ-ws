@@ -7,21 +7,21 @@ import csv
 import sys
 import time
 from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
+from collections.abc import Callable, Iterable
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Callable, Iterable, List, Optional
 from urllib.parse import urljoin
 
 import requests
 
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.utils.file_utils import INPUT_MIME_TYPES
-
 
 DEFAULT_TIMEOUT = 60
 
@@ -33,11 +33,11 @@ class QueryRunResult:
     file_path: Path
     query: str
     status: str
-    duration: Optional[float] = None
-    error: Optional[str] = None
+    duration: float | None = None
+    error: str | None = None
 
 
-def discover_query_files(profile_name: str) -> List[Path]:
+def discover_query_files(profile_name: str) -> list[Path]:
     """Return all query files for the given application profile."""
 
     profile_root = Path(config.APPLICATION_PROFILES_ROOT_FOLDER) / profile_name
@@ -62,10 +62,10 @@ def run_queries(
     timeout: float,
     printer: Callable[[str], None] = print,
     timer: Callable[[], float] = time.perf_counter,
-) -> List[QueryRunResult]:
+) -> list[QueryRunResult]:
     """Execute each query and collect profiling information."""
 
-    results: List[QueryRunResult] = []
+    results: list[QueryRunResult] = []
 
     for query_path in query_files:
         query_text = query_path.read_text(encoding="utf-8")
@@ -209,8 +209,10 @@ def create_delta_graphs(
         runner.run()
 
 
-def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Profile SPARQL queries for a given application profile.")
+def parse_arguments(args: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Profile SPARQL queries for a given application profile."
+    )
 
     parser.add_argument("profile", help="Name of the application profile to profile")
     parser.add_argument("old_file", nargs="?", help="Optional old RDF version to preload")
@@ -256,7 +258,7 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
     return parser.parse_args(args=args)
 
 
-def main(cli_args: Optional[List[str]] = None) -> int:
+def main(cli_args: list[str] | None = None) -> int:  # noqa: C901  TODO: decompose the CLI flow
     args = parse_arguments(cli_args)
 
     dataset_name = args.dataset or args.profile.replace(" ", "_")
@@ -315,7 +317,8 @@ def main(cli_args: Optional[List[str]] = None) -> int:
                 print(f"Failed to upload {file_path}: {exc}", file=sys.stderr)
                 return 1
 
-    execute = lambda query_text: adapter.execute_query(dataset_name=dataset_name, sparql_query=query_text)
+    def execute(query_text):
+        return adapter.execute_query(dataset_name=dataset_name, sparql_query=query_text)
 
     print("Starting query profiling...")
     results = run_queries(query_files, execute, timeout=args.timeout)

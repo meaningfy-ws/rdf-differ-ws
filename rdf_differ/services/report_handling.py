@@ -1,24 +1,35 @@
 import json
 import logging
 import shutil
-from distutils.dir_util import copy_tree
-from json import loads, dumps
+from json import dumps, loads
 from pathlib import Path
 
+from distutils.dir_util import copy_tree
 from eds4jinja2.builders.report_builder import ReportBuilder
 from werkzeug.exceptions import UnprocessableEntity
 
-from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB, RDF_DIFFER_META_NAME
+from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_META_NAME, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.time import get_timestamp
-from rdf_differ.utils.file_utils import dir_is_empty, empty_directory, copy_file_to_destination, dir_exists, \
-    list_folder_paths_from_path
+from rdf_differ.utils.file_utils import (
+    copy_file_to_destination,
+    dir_exists,
+    dir_is_empty,
+    empty_directory,
+    list_folder_paths_from_path,
+)
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
-def build_report(temp_dir: str, template_location: str, query_files: dict, application_profile: str, dataset_name: str,
-                 dataset: dict,
-                 timestamp: str):
+def build_report(
+    temp_dir: str,
+    template_location: str,
+    query_files: dict,
+    application_profile: str,
+    dataset_name: str,
+    dataset: dict,
+    timestamp: str,
+):
     """
     :param temp_dir: location to temporarily save the report
     :param template_location: report location
@@ -32,31 +43,33 @@ def build_report(temp_dir: str, template_location: str, query_files: dict, appli
     additional_config = {
         "conf": {
             "query_files": query_files,
-            "default_endpoint": dataset['query_url'],
+            "default_endpoint": dataset["query_url"],
             "dataset_name": dataset_name,
             "application_profile": application_profile,
             "timestamp": timestamp,
-            "original_name": dataset['original_name'],
-            "old_version_file": dataset['old_version_file'],
-            "new_version_file": dataset['new_version_file']
+            "original_name": dataset["original_name"],
+            "old_version_file": dataset["old_version_file"],
+            "new_version_file": dataset["new_version_file"],
         }
     }
-    logger.debug(f'template location {template_location}')
+    logger.debug(f"template location {template_location}")
 
     copy_tree(template_location, temp_dir)
 
     try:
-        with open(Path(temp_dir) / 'config.json', 'r') as config_file:
+        with open(Path(temp_dir) / "config.json") as config_file:
             config_content = json.load(config_file)
 
-        logger.debug(f'template file {config_content["template"]}')
+        logger.debug(f"template file {config_content['template']}")
     except FileNotFoundError as e:
         logger.exception(str(e))
-        raise UnprocessableEntity("config.json file is missing from the chosen template variant folder")
+        raise UnprocessableEntity(
+            "config.json file is missing from the chosen template variant folder"
+        )
 
     report_builder = ReportBuilder(target_path=temp_dir, additional_config=additional_config)
     report_builder.make_document()
-    return Path(str(temp_dir)) / f'output/{config_content["template"]}'
+    return Path(str(temp_dir)) / f"output/{config_content['template']}"
 
 
 def build_dataset_reports_location(dataset_name: str, reports_location: str) -> str:
@@ -70,8 +83,9 @@ def build_dataset_reports_location(dataset_name: str, reports_location: str) -> 
     return str(Path(reports_location) / dataset_name)
 
 
-def build_report_location(dataset_name: str, application_profile: str, template_type: str,
-                          reports_location: str) -> str:
+def build_report_location(
+    dataset_name: str, application_profile: str, template_type: str, reports_location: str
+) -> str:
     """
     build report path
 
@@ -82,11 +96,19 @@ def build_report_location(dataset_name: str, application_profile: str, template_
     :return: report location
     """
     return str(
-        Path(build_dataset_reports_location(dataset_name, reports_location)) / f'{application_profile}/{template_type}')
+        Path(build_dataset_reports_location(dataset_name, reports_location))
+        / f"{application_profile}/{template_type}"
+    )
 
 
-def build_report_name(destination_folder: str, dataset_name: str, application_profile: str, template_type: str,
-                      timestamp: str, extension: str) -> str:
+def build_report_name(
+    destination_folder: str,
+    dataset_name: str,
+    application_profile: str,
+    template_type: str,
+    timestamp: str,
+    extension: str,
+) -> str:
     """
     build absolute report path including the filename
 
@@ -99,10 +121,14 @@ def build_report_name(destination_folder: str, dataset_name: str, application_pr
     :return: absolute report path
     """
     return str(
-        Path(destination_folder) / f'{dataset_name}-{application_profile}-{template_type}-{timestamp}.{extension}')
+        Path(destination_folder)
+        / f"{dataset_name}-{application_profile}-{template_type}-{timestamp}.{extension}"
+    )
 
 
-def retrieve_report(dataset_name: str, application_profile: str, template_type: str, reports_location: str) -> str:
+def retrieve_report(
+    dataset_name: str, application_profile: str, template_type: str, reports_location: str
+) -> str:
     """
     retrieve report path
 
@@ -113,11 +139,20 @@ def retrieve_report(dataset_name: str, application_profile: str, template_type: 
     :return:
     """
     return str(
-        next(Path(build_report_location(dataset_name, application_profile, template_type, reports_location)).iterdir(),
-             ''))
+        next(
+            Path(
+                build_report_location(
+                    dataset_name, application_profile, template_type, reports_location
+                )
+            ).iterdir(),
+            "",
+        )
+    )
 
 
-def report_exists(dataset_name: str, application_profile: str, template_type: str, reports_location: str) -> bool:
+def report_exists(
+    dataset_name: str, application_profile: str, template_type: str, reports_location: str
+) -> bool:
     """
 
     :param dataset_name: dataset name
@@ -126,7 +161,9 @@ def report_exists(dataset_name: str, application_profile: str, template_type: st
     :param reports_location: which file system location to use to perform the action
     :return: if report exists return true otherwise false
     """
-    report_location = build_report_location(dataset_name, application_profile, template_type, reports_location)
+    report_location = build_report_location(
+        dataset_name, application_profile, template_type, reports_location
+    )
     return dir_exists(report_location) and not dir_is_empty(report_location)
 
 
@@ -143,8 +180,10 @@ def get_all_reports(dataset_name: str, reports_location_db: str) -> list:
         for ap_location in list_folder_paths_from_path(reports_location):
             reports.append(
                 {
-                    'application_profile': Path(ap_location).name,
-                    'template_variations': [location.name for location in Path(ap_location).iterdir()]
+                    "application_profile": Path(ap_location).name,
+                    "template_variations": [
+                        location.name for location in Path(ap_location).iterdir()
+                    ],
                 }
             )
         return reports
@@ -152,8 +191,14 @@ def get_all_reports(dataset_name: str, reports_location_db: str) -> list:
     return list()
 
 
-def save_report(report: str, dataset_name: str, application_profile: str, template_type: str, timestamp: str,
-                reports_location: str) -> None:
+def save_report(
+    report: str,
+    dataset_name: str,
+    application_profile: str,
+    template_type: str,
+    timestamp: str,
+    reports_location: str,
+) -> None:
     """
     save report to specified location
 
@@ -165,22 +210,32 @@ def save_report(report: str, dataset_name: str, application_profile: str, templa
     :param reports_location: which file system location to use to perform the action
     """
     report_extension = Path(report).suffix[1:]  # remove `.` from extension
-    location_to_save = build_report_location(dataset_name, application_profile, template_type, reports_location)
-    report_name = build_report_name(location_to_save, dataset_name, application_profile, template_type, timestamp,
-                                    report_extension)
+    location_to_save = build_report_location(
+        dataset_name, application_profile, template_type, reports_location
+    )
+    report_name = build_report_name(
+        location_to_save,
+        dataset_name,
+        application_profile,
+        template_type,
+        timestamp,
+        report_extension,
+    )
 
     if not dir_exists(location_to_save):
         Path(location_to_save).mkdir(parents=True)
 
     if not dir_is_empty(location_to_save):
-        logger.debug(f'{location_to_save} is not empty. Removing existing content.')
+        logger.debug(f"{location_to_save} is not empty. Removing existing content.")
         empty_directory(location_to_save)
 
-    logger.debug(f'{location_to_save}.')
+    logger.debug(f"{location_to_save}.")
     copy_file_to_destination(report, report_name)
 
 
-def remove_report(dataset_name: str, application_profile: str, template_type: str, reports_location: str) -> bool:
+def remove_report(
+    dataset_name: str, application_profile: str, template_type: str, reports_location: str
+) -> bool:
     """
     remove report
 
@@ -190,13 +245,16 @@ def remove_report(dataset_name: str, application_profile: str, template_type: st
     :param reports_location: which file system location to use to perform the action
     :return: if report successfully deleted return true otherwise return false
     """
-    report_location = build_report_location(dataset_name, application_profile, template_type, reports_location)
+    report_location = build_report_location(
+        dataset_name, application_profile, template_type, reports_location
+    )
     try:
         shutil.rmtree(report_location)
         return True
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         logger.debug(
-            f'no report found for {dataset_name} with {application_profile}, {template_type}. nothing to delete.')
+            f"no report found for {dataset_name} with {application_profile}, {template_type}. nothing to delete."
+        )
 
     return False
 
@@ -213,13 +271,15 @@ def remove_all_reports(dataset_name: str, db_location: str) -> bool:
     try:
         shutil.rmtree(report_location)
         return True
-    except OSError as e:
-        logger.debug(f'no reports found for {dataset_name}. nothing to delete.')
+    except OSError:
+        logger.debug(f"no reports found for {dataset_name}. nothing to delete.")
 
     return False
 
 
-def generate_meta_file(reports_location: str, uid: str, dataset_name: str, timestamp: str = '') -> dict:
+def generate_meta_file(
+    reports_location: str, uid: str, dataset_name: str, timestamp: str = ""
+) -> dict:
     """
     generate meta file for diff
     :param reports_location: location of diff reports
@@ -229,17 +289,13 @@ def generate_meta_file(reports_location: str, uid: str, dataset_name: str, times
     :return: meta file
     """
     timestamp = timestamp or get_timestamp()
-    meta_data = {
-        'uid': uid,
-        'dataset_name': dataset_name,
-        'created_at': timestamp
-    }
+    meta_data = {"uid": uid, "dataset_name": dataset_name, "created_at": timestamp}
     meta_file = Path(reports_location) / RDF_DIFFER_META_NAME
     meta_file.write_text(dumps(meta_data))
     return meta_data
 
 
-def read_meta_file(report_base_location: str, meta_file_name: str = 'meta.json') -> dict:
+def read_meta_file(report_base_location: str, meta_file_name: str = "meta.json") -> dict:
     """
     method to read data from meta file
     :param report_base_location: report location
@@ -259,7 +315,7 @@ def find_dataset_name_by_id(dataset_id: str, reports_location: str = RDF_DIFFER_
     """
     for location in list_folder_paths_from_path(Path(reports_location)):
         content = read_meta_file(Path(reports_location) / location)
-        if content.get('uid', None) == dataset_id:
-            return content.get('dataset_name')
+        if content.get("uid", None) == dataset_id:
+            return content.get("dataset_name")
 
-    return ''
+    return ""

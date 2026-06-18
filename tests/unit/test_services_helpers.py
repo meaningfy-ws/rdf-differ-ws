@@ -1,10 +1,10 @@
-from rdf_differ.utils.file_utils import list_folders_from_path, list_files_from_path
+from rdf_differ.utils.file_utils import list_files_from_path, list_folders_from_path
 
 
 def test_list_folders_from_path(sample_ap_root_folder):
     folders = list_folders_from_path(sample_ap_root_folder)
     assert isinstance(folders, list)
-    assert 'ap1', 'ap2' in folders
+    assert "ap1", "ap2" in folders
 
 
 def test_list_folders_from_path(sample_ap_root_folder):
