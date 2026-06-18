@@ -60,6 +60,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   previously-untested domain model and for `services/{queue,tasks}`, `adapters/sparql`,
   `utils/rdf_converter`, `ui/api_wrapper`, the query-profiler helpers, the task/AP API
   handlers, and `report_handling.build_report`. 153 unit tests, ~80.6% coverage.
+- **Opt-in Playwright E2E harness** under `tests/e2e/` (smoke flows for the UI) with an `e2e`
+  dependency group and a manual `e2e.yaml` workflow. Auto-skips unless the group is installed and
+  the stack is up, so default runs/CI are unaffected. Kept intentionally small (the SSR UI is mostly
+  covered by the Flask-test-client tests).
 - **Architecture boundaries fixed and enforced** (import-linter): the Celery task module
   moved `adapters/celery.py → services/celery.py` (task orchestration is the services
   layer); the pure path/IO helpers `build_dataset_reports_location` + `read_meta_file`

@@ -1,0 +1,39 @@
+name: E2E (opt-in)
+
+# Browser E2E smoke tests (Playwright). Manual only — it builds the full Docker stack
+# and a browser, so it is not part of the per-push gate. See tests/e2e/README.md.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    name: browser smoke
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Install dependencies (incl. e2e)
+        run: poetry install --with e2e
+
+      - name: Install browser
+        run: poetry run playwright install --with-deps chromium
+
+      - name: Prepare environment
+        run: cp infra/.env.example infra/.env
+
+      - name: Bring up the full stack
+        run: make start-services-test
+
+      - name: Run E2E smoke tests
+        env:
+          RDF_DIFFER_UI_URL: http://localhost:8030
+        run: poetry run pytest tests/e2e --browser chromium

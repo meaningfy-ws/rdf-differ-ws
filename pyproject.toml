@@ -69,6 +69,11 @@ docs = [
     "Sphinx~=7.1.2",
     "sphinxcontrib-apidoc~=0.4.0",
 ]
+# Opt-in browser E2E. Not installed by default — `poetry install --with e2e` then
+# `poetry run playwright install chromium`. See tests/e2e/README.md.
+e2e = [
+    "pytest-playwright~=0.5",
+]
 
 [tool.poetry]
 # No-src layout: include the top-level package directly, NO `from = "src"`.
