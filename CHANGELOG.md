@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Root decluttered.** `bash/` → `infra/scripts/` (all run/setup/CLI helper scripts; Makefile,
+  README and test references updated; `source bash/.env` → `infra/scripts/.env`; fixed a stale
+  `rdf_differ.adapters.celery` path in `stop_gunicorn.sh`). The runtime data dirs `db/`, `logs/`,
+  `reports/` are no longer tracked via placeholder `.gitignore`s — they are git-ignored and created
+  on demand by the app, so a fresh clone no longer carries them.
+- **Makefile modernised.** Removed the dead `generate-tests-from-features` target (pointed at a
+  non-existent `tests/features`/`tests/steps` layout and shelled out to bare `py.test`/`pytest-bdd`)
+  and the dqgen-coupled `update_template` / `update_all_templates` targets (+ their `TEMPLATE_*` vars
+  pulling from `../diff-query-generator`) — YAGNI; templates are copied in manually for now.
+  Added a self-documenting `help` target (now the default goal), `.PHONY` declarations, convention
+  aliases `check` (= `check-quality`) and `ci` (= `check-all`), a `format-check` target now wired into
+  `check-quality` (so CI gates on formatting), and fixed the broken `run-dev-ui` (subshell `export` +
+  bare `flask` → a single `poetry run flask run`).
+
 - **mypy is now green and gating** (`make check-quality` runs lint + types + architecture). Fixed
   all ~52 type errors: `Optional` defaults, missing annotations, `__eq__(self, other: object)`,
   `cast(...)` for untyped third-party returns, and removed the re-export indirection (consumers now

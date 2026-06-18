@@ -11,7 +11,9 @@ redis_client = redis.Redis(
 REVOKING_QUEUE = "revoke"
 
 
-def push_task_to_queue(task_id: str, queue: str = REVOKING_QUEUE, client: redis.Redis | None = None):
+def push_task_to_queue(
+    task_id: str, queue: str = REVOKING_QUEUE, client: redis.Redis | None = None
+):
     """
     used for adding a task's id to a queue to be "undone" or cancelled.
 

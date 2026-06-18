@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 
-SCRIPT_PATH = "../../bash/rdf-differ.sh"
+SCRIPT_PATH = "../../infra/scripts/rdf-differ.sh"
 BASE_URL = os.environ.get("RDF_DIFFER_BASE_URL", "http://localhost:4030")
 SAVED_REPORT = "../test_data/owl/ePO_sample-4.0.0-upd_diff-report.json"
 REUSE_SAVED_REPORT = os.environ.get("RDF_DIFFER_REUSE_SAVED_REPORT", "true").lower() in [
