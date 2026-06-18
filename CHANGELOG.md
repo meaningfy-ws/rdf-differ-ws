@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Infrastructure modernized and moved `docker/` → `infra/`** (compose, Dockerfiles, nginx, traefik,
+  redis.conf; Makefile/README/compose references updated). Dockerfiles rebuilt on **Python 3.12 +
+  Poetry + non-root**, installing from the lockfile (the old `pip -r requirements` is gone).
+- **Connexion 3 serving migration:** the API is ASGI under Connexion 3 — it is now served by
+  `gunicorn -k uvicorn.workers.UvicornWorker` on the ASGI app (`api.run:connexion_app`); the UI stays
+  gunicorn WSGI. `bash/run_api.sh` updated (and its stale `adapters.celery` path fixed). Smoke-tested:
+  the API boots under the Uvicorn worker and `GET /diffs`, `/ui/`, `/openapi.json` all return 200.
+- **LinkML `model/` seam** added (`model/schema.yaml` mirroring the domain + `make generate-models`).
+  Seam only — generation is opt-in and not yet authoritative (DEC-6); the hand-written
+  `rdf_differ/domain/model.py` remains the source of truth.
+
 - **Modernization to the Meaningfy standard** (in progress, slice-per-commit):
   projected the OpenSpec spine; adding root tool configs (Ruff, mypy, coverage,
   import-linter, pre-commit, Sonar). Tooling/structure only — no runtime

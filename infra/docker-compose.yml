@@ -7,7 +7,7 @@ services:
       - ${RDF_DIFFER_API_PORT}
     build:
       context: ..
-      dockerfile: ./docker/api/Dockerfile
+      dockerfile: ./infra/api/Dockerfile
     volumes:
       - rdf-differ-data:/usr/src/app
       - rdf-differ-template:${RDF_DIFFER_TEMPLATE_LOCATION}
@@ -35,7 +35,7 @@ services:
       - ${RDF_DIFFER_UI_PORT}
     build:
       context: ..
-      dockerfile: ./docker/ui/Dockerfile
+      dockerfile: ./infra/ui/Dockerfile
     volumes:
       - rdf-differ-data:/usr/src/app
 #    ports:
@@ -82,7 +82,7 @@ services:
     container_name: rdf-differ-celery-worker-${ENVIRONMENT}
     build:
       context: ..
-      dockerfile: ./docker/api/Dockerfile
+      dockerfile: ./infra/api/Dockerfile
     command: celery -A rdf_differ.services.celery.celery_worker worker --loglevel info --logfile ${RDF_DIFFER_CELERY_LOGS}
     volumes:
       - rdf-differ-data:/usr/src/app
@@ -107,7 +107,7 @@ services:
     container_name: rdf-differ-flower-${ENVIRONMENT}
     build:
       context: ..
-      dockerfile: ./docker/api/Dockerfile
+      dockerfile: ./infra/api/Dockerfile
     command: celery -A rdf_differ.services.celery.celery_worker --broker=${RDF_DIFFER_REDIS_LOCATION}:${RDF_DIFFER_REDIS_PORT} flower --port=${RDF_FLOWER_PORT} --basic-auth=admin:${RDF_FLOWER_ADMIN_PASSWORD}
     expose:
       - ${RDF_FLOWER_PORT}

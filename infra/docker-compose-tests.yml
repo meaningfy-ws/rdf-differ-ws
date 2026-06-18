@@ -5,7 +5,7 @@ services:
     container_name: rdf-differ-api-${ENVIRONMENT}
     build:
       context: ..
-      dockerfile: ./docker/api/Dockerfile
+      dockerfile: ./infra/api/Dockerfile
     volumes:
       - ..:/usr/src/app
       - rdf-differ-template:${RDF_DIFFER_TEMPLATE_LOCATION}
@@ -21,7 +21,7 @@ services:
     container_name: rdf-differ-ui-${ENVIRONMENT}
     build:
       context: ..
-      dockerfile: ./docker/ui/Dockerfile
+      dockerfile: ./infra/ui/Dockerfile
     volumes:
       - ..:/usr/src/app
     ports:
@@ -48,7 +48,7 @@ services:
     container_name: rdf-differ-celery-worker-${ENVIRONMENT}
     build:
       context: ..
-      dockerfile: ./docker/api/Dockerfile
+      dockerfile: ./infra/api/Dockerfile
     command: celery -A rdf_differ.services.celery.celery_worker worker --loglevel info --logfile ${RDF_DIFFER_CELERY_LOGS}
     volumes:
       - ..:/usr/src/app
@@ -71,7 +71,7 @@ services:
     container_name: rdf-differ-flower-${ENVIRONMENT}
     build:
       context: ..
-      dockerfile: ./docker/api/Dockerfile
+      dockerfile: ./infra/api/Dockerfile
     command: celery -A rdf_differ.services.celery.celery_worker --broker=${RDF_DIFFER_REDIS_LOCATION}:${RDF_DIFFER_REDIS_PORT} flower --port=${RDF_FLOWER_PORT}
     ports:
       - ${RDF_FLOWER_PORT}:${RDF_FLOWER_PORT}

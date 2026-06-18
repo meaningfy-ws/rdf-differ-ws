@@ -1,4 +1,4 @@
-include docker/.env
+include infra/.env
 
 BUILD_PRINT = \e[1;34mSTEP: \e[0m
 MSG_PRINT = \e[1;34mINFO: \e[0m
@@ -14,7 +14,7 @@ OS_DOCKERC=$(shell command -v docker compose > /dev/null && echo 1)
 #-----------------------------------------------------------------------------
 
 # how to set envs to local
-# set -o allexport; source docker/.env; set +o allexport
+# set -o allexport; source infra/.env; set +o allexport
 
 start: | start-traefik start-services
 	@ echo "$(MSG_PRINT)Docker-based services started; make stop to stop"
@@ -66,14 +66,14 @@ ifeq ($(DEB_OS), 1)
 # running as root, and replacing a system config, are both bad practices!
 	@ echo "$(WARN_PRINT)Backing up and replacing a system config as root!"
 	@ sudo cp /etc/redis/redis.conf /etc/redis/redis.conf.rdf_differ.bak -v
-	@ sudo cp docker/redis.conf /etc/redis/redis.conf -v
+	@ sudo cp infra/redis.conf /etc/redis/redis.conf -v
 	@ sudo systemctl restart redis.service
 else ifeq ($(RPM_OS), 1)
 	@ sudo systemctl enable redis --now
 else
 	@ echo "$(MSG_PRINT)Operating system not supported"
 	@ echo "$(MSG_PRINT)Please start the Redis server yourself"
-	@ echo "$(MSG_PRINT)Refer also to docker/redis.conf"
+	@ echo "$(MSG_PRINT)Refer also to infra/redis.conf"
 	false
 endif
 
@@ -97,7 +97,7 @@ endif
 build-services:
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Building the RDF Differ micro-services'
-	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env build
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file infra/docker-compose.yml --env-file infra/.env build
 else
 	@ echo "$(MSG_PRINT)Docker not found, please see README"
 	false
@@ -109,16 +109,16 @@ build-externals:
 
 start-traefik: build-externals
 	@ echo -e "$(BUILD_PRINT)Starting the Traefik services $(END_BUILD_PRINT)"
-	@ docker compose -p common --file ./docker/traefik/docker-compose.yml --env-file docker/.env up -d
+	@ docker compose -p common --file ./infra/traefik/docker-compose.yml --env-file infra/.env up -d
 
 stop-traefik:
 	@ echo -e "$(BUILD_PRINT)Stopping the Traefik services $(END_BUILD_PRINT)"
-	@ docker compose -p common --file ./docker/traefik/docker-compose.yml --env-file docker/.env down
+	@ docker compose -p common --file ./infra/traefik/docker-compose.yml --env-file infra/.env down
 
 start-services: build-volumes
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Starting the RDF Differ micro-services'
-	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env up -d
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file infra/docker-compose.yml --env-file infra/.env up -d
 else
 	@ echo "$(MSG_PRINT)Docker not found, please see README"
 	false
@@ -127,7 +127,7 @@ endif
 stop-services:
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Stopping the RDF Differ micro-services'
-	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env stop
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file infra/docker-compose.yml --env-file infra/.env stop
 else
 	@ echo "$(MSG_PRINT)Docker not found, please see README"
 	false
@@ -136,7 +136,7 @@ endif
 teardown-services:
 ifeq ($(OS_DOCKERC), 1)
 	@ echo -e '$(BUILD_PRINT)Tearing down the microservice environment'
-	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose.yml --env-file docker/.env down --volumes --remove-orphans
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file infra/docker-compose.yml --env-file infra/.env down --volumes --remove-orphans
 else
 	@ echo "$(MSG_PRINT)Docker not found, please see README"
 	false
@@ -147,11 +147,11 @@ endif
 #-----------------------------------------------------------------------------
 build-docker-fuseki-test: | build-volumes
 	@ echo -e '$(BUILD_PRINT)Building the Fuseki service'
-	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env build rdf-differ-fuseki
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file infra/docker-compose-tests.yml --env-file infra/.env build rdf-differ-fuseki
 
 run-docker-fuseki-test: | build-docker-fuseki-test
 	@ echo -e '$(BUILD_PRINT)Starting the Fuseki service'
-	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-fuseki
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file infra/docker-compose-tests.yml --env-file infra/.env up -d rdf-differ-fuseki
 
 #-----------------------------------------------------------------------------
 # Test commands
@@ -165,19 +165,19 @@ test-data-fuseki:
 
 run-docker-redis-test:
 	@ echo -e '$(BUILD_PRINT)Starting redis'
-	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-redis
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file infra/docker-compose-tests.yml --env-file infra/.env up -d rdf-differ-redis
 
 run-docker-api-test:
 	@ echo -e '$(BUILD_PRINT)Starting api'
-	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-api
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file infra/docker-compose-tests.yml --env-file infra/.env up -d rdf-differ-api
 
 run-docker-ui-test:
 	@ echo -e '$(BUILD_PRINT)Starting ui'
-	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-ui
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file infra/docker-compose-tests.yml --env-file infra/.env up -d rdf-differ-ui
 
 run-docker-celery-test:
 	@ echo -e '$(BUILD_PRINT)Starting celery worker'
-	@ docker compose -p rdf-differ-${ENVIRONMENT} --file docker/docker-compose-tests.yml --env-file docker/.env up -d rdf-differ-celery-worker
+	@ docker compose -p rdf-differ-${ENVIRONMENT} --file infra/docker-compose-tests.yml --env-file infra/.env up -d rdf-differ-celery-worker
 
 # it is advisable to run this separately before and not as a dependency of the test to ensure no race condition occurs (tests starting before services are ready)
 start-services-test: | run-docker-fuseki-test run-docker-redis-test run-docker-celery-test run-docker-api-test
@@ -195,6 +195,12 @@ test-unit:
 test-feature:
 	@ echo "$(BUILD_PRINT)Running BDD feature tests"
 	@ poetry run pytest tests/feature -m feature
+
+generate-models:
+	@ echo "$(BUILD_PRINT)Generating Pydantic models from model/schema.yaml (LinkML seam — DEC-6, not yet authoritative)"
+	@ poetry run python -c "import linkml" 2>/dev/null || { echo "$(WARN_PRINT)linkml not installed. Run: poetry add --group model 'linkml>=1.7'  (see model/README.md)"; exit 1; }
+	@ poetry run gen-pydantic model/schema.yaml > rdf_differ/domain/_generated_model.py
+	@ echo "$(MSG_PRINT)Wrote rdf_differ/domain/_generated_model.py (preview — not wired in; see model/README.md)"
 
 lint:
 	@ echo "$(BUILD_PRINT)Linting the code (Ruff)"
