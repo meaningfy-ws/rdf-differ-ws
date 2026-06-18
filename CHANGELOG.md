@@ -41,6 +41,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `entrypoints > services > adapters > domain > utils` plus a utils-isolation contract
   (2 contracts kept). Behaviour-neutral (105/2 unchanged; Celery tasks still register).
   Updated the `celery -A` worker path in the compose files.
+- **CI replaced** with `.github/workflows/ci.yaml` (Python 3.12, Poetry, `make check-quality`,
+  `openspec validate --changes --strict`, unit tests with Redis + Fuseki service containers and
+  the coverage gate, Codecov upload). Added a `deploy.yaml` CD **stub** pending DevOps ratification
+  (DEC-7; legacy publish logic preserved in `.github/disabled-workflows/package.yml`). Removed the
+  Python-3.8 `test.yml`/`package.yml`. Wrote the normative `specs/` deltas for the new capabilities
+  (`project-tooling`, `spec-spine`, `agentic-setup`) so the change validates strictly.
+  (Antora `docs.yaml` deferred with the docs pillar, slice 8.)
 - **Temporary:** vendored a pin-relaxed copy of `eds4jinja2` under `vendor/eds4jinja2/`
   so it installs on 3.12 (upstream 0.2.0 caps pandas/numpy below their cp312 wheels).
   Remove once `eds4jinja2 >= 0.3.0` ships — see the upstream fix spec in the change.

@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  quality-and-tests:
+    name: quality + tests
+    runs-on: ubuntu-22.04
+    services:
+      redis:
+        image: redis:6-alpine
+        ports: ['6379:6379']
+      fuseki:
+        image: stain/jena-fuseki:4.0.0
+        env:
+          ADMIN_PASSWORD: admin
+        ports: ['3030:3030']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Install dependencies
+        run: poetry install --with dev,test,lint
+
+      - name: Quality gate (Ruff + import-linter)
+        run: make check-quality
+
+      - name: Validate the spec spine
+        run: npx -y @fission-ai/openspec@1.4.1 validate --changes --strict
+
+      - name: Unit tests with coverage
+        # The two API-dependent UI tests need a live API service on :4030 — they are
+        # integration tests still living under tests/unit/ (TODO: relocate to
+        # tests/integration/ once the Connexion-3 ASGI serving migration lands).
+        run: |
+          poetry run pytest tests/unit \
+            --deselect tests/unit/test_entrypoints_ui_views.py::test_get_dataset \
+            --deselect tests/unit/test_entrypoints_ui_views.py::test_create_diff_success \
+            --cov=rdf_differ --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          flags: unit
+          fail_ci_if_error: false

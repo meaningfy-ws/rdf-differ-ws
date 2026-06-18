@@ -1,0 +1,21 @@
+name: Deploy (TODO — stub)
+
+# DEC-7 (modernization): the CD pipeline is intentionally a STUB until DevOps ratifies
+# the deployment contract — image build/publish targets, environments, secret wiring and
+# the versioned-image scheme. The legacy release/publish logic is preserved verbatim in
+# .github/disabled-workflows/package.yml for reference when the real pipeline is authored.
+#
+# See openspec/changes/meaningfy-modernization (DEC-7) and the ci-cd-delivery skill.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: deploy (not yet ratified)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Announce stub
+        run: |
+          echo "The deployment pipeline is not yet ratified (modernization DEC-7)."
+          echo "Reference: .github/disabled-workflows/package.yml and the ci-cd-delivery skill."
