@@ -1,0 +1,67 @@
+id: https://meaningfy.ws/rdf-differ/model
+name: rdf-differ-model
+title: RDF Differ domain model
+description: >-
+  LinkML seed for the RDF Differ domain. This mirrors the hand-written domain in
+  `rdf_differ/domain/model.py`, which remains the SOURCE OF TRUTH for now (modernization
+  DEC-6 — the model/ + `make generate-models` seam is scaffolded, generation is a follow-up).
+  When generation is adopted, generated Pydantic models replace the hand-written ones and this
+  schema becomes authoritative.
+license: Apache-2.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  rdfdiffer: https://meaningfy.ws/rdf-differ/model/
+default_prefix: rdfdiffer
+default_range: string
+
+imports:
+  - linkml:types
+
+classes:
+  RDFContentReference:
+    description: An opaque reference to RDF content (placeholder; concrete form TBD).
+
+  DatasetVersion:
+    description: A single named version of a dataset.
+    attributes:
+      version_id:
+        identifier: true
+        required: true
+      description:
+        required: false
+      content_reference:
+        range: RDFContentReference
+        required: false
+
+  VersionsDelta:
+    description: The difference (insertions/deletions) between two dataset versions.
+    attributes:
+      old_version_id:
+        required: true
+      new_version_id:
+        required: true
+      insertions:
+        range: RDFContentReference
+        required: false
+      deletions:
+        range: RDFContentReference
+        required: false
+
+  Dataset:
+    description: A named, versioned RDF dataset and the deltas computed between its versions.
+    attributes:
+      name:
+        required: true
+      uri:
+        required: true
+      description:
+        required: false
+      versions:
+        range: DatasetVersion
+        multivalued: true
+        inlined_as_list: true
+      version_deltas:
+        range: VersionsDelta
+        multivalued: true
+        inlined_as_list: true

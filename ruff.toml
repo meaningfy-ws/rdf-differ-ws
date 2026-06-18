@@ -1,0 +1,41 @@
+# Ruff — formatter + linter, replaces black + isort + flake8 + pylint (decision D4).
+# Config lives in this dedicated root file; pyproject.toml stays minimal.
+
+line-length = 100
+# Matches the project's Python version.
+target-version = "py312"
+
+[lint]
+# Selection set from decision D4.
+select = [
+    "E",      # pycodestyle errors
+    "F",      # pyflakes
+    "I",      # import sorting (isort)
+    "B",      # flake8-bugbear
+    "UP",     # pyupgrade
+    "SIM",    # flake8-simplify
+    "C90",    # mccabe complexity
+    "N",      # pep8-naming conventions
+    "RUF100", # unused noqa directives
+]
+ignore = [
+    "E501",   # line length is enforced by the formatter; avoid double-flagging
+    # --- Deferred legacy debt (modernization). Address in dedicated commits; do NOT
+    #     fold into other changes. Kept out of the gate so `make lint` is green now. ---
+    "B904",   # raise ... from err — traceback chaining; low-value, ~12 legacy sites. TODO: add `from`.
+    "N818",   # exception names without Error suffix (VersionMissing, FusekiException, …) —
+              #   renaming is a public-name change; deferred to avoid behaviour risk.
+]
+
+[lint.mccabe]
+max-complexity = 10
+
+[lint.per-file-ignores]
+# Tests: B008 = pytest fixtures legitimately use callables as argument defaults.
+"tests/**/*.py" = ["B008"]
+# Example: a config module whose method names mirror env-var names.
+# "rdf_differ/__init__.py" = ["N802"]
+
+[format]
+quote-style = "double"
+indent-style = "space"

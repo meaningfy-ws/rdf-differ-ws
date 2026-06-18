@@ -1,0 +1,209 @@
+name: meaningfy
+version: 1
+description: >
+  Meaningfy spine workflow — Shape-Up EPIC (proposal) → normative specs →
+  PLAN (design + tasks). A THIN fork of OpenSpec's spec-driven schema (Q2.1=A):
+  it keeps OpenSpec's native artifact files and lifecycle, and overlays the
+  Meaningfy artifact vocabulary. Meaningfy nouns map onto native files:
+  EPIC ≡ proposal.md (the work shape); PLAN ≡ design.md + tasks.md (the pair the
+  clarity gate scores ≥9/10); normative requirements live in specs/ deltas
+  (RFC-2119 SHALL + Given/When/Then, no EARS — DEC-8). Rich per-artifact rules
+  are deferred until the dogfood gate teaches what the artifacts must carry.
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: The EPIC — the shaped bet (Shape-Up work shape = OpenSpec proposal)
+    template: proposal.md
+    instruction: >
+      Create the EPIC: the shaped bet for this change. In Meaningfy an EPIC *is*
+      the OpenSpec proposal (file `proposal.md`); it carries the Shape-Up work
+      shape that plain OpenSpec lacks, plus the native proposal contract.
+
+
+      Shape-Up sections (the bet):
+
+      - **Appetite**: how much time/risk this is worth (small / medium / large).
+      A fixed appetite, not an estimate.
+
+      - **Why** (the problem): 1-2 sentences — the raw problem or opportunity.
+      Why now? (Header is `## Why` for OpenSpec-native compatibility.)
+
+      - **Solution outline**: the shaped approach at the right altitude — enough
+      to start, not a full design (design.md carries the how).
+
+      - **Key decisions**: the decisions already taken and their rationale. Give
+      each a citeable ID (e.g. `DEC-1`) — this is the golden thread's anchor.
+
+      - **Rabbit-holes**: known traps to avoid; things deliberately left vague.
+
+      - **No-gos**: explicitly out of scope (MANDATORY — an EPIC without no-gos
+      is unshaped).
+
+
+      Native proposal contract (the contract with the specs phase):
+
+      - **What Changes**: bullet list; mark breaking changes **BREAKING**.
+
+      - **Capabilities**:
+        - **New Capabilities**: kebab-case names; each becomes `specs/<name>/spec.md`.
+        - **Modified Capabilities**: existing specs whose REQUIREMENTS change. Check `openspec/specs/` first. Leave empty if no requirement changes.
+      - **Impact**: affected code, APIs, dependencies, systems.
+
+
+      Keep it concise (1-2 pages). Focus on the bet and the "why" — the "how"
+      belongs in design.md. This is the foundation: specs, design, and tasks all
+      build on it.
+    requires: []
+  - id: specs
+    generates: specs/**/*.md
+    description: Normative requirements — RFC-2119 SHALL + Given/When/Then (no EARS)
+    template: spec.md
+    instruction: >
+      Create specification files that define WHAT the system must do. One spec
+      file per capability listed in the EPIC's Capabilities section.
+
+      - New capabilities: use the exact kebab-case name (specs/<capability>/spec.md).
+
+      - Modified capabilities: use the existing spec folder name from
+      openspec/specs/<capability>/.
+
+
+      Delta operations (use ## headers): **ADDED**, **MODIFIED** (full updated
+      content), **REMOVED** (with **Reason** + **Migration**), **RENAMED**
+      (FROM:/TO:).
+
+
+      Format (DEC-8 — native normative layer, NOT EARS):
+
+      - Each requirement: `### Requirement: <name>` then a SHALL/MUST statement
+      (avoid should/may for normative behaviour).
+
+      - Each scenario: `#### Scenario: <name>` with WHEN/THEN. **CRITICAL**:
+      scenarios MUST use exactly 4 hashtags (`####`) or they fail silently.
+
+      - Every requirement MUST have at least one scenario. Specs are testable —
+      each scenario is a candidate `.feature` step (bdd-gherkin owns executable
+      acceptance).
+
+
+      Example:
+
+      ```
+
+      ## ADDED Requirements
+
+
+      ### Requirement: User can export data
+
+      The system SHALL allow users to export their data in CSV format.
+
+
+      #### Scenario: Successful export
+
+      - **WHEN** the user clicks "Export"
+
+      - **THEN** the system downloads a CSV file with all user data
+
+      ```
+    requires:
+      - proposal
+  - id: design
+    generates: design.md
+    description: PLAN (design half) — the HOW, algorithm, decisions, anti-patterns
+    template: design.md
+    instruction: >
+      Create the design document — the first half of the PLAN. In Meaningfy the
+      PLAN is `design.md` + `tasks.md` together; this file carries the technical
+      reasoning, the next carries the executable breakdown. The clarity gate
+      scores the PLAN pair (≥9/10) before `apply`.
+
+
+      Include design.md when any apply: cross-cutting change, new architectural
+      pattern, new dependency, significant data-model change, security/perf/
+      migration complexity, or ambiguity worth resolving before coding.
+
+
+      Sections:
+
+      - **Parent**: cite the EPIC this derives from (golden thread — "cite your
+      parent").
+
+      - **Context**: background, current state, constraints.
+
+      - **Goals / Non-Goals**.
+
+      - **Decisions**: key technical choices with rationale (why X over Y;
+      alternatives considered).
+
+      - **Algorithm / approach**: the shape of the solution; concrete worked
+      examples; explicit **anti-patterns** to avoid.
+
+      - **Error matrix**: failure modes → expected handling.
+
+      - **Risks / Trade-offs**: [Risk] → Mitigation.
+
+      - **Open Questions**: unknowns to resolve (HARD questions get parked here).
+
+
+      Reference the EPIC for motivation and specs for requirements. Architecture
+      and approach, not line-by-line code.
+    requires:
+      - proposal
+  - id: tasks
+    generates: tasks.md
+    description: PLAN (tasks half) — the trackable breakdown the apply phase runs
+    template: tasks.md
+    instruction: >
+      Create the task list — the second half of the PLAN. The apply phase parses
+      the checkbox format to track progress; tasks not using `- [ ]` are not
+      tracked.
+
+
+      **Cite your parent** (golden thread): the first line MUST reference the
+      EPIC id this plan derives from (e.g. `> Derived from EPIC-0N`).
+
+
+      Guidelines:
+
+      - Group related tasks under `## N.` numbered headings.
+
+      - Each task: `- [ ] X.Y <description>` — small enough for one session,
+      ordered by dependency.
+
+      - Close with a **Roadmap** checklist (the task IDs in execution order) and
+      a one-line **Verification** note (how the whole change is checked).
+
+
+      Example:
+
+      ```
+
+      ## 1. Setup
+
+      - [ ] 1.1 Create the module structure
+
+      - [ ] 1.2 Add dependencies
+
+
+      ## 2. Core implementation
+
+      - [ ] 2.1 Implement the export function
+
+      - [ ] 2.2 Add CSV formatting
+      ```
+
+
+      Reference specs for WHAT and design.md for HOW. Each task is verifiable.
+    requires:
+      - specs
+      - design
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    Read the EPIC (proposal.md), the PLAN (design.md + tasks.md), and the specs
+    deltas. Confirm the clarity gate passed (≥9/10) before starting. Work through
+    pending tasks with TDD (superpowers:test-driven-development + cosmic-python
+    layering); mark each complete as you go. Pause on blockers or ambiguity —
+    park HARD questions in design.md's Open Questions, don't guess.

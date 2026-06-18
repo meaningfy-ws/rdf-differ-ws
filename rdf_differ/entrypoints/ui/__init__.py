@@ -17,6 +17,6 @@ from rdf_differ.config import RDF_DIFFER_SECRET_KEY_UI
 app = Flask(__name__)
 
 
-app.config['SECRET_KEY'] = RDF_DIFFER_SECRET_KEY_UI
+app.config["SECRET_KEY"] = RDF_DIFFER_SECRET_KEY_UI
 
-from . import views
+from . import views  # noqa: E402, F401  (Flask pattern: import views after app to register routes)

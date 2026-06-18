@@ -1,15 +1,16 @@
 import logging
+from typing import cast
 
 from celery.result import AsyncResult
 
-from rdf_differ.adapters.celery import celery_worker
 from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ.services.celery import celery_worker
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 
 def flatten_active_tasks(tasks: dict) -> list:
-    return tasks.get(list(tasks.keys())[0], [])
+    return cast(list, tasks.get(list(tasks.keys())[0], []))
 
 
 def retrieve_active_tasks(worker=None) -> dict:
@@ -21,7 +22,7 @@ def retrieve_active_tasks(worker=None) -> dict:
     worker = worker if worker else celery_worker
     inspector = worker.control.inspect()
 
-    return inspector.active()
+    return cast(dict, inspector.active())
 
 
 def retrieve_task(task_id: str, worker=None) -> AsyncResult:

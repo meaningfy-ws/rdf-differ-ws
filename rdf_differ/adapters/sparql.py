@@ -5,7 +5,7 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 
-from SPARQLWrapper import SPARQLWrapper, JSON, POST, BASIC
+from SPARQLWrapper import BASIC, JSON, POST, SPARQLWrapper
 
 
 class SPARQLRunner:
@@ -23,7 +23,13 @@ class SPARQLRunner:
         runner.setReturnFormat(self.result_format)
         return runner.query().convert()
 
-    def execute_update(self, endpoint_url: str, query_text: str, login: str = None, password: str = None):
+    def execute_update(
+        self,
+        endpoint_url: str,
+        query_text: str,
+        login: str | None = None,
+        password: str | None = None,
+    ):
         runner = SPARQLWrapper(endpoint_url)
         runner.setHTTPAuth(BASIC)
         runner.setCredentials(login, password)

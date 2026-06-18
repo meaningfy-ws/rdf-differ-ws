@@ -1,0 +1,17 @@
+# coverage.py configuration — renders to .coveragerc at the repo root.
+# No-src layout: measure the top-level package directly.
+[run]
+branch = True
+source = rdf_differ
+omit = */__init__.py
+
+[report]
+# Coverage gate: the Meaningfy >=80% target (reached by the unit suite).
+fail_under = 80
+show_missing = true
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
+    ^\s+\.\.\.$
+    def __repr__
+    raise NotImplementedError

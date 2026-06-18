@@ -1,0 +1,42 @@
+; =============================================================================
+; Import Linter — Architecture Guardrails for RDF Differ
+; =============================================================================
+; Enforces the cosmic-python layer direction so the architecture cannot erode
+; silently. This is the REAL enforced contract (discovered from the actual import
+; graph in modernization slice 7) — higher layers may import lower, never the
+; reverse. `make check-architecture` (wraps `poetry run lint-imports`) gates it.
+;
+; Direction:  entrypoints -> services -> adapters -> domain -> utils
+;   * entrypoints  : API/UI/CLI glue (Connexion, Flask, Click)
+;   * services     : use-case orchestration (incl. the Celery tasks in services.celery)
+;   * adapters     : Fuseki/SPARQL/Redis/Celery-app infrastructure
+;   * domain       : pure domain model (imports nothing inward)
+;   * utils        : cross-cutting pure helpers (imports only `config`)
+;
+; TODO (deferred): eliminate `rdf_differ.utils` by redistributing its helpers into
+; the proper layer (mostly `adapters`/`domain`); tracked in the modernization EPIC.
+
+[importlinter]
+root_package = rdf_differ
+
+[importlinter:contract:layers]
+name = Cosmic-python layers: entrypoints > services > adapters > domain > utils
+type = layers
+layers =
+    rdf_differ.entrypoints
+    rdf_differ.services
+    rdf_differ.adapters
+    rdf_differ.domain
+    rdf_differ.utils
+
+; utils is a leaf: it must not reach back up into any business layer.
+[importlinter:contract:utils-isolation]
+name = utils must not import business layers
+type = forbidden
+source_modules =
+    rdf_differ.utils
+forbidden_modules =
+    rdf_differ.domain
+    rdf_differ.adapters
+    rdf_differ.services
+    rdf_differ.entrypoints

@@ -1,7 +1,7 @@
 import pathlib
-from pathlib import Path
 
 import pytest
+
 from tests.unit import TEST_DATA
 
 
