@@ -48,8 +48,8 @@ class SKOSHistoryRunner:
         old_version_id: str,
         new_version_id: str,
         basedir: str,
-        filename: str = None,
-        endpoint: str = None,
+        filename: str | None = None,
+        endpoint: str | None = None,
         config_template: str = CONFIG_TEMPLATE,
     ):
         """

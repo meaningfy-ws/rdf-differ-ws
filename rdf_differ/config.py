@@ -12,20 +12,21 @@ Project wide configuration file.
 import os
 from pathlib import Path
 
-from distutils.util import strtobool
+from rdf_differ.utils.conversions import strtobool
 
 TEMPLATES_FOLDER_PATH = Path(__file__).parents[1] / "resources" / "templates"
 
 RDF_DIFFER_FILENAME = os.environ.get("RDF_DIFFER_FILENAME", "file")
 
+_template_location = os.environ.get("RDF_DIFFER_TEMPLATE_LOCATION")
 if (
-    os.environ.get("RDF_DIFFER_TEMPLATE_LOCATION")
-    and Path(os.environ.get("RDF_DIFFER_TEMPLATE_LOCATION")).exists()
-    and any(Path(os.environ.get("RDF_DIFFER_TEMPLATE_LOCATION")).iterdir())
+    _template_location
+    and Path(_template_location).exists()
+    and any(Path(_template_location).iterdir())
 ):
-    APPLICATION_PROFILES_ROOT_FOLDER = os.environ.get("RDF_DIFFER_TEMPLATE_LOCATION")
+    APPLICATION_PROFILES_ROOT_FOLDER = _template_location
 else:
-    APPLICATION_PROFILES_ROOT_FOLDER = TEMPLATES_FOLDER_PATH
+    APPLICATION_PROFILES_ROOT_FOLDER = str(TEMPLATES_FOLDER_PATH)
 
 RDF_DIFFER_UI_PORT = os.environ.get("RDF_DIFFER_UI_PORT", 8030)
 

@@ -1,15 +1,17 @@
+from typing import cast
+
 import redis
 
 from rdf_differ.config import RDF_DIFFER_REDIS_LOCATION, RDF_DIFFER_REDIS_PORT
 
 redis_client = redis.Redis(
-    host=RDF_DIFFER_REDIS_LOCATION.split("redis://")[1], port=RDF_DIFFER_REDIS_PORT
+    host=RDF_DIFFER_REDIS_LOCATION.split("redis://")[1], port=int(RDF_DIFFER_REDIS_PORT)
 )
 
 REVOKING_QUEUE = "revoke"
 
 
-def push_task_to_queue(task_id: str, queue: str = REVOKING_QUEUE, client: redis.Redis = None):
+def push_task_to_queue(task_id: str, queue: str = REVOKING_QUEUE, client: redis.Redis | None = None):
     """
     used for adding a task's id to a queue to be "undone" or cancelled.
 
@@ -22,7 +24,7 @@ def push_task_to_queue(task_id: str, queue: str = REVOKING_QUEUE, client: redis.
 
 
 def remove_task_from_queue(
-    task_id: str, queue: str = REVOKING_QUEUE, client: redis.Redis = None
+    task_id: str, queue: str = REVOKING_QUEUE, client: redis.Redis | None = None
 ) -> bool:
     """
     "cancel the cancellation" of a task from the specified queue
@@ -38,7 +40,7 @@ def remove_task_from_queue(
 
 
 def task_exists_in_queue(
-    task_id: str, queue: str = REVOKING_QUEUE, client: redis.Redis = None
+    task_id: str, queue: str = REVOKING_QUEUE, client: redis.Redis | None = None
 ) -> bool:
     """
     check if task is in specified queue
@@ -49,6 +51,6 @@ def task_exists_in_queue(
     """
     client = client if client else redis_client
 
-    queue_list = client.lrange(queue, 0, -1)
+    queue_list = cast(list, client.lrange(queue, 0, -1))
 
     return any(item.decode() == task_id for item in queue_list)

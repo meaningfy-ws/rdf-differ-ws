@@ -14,6 +14,7 @@ import tempfile
 from contextlib import contextmanager
 from json import loads
 from pathlib import Path
+from typing import cast
 from uuid import uuid4
 
 import shortuuid
@@ -120,8 +121,8 @@ def save_files(old_file: FileStorage, new_file: FileStorage, location: str = "")
     location_to_save = Path(location) / str(uuid4())
     location_to_save.mkdir()
     try:
-        saved_old_file = build_secure_filename(str(location_to_save), old_file.filename)
-        saved_new_file = build_secure_filename(str(location_to_save), new_file.filename)
+        saved_old_file = build_secure_filename(str(location_to_save), old_file.filename or "")
+        saved_new_file = build_secure_filename(str(location_to_save), new_file.filename or "")
 
         old_file.save(str(saved_old_file))
         new_file.save(str(saved_new_file))
@@ -144,8 +145,8 @@ def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
 
     temp_dir = tempfile.TemporaryDirectory()
     try:
-        saved_old_file = build_secure_filename(temp_dir.name, old_file.filename)
-        saved_new_file = build_secure_filename(temp_dir.name, new_file.filename)
+        saved_old_file = build_secure_filename(temp_dir.name, old_file.filename or "")
+        saved_new_file = build_secure_filename(temp_dir.name, new_file.filename or "")
 
         old_file.save(saved_old_file)
         new_file.save(saved_new_file)
@@ -168,15 +169,15 @@ INPUT_MIME_TYPES = {
 }
 
 
-def list_folders_from_path(path: pathlib.Path):
+def list_folders_from_path(path: pathlib.Path) -> list[str]:
     return [x for x in os.listdir(path) if os.path.isdir(os.path.join(path, x))]
 
 
-def list_files_from_path(path: pathlib.Path):
+def list_files_from_path(path: pathlib.Path) -> list[str]:
     return [x for x in os.listdir(path) if os.path.isfile(os.path.join(path, x))]
 
 
-def list_files_paths_from_path(path: pathlib.Path):
+def list_files_paths_from_path(path: pathlib.Path) -> list[str]:
     """
     Method to list file names from a given path
         :param path:
@@ -185,7 +186,7 @@ def list_files_paths_from_path(path: pathlib.Path):
     return [str(path / x) for x in os.listdir(path) if os.path.isfile(os.path.join(path, x))]
 
 
-def list_folder_paths_from_path(path: pathlib.Path):
+def list_folder_paths_from_path(path: pathlib.Path) -> list[str]:
     """
     Method to list folder paths from a given path
         :param path:
@@ -205,12 +206,13 @@ def build_dataset_reports_location(dataset_name: str, reports_location: str) -> 
     return str(Path(reports_location) / dataset_name)
 
 
-def read_meta_file(report_base_location: str, meta_file_name: str = "meta.json") -> dict:
+def read_meta_file(report_base_location: str | Path, meta_file_name: str = "meta.json") -> dict:
     """
     method to read data from meta file
     :param report_base_location: report location
     :param meta_file_name: custom meta name, defaults to "meta.json"
     :return: contents of the meta file
     """
-    logger.debug(loads((Path(report_base_location) / meta_file_name).read_text()))
-    return loads((Path(report_base_location) / meta_file_name).read_text())
+    content = cast(dict, loads((Path(report_base_location) / meta_file_name).read_text()))
+    logger.debug(content)
+    return content

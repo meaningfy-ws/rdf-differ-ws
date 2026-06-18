@@ -24,7 +24,11 @@ class SPARQLRunner:
         return runner.query().convert()
 
     def execute_update(
-        self, endpoint_url: str, query_text: str, login: str = None, password: str = None
+        self,
+        endpoint_url: str,
+        query_text: str,
+        login: str | None = None,
+        password: str | None = None,
     ):
         runner = SPARQLWrapper(endpoint_url)
         runner.setHTTPAuth(BASIC)

@@ -16,6 +16,7 @@ from abc import ABC, abstractmethod
 from contextlib import suppress
 from json import loads
 from pathlib import Path
+from typing import cast
 from urllib.parse import urljoin
 
 from requests.auth import HTTPBasicAuth
@@ -312,8 +313,11 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :param sparql_query: query to be executed
         :return: SPARQLWrapper query response
         """
-        return self.sparql_client.execute(
-            endpoint_url=self.make_sparql_endpoint(dataset_name), query_text=sparql_query
+        return cast(
+            dict,
+            self.sparql_client.execute(
+                endpoint_url=self.make_sparql_endpoint(dataset_name), query_text=sparql_query
+            ),
         )
 
     def execute_update_query(self, dataset_name: str, sparql_query: str) -> dict:
@@ -324,11 +328,14 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         :param sparql_query: query to be executed
         :return: SPARQLWrapper query response
         """
-        return self.sparql_client.execute_update(
-            endpoint_url=self.make_sparql_update_endpoint(dataset_name),
-            query_text=sparql_query,
-            login=config.RDF_DIFFER_FUSEKI_USERNAME,
-            password=config.RDF_DIFFER_FUSEKI_PASSWORD,
+        return cast(
+            dict,
+            self.sparql_client.execute_update(
+                endpoint_url=self.make_sparql_update_endpoint(dataset_name),
+                query_text=sparql_query,
+                login=config.RDF_DIFFER_FUSEKI_USERNAME,
+                password=config.RDF_DIFFER_FUSEKI_PASSWORD,
+            ),
         )
 
     def make_sparql_endpoint(self, dataset_name: str) -> str:

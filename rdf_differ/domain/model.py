@@ -30,7 +30,9 @@ class DatasetVersion:
     description: str | None
     content_reference: RDFContentReference | None
 
-    def __eq__(self, other: "DatasetVersion"):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, DatasetVersion):
+            return NotImplemented
         return self.version_id == other.version_id
 
 
@@ -41,7 +43,9 @@ class VersionsDelta:
     insertions: RDFContentReference | None
     deletions: RDFContentReference | None
 
-    def __eq__(self, other: "VersionsDelta"):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, VersionsDelta):
+            return NotImplemented
         return (
             self.old_version_id == other.old_version_id
             and self.new_version_id == other.new_version_id
@@ -53,8 +57,8 @@ class Dataset:
         self.name = name
         self.uri = uri
         self.description = description
-        self.versions = list()
-        self.version_deltas = list()
+        self.versions: list[DatasetVersion] = []
+        self.version_deltas: list[VersionsDelta] = []
 
     def add_version(self, dataset_version: DatasetVersion):
         if self._version_exists(dataset_version.version_id):

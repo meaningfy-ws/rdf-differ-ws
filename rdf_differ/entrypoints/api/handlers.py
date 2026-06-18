@@ -6,10 +6,10 @@
 # Email: coslet.mihai@gmail.com
 import logging
 from json import dumps
+from typing import cast
 
 import requests
-from distutils.util import strtobool
-from flask import send_file
+from flask import Response, send_file
 from SPARQLWrapper.SPARQLExceptions import EndPointNotFound
 from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import (
@@ -29,16 +29,21 @@ from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.services.celery import async_create_diff, async_generate_report
 from rdf_differ.services.queue import kill_task
 from rdf_differ.services.report_handling import (
-    build_dataset_reports_location,
     find_dataset_name_by_id,
     get_all_reports,
-    read_meta_file,
     remove_all_reports,
     report_exists,
     retrieve_report,
 )
 from rdf_differ.services.tasks import flatten_active_tasks, retrieve_active_tasks, retrieve_task
-from rdf_differ.utils.file_utils import build_unique_name, check_dataset_name_validity, save_files
+from rdf_differ.utils.conversions import strtobool
+from rdf_differ.utils.file_utils import (
+    build_dataset_reports_location,
+    build_unique_name,
+    check_dataset_name_validity,
+    read_meta_file,
+    save_files,
+)
 
 """
 The definition of the API endpoints
@@ -94,9 +99,9 @@ def get_diff(dataset_id: str) -> tuple:
     try:
         dataset = FusekiDiffAdapter(
             config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests, sparql_client=SPARQLRunner()
-        ).dataset_description(meta.get("dataset_name"))
+        ).dataset_description(cast(str, meta.get("dataset_name")))
         dataset["available_reports"] = get_all_reports(
-            meta.get("dataset_name"), config.RDF_DIFFER_REPORTS_DB
+            cast(str, meta.get("dataset_name")), config.RDF_DIFFER_REPORTS_DB
         )
         logger.debug(f"finish get diff for {dataset_id} endpoint")
         return dataset, 200
@@ -134,25 +139,25 @@ def create_diff(
         config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests, sparql_client=SPARQLRunner()
     )
 
-    if not check_dataset_name_validity(body.get("dataset_name")):
+    if not check_dataset_name_validity(cast(str, body.get("dataset_name"))):
         raise Conflict(
             f"<{body.get('dataset_name')}> name is not acceptable is not empty."
             "Dataset name can contain only ASCII letters, numbers, _, :, and -"
         )  # 409
 
     body["original_name"] = body.get("dataset_name")
-    dataset_name = build_unique_name(body.get("dataset_name"))
+    dataset_name = build_unique_name(cast(str, body.get("dataset_name")))
     body["dataset_name"] = dataset_name
     body["old_version_file"] = old_version_file_content.filename
     body["new_version_file"] = new_version_file_content.filename
 
     try:
-        dataset = fuseki_adapter.dataset_description(dataset_name=body.get("dataset_name"))
+        dataset = fuseki_adapter.dataset_description(dataset_name=cast(str, body.get("dataset_name")))
         # if description is {} (empty) then we can create the diff
         can_create = not bool(dataset)
         logger.debug(f"dataset exists. empty: {not can_create}")
     except EndPointNotFound:
-        fuseki_adapter.create_dataset(dataset_name=body.get("dataset_name"))
+        fuseki_adapter.create_dataset(dataset_name=cast(str, body.get("dataset_name")))
         can_create = True
         logger.info("creating dataset")
 
@@ -266,7 +271,9 @@ def build_report(body: dict) -> tuple:
         }, 406
 
 
-def get_report(dataset_id: str, application_profile: str, template_type: str) -> tuple:
+def get_report(
+    dataset_id: str, application_profile: str, template_type: str
+) -> tuple | Response:
     """
         Get a dataset diff report
     :param dataset_id: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset

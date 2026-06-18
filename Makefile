@@ -219,12 +219,8 @@ check-architecture:
 	@ echo "$(BUILD_PRINT)Checking architecture boundaries (import-linter)"
 	@ poetry run lint-imports --config .importlinter
 
-# Aggregate quality gate. NOTE (modernization): `typecheck` is NOT in the gate yet
-# — the legacy code has a ~62-error mypy baseline to burn down incrementally
-# (run `make typecheck` to see it). `check-architecture` becomes green after the
-# slice-7 fix of the adapters->services violation. Add `typecheck` here once the
-# type-debt is cleared.
-check-quality: lint check-architecture
+# Aggregate quality gate: lint + types + architecture (all green).
+check-quality: lint typecheck check-architecture
 
 check-all: check-quality
 	@ $(MAKE) test

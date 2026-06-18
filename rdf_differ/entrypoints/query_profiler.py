@@ -107,7 +107,7 @@ def summarise_results(results: Iterable[QueryRunResult]) -> dict:
     items = list(results)
     completed = [item for item in items if item.duration is not None]
 
-    summary = defaultdict(lambda: None)
+    summary: defaultdict[str, object] = defaultdict(lambda: None)
 
     summary["query_count"] = len(items)
 

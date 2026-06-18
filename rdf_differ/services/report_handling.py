@@ -4,7 +4,6 @@ import shutil
 from json import dumps
 from pathlib import Path
 
-from distutils.dir_util import copy_tree
 from eds4jinja2.builders.report_builder import ReportBuilder
 from werkzeug.exceptions import UnprocessableEntity
 
@@ -56,7 +55,7 @@ def build_report(
     }
     logger.debug(f"template location {template_location}")
 
-    copy_tree(template_location, temp_dir)
+    shutil.copytree(template_location, temp_dir, dirs_exist_ok=True)
 
     try:
         with open(Path(temp_dir) / "config.json") as config_file:
@@ -296,6 +295,6 @@ def find_dataset_name_by_id(dataset_id: str, reports_location: str = RDF_DIFFER_
     for location in list_folder_paths_from_path(Path(reports_location)):
         content = read_meta_file(Path(reports_location) / location)
         if content.get("uid", None) == dataset_id:
-            return content.get("dataset_name")
+            return str(content.get("dataset_name", ""))
 
     return ""

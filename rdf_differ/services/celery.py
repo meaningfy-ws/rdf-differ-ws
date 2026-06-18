@@ -2,6 +2,7 @@ import logging
 import shutil
 import tempfile
 from pathlib import Path
+from typing import cast
 
 import requests
 from celery import Celery
@@ -11,12 +12,12 @@ from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REDIS_SERVICE
 from rdf_differ.services.report_handling import (
-    build_dataset_reports_location,
     build_report,
     generate_meta_file,
     save_report,
 )
 from rdf_differ.services.time import get_timestamp
+from rdf_differ.utils.file_utils import build_dataset_reports_location
 
 celery_worker = Celery(
     "rdf-differ-tasks", broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE
@@ -60,10 +61,10 @@ def async_create_diff(
     try:
         fuseki_adapter.create_diff(
             dataset=dataset_id,
-            dataset_uri=body.get("dataset_uri"),
+            dataset_uri=cast(str, body.get("dataset_uri")),
             temp_dir=Path(cleanup_location),
-            old_version_id=body.get("old_version_id"),
-            new_version_id=body.get("new_version_id"),
+            old_version_id=cast(str, body.get("old_version_id")),
+            new_version_id=cast(str, body.get("new_version_id")),
             old_version_file=Path(old_version_file),
             new_version_file=Path(new_version_file),
         )

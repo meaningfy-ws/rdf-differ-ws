@@ -1,4 +1,5 @@
 import pathlib
+from typing import cast
 
 from rdf_differ.config import APPLICATION_PROFILES_ROOT_FOLDER
 from rdf_differ.utils.file_utils import dir_exists, list_files_from_path, list_folders_from_path
@@ -14,8 +15,8 @@ class ApplicationProfileManager:
 
     def __init__(
         self,
-        application_profile: str = None,
-        template_type: str = None,
+        application_profile: str | None = None,
+        template_type: str | None = None,
         root_folder: pathlib.Path = pathlib.Path(APPLICATION_PROFILES_ROOT_FOLDER),
     ):
         self.root_folder = root_folder
@@ -29,7 +30,7 @@ class ApplicationProfileManager:
         """
         if not dir_exists(self.root_folder):
             raise FileNotFoundError(f"The root folder '{self.root_folder}' is not found.")
-        return self.root_folder / self.application_profile
+        return self.root_folder / cast(str, self.application_profile)
 
     def list_aps(self) -> list[str]:
         """
@@ -104,6 +105,6 @@ class ApplicationProfileManager:
         """
         if self.template_type not in self.list_template_variants():
             raise LookupError(f"the template type named '{self.template_type}' is not found.")
-        template_folder_path = self.get_template_variants_folder() / self.template_type
+        template_folder_path = self.get_template_variants_folder() / cast(str, self.template_type)
 
         return template_folder_path

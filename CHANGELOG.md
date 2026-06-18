@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **mypy is now green and gating** (`make check-quality` runs lint + types + architecture). Fixed
+  all ~52 type errors: `Optional` defaults, missing annotations, `__eq__(self, other: object)`,
+  `cast(...)` for untyped third-party returns, and removed the re-export indirection (consumers now
+  import `build_dataset_reports_location` / `read_meta_file` from `utils.file_utils`). Per-module
+  `ignore_missing_imports` for the stub-less libs (celery, connexion, flask_wtf, wtforms, pytz,
+  requests, SPARQLWrapper, eds4jinja2).
+- **Removed `distutils`** (removed from Python 3.12; it was working only via a fragile setuptools
+  shim): `distutils.util.strtobool` → `rdf_differ.utils.conversions.strtobool`;
+  `distutils.dir_util.copy_tree` → `shutil.copytree(..., dirs_exist_ok=True)`.
+
 - **Infrastructure modernized and moved `docker/` → `infra/`** (compose, Dockerfiles, nginx, traefik,
   redis.conf; Makefile/README/compose references updated). Dockerfiles rebuilt on **Python 3.12 +
   Poetry + non-root**, installing from the lockfile (the old `pip -r requirements` is gone).
