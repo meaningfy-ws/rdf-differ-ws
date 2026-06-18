@@ -12,6 +12,7 @@ import re
 import shutil
 import tempfile
 from contextlib import contextmanager
+from json import loads
 from pathlib import Path
 from uuid import uuid4
 
@@ -191,3 +192,25 @@ def list_folder_paths_from_path(path: pathlib.Path):
         The path to be checked on.
     """
     return [str(path / x) for x in os.listdir(path) if os.path.isdir(os.path.join(path, x))]
+
+
+def build_dataset_reports_location(dataset_name: str, reports_location: str) -> str:
+    """
+    build path for report location of given dataset
+
+    :param dataset_name: dataset name
+    :param reports_location: which file system location to use to perform the action
+    :return:
+    """
+    return str(Path(reports_location) / dataset_name)
+
+
+def read_meta_file(report_base_location: str, meta_file_name: str = "meta.json") -> dict:
+    """
+    method to read data from meta file
+    :param report_base_location: report location
+    :param meta_file_name: custom meta name, defaults to "meta.json"
+    :return: contents of the meta file
+    """
+    logger.debug(loads((Path(report_base_location) / meta_file_name).read_text()))
+    return loads((Path(report_base_location) / meta_file_name).read_text())

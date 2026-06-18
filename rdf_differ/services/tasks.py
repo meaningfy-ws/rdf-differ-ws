@@ -2,8 +2,8 @@ import logging
 
 from celery.result import AsyncResult
 
-from rdf_differ.adapters.celery import celery_worker
 from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ.services.celery import celery_worker
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 

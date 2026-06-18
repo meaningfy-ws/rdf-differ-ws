@@ -21,12 +21,12 @@ from werkzeug.exceptions import (
 )
 
 from rdf_differ import config
-from rdf_differ.adapters.celery import async_create_diff, async_generate_report
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.redis import push_task_to_queue, redis_client
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.ap_manager import ApplicationProfileManager
+from rdf_differ.services.celery import async_create_diff, async_generate_report
 from rdf_differ.services.queue import kill_task
 from rdf_differ.services.report_handling import (
     build_dataset_reports_location,

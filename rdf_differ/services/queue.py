@@ -3,11 +3,11 @@ import logging
 import requests
 
 from rdf_differ import config
-from rdf_differ.adapters.celery import CELERY_CREATE_DIFF, CELERY_GENERATE_REPORT
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter
 from rdf_differ.adapters.redis import push_task_to_queue, task_exists_in_queue
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ.services.celery import CELERY_CREATE_DIFF, CELERY_GENERATE_REPORT
 from rdf_differ.services.report_handling import remove_report
 from rdf_differ.services.tasks import revoke_task
 

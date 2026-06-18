@@ -30,7 +30,7 @@ from rdf_differ.adapters import (
 )
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from rdf_differ.config import RDF_DIFFER_REPORTS_DB
-from rdf_differ.services.report_handling import build_dataset_reports_location, read_meta_file
+from rdf_differ.utils.file_utils import build_dataset_reports_location, read_meta_file
 
 
 class AbstractDiffAdapter(ABC):

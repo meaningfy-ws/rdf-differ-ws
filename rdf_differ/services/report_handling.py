@@ -1,7 +1,7 @@
 import json
 import logging
 import shutil
-from json import dumps, loads
+from json import dumps
 from pathlib import Path
 
 from distutils.dir_util import copy_tree
@@ -11,11 +11,13 @@ from werkzeug.exceptions import UnprocessableEntity
 from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_META_NAME, RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.time import get_timestamp
 from rdf_differ.utils.file_utils import (
+    build_dataset_reports_location,
     copy_file_to_destination,
     dir_exists,
     dir_is_empty,
     empty_directory,
     list_folder_paths_from_path,
+    read_meta_file,
 )
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
@@ -70,17 +72,6 @@ def build_report(
     report_builder = ReportBuilder(target_path=temp_dir, additional_config=additional_config)
     report_builder.make_document()
     return Path(str(temp_dir)) / f"output/{config_content['template']}"
-
-
-def build_dataset_reports_location(dataset_name: str, reports_location: str) -> str:
-    """
-    build path for report location of given dataset
-
-    :param dataset_name: dataset name
-    :param reports_location: which file system location to use to perform the action
-    :return:
-    """
-    return str(Path(reports_location) / dataset_name)
 
 
 def build_report_location(
@@ -293,17 +284,6 @@ def generate_meta_file(
     meta_file = Path(reports_location) / RDF_DIFFER_META_NAME
     meta_file.write_text(dumps(meta_data))
     return meta_data
-
-
-def read_meta_file(report_base_location: str, meta_file_name: str = "meta.json") -> dict:
-    """
-    method to read data from meta file
-    :param report_base_location: report location
-    :param meta_file_name: custom meta name, defaults to "meta.json"
-    :return: contents of the meta file
-    """
-    logger.debug(loads((Path(report_base_location) / meta_file_name).read_text()))
-    return loads((Path(report_base_location) / meta_file_name).read_text())
 
 
 def find_dataset_name_by_id(dataset_id: str, reports_location: str = RDF_DIFFER_REPORTS_DB) -> str:

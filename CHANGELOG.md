@@ -33,6 +33,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   measured; the ≥80% target with new tests is deferred). Deduped two shadowed test
   names (F811). No new tests added. (TODO: reclassify the API-dependent UI tests from
   `unit/` into `integration/`.)
+- **Architecture boundaries fixed and enforced** (import-linter): the Celery task module
+  moved `adapters/celery.py → services/celery.py` (task orchestration is the services
+  layer); the pure path/IO helpers `build_dataset_reports_location` + `read_meta_file`
+  moved to `utils/file_utils.py` (re-exported from `report_handling` for compatibility),
+  so `adapters` no longer imports `services`. `.importlinter` now enforces the real chain
+  `entrypoints > services > adapters > domain > utils` plus a utils-isolation contract
+  (2 contracts kept). Behaviour-neutral (105/2 unchanged; Celery tasks still register).
+  Updated the `celery -A` worker path in the compose files.
 - **Temporary:** vendored a pin-relaxed copy of `eds4jinja2` under `vendor/eds4jinja2/`
   so it installs on 3.12 (upstream 0.2.0 caps pandas/numpy below their cp312 wheels).
   Remove once `eds4jinja2 >= 0.3.0` ships — see the upstream fix spec in the change.
