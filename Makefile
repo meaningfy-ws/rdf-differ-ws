@@ -42,14 +42,12 @@ else
 endif
 
 install-python-dependencies:
-	@ echo "$(BUILD_PRINT)Installing the production requirements"
-	@ python -m pip install --upgrade pip
-	@ python -m pip install -r requirements/prod.txt
+	@ echo "$(BUILD_PRINT)Installing the runtime dependencies (Poetry)"
+	@ poetry install --only main
 
 install-python-dependencies-dev:
-	@ echo "$(BUILD_PRINT)Installing the development requirements"
-	@ python -m pip install --upgrade pip
-	@ python -m pip install -r requirements/dev.txt
+	@ echo "$(BUILD_PRINT)Installing all dependency groups (Poetry)"
+	@ poetry install --with dev,test,lint,docs
 
 setup-local-fuseki:
 	@ ./bash/setup_fuseki.sh
@@ -188,11 +186,11 @@ start-services-test: | run-docker-fuseki-test run-docker-redis-test run-docker-c
 
 test: | install-python-dependencies-dev test-data-fuseki
 	@ echo "$(BUILD_PRINT)Running tests using Docker services"
-	@ pytest
+	@ poetry run pytest
 
 lint:
-	@ echo "$(BUILD_PRINT)Linting the code"
-	@ flake8 || true
+	@ echo "$(BUILD_PRINT)Linting the code (Ruff)"
+	@ poetry run ruff check rdf_differ tests
 
 #-----------------------------------------------------------------------------
 # Template commands

@@ -1,0 +1,90 @@
+# Minimal pyproject.toml — Meaningfy standard (no-src, config-in-root).
+# Only [project], [tool.poetry], [dependency-groups], [build-system] live here.
+# Every TOOL is configured in its own dedicated root file:
+#   ruff.toml · mypy.ini · pytest.ini · .coveragerc · .importlinter
+#   .pre-commit-config.yaml · sonar-project.properties
+# The single source of truth for the version is the root VERSION file; keep the
+# `version` field below in sync.
+
+[project]
+name = "rdf-differ"
+version = "0.1.0"
+description = "Diff calculator for RDF datasets (SKOS/OWL aware) — REST API, UI, worker and CLI"
+authors = [
+    { name = "Meaningfy", email = "hi@meaningfy.ws" }
+]
+maintainers = [
+    { name = "Meaningfy", email = "hi@meaningfy.ws" }
+]
+license = { text = "Apache-2.0" }
+requires-python = ">=3.12,<4.0"
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Natural Language :: English",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+]
+dependencies = [
+    "click>=8.1,<9",
+    "SPARQLWrapper>=2.0,<3",
+    "rdflib>=7.1,<8",
+    "requests>=2.32,<3",
+    "Flask>=3.1,<4",
+    "Flask-WTF>=1.2,<2",
+    "connexion[flask,swagger-ui,uvicorn]>=3.2,<4",
+    # eds4jinja2 is enriched as a vendored path dependency in [tool.poetry.dependencies]
+    # (temporary 3.12 workaround — see vendor/eds4jinja2/VENDORED.md). No PyPI version pin here.
+    "eds4jinja2",
+    "shortuuid>=1.0,<2",
+    "celery>=5.4,<6",
+    "redis>=5,<6",
+    "flower>=2.0,<3",
+    "gunicorn>=22,<27",
+]
+
+[dependency-groups]
+# PEP 735 dependency groups.
+dev = [
+    "pre-commit==4.6.0",
+]
+test = [
+    "pytest~=7.4.3",
+    "coverage~=7.3.3",
+    "pytest-cov~=4.1.0",
+    "pytest-bdd~=7.0.1",
+    "beautifulsoup4~=4.12.2",
+]
+lint = [
+    "ruff==0.15.11",
+    "mypy==1.20.2",
+    "import-linter==2.11",
+    "radon==6.0.1",
+    "xenon==0.9.3",
+]
+docs = [
+    "myst-parser~=2.0.0",
+    "Sphinx~=7.1.2",
+    "sphinxcontrib-apidoc~=0.4.0",
+]
+
+[tool.poetry]
+# No-src layout: include the top-level package directly, NO `from = "src"`.
+packages = [
+    { include = "rdf_differ" }
+]
+
+[tool.poetry.dependencies]
+# Enrich the eds4jinja2 entry from [project.dependencies] as a vendored path dependency.
+# TEMPORARY 3.12 workaround until eds4jinja2 >= 0.3.0 ships — see
+# openspec/changes/meaningfy-modernization/eds4jinja2-upstream-fix.md
+eds4jinja2 = { path = "vendor/eds4jinja2", develop = false }
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# NOTE: intentionally no [tool.ruff], [tool.mypy], [tool.pytest], [tool.coverage]
+# sections here — all tool config lives in dedicated root files (see header).

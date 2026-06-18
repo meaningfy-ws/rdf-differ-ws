@@ -13,3 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   projected the OpenSpec spine; adding root tool configs (Ruff, mypy, coverage,
   import-linter, pre-commit, Sonar). Tooling/structure only — no runtime
   behaviour change. See `openspec/changes/meaningfy-modernization/`.
+- **Packaging migrated to Poetry** with PEP 621 `[project]` + `[dependency-groups]`;
+  `requirements/*.txt` and `setup.cfg` retired; pytest config moved to `pytest.ini`.
+- **BREAKING (install flow):** install via `poetry install` (or `make install`),
+  no longer `pip install -r requirements/...`.
+- **BREAKING (runtime baseline):** Python floor raised to **3.12**; dependencies
+  bumped to current majors — Flask 3, Connexion 3 (API app construction updated),
+  Celery 5.4+, rdflib 7.1+, pandas 2.2+, etc.
+- Dropped **Flask-Bootstrap** (unused; UI uses Materialize CSS via CDN).
+- **Temporary:** vendored a pin-relaxed copy of `eds4jinja2` under `vendor/eds4jinja2/`
+  so it installs on 3.12 (upstream 0.2.0 caps pandas/numpy below their cp312 wheels).
+  Remove once `eds4jinja2 >= 0.3.0` ships — see the upstream fix spec in the change.

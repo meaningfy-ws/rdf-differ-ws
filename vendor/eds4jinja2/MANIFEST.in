@@ -1,0 +1,3 @@
+recursive-include rdf_report_templates/ *
+graft rdf_report_templates
+global-exclude *.pyc *$py.class
