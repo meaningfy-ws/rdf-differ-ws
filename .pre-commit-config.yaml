@@ -1,0 +1,14 @@
+# pre-commit hooks — renders to .pre-commit-config.yaml at the repo root.
+# Ruff only (decision: hooks run the fast linter/formatter; mypy + import-linter
+# run in CI and via `make check-quality`, not on every commit).
+# Install once with: poetry run pre-commit install
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Keep in sync with the ruff pin in pyproject.toml [dependency-groups].lint
+    rev: v0.15.0
+    hooks:
+      # Lint with auto-fix.
+      - id: ruff-check
+        args: [--fix]
+      # Format.
+      - id: ruff-format

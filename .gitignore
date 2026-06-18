@@ -129,6 +129,10 @@ dmypy.json
 .idea/
 .vscode
 
+# Modernization tooling caches
+.ruff_cache/
+.import_linter_cache/
+
 # projest related
 #/fuseki
 data-dev/

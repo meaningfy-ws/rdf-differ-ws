@@ -1,0 +1,29 @@
+; =============================================================================
+; Import Linter — Architecture Guardrails for RDF Differ
+; =============================================================================
+; Enforces the cosmic-python layer direction so the architecture cannot erode
+; silently.
+;
+; NOTE (modernization slice 1): this is the PERMISSIVE placeholder contract —
+; all layers parenthesised (optional) so it is green on the current tree. Slice 7
+; discovers the real import graph and replaces this with the proper per-layer
+; forbidden-import contracts (and addresses rdf_differ/utils/ placement).
+;
+; Run with:  make check-architecture   (wraps `poetry run lint-imports`)
+
+[importlinter]
+root_package = rdf_differ
+
+; -----------------------------------------------------------------------------
+; SINGLE-COMPONENT layout — the four cosmic-python layers.
+; Direction:  entrypoints -> services -> adapters -> domain
+; All four are parenthesised so the contract holds before the rules are hardened.
+; -----------------------------------------------------------------------------
+[importlinter:contract:layers]
+name = Cosmic-python layers: entrypoints > services > adapters > domain
+type = layers
+layers =
+    (rdf_differ.entrypoints)
+    (rdf_differ.services)
+    (rdf_differ.adapters)
+    (rdf_differ.domain)

@@ -1,0 +1,19 @@
+# coverage.py configuration — renders to .coveragerc at the repo root.
+# No-src layout: measure the top-level package directly.
+[run]
+branch = True
+source = rdf_differ
+omit = */__init__.py
+
+[report]
+# Slice 1 (modernization): gate disabled (0) so it never breaks the existing
+# `pytest --cov` driven by setup.cfg. Slice 6 raises this to the measured level;
+# reaching >=80% with new tests is a deferred follow-up task.
+fail_under = 0
+show_missing = true
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
+    ^\s+\.\.\.$
+    def __repr__
+    raise NotImplementedError

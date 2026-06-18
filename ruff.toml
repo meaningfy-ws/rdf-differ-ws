@@ -1,0 +1,36 @@
+# Ruff — formatter + linter, replaces black + isort + flake8 + pylint (decision D4).
+# Config lives in this dedicated root file; pyproject.toml stays minimal.
+
+line-length = 100
+# Matches the project's Python version.
+target-version = "py312"
+
+[lint]
+# Selection set from decision D4.
+select = [
+    "E",      # pycodestyle errors
+    "F",      # pyflakes
+    "I",      # import sorting (isort)
+    "B",      # flake8-bugbear
+    "UP",     # pyupgrade
+    "SIM",    # flake8-simplify
+    "C90",    # mccabe complexity
+    "N",      # pep8-naming conventions
+    "RUF100", # unused noqa directives
+]
+ignore = [
+    "E501",   # line length is enforced by the formatter; avoid double-flagging
+]
+
+[lint.mccabe]
+max-complexity = 10
+
+[lint.per-file-ignores]
+# Justified, scoped exceptions only. Example: a config module whose method names
+# are UPPER_SNAKE_CASE to mirror environment-variable names.
+# "rdf_differ/__init__.py" = ["N802"]
+# "tests/**/*.py" = ["N802"]
+
+[format]
+quote-style = "double"
+indent-style = "space"
