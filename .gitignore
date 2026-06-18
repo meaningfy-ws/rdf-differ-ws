@@ -151,3 +151,11 @@ diff-output
 # test reports
 test-results*.xml
 lint_report.txt
+
+# Local secret env files — commit ONLY *.example templates (never real values)
+.env
+bash/.env
+!*.example
+
+# Stale Enterprise-Architect HTML export scratch
+temp/
