@@ -11,6 +11,23 @@ migration and self-review are in `design.md`.
 > **For agentic workers:** use superpowers:subagent-driven-development (fresh subagent per task,
 > review between tasks) or superpowers:executing-plans.
 
+## Implementation status (2026-06-19)
+
+**Implemented & green** (≈100 new tests; `make check-quality` passes — ruff, mypy, 4 import-linter
+contracts): Tasks **1–12, 4b, 14, 15** — the full module (pydantic domain config/URIs/delta-pairs/
+blank-node strategy/constants/errors/results; `GraphStorePort` + parametrised queries; `PyoxigraphStore`,
+`RdflibStore`, `RemoteSparqlStore` + `StoreSettings` + `build_graph_store`; deterministic rdflib
+skolemiser; `VersionStoreLoader` + validation + in-memory artifacts; `diff_service`; Click CLI), plus
+the `utils/` dissolution, the tightened import-linter, and the `domain/model.py` pydantic migration.
+
+**Task 13 (cutover) — flag-gated, not yet a deletion.** The Celery `create_diff` task runs the Python
+loader when `RDF_DIFFER_USE_PYTHON_LOADER=true` (default off → legacy script). The diff logic is
+unit-verified for parity on real engines; **deleting `load_versions.sh` + `skos_history_wrapper`**
+is the final step, gated on a **Fuseki parity smoke test** (only validatable against a live endpoint).
+
+**Task 16 (in-memory full report) — gated/deferred** on the external eds4jinja2 enhancement; the CLI
+`--report` prints the documented fallback and still emits diff artifacts (DEC-5).
+
 ## Task 1: Domain config models (pydantic v2) — DEC-3
 
 - [ ] Write failing tests for `VersionStoreConfig`: rejects <2 versions, duplicate ids, missing file, relative scheme/base IRI, mixed RDF formats; `BlankNodePolicy` ∈ {exclude, document_only, skolemise} **all accepted** (DEC-9 — skolemise is now supported); `engine` ∈ {remote, oxigraph, rdflib}

@@ -2,41 +2,67 @@
 ; Import Linter — Architecture Guardrails for RDF Differ
 ; =============================================================================
 ; Enforces the cosmic-python layer direction so the architecture cannot erode
-; silently. This is the REAL enforced contract (discovered from the actual import
-; graph in modernization slice 7) — higher layers may import lower, never the
-; reverse. `make check-architecture` (wraps `poetry run lint-imports`) gates it.
+; silently. `make check-architecture` (wraps `poetry run lint-imports`) gates it.
 ;
-; Direction:  entrypoints -> services -> adapters -> domain -> utils
+; Direction:  entrypoints -> services -> adapters -> domain
 ;   * entrypoints  : API/UI/CLI glue (Connexion, Flask, Click)
-;   * services     : use-case orchestration (incl. the Celery tasks in services.celery)
-;   * adapters     : Fuseki/SPARQL/Redis/Celery-app infrastructure
-;   * domain       : pure domain model (imports nothing inward)
-;   * utils        : cross-cutting pure helpers (imports only `config`)
+;   * services     : use-case orchestration (incl. the Celery tasks)
+;   * adapters     : Fuseki/SPARQL/Redis/oxigraph/rdflib/filesystem infrastructure
+;   * domain       : pure domain model (imports nothing inward; pydantic allowed)
 ;
-; TODO (deferred): eliminate `rdf_differ.utils` by redistributing its helpers into
-; the proper layer (mostly `adapters`/`domain`); tracked in the modernization EPIC.
+; `rdf_differ.utils` was dissolved into the proper layers (modernization /
+; rdf-loading-module DEC-7); the legacy utils contracts are gone.
 
 [importlinter]
 root_package = rdf_differ
+; required because the store-seam / domain-purity contracts forbid external libs
+include_external_packages = True
 
 [importlinter:contract:layers]
-name = Cosmic-python layers: entrypoints > services > adapters > domain > utils
+name = Cosmic-python layers: entrypoints > services > adapters > domain
 type = layers
 layers =
     rdf_differ.entrypoints
     rdf_differ.services
     rdf_differ.adapters
     rdf_differ.domain
-    rdf_differ.utils
 
-; utils is a leaf: it must not reach back up into any business layer.
-[importlinter:contract:utils-isolation]
-name = utils must not import business layers
+; DIP at the store seam (DEC-8). Scoped to the new loading service module, which
+; MUST reach the triple store only through `GraphStorePort` — never a store/report
+; library directly. (Legacy services predate this and are addressed separately.)
+[importlinter:contract:loading-services-store-seam]
+name = services.loading must not import store/report libraries (DIP)
 type = forbidden
 source_modules =
-    rdf_differ.utils
+    rdf_differ.services.loading
 forbidden_modules =
+    pyoxigraph
+    rdflib
+    requests
+    SPARQLWrapper
+    eds4jinja2
+
+; Domain purity (DEC-8): the domain layer must not depend on I/O frameworks.
+[importlinter:contract:domain-purity]
+name = domain must not import I/O frameworks
+type = forbidden
+source_modules =
     rdf_differ.domain
-    rdf_differ.adapters
-    rdf_differ.services
-    rdf_differ.entrypoints
+forbidden_modules =
+    flask
+    connexion
+    celery
+    click
+    requests
+    pyoxigraph
+    eds4jinja2
+    SPARQLWrapper
+
+; The three GraphStorePort implementations must not import each other (DEC-8).
+[importlinter:contract:store-adapter-independence]
+name = store adapters are independent of each other
+type = independence
+modules =
+    rdf_differ.adapters.loading.remote_store
+    rdf_differ.adapters.loading.in_memory_oxigraph_store
+    rdf_differ.adapters.loading.in_memory_rdflib_store

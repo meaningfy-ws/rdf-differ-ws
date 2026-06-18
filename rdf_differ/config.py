@@ -12,7 +12,17 @@ Project wide configuration file.
 import os
 from pathlib import Path
 
-from rdf_differ.utils.conversions import strtobool
+_TRUE_VALUES = {"1", "true", "yes", "y", "on", "t"}
+
+
+def strtobool(value: str) -> bool:
+    """Parse a truthy string to a bool.
+
+    Drop-in replacement for the removed ``distutils.util.strtobool`` (gone in Python 3.12),
+    returning a ``bool`` instead of ``int``. Unrecognised values are treated as False.
+    """
+    return str(value).strip().lower() in _TRUE_VALUES
+
 
 TEMPLATES_FOLDER_PATH = Path(__file__).parents[1] / "resources" / "templates"
 
@@ -40,6 +50,12 @@ RDF_DIFFER_FUSEKI_SERVICE = f"{RDF_DIFFER_FUSEKI_LOCATION}:{RDF_DIFFER_FUSEKI_PO
 
 RDF_DIFFER_FUSEKI_USERNAME = os.environ.get("RDF_DIFFER_FUSEKI_USERNAME", "admin")
 RDF_DIFFER_FUSEKI_PASSWORD = os.environ.get("RDF_DIFFER_FUSEKI_PASSWORD", "admin")
+
+# Cutover flag (rdf-loading-module): when true, the diff is created by the new
+# Python RDF Loading Module (RemoteSparqlStore + VersionStoreLoader) instead of
+# the legacy load_versions.sh subprocess. Default off — flip after a Fuseki
+# parity smoke test, then load_versions.sh / skos_history_wrapper can be retired.
+RDF_DIFFER_USE_PYTHON_LOADER = strtobool(os.environ.get("RDF_DIFFER_USE_PYTHON_LOADER", "false"))
 
 RDF_DIFFER_REDIS_LOCATION = os.environ.get("RDF_DIFFER_REDIS_LOCATION", "redis://localhost")
 RDF_DIFFER_REDIS_PORT = os.environ.get("RDF_DIFFER_REDIS_PORT", 6379)

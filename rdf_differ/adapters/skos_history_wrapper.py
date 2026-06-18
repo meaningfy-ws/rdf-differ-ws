@@ -13,8 +13,9 @@ from urllib.parse import quote, urljoin
 
 from rdflib.util import guess_format
 
+from rdf_differ.adapters.filesystem import dir_exists, dir_is_empty
 from rdf_differ.config import RDF_DIFFER_FILENAME, RDF_DIFFER_FUSEKI_SERVICE
-from rdf_differ.utils.file_utils import INPUT_MIME_TYPES, dir_exists, dir_is_empty
+from rdf_differ.domain.constants import INPUT_MIME_TYPES
 
 CONFIG_TEMPLATE = """#!/bin/bash
 

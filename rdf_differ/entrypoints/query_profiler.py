@@ -21,7 +21,7 @@ from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
 from rdf_differ.adapters.sparql import SPARQLRunner
-from rdf_differ.utils.file_utils import INPUT_MIME_TYPES
+from rdf_differ.domain.constants import INPUT_MIME_TYPES
 
 DEFAULT_TIMEOUT = 60
 

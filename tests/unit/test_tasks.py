@@ -9,9 +9,9 @@ from unittest.mock import patch
 import pytest
 
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.adapters.filesystem import dir_exists
 from rdf_differ.config import RDF_DIFFER_REPORTS_DB
 from rdf_differ.services.celery import async_create_diff, async_generate_report
-from rdf_differ.utils.file_utils import dir_exists
 
 
 @patch.object(FusekiDiffAdapter, "create_diff")

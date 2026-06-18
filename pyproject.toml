@@ -43,7 +43,14 @@ dependencies = [
     "redis>=5,<6",
     "flower>=2.0,<3",
     "gunicorn>=22,<27",
+    "pydantic (>=2.6,<3)",
+    "pydantic-settings (>=2.2,<3)",
+    "pyoxigraph (>=0.4,<0.5)",
+    "pyyaml (>=6,<7)",
 ]
+
+[project.scripts]
+rdf-diff = "rdf_differ.entrypoints.cli.load:cli"
 
 [dependency-groups]
 # PEP 735 dependency groups.

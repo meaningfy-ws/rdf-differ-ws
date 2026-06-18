@@ -2,6 +2,7 @@ import uuid
 from json import dumps
 from pathlib import Path
 
+from rdf_differ.adapters.filesystem import dir_exists
 from rdf_differ.services.report_handling import (
     build_dataset_reports_location,
     build_report_location,
@@ -15,7 +16,6 @@ from rdf_differ.services.report_handling import (
     retrieve_report,
     save_report,
 )
-from rdf_differ.utils.file_utils import dir_exists
 
 
 def test_build_dataset_report_location():

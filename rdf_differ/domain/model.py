@@ -1,11 +1,11 @@
-#!/usr/bin/python3
+"""Core domain model (pydantic v2 — DEC-3, migrated from dataclasses).
 
-# model.py
-# Date: 11/08/2020
-# Author: Mihai Coșleț
-# Email: coslet.mihai@gmail.com
+Pure domain: pydantic is allowed here; no I/O frameworks. `DatasetVersion` and
+`VersionsDelta` keep identity-based equality (by id / id-pair) so they behave as
+value objects keyed on their identifiers, not their payloads.
+"""
 
-from dataclasses import dataclass
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class VersionMissing(Exception):
@@ -21,27 +21,31 @@ class VersionsDeltaExists(Exception):
 
 
 class RDFContentReference:
-    pass
+    """Marker for a reference to RDF content (version data / a delta component)."""
 
 
-@dataclass
-class DatasetVersion:
+class DatasetVersion(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     version_id: str
-    description: str | None
-    content_reference: RDFContentReference | None
+    description: str | None = None
+    content_reference: RDFContentReference | None = None
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DatasetVersion):
             return NotImplemented
         return self.version_id == other.version_id
 
+    __hash__ = None  # type: ignore[assignment]  # identity by id; not hashable
 
-@dataclass
-class VersionsDelta:
+
+class VersionsDelta(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     old_version_id: str
     new_version_id: str
-    insertions: RDFContentReference | None
-    deletions: RDFContentReference | None
+    insertions: RDFContentReference | None = None
+    deletions: RDFContentReference | None = None
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, VersionsDelta):
@@ -51,50 +55,40 @@ class VersionsDelta:
             and self.new_version_id == other.new_version_id
         )
 
+    __hash__ = None  # type: ignore[assignment]
 
-class Dataset:
-    def __init__(self, name: str, uri: str, description: str | None = ""):
-        self.name = name
-        self.uri = uri
-        self.description = description
-        self.versions: list[DatasetVersion] = []
-        self.version_deltas: list[VersionsDelta] = []
 
-    def add_version(self, dataset_version: DatasetVersion):
+class Dataset(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    name: str
+    uri: str
+    description: str | None = ""
+    versions: list[DatasetVersion] = Field(default_factory=list)
+    version_deltas: list[VersionsDelta] = Field(default_factory=list)
+
+    def add_version(self, dataset_version: DatasetVersion) -> None:
         if self._version_exists(dataset_version.version_id):
             raise VersionExists(
                 f"This dataset version ({dataset_version.version_id}) already exists."
             )
         self.versions.append(dataset_version)
 
-    def _version_exists(self, dataset_version: str) -> bool:
-        return dataset_version in [known_version.version_id for known_version in self.versions]
+    def _version_exists(self, version_id: str) -> bool:
+        return version_id in [known.version_id for known in self.versions]
 
     def get_delta(self, old_version_id: str, new_version_id: str) -> VersionsDelta | None:
-        target_delta = VersionsDelta(
-            old_version_id=old_version_id,
-            new_version_id=new_version_id,
-            insertions=None,
-            deletions=None,
-        )
-        return next(
-            filter(lambda existent_delta: target_delta == existent_delta, self.version_deltas), None
-        )
+        target = VersionsDelta(old_version_id=old_version_id, new_version_id=new_version_id)
+        return next(filter(lambda existing: target == existing, self.version_deltas), None)
 
     def calculate_diff(self, old_version_id: str, new_version_id: str) -> VersionsDelta:
         if not (self._version_exists(old_version_id) and self._version_exists(new_version_id)):
             raise VersionMissing(
-                f"In order to calculate a diff both versions ({old_version_id} and {new_version_id}) must exist."
+                f"In order to calculate a diff both versions ({old_version_id} and "
+                f"{new_version_id}) must exist."
             )
-
         delta = self.get_delta(old_version_id=old_version_id, new_version_id=new_version_id)
         if not delta:
-            # TODO: provide a insertions/deletion abstract fetcher
-            delta = VersionsDelta(
-                old_version_id=old_version_id,
-                new_version_id=new_version_id,
-                deletions=None,
-                insertions=None,
-            )
+            delta = VersionsDelta(old_version_id=old_version_id, new_version_id=new_version_id)
             self.version_deltas.append(delta)
         return delta

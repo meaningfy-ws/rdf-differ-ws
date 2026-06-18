@@ -22,9 +22,15 @@ from werkzeug.exceptions import (
 
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.adapters.filesystem import (
+    build_dataset_reports_location,
+    read_meta_file,
+    save_files,
+)
 from rdf_differ.adapters.redis import push_task_to_queue, redis_client
 from rdf_differ.adapters.sparql import SPARQLRunner
-from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB
+from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB, strtobool
+from rdf_differ.domain.naming import build_unique_name, check_dataset_name_validity
 from rdf_differ.services.ap_manager import ApplicationProfileManager
 from rdf_differ.services.celery import async_create_diff, async_generate_report
 from rdf_differ.services.queue import kill_task
@@ -36,14 +42,6 @@ from rdf_differ.services.report_handling import (
     retrieve_report,
 )
 from rdf_differ.services.tasks import flatten_active_tasks, retrieve_active_tasks, retrieve_task
-from rdf_differ.utils.conversions import strtobool
-from rdf_differ.utils.file_utils import (
-    build_dataset_reports_location,
-    build_unique_name,
-    check_dataset_name_validity,
-    read_meta_file,
-    save_files,
-)
 
 """
 The definition of the API endpoints

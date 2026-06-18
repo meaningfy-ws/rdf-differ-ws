@@ -7,9 +7,7 @@ from pathlib import Path
 from eds4jinja2.builders.report_builder import ReportBuilder
 from werkzeug.exceptions import UnprocessableEntity
 
-from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_META_NAME, RDF_DIFFER_REPORTS_DB
-from rdf_differ.services.time import get_timestamp
-from rdf_differ.utils.file_utils import (
+from rdf_differ.adapters.filesystem import (
     build_dataset_reports_location,
     copy_file_to_destination,
     dir_exists,
@@ -18,6 +16,8 @@ from rdf_differ.utils.file_utils import (
     list_folder_paths_from_path,
     read_meta_file,
 )
+from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_META_NAME, RDF_DIFFER_REPORTS_DB
+from rdf_differ.services.time import get_timestamp
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 

@@ -1,8 +1,12 @@
 import pathlib
 from typing import cast
 
+from rdf_differ.adapters.filesystem import (
+    dir_exists,
+    list_files_from_path,
+    list_folders_from_path,
+)
 from rdf_differ.config import APPLICATION_PROFILES_ROOT_FOLDER
-from rdf_differ.utils.file_utils import dir_exists, list_files_from_path, list_folders_from_path
 
 QUERIES_SUBFOLDER = "queries"
 TEMPLATE_VARIANTS_SUBFOLDER = "template_variants"

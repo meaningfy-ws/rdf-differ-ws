@@ -172,8 +172,16 @@ pyoxigraph, eds4jinja2) — enforced by import-linter (see contracts below).
 
 **Decision.** `RemoteSparqlStore` is the faithful Python replacement for `resources/load_versions.sh`
 loading into a SPARQL endpoint, preserving the four-named-graph + version-history contract so dqgen
-queries and the report builder keep working unchanged. At cutover, **retire `load_versions.sh`** and
-the subprocess in `rdf_differ/adapters/skos_history_wrapper.py`.
+queries and the report builder keep working unchanged.
+
+**Implemented cutover (safe, flag-gated).** The Celery `create_diff` task selects the diff engine on
+the `RDF_DIFFER_USE_PYTHON_LOADER` flag: when **on**, it builds a per-dataset `RemoteSparqlStore`
+(GSP `…/{ds}/data`, update `…/{ds}`, query `…/{ds}/query`) and runs `VersionStoreLoader` via the pure
+`services.loading.diff_service`; when **off (default)** it keeps the legacy subprocess. This makes the
+Python loader the production path *selectable and verifiable* without a big-bang deletion. **Physical
+retirement** of `load_versions.sh` + `skos_history_wrapper` is the final step, gated on a Fuseki
+parity smoke test (`make start-services-test` + flip the flag) — deferred because it can only be
+validated against a live endpoint, and the relevant tests are environmental.
 
 ### DEC-5 — In-memory has two deliverables split at a clean seam; the full report is an external dependency
 
@@ -229,8 +237,11 @@ of `rdf_differ.utils`).
 Beyond keeping the layers contract (now **without** `utils`), add:
 
 - **Layers contract (updated):** `entrypoints > services > adapters > domain` (utils removed).
-- **Forbidden — services store/report seam (DIP):** `rdf_differ.services` MUST NOT import
-  `pyoxigraph`, `rdflib`, `requests`, `SPARQLWrapper`, `eds4jinja2`.
+- **Forbidden — services store/report seam (DIP):** `rdf_differ.services.loading` MUST NOT import
+  `pyoxigraph`, `rdflib`, `requests`, `SPARQLWrapper`, `eds4jinja2`. (Scoped to the **new** loading
+  service module: it is the code that must obey DIP. The legacy services — `report_handling` uses
+  `eds4jinja2`, `queue` injects `requests` — predate this and are addressed in a follow-up; widening
+  the contract package-wide is deferred so it does not block this epic.)
 - **Forbidden — domain purity:** `rdf_differ.domain` MUST NOT import I/O frameworks (`flask`,
   `connexion`, `celery`, `click`, `requests`, `rdflib`, `pyoxigraph`, `eds4jinja2`). (pydantic is
   allowed.)

@@ -9,15 +9,20 @@ from celery import Celery
 
 from rdf_differ import config
 from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.adapters.filesystem import build_dataset_reports_location
+from rdf_differ.adapters.loading.settings import StoreSettings
+from rdf_differ.adapters.loading.skolemizer import strategy_for
+from rdf_differ.adapters.loading.store_factory import build_graph_store
 from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REDIS_SERVICE
+from rdf_differ.domain.loading.config import Engine
+from rdf_differ.services.loading.diff_service import build_diff_config, create_version_diff
 from rdf_differ.services.report_handling import (
     build_report,
     generate_meta_file,
     save_report,
 )
 from rdf_differ.services.time import get_timestamp
-from rdf_differ.utils.file_utils import build_dataset_reports_location
 
 celery_worker = Celery(
     "rdf-differ-tasks", broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE
@@ -28,6 +33,42 @@ logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
 CELERY_CREATE_DIFF = "create_diff"
 CELERY_GENERATE_REPORT = "generate_report"
+
+
+def _create_diff_with_python_loader(
+    *, dataset: str, dataset_uri: str, old_id: str, new_id: str, old_file: str, new_file: str
+) -> None:
+    """Create the diff via the Python RDF Loading Module (RemoteSparqlStore).
+
+    Composition root for the remote path: builds the per-dataset ``StoreSettings``
+    + remote store + blank-node strategy, then delegates to the pure diff service.
+    Replaces the ``load_versions.sh`` subprocess when ``RDF_DIFFER_USE_PYTHON_LOADER``
+    is enabled.
+    """
+    base = config.RDF_DIFFER_FUSEKI_SERVICE
+    settings = StoreSettings(
+        username=config.RDF_DIFFER_FUSEKI_USERNAME,
+        password=config.RDF_DIFFER_FUSEKI_PASSWORD,
+        data_endpoint_override=f"{base}/{dataset}/data",
+        update_endpoint_override=f"{base}/{dataset}",
+        query_endpoint_override=f"{base}/{dataset}/query",
+    )
+    store = build_graph_store(Engine.REMOTE, settings)
+    cfg = build_diff_config(
+        dataset=dataset,
+        scheme_uri=dataset_uri,
+        old_version_id=old_id,
+        new_version_id=new_id,
+        old_version_file=old_file,
+        new_version_file=new_file,
+        engine=Engine.REMOTE,
+    )
+    create_version_diff(
+        store,
+        cfg,
+        blank_node_strategy=strategy_for(cfg.blank_node_policy, base_iri=cfg.scheme_uri),
+        query_endpoint=settings.query_endpoint,
+    )
 
 
 # =================== TASKS =================== #
@@ -59,15 +100,25 @@ def async_create_diff(
     )
 
     try:
-        fuseki_adapter.create_diff(
-            dataset=dataset_id,
-            dataset_uri=cast(str, body.get("dataset_uri")),
-            temp_dir=Path(cleanup_location),
-            old_version_id=cast(str, body.get("old_version_id")),
-            new_version_id=cast(str, body.get("new_version_id")),
-            old_version_file=Path(old_version_file),
-            new_version_file=Path(new_version_file),
-        )
+        if config.RDF_DIFFER_USE_PYTHON_LOADER:
+            _create_diff_with_python_loader(
+                dataset=dataset_id,
+                dataset_uri=cast(str, body.get("dataset_uri")),
+                old_id=cast(str, body.get("old_version_id")),
+                new_id=cast(str, body.get("new_version_id")),
+                old_file=old_version_file,
+                new_file=new_version_file,
+            )
+        else:
+            fuseki_adapter.create_diff(
+                dataset=dataset_id,
+                dataset_uri=cast(str, body.get("dataset_uri")),
+                temp_dir=Path(cleanup_location),
+                old_version_id=cast(str, body.get("old_version_id")),
+                new_version_id=cast(str, body.get("new_version_id")),
+                old_version_file=Path(old_version_file),
+                new_version_file=Path(new_version_file),
+            )
         fuseki_adapter.inject_metadata(dataset_name=dataset_id, metadata=body)
     except Exception as e:
         logger.error(str(e))

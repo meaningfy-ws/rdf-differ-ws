@@ -7,7 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **RDF Loading Module** (`openspec/changes/rdf-loading-module`) — a layered, tested Python rewrite of
+  `resources/load_versions.sh`. One `GraphStorePort` with three config-selected backends:
+  `RemoteSparqlStore` (any SPARQL 1.1 + GSP endpoint), `PyoxigraphStore` and `RdflibStore` (in-memory).
+  The same skos-history delta logic (`insertions = new − old`, `deletions = old − new`, `CLEAR`+`INSERT`
+  idempotency, two-pass N-version delta-pair set) runs against any engine. Pydantic v2 config/value
+  objects, a `UriBuilder`, parametrised SPARQL templates (no free strings), deterministic W3C blank-node
+  skolemisation (rdflib `to_canonical_graph` → `.well-known/genid/`), post-load validation, in-memory
+  diff-artifact output, and a `rdf-diff` Click CLI (`--engine remote|oxigraph|rdflib [--report]`).
+- **Cutover flag** `RDF_DIFFER_USE_PYTHON_LOADER` (default off): when on, the Celery `create_diff` task
+  uses the Python loader (`RemoteSparqlStore` + `VersionStoreLoader`) instead of the `load_versions.sh`
+  subprocess. Physical retirement of the script is gated on a Fuseki parity smoke test.
+
 ### Changed
+
+- **`rdf_differ/domain/model.py` migrated to pydantic v2** (`Dataset`/`DatasetVersion`/`VersionsDelta`).
+- **`rdf_differ/utils/` dissolved** into the proper layers: filesystem/RDF-IO → `adapters/filesystem.py`,
+  name helpers → `domain/naming.py`, `INPUT_MIME_TYPES` → `domain/constants.py`, `strtobool` → `config`.
+- **Stricter import-linter**: layers (utils-free) + `services.loading` store-seam DIP + domain purity +
+  store-adapter independence (4 contracts).
 
 - **Root decluttered.** `bash/` → `infra/scripts/` (all run/setup/CLI helper scripts; Makefile,
   README and test references updated; `source bash/.env` → `infra/scripts/.env`; fixed a stale

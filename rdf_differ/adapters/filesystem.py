@@ -1,14 +1,16 @@
-#!/usr/bin/python3
+"""Filesystem and RDF-file I/O operations (adapters layer).
 
-# file_utils.py
-# Date: 09/07/2020
-# Author: Mihai Coșleț
-# Email: coslet.mihai@gmail.com
+Relocated here from the legacy ``rdf_differ.utils`` during the utils dissolution
+(DEC-7). This module holds all filesystem-touching helpers (directory/file checks,
+copying, listing, saving uploaded files) plus the ``rdflib``-backed RDF conversion
+helper. Path-building and meta-file reading used by both the report service and the
+diff adapter also live here, since reading a meta file is filesystem I/O and an
+adapter consumer (``diff_adapter``) must not import from the services layer.
+"""
 
 import logging
 import os
 import pathlib
-import re
 import shutil
 import tempfile
 from contextlib import contextmanager
@@ -17,11 +19,11 @@ from pathlib import Path
 from typing import cast
 from uuid import uuid4
 
-import shortuuid
+from rdflib.tools.rdfpipe import parse_and_serialize
 from werkzeug.datastructures import FileStorage
-from werkzeug.utils import secure_filename
 
 from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ.domain.naming import build_secure_filename
 
 logger = logging.getLogger(RDF_DIFFER_LOGGER)
 
@@ -88,22 +90,6 @@ def check_files_exist(file_a: FileStorage, file_b: FileStorage) -> None:
         raise TypeError("Files cannot be of None type.")
 
 
-def check_dataset_name_validity(name: str) -> bool:
-    return bool(re.match(r"^[\w\d_:-]*$", name, flags=re.A))
-
-
-def build_unique_name(base: str, length_added: int = 8) -> str:
-    if length_added > 22:
-        logger.warning("currently max accepted length_added is 22")
-        length_added = 22
-
-    return f"{base}{shortuuid.uuid()[:length_added]}"
-
-
-def build_secure_filename(location: str, filename: str) -> str:
-    return str(Path(location) / (str(uuid4()) + secure_filename(filename)))
-
-
 @contextmanager
 def save_files(old_file: FileStorage, new_file: FileStorage, location: str = ""):
     """
@@ -156,19 +142,6 @@ def temporarily_save_files(old_file: FileStorage, new_file: FileStorage):
         temp_dir.cleanup()
 
 
-INPUT_MIME_TYPES = {
-    "rdf": "application/rdf+xml",
-    "owl": "application/rdf+xml",
-    "trix": "application/trix",
-    "trig": "application/trig",
-    "nq": "application/n-quads",
-    "nt": "application/n-triples",
-    "jsonld": "application/ld+json",
-    "n3": "text/n3",
-    "ttl": "text/turtle",
-}
-
-
 def list_folders_from_path(path: pathlib.Path) -> list[str]:
     return [x for x in os.listdir(path) if os.path.isdir(os.path.join(path, x))]
 
@@ -216,3 +189,39 @@ def read_meta_file(report_base_location: str | Path, meta_file_name: str = "meta
     content = cast(dict, loads((Path(report_base_location) / meta_file_name).read_text()))
     logger.debug(content)
     return content
+
+
+def convert_test_data(input_file, output_file, input_format="", additional_bindings=None):
+    ns_binding = {
+        "skos": "http://www.w3.org/2004/02/skos/core#",
+        "skosxl": "http://www.w3.org/2008/05/skos-xl#",
+        "dct": "http://purl.org/dc/terms/",
+        "dc": "http://purl.org/dc/elements/1.1/",
+        "euvoc": "http://publications.europa.eu/ontology/euvoc#",
+        "lemon": "http://lemon-model.net/lemon#",
+        "lexinfo": "http://www.lexinfo.net/ontology/2.0/lexinfo#",
+        "owl": "http://www.w3.org/2002/07/owl#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "rdf": "http://www.w3.org/2002/07/owl#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "domain": "http://eurovoc.europa.eu/domain",
+        "notation": "http://publications.europa.eu/resource/authority/notation-type",
+        "label": "http://publications.europa.eu/resource/authority/label-type",
+        "context": "http://publications.europa.eu/resource/authority/use-context",
+        "status": "http://publications.europa.eu/resource/authority/concept-status/",
+        "p1": "http://inexistent/domain/",
+    }
+
+    if additional_bindings:
+        ns_binding = {**ns_binding, **additional_bindings}
+
+    guess = not input_format
+
+    parse_and_serialize(
+        input_files=[input_file],
+        input_format=input_format,
+        guess=guess,
+        outfile=output_file,
+        output_format="ttl",
+        ns_bindings=ns_binding,
+    )
