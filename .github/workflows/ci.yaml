@@ -39,14 +39,9 @@ jobs:
         run: npx -y @fission-ai/openspec@1.4.1 validate --changes --strict
 
       - name: Unit tests with coverage
-        # The two API-dependent UI tests need a live API service on :4030 — they are
-        # integration tests still living under tests/unit/ (TODO: relocate to
-        # tests/integration/ once the Connexion-3 ASGI serving migration lands).
-        run: |
-          poetry run pytest tests/unit \
-            --deselect tests/unit/test_entrypoints_ui_views.py::test_get_dataset \
-            --deselect tests/unit/test_entrypoints_ui_views.py::test_create_diff_success \
-            --cov=rdf_differ --cov-report=xml --cov-report=term-missing
+        # Integration tests that need a live API service (tests/integration/) are not run
+        # here — the unit job brings up only Redis + Fuseki.
+        run: poetry run pytest tests/unit --cov=rdf_differ --cov-report=xml --cov-report=term-missing
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
