@@ -1,7 +1,7 @@
 import pathlib
 from typing import cast
 
-from rdf_differ.config import APPLICATION_PROFILES_ROOT_FOLDER
+from rdf_differ import config
 from rdf_differ.core.adapters.filesystem import (
     dir_exists,
     list_files_from_path,
@@ -21,7 +21,7 @@ class ApplicationProfileManager:
         self,
         application_profile: str | None = None,
         template_type: str | None = None,
-        root_folder: pathlib.Path = pathlib.Path(APPLICATION_PROFILES_ROOT_FOLDER),
+        root_folder: pathlib.Path = pathlib.Path(config.APPLICATION_PROFILES_ROOT_FOLDER),
     ):
         self.root_folder = root_folder
         self.application_profile = application_profile

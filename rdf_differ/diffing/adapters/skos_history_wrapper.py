@@ -13,7 +13,7 @@ from urllib.parse import quote, urljoin
 
 from rdflib.util import guess_format
 
-from rdf_differ.config import RDF_DIFFER_FILENAME, RDF_DIFFER_FUSEKI_SERVICE
+from rdf_differ import config
 from rdf_differ.core.adapters.filesystem import dir_exists, dir_is_empty
 from rdf_differ.core.domain.constants import INPUT_MIME_TYPES
 
@@ -100,8 +100,8 @@ class SKOSHistoryRunner:
         self.new_version_id = new_version_id.strip()
 
         self.basedir = basedir
-        self.filename = filename if filename else RDF_DIFFER_FILENAME
-        self.endpoint = endpoint if endpoint else RDF_DIFFER_FUSEKI_SERVICE
+        self.filename = filename if filename else config.RDF_DIFFER_FILENAME
+        self.endpoint = endpoint if endpoint else config.RDF_DIFFER_FUSEKI_SERVICE
 
         self._check_basedir()
 

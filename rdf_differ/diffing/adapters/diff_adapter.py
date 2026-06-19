@@ -22,7 +22,6 @@ from urllib.parse import urljoin
 from requests.auth import HTTPBasicAuth
 
 from rdf_differ import config
-from rdf_differ.config import RDF_DIFFER_REPORTS_DB
 from rdf_differ.core.adapters.filesystem import build_dataset_reports_location, read_meta_file
 from rdf_differ.diffing.adapters import (
     QUERY_DATASET_DESCRIPTION,
@@ -404,7 +403,7 @@ class FusekiDiffAdapter(AbstractDiffAdapter):
         # todo: handle meta file missing
         with suppress(Exception):
             meta = read_meta_file(
-                build_dataset_reports_location(dataset_name, RDF_DIFFER_REPORTS_DB)
+                build_dataset_reports_location(dataset_name, config.RDF_DIFFER_REPORTS_DB)
             )
 
         return {

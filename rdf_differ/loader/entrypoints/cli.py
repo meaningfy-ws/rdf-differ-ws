@@ -13,6 +13,7 @@ from pathlib import Path
 import click
 import yaml
 
+from rdf_differ import config
 from rdf_differ.loader.adapters.graph_store import GraphStoreError
 from rdf_differ.loader.adapters.graph_store_provider import build_graph_store
 from rdf_differ.loader.adapters.settings import StoreSettings
@@ -133,10 +134,23 @@ def _run_load(
 
 
 def _build_settings(endpoint: str | None) -> StoreSettings:
+    """Build the remote connection settings from the project ``config``.
+
+    With ``--endpoint`` the three SPARQL endpoints are overridden explicitly;
+    otherwise the Fuseki location/port/credentials come from ``config``.
+    """
+    base = StoreSettings(
+        location=config.RDF_DIFFER_FUSEKI_LOCATION,
+        port=config.RDF_DIFFER_FUSEKI_PORT,
+        username=config.RDF_DIFFER_FUSEKI_USERNAME,
+        password=config.RDF_DIFFER_FUSEKI_PASSWORD,
+    )
     if endpoint is None:
-        return StoreSettings()
-    return StoreSettings(
-        data_endpoint_override=f"{endpoint}/data",
-        update_endpoint_override=f"{endpoint}/update",
-        query_endpoint_override=f"{endpoint}/query",
+        return base
+    return base.model_copy(
+        update={
+            "data_endpoint_override": f"{endpoint}/data",
+            "update_endpoint_override": f"{endpoint}/update",
+            "query_endpoint_override": f"{endpoint}/query",
+        }
     )

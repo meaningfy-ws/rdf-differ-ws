@@ -16,7 +16,7 @@ from pathlib import Path
 import requests
 from werkzeug.datastructures import FileStorage
 
-import rdf_differ.config
+from rdf_differ import config
 
 
 def get_datasets() -> tuple:
@@ -25,7 +25,7 @@ def get_datasets() -> tuple:
     :return: the list of dataset diffs
     :rtype: list, int
     """
-    response = requests.get(rdf_differ.config.RDF_DIFFER_API_SERVICE + "/diffs")
+    response = requests.get(config.RDF_DIFFER_API_SERVICE + "/diffs")
     return response.json(), response.status_code
 
 
@@ -36,7 +36,7 @@ def get_dataset(dataset_id: str) -> tuple:
     :return: dataset description (as specified in the rdf_differ.diffing.adapters.diff_adapter.py)
     :rtype: dict, int
     """
-    response = requests.get(rdf_differ.config.RDF_DIFFER_API_SERVICE + f"/diffs/{dataset_id}")
+    response = requests.get(config.RDF_DIFFER_API_SERVICE + f"/diffs/{dataset_id}")
     return response.json(), response.status_code
 
 
@@ -50,7 +50,7 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
     :rtype: file, int
     """
     response = requests.get(
-        url=rdf_differ.config.RDF_DIFFER_API_SERVICE + "/diffs/report",
+        url=config.RDF_DIFFER_API_SERVICE + "/diffs/report",
         params={
             "dataset_id": dataset_id,
             "application_profile": application_profile,
@@ -81,7 +81,7 @@ def build_report(dataset_id: str, application_profile: str, template_type: str) 
     )
     headers = {"Content-type": "application/json"}
     response = requests.post(
-        rdf_differ.config.RDF_DIFFER_API_SERVICE + "/diffs/report", data=data, headers=headers
+        config.RDF_DIFFER_API_SERVICE + "/diffs/report", data=data, headers=headers
     )
     return response.text, response.status_code
 
@@ -126,9 +126,7 @@ def create_diff(
         "old_version_id": old_version_id,
         "new_version_id": new_version_id,
     }
-    response = requests.post(
-        rdf_differ.config.RDF_DIFFER_API_SERVICE + "/diffs", data=data, files=files
-    )
+    response = requests.post(config.RDF_DIFFER_API_SERVICE + "/diffs", data=data, files=files)
     return response.text, response.status_code
 
 
@@ -138,7 +136,7 @@ def get_application_profiles() -> tuple:
     :return: applicaiton profiles
     :rtype list, int
     """
-    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + "/aps")
+    response = requests.get(url=config.RDF_DIFFER_API_SERVICE + "/aps")
     return response.json(), response.status_code
 
 
@@ -148,7 +146,7 @@ def get_active_tasks() -> tuple:
     :return: active celery tasks
     :rtype list, int
     """
-    response = requests.get(url=rdf_differ.config.RDF_DIFFER_API_SERVICE + "/tasks/active")
+    response = requests.get(url=config.RDF_DIFFER_API_SERVICE + "/tasks/active")
     return response.json(), response.status_code
 
 
@@ -159,5 +157,5 @@ def revoke_task(task_id: str) -> tuple:
     :return: api response
     :rtype: dict, int
     """
-    response = requests.delete(url=f"{rdf_differ.config.RDF_DIFFER_API_SERVICE}/tasks/{task_id}")
+    response = requests.delete(url=f"{config.RDF_DIFFER_API_SERVICE}/tasks/{task_id}")
     return response.json(), response.status_code

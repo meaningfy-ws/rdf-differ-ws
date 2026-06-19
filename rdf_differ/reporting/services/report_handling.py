@@ -7,7 +7,7 @@ from pathlib import Path
 from eds4jinja2.builders.report_builder import ReportBuilder
 from werkzeug.exceptions import UnprocessableEntity
 
-from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_META_NAME, RDF_DIFFER_REPORTS_DB
+from rdf_differ import config
 from rdf_differ.core.adapters.filesystem import (
     build_dataset_reports_location,
     copy_file_to_destination,
@@ -19,7 +19,7 @@ from rdf_differ.core.adapters.filesystem import (
 )
 from rdf_differ.core.domain.time import get_timestamp
 
-logger = logging.getLogger(RDF_DIFFER_LOGGER)
+logger = logging.getLogger(config.RDF_DIFFER_LOGGER)
 
 
 def build_report(
@@ -280,12 +280,14 @@ def generate_meta_file(
     """
     timestamp = timestamp or get_timestamp()
     meta_data = {"uid": uid, "dataset_name": dataset_name, "created_at": timestamp}
-    meta_file = Path(reports_location) / RDF_DIFFER_META_NAME
+    meta_file = Path(reports_location) / config.RDF_DIFFER_META_NAME
     meta_file.write_text(dumps(meta_data))
     return meta_data
 
 
-def find_dataset_name_by_id(dataset_id: str, reports_location: str = RDF_DIFFER_REPORTS_DB) -> str:
+def find_dataset_name_by_id(
+    dataset_id: str, reports_location: str = config.RDF_DIFFER_REPORTS_DB
+) -> str:
     """
     method to search for dataset name based on the id
     :param dataset_id: uid of the dataset diff

@@ -20,10 +20,9 @@ def test_discover_query_files(tmp_path, monkeypatch):
     file_a.write_text("SELECT * WHERE { ?s ?p ?o }")
     file_b.write_text("ASK { ?s ?p ?o }")
 
-    monkeypatch.setattr(
-        "rdf_differ.diffing.entrypoints.query_profiler.config.APPLICATION_PROFILES_ROOT_FOLDER",
-        tmp_path,
-    )
+    # APPLICATION_PROFILES_ROOT_FOLDER resolves from RDF_DIFFER_TEMPLATE_LOCATION
+    # (config property), so point it at the populated temp tree.
+    monkeypatch.setenv("RDF_DIFFER_TEMPLATE_LOCATION", str(tmp_path))
 
     files = discover_query_files("example")
 

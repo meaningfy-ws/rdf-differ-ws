@@ -3,10 +3,10 @@ from typing import cast
 
 from celery.result import AsyncResult
 
+from rdf_differ import config
 from rdf_differ.api.services.celery import celery_worker
-from rdf_differ.config import RDF_DIFFER_LOGGER
 
-logger = logging.getLogger(RDF_DIFFER_LOGGER)
+logger = logging.getLogger(config.RDF_DIFFER_LOGGER)
 
 
 def flatten_active_tasks(tasks: dict) -> list:

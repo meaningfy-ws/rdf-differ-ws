@@ -22,10 +22,9 @@ from uuid import uuid4
 from rdflib.tools.rdfpipe import parse_and_serialize
 from werkzeug.datastructures import FileStorage
 
-from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.core.domain.naming import build_secure_filename
 
-logger = logging.getLogger(RDF_DIFFER_LOGGER)
+logger = logging.getLogger(__name__)
 
 
 def dir_exists(path: str | Path) -> bool:

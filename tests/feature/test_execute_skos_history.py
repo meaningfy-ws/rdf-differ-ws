@@ -19,7 +19,7 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.config import RDF_DIFFER_FUSEKI_SERVICE
+from rdf_differ import config
 from rdf_differ.core.adapters.sparql import SPARQLRunner
 from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
 from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
@@ -94,7 +94,7 @@ def the_user_runs_the_skos_history_calculator(config_location):
 def the_dsv_description_is_generated():
     """the DSV description is generated."""
     assert FusekiDiffAdapter(
-        triplestore_service_url=RDF_DIFFER_FUSEKI_SERVICE,
+        triplestore_service_url=config.RDF_DIFFER_FUSEKI_SERVICE,
         http_client=requests,
         sparql_client=SPARQLRunner(),
     ).dataset_description("subdiv")
@@ -104,7 +104,7 @@ def the_dsv_description_is_generated():
 def the_dataset_versions_are_loaded_into_the_triplestore(fake_sparql_runner):
     """the dataset versions are loaded into the triplestore."""
     diff_description = FusekiDiffAdapter(
-        triplestore_service_url=RDF_DIFFER_FUSEKI_SERVICE,
+        triplestore_service_url=config.RDF_DIFFER_FUSEKI_SERVICE,
         http_client=requests,
         sparql_client=SPARQLRunner(),
     ).dataset_description("subdiv")
@@ -118,7 +118,7 @@ def the_dataset_versions_are_loaded_into_the_triplestore(fake_sparql_runner):
 def the_insertions_and_deletions_graphs_are_created():
     """the insertions and deletions graphs are created."""
     fuseki_service = FusekiDiffAdapter(
-        triplestore_service_url=RDF_DIFFER_FUSEKI_SERVICE,
+        triplestore_service_url=config.RDF_DIFFER_FUSEKI_SERVICE,
         http_client=requests,
         sparql_client=SPARQLRunner(),
     )

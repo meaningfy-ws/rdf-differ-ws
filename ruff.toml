@@ -33,8 +33,8 @@ max-complexity = 10
 [lint.per-file-ignores]
 # Tests: B008 = pytest fixtures legitimately use callables as argument defaults.
 "tests/**/*.py" = ["B008"]
-# Example: a config module whose method names mirror env-var names.
-# "rdf_differ/__init__.py" = ["N802"]
+# The config module's method names mirror env-var names (Meaningfy settings pattern).
+"rdf_differ/__init__.py" = ["N802"]
 
 [format]
 quote-style = "double"

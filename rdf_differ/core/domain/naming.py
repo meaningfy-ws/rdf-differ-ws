@@ -15,9 +15,7 @@ from uuid import uuid4
 import shortuuid
 from werkzeug.utils import secure_filename
 
-from rdf_differ.config import RDF_DIFFER_LOGGER
-
-logger = logging.getLogger(RDF_DIFFER_LOGGER)
+logger = logging.getLogger(__name__)
 
 
 def check_dataset_name_validity(name: str) -> bool:

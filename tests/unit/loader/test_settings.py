@@ -22,14 +22,16 @@ def test_derived_endpoints_from_base():
     assert settings.query_endpoint == "http://localhost:3030/query"
 
 
-def test_reads_env_with_prefix(monkeypatch):
-    monkeypatch.setenv("RDF_DIFFER_FUSEKI_LOCATION", "http://fuseki.example")
-    monkeypatch.setenv("RDF_DIFFER_FUSEKI_PORT", "8080")
-    monkeypatch.setenv("RDF_DIFFER_FUSEKI_USERNAME", "bob")
-    monkeypatch.setenv("RDF_DIFFER_FUSEKI_PASSWORD", "s3cret")
-    monkeypatch.setenv("RDF_DIFFER_FUSEKI_RETRY_ATTEMPTS", "5")
-
-    settings = StoreSettings()
+def test_accepts_explicit_values():
+    # StoreSettings is an injected value object (DEC-10): the composition root
+    # builds it from `config`; it never reads the environment itself.
+    settings = StoreSettings(
+        location="http://fuseki.example",
+        port=8080,
+        username="bob",
+        password="s3cret",
+        retry_attempts=5,
+    )
 
     assert settings.base_endpoint == "http://fuseki.example:8080"
     assert settings.username == "bob"

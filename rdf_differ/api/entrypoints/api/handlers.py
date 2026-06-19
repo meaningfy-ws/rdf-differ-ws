@@ -24,7 +24,6 @@ from rdf_differ import config
 from rdf_differ.api.services.celery import async_create_diff, async_generate_report
 from rdf_differ.api.services.queue import kill_task
 from rdf_differ.api.services.tasks import flatten_active_tasks, retrieve_active_tasks, retrieve_task
-from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REPORTS_DB, strtobool
 from rdf_differ.core.adapters.filesystem import (
     build_dataset_reports_location,
     read_meta_file,
@@ -32,6 +31,7 @@ from rdf_differ.core.adapters.filesystem import (
 )
 from rdf_differ.core.adapters.redis import push_task_to_queue, redis_client
 from rdf_differ.core.adapters.sparql import SPARQLRunner
+from rdf_differ.core.domain import strtobool
 from rdf_differ.core.domain.naming import build_unique_name, check_dataset_name_validity
 from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 from rdf_differ.reporting.services.ap_manager import ApplicationProfileManager
@@ -50,7 +50,7 @@ Important distinction:
 - dataset_name is the name of the dataset, which is the name of the folder containing the dataset diff results
 - dataset_id is the uid used for both identifying the dataset and the task that is associated with its creation
 """
-logger = logging.getLogger(RDF_DIFFER_LOGGER)
+logger = logging.getLogger(config.RDF_DIFFER_LOGGER)
 
 
 def get_diffs() -> tuple:
@@ -86,7 +86,7 @@ def get_diff(dataset_id: str) -> tuple:
     try:
         meta = read_meta_file(
             build_dataset_reports_location(
-                find_dataset_name_by_id(dataset_id), RDF_DIFFER_REPORTS_DB
+                find_dataset_name_by_id(dataset_id), config.RDF_DIFFER_REPORTS_DB
             )
         )
     except Exception:
@@ -172,7 +172,7 @@ def create_diff(
                     old_version_file,
                     new_version_file,
                     db_location,
-                    RDF_DIFFER_REPORTS_DB,
+                    config.RDF_DIFFER_REPORTS_DB,
                 )
                 push_task_to_queue(dumps([task.id, dataset_name]))
 
@@ -201,7 +201,7 @@ def delete_diff(dataset_id: str) -> tuple:
         FusekiDiffAdapter(
             config.RDF_DIFFER_FUSEKI_SERVICE, http_client=requests, sparql_client=SPARQLRunner()
         ).delete_dataset(find_dataset_name_by_id(dataset_id))
-        remove_all_reports(find_dataset_name_by_id(dataset_id), RDF_DIFFER_REPORTS_DB)
+        remove_all_reports(find_dataset_name_by_id(dataset_id), config.RDF_DIFFER_REPORTS_DB)
 
         logger.info(f"finish delete dataset: {dataset_id} endpoint")
         return f"<{dataset_id}> deleted successfully.", 200
@@ -251,7 +251,7 @@ def build_report(body: dict) -> tuple:
             find_dataset_name_by_id(dataset_id),
             application_profile,
             template_type,
-            RDF_DIFFER_REPORTS_DB,
+            config.RDF_DIFFER_REPORTS_DB,
         )
         or rebuild
     ):
@@ -259,7 +259,7 @@ def build_report(body: dict) -> tuple:
             dataset_name=find_dataset_name_by_id(dataset_id),
             application_profile=application_profile,
             template_type=template_type,
-            db_location=RDF_DIFFER_REPORTS_DB,
+            db_location=config.RDF_DIFFER_REPORTS_DB,
             template_location=str(template_location),
             query_files=query_files,
             dataset=dataset,
@@ -301,14 +301,14 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
         find_dataset_name_by_id(dataset_id),
         application_profile,
         template_type,
-        RDF_DIFFER_REPORTS_DB,
+        config.RDF_DIFFER_REPORTS_DB,
     ):
         return send_file(
             retrieve_report(
                 find_dataset_name_by_id(dataset_id),
                 application_profile,
                 template_type,
-                RDF_DIFFER_REPORTS_DB,
+                config.RDF_DIFFER_REPORTS_DB,
             ),
             as_attachment=True,
         )  # 200
@@ -374,7 +374,7 @@ def stop_running_task(task_id: str) -> tuple:
     try:
         tasks = flatten_active_tasks(retrieve_active_tasks())
         task = next(task for task in tasks if task["id"] == task_id)
-        kill_task(task, RDF_DIFFER_REPORTS_DB)
+        kill_task(task, config.RDF_DIFFER_REPORTS_DB)
     except Exception:
         raise NotAcceptable("task already finished executing or does not exist")  # 406
 

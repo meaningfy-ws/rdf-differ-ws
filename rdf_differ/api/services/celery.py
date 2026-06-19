@@ -8,7 +8,6 @@ import requests
 from celery import Celery
 
 from rdf_differ import config
-from rdf_differ.config import RDF_DIFFER_LOGGER, RDF_DIFFER_REDIS_SERVICE
 from rdf_differ.core.adapters.filesystem import build_dataset_reports_location
 from rdf_differ.core.adapters.sparql import SPARQLRunner
 from rdf_differ.core.domain.time import get_timestamp
@@ -25,11 +24,13 @@ from rdf_differ.reporting.services.report_handling import (
 )
 
 celery_worker = Celery(
-    "rdf-differ-tasks", broker=RDF_DIFFER_REDIS_SERVICE, backend=RDF_DIFFER_REDIS_SERVICE
+    "rdf-differ-tasks",
+    broker=config.RDF_DIFFER_REDIS_SERVICE,
+    backend=config.RDF_DIFFER_REDIS_SERVICE,
 )
 celery_worker.conf.update(result_extended=True)
 
-logger = logging.getLogger(RDF_DIFFER_LOGGER)
+logger = logging.getLogger(config.RDF_DIFFER_LOGGER)
 
 CELERY_CREATE_DIFF = "create_diff"
 CELERY_GENERATE_REPORT = "generate_report"

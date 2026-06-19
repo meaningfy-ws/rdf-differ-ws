@@ -11,7 +11,7 @@ fails fast on the silent-corruption gap (L8) the legacy script had.
 import logging
 from pathlib import Path
 
-from rdf_differ.config import RDF_DIFFER_LOGGER
+from rdf_differ import config
 from rdf_differ.core.domain.constants import DeltaOp, mime_type_for
 from rdf_differ.loader.adapters import sparql_queries as q
 from rdf_differ.loader.adapters.graph_store import GraphStorePort
@@ -30,7 +30,7 @@ from rdf_differ.loader.domain.model import (
 )
 from rdf_differ.loader.domain.uris import UriBuilder
 
-logger = logging.getLogger(RDF_DIFFER_LOGGER)
+logger = logging.getLogger(config.RDF_DIFFER_LOGGER)
 
 
 class VersionStoreLoader:

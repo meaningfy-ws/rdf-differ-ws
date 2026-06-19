@@ -31,6 +31,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Settings migrated to the Meaningfy config pattern.** Replaced the `config.py` module-level
+  `RDF_DIFFER_*` constants and the loader's pydantic-settings `StoreSettings` with a
+  `core/adapters/config_resolver.py` (`ConfigResolverABC` / `EnvConfigResolver` / `env_property`)
+  plus config mixin classes aggregated into a single `config = RdfDifferConfigResolver()` in the root
+  `rdf_differ/__init__.py`. Consumers use `from rdf_differ import config` → `config.RDF_DIFFER_*`.
+  `StoreSettings` is now an injected value object built from `config` by the composition root (DEC-10);
+  `pydantic-settings` dropped. `strtobool` moved to `core/domain`. Core modules use module-level
+  (`__name__`) loggers so commons no longer depends on app config.
 - **`rdf_differ/domain/model.py` migrated to pydantic v2** (`Dataset`/`DatasetVersion`/`VersionsDelta`).
 - **`rdf_differ/utils/` dissolved** into the proper layers, then relocated to the shared `core/`
   component (DEC-11): filesystem/RDF-IO → `core/adapters/filesystem.py`, name helpers →

@@ -2,10 +2,11 @@ from typing import cast
 
 import redis
 
-from rdf_differ.config import RDF_DIFFER_REDIS_LOCATION, RDF_DIFFER_REDIS_PORT
+from rdf_differ import config
 
 redis_client = redis.Redis(
-    host=RDF_DIFFER_REDIS_LOCATION.split("redis://")[1], port=int(RDF_DIFFER_REDIS_PORT)
+    host=config.RDF_DIFFER_REDIS_LOCATION.split("redis://")[1],
+    port=int(config.RDF_DIFFER_REDIS_PORT),
 )
 
 REVOKING_QUEUE = "revoke"

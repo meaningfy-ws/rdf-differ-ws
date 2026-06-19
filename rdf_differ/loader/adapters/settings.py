@@ -1,21 +1,20 @@
 """Typed remote-store connection settings (DEC-10).
 
 ``StoreSettings`` describes the **remote** SPARQL endpoint connection only —
-base location, credentials, timeouts/retries — read from the environment
-(``RDF_DIFFER_FUSEKI_*``, mirroring ``config.py``). It is an I/O concern, so it
-lives in the adapters layer, never in ``domain``. In-memory engines ignore it.
+base location, credentials, timeouts/retries. It is an **injected value object**:
+the composition root (CLI / Celery task) builds it from the project ``config``
+(``RDF_DIFFER_FUSEKI_*``) and passes it in; the store never reads the environment
+itself (DIP, DEC-10). In-memory engines ignore it.
 
 The dataset/diff shape (versions, IRIs, engine, blank-node policy) is a separate
 concern carried by ``VersionStoreConfig`` (DEC-3); the two never overlap.
 """
 
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import BaseModel
 
 
-class StoreSettings(BaseSettings):
-    """Remote SPARQL endpoint connection settings (env ``RDF_DIFFER_FUSEKI_*``)."""
-
-    model_config = SettingsConfigDict(env_prefix="RDF_DIFFER_FUSEKI_", extra="ignore")
+class StoreSettings(BaseModel):
+    """Remote SPARQL endpoint connection settings (built from ``config`` by callers)."""
 
     location: str = "http://localhost"
     port: int = 3030

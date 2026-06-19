@@ -5,13 +5,12 @@ import requests
 from rdf_differ import config
 from rdf_differ.api.services.celery import CELERY_CREATE_DIFF, CELERY_GENERATE_REPORT
 from rdf_differ.api.services.tasks import revoke_task
-from rdf_differ.config import RDF_DIFFER_LOGGER
 from rdf_differ.core.adapters.redis import push_task_to_queue, task_exists_in_queue
 from rdf_differ.core.adapters.sparql import SPARQLRunner
 from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
 from rdf_differ.reporting.services.report_handling import remove_report
 
-logger = logging.getLogger(RDF_DIFFER_LOGGER)
+logger = logging.getLogger(config.RDF_DIFFER_LOGGER)
 
 
 def stop_task(task_id):
