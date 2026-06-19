@@ -329,9 +329,11 @@ domain` layers, with no layer-first directories left at the root:
   (233 unit tests green; only pre-existing live-Fuseki/subprocess tests fail); OpenAPI operationIds,
   Celery `-A`, gunicorn/Flask app paths and compose updated to the new module paths.
 
-> Remaining alignment slices (sequenced): settings → `core/adapters/config_resolver` + `env_property`
-> (replacing pydantic `StoreSettings`/`config.py`); `exceptions.py` per layer; return typed models not
-> dicts; central NS-prefix bindings (`resources/prefixes.json`).
+> Alignment slices delivered (component-first migration, commit-per-slice): (1) structure +
+> ers-style import-linter; (2) settings → `core/adapters/config_resolver` + `env_property` (replacing
+> pydantic `StoreSettings`/`config.py`); (3) `exceptions.py` per layer; (4) typed response models
+> (not dicts) + central NS-prefix bindings (`resources/prefixes.json` via `config.SPARQL_PREFIXES`).
+> The cosmic-python settings/linter spec gist is maintained separately in the skillery.
 
 ---
 
