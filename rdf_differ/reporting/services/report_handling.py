@@ -18,6 +18,7 @@ from rdf_differ.core.adapters.filesystem import (
     read_meta_file,
 )
 from rdf_differ.core.domain.time import get_timestamp
+from rdf_differ.reporting.domain.model import ReportMeta
 
 logger = logging.getLogger(config.RDF_DIFFER_LOGGER)
 
@@ -278,8 +279,8 @@ def generate_meta_file(
     :param timestamp: time of diff creation
     :return: meta file
     """
-    timestamp = timestamp or get_timestamp()
-    meta_data = {"uid": uid, "dataset_name": dataset_name, "created_at": timestamp}
+    meta = ReportMeta(uid=uid, dataset_name=dataset_name, created_at=timestamp or get_timestamp())
+    meta_data = meta.model_dump()
     meta_file = Path(reports_location) / config.RDF_DIFFER_META_NAME
     meta_file.write_text(dumps(meta_data))
     return meta_data

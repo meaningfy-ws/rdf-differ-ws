@@ -21,6 +21,7 @@ from werkzeug.exceptions import (
 )
 
 from rdf_differ import config
+from rdf_differ.api.domain.model import CreateDiffResponse, MessageResponse, ReportTaskResponse
 from rdf_differ.api.services.celery import async_create_diff, async_generate_report
 from rdf_differ.api.services.queue import kill_task
 from rdf_differ.api.services.tasks import flatten_active_tasks, retrieve_active_tasks, retrieve_task
@@ -179,7 +180,7 @@ def create_diff(
 
                 redis_client.set(task.id, str(False))
             logger.debug(f"task executed with id: {task.id}")
-            return {"uid": task.id, "dataset_name": dataset_name}, 200
+            return CreateDiffResponse(uid=task.id, dataset_name=dataset_name).model_dump(), 200
         except ValueError as exception:
             exception_text = "Internal error while uploading the diffs.\n" + str(exception)
             logger.exception(exception_text)
@@ -265,11 +266,19 @@ def build_report(body: dict) -> tuple:
             query_files=query_files,
             dataset=dataset,
         )
-        return {"task_id": task.id, "application_profile": application_profile}, 200
+        return (
+            ReportTaskResponse(
+                task_id=task.id, application_profile=application_profile
+            ).model_dump(),
+            200,
+        )
     else:
-        return {
-            "message": "Report already exists. To rebuild send the `rebuild` query parameter set to true"
-        }, 406
+        return (
+            MessageResponse(
+                message="Report already exists. To rebuild send the `rebuild` query parameter set to true"
+            ).model_dump(),
+            406,
+        )
 
 
 def get_report(dataset_id: str, application_profile: str, template_type: str) -> tuple | Response:
@@ -379,4 +388,4 @@ def stop_running_task(task_id: str) -> tuple:
     except Exception:
         raise NotAcceptable("task already finished executing or does not exist")  # 406
 
-    return {"message": f"task {task_id} set for revoking."}, 200
+    return MessageResponse(message=f"task {task_id} set for revoking.").model_dump(), 200

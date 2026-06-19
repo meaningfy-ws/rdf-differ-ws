@@ -10,6 +10,7 @@ is aggregated into a single ``RdfDifferConfigResolver`` instance exported as
 ``config.RDF_DIFFER_<NAME>``.
 """
 
+import json
 import os
 from pathlib import Path
 
@@ -22,6 +23,7 @@ dotenv.load_dotenv(verbose=True, override=os.environ.get("IS_PRIME_ENV") != "tru
 
 REPO_ROOT = Path(__file__).parents[1]
 TEMPLATES_FOLDER_PATH = REPO_ROOT / "resources" / "templates"
+SPARQL_PREFIXES_PATH = REPO_ROOT / "resources" / "prefixes.json"
 
 
 class FusekiConfig:
@@ -131,6 +133,14 @@ class LoggingConfig:
         return config_value
 
 
+class SparqlConfig:
+    @property
+    def SPARQL_PREFIXES(self) -> dict[str, str]:
+        """Namespace prefix → IRI bindings, managed centrally in prefixes.json."""
+        data = json.loads(SPARQL_PREFIXES_PATH.read_text(encoding="utf-8"))
+        return dict(data["prefix_definitions"])
+
+
 class LoaderConfig:
     # Cutover flag (rdf-loading-module): when true, the diff is created by the new
     # Python RDF Loading Module instead of the legacy load_versions.sh subprocess.
@@ -140,7 +150,14 @@ class LoaderConfig:
 
 
 class RdfDifferConfigResolver(
-    FusekiConfig, ApiConfig, UiConfig, RedisConfig, StorageConfig, LoggingConfig, LoaderConfig
+    FusekiConfig,
+    ApiConfig,
+    UiConfig,
+    RedisConfig,
+    StorageConfig,
+    LoggingConfig,
+    SparqlConfig,
+    LoaderConfig,
 ):
     """Aggregates every config group into the single project configuration."""
 

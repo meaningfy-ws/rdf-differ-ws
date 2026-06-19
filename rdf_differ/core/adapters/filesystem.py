@@ -191,26 +191,12 @@ def read_meta_file(report_base_location: str | Path, meta_file_name: str = "meta
 
 
 def convert_test_data(input_file, output_file, input_format="", additional_bindings=None):
-    ns_binding = {
-        "skos": "http://www.w3.org/2004/02/skos/core#",
-        "skosxl": "http://www.w3.org/2008/05/skos-xl#",
-        "dct": "http://purl.org/dc/terms/",
-        "dc": "http://purl.org/dc/elements/1.1/",
-        "euvoc": "http://publications.europa.eu/ontology/euvoc#",
-        "lemon": "http://lemon-model.net/lemon#",
-        "lexinfo": "http://www.lexinfo.net/ontology/2.0/lexinfo#",
-        "owl": "http://www.w3.org/2002/07/owl#",
-        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-        "rdf": "http://www.w3.org/2002/07/owl#",
-        "xsd": "http://www.w3.org/2001/XMLSchema#",
-        "domain": "http://eurovoc.europa.eu/domain",
-        "notation": "http://publications.europa.eu/resource/authority/notation-type",
-        "label": "http://publications.europa.eu/resource/authority/label-type",
-        "context": "http://publications.europa.eu/resource/authority/use-context",
-        "status": "http://publications.europa.eu/resource/authority/concept-status/",
-        "p1": "http://inexistent/domain/",
-    }
+    # Namespace bindings are managed centrally (resources/prefixes.json) and exposed
+    # via config.SPARQL_PREFIXES — not embedded here. Imported locally to keep the
+    # core module free of an app-config dependency at import time.
+    from rdf_differ import config
 
+    ns_binding = dict(config.SPARQL_PREFIXES)
     if additional_bindings:
         ns_binding = {**ns_binding, **additional_bindings}
 

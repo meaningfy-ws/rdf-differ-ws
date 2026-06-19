@@ -31,6 +31,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Endpoints return typed response models, not ad-hoc dicts.** Added
+  `api/domain/model.py` (`CreateDiffResponse`, `ReportTaskResponse`, `MessageResponse`) and
+  `reporting/domain/model.py` (`ReportMeta`); handlers and `generate_meta_file` build these and
+  serialise via `.model_dump()` at the JSON boundary.
+- **Namespace prefix bindings centralised.** The inline `ns_binding` dict in `convert_test_data`
+  moved to `resources/prefixes.json`, exposed via a `config.SPARQL_PREFIXES` property (ted_sws
+  pattern) — reusable and maintainable, no longer embedded in code.
 - **Exceptions moved to per-layer `exceptions.py` modules** (no longer buried in logic modules):
   `loader/domain/exceptions.py` (`LoadingError` family), `loader/adapters/exceptions.py`
   (`GraphStoreError`), `diffing/domain/exceptions.py` (`Version*`), `diffing/adapters/exceptions.py`
