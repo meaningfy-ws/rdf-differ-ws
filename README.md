@@ -145,19 +145,19 @@ make stop
 If you are running the project for the first time this would be the commands to run in sequence:
 
 ```bash
-make install-os-dependencies
-make install-python-dependencies
-make run-system-redis
-make run-local-api
-make run-local-ui
-make setup-local-fuseki # skip if you manage Fuseki
+make local-deps
+make install
+make local-redis
+make local-api
+make local-ui
+make local-fuseki-setup # skip if you manage Fuseki
 ```
 
 If you use the local Fuseki instance, in a separate terminal process remember
 to run and keep open:
 
 ```bash
-make run-local-fuseki
+make local-fuseki
 ```
 
 In this case be careful that you don't already have a Fuseki instance running
@@ -167,20 +167,21 @@ category and probably can reuse the preexisting triplestore.
 
 #### Prerequisites
 
-To install prerequisite operating system (OS) software and dependencies, run:
+Python dependencies install without root:
 
 ```bash
-make install # add -dev if you want to run tests
+make install      # runtime only; add 'make install-dev' to run tests
 ```
 
-**WARNING:** Some commands are **run as root** with _sudo_.
-
-If you install OS packages yourself (if in case you run an unsupported OS or
-you don't want to run as root), run:
+The OS packages (Java for a local Fuseki, Redis) are **only** needed if you run
+those services natively (not with Docker). They install with _sudo_:
 
 ```bash
-make install-python-dependencies # add -dev if you want to run tests
+make local-deps   # apt/yum install of Java + Redis (run as root)
 ```
+
+If you run an unsupported OS, or prefer not to use root, install Java 11+ and
+Redis 6+ yourself and skip `make local-deps`.
 
 #### Fuseki
 
@@ -188,8 +189,8 @@ To run the triplestore database (Fuseki) server locally and not via Docker (on
 first setup accept the default values):
 
 ```bash
-make setup-local-fuseki
-make run-local-fuseki
+make local-fuseki-setup
+make local-fuseki
 ```
 
 _leave this terminal session open._
@@ -197,10 +198,10 @@ _leave this terminal session open._
 That will fetch, install in and run Fuseki from the current working directory,
 which can be run as a user _without requiring root_.
 
-You can also choose to only run Fuseki with Docker, reusing the service used for tests:
+You can also bring up the dockerised test stack (which includes Fuseki) instead:
 
 ```sh
-make run-docker-fuseki-test
+make start-services-test
 ```
 
 Alternatively, if you have a separately managed installation of Fuseki, you can
@@ -212,7 +213,7 @@ location/port as defined in `infra/scripts/.env`.
 To set up and run a _system_ Redis server which _does_ need to be **run as root**:
 
 ```bash
-make run-system-redis
+make local-redis
 ```
 
 **WARNING:** This runs as root and replaces a system configuration file. If you
@@ -220,10 +221,10 @@ get errors about configuration directives, you are likely running an older OS
 with older Redis (e.g. Ubuntu 18.04 does not have the Redis version that's
 required).
 
-There is currently no local alternative to this to run as a user. If that is a concern, you can also choose to run Redis test service with Docker:
+There is currently no local alternative to this to run as a user. If that is a concern, bring up the dockerised test stack (which includes Redis) instead:
 
 ```sh
-make run-docker-redis-test
+make start-services-test
 ```
 
 #### Application
@@ -231,19 +232,19 @@ make run-docker-redis-test
 To run the API (including Celery) locally:
 
 ```bash
-make run-local-api
+make local-api
 ```
 
 To run the UI locally:
 
 ```bash
-make run-local-ui
+make local-ui
 ```
 
 To stop both API and UI servers (leaving only Fuseki and the system Redis running, which you must control on your own):
 
 ```bash
-make stop-local-applications
+make local-stop
 ```
 
 ## Usage

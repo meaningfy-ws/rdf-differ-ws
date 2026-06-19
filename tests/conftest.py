@@ -142,6 +142,10 @@ _MARKER_BY_DIR = ("unit", "feature", "e2e", "integration")
 def pytest_collection_modifyitems(config, items):
     root = str(config.rootpath).replace("\\", "/")
     for item in items:
+        # An explicit layer marker on a test wins over the directory default — lets a
+        # service-dependent test under tests/unit/ opt into `integration` instead.
+        if any(item.get_closest_marker(layer) for layer in _MARKER_BY_DIR):
+            continue
         rel = str(item.path).replace("\\", "/").replace(root, "")
         for layer in _MARKER_BY_DIR:
             if f"/tests/{layer}/" in rel:

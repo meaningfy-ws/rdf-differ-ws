@@ -54,6 +54,7 @@ def test_get_diffs_500(mock_list_datasets):
 @patch.object(FusekiDiffAdapter, "dataset_description")
 @patch.object(SKOSHistoryRunner, "__init__")
 @patch.object(SKOSHistoryRunner, "run")
+@pytest.mark.integration  # needs live Fuseki/Redis/db (not a unit test)
 def test_create_diff_200_empty_dataset(_, mock_init, mock_dataset_description):
     mock_init.return_value = None
     mock_dataset_description.return_value = {}
@@ -70,6 +71,7 @@ def test_create_diff_200_empty_dataset(_, mock_init, mock_dataset_description):
 
 @patch.object(FusekiDiffAdapter, "create_dataset")
 @patch.object(FusekiDiffAdapter, "dataset_description")
+@pytest.mark.integration  # needs live Fuseki/Redis/db (not a unit test)
 def test_create_diff_200_dataset_doesnt_exist(mock_dataset_description, mock_create_dataset):
     mock_dataset_description.side_effect = EndPointNotFound
 
@@ -85,6 +87,7 @@ def test_create_diff_200_dataset_doesnt_exist(mock_dataset_description, mock_cre
 
 
 @patch("rdf_differ.core.adapters.filesystem.build_secure_filename")
+@pytest.mark.integration  # needs live Fuseki/Redis/db (not a unit test)
 def test_create_diff_500(mock_exception):
     mock_exception.side_effect = ValueError("error")
 
@@ -187,6 +190,7 @@ def test_delete_diff_404(mock_delete_dataset):
 @patch.object(ApplicationProfileManager, "get_template_folder")
 @patch.object(ApplicationProfileManager, "get_queries_dict")
 @patch("rdf_differ.api.entrypoints.api.handlers.report_exists")
+@pytest.mark.integration  # needs live Fuseki/Redis/db (not a unit test)
 def test_build_report_200(
     mock_report_exists,
     mock_get_queries_dict,
@@ -217,6 +221,7 @@ def test_build_report_200(
 @patch.object(ApplicationProfileManager, "get_template_folder")
 @patch.object(ApplicationProfileManager, "get_queries_dict")
 @patch("rdf_differ.api.entrypoints.api.handlers.report_exists")
+@pytest.mark.integration  # needs live Fuseki/Redis/db (not a unit test)
 def test_build_report_200_rebuild(
     mock_report_exists,
     mock_get_queries_dict,

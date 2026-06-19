@@ -31,6 +31,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Makefile groomed.** `make install`/`install-dev` are Python-only (no `sudo`, no JDK); the Java/Redis
+  OS packages moved to an opt-in `local-deps` (only for the no-Docker path). `make start` now creates
+  the `proxy-net` network before bringing services up (fixes "network proxy-net … could not be found").
+  The per-service docker-test targets collapsed into `start-services-test` (one `compose up` + test-data
+  seeding); `test` no longer fails when Fuseki is down. Compose calls DRY'd into variables; a clear
+  grouped `make help`.
+- **Fixed `skos_history_wrapper` script path** — it resolved `load_versions.sh` via
+  `__file__.parents[2]`, which broke when the module moved one level deeper (component-first); now
+  anchored on `REPO_ROOT`.
+- **Service-dependent tests recategorised.** Six tests under `tests/unit/` that need live
+  Fuseki/Redis/`db/`/the real script are tagged `@pytest.mark.integration` (conftest lets an explicit
+  marker override the path default), so `make test-unit` is green offline (236 passed, ~1s).
 - **Endpoints return typed response models, not ad-hoc dicts.** Added
   `api/domain/model.py` (`CreateDiffResponse`, `ReportTaskResponse`, `MessageResponse`) and
   `reporting/domain/model.py` (`ReportMeta`); handlers and `generate_meta_file` build these and

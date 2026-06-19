@@ -13,7 +13,7 @@ from urllib.parse import quote, urljoin
 
 from rdflib.util import guess_format
 
-from rdf_differ import config
+from rdf_differ import REPO_ROOT, config
 from rdf_differ.core.adapters.filesystem import dir_exists, dir_is_empty
 from rdf_differ.core.domain.constants import INPUT_MIME_TYPES
 from rdf_differ.diffing.adapters.exceptions import SubprocessFailure
@@ -209,7 +209,7 @@ class SKOSHistoryRunner:
         :param config_location: path - location of the config
         :return: the script's output
         """
-        script_location = Path(__file__).parents[2] / "resources/load_versions.sh"
+        script_location = REPO_ROOT / "resources/load_versions.sh"
 
         logging.info("Subprocess: run load_versions.sh start.")
 
