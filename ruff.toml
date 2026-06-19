@@ -27,6 +27,17 @@ ignore = [
               #   renaming is a public-name change; deferred to avoid behaviour risk.
 ]
 
+[lint.flake8-bugbear]
+# FastAPI's dependency markers are designed to be called in argument defaults
+# (the framework idiom); they are immutable, so B008 does not apply.
+extend-immutable-calls = [
+    "fastapi.File",
+    "fastapi.Form",
+    "fastapi.Query",
+    "fastapi.Path",
+    "fastapi.Depends",
+]
+
 [lint.mccabe]
 max-complexity = 10
 

@@ -112,7 +112,7 @@ See `docs/` for project documentation.
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **rdf-differ** (4056 symbols, 4712 relationships, 42 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **rdf-differ-ws** (4964 symbols, 6248 relationships, 73 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > Index stale? Run `node .gitnexus/run.cjs analyze` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? `npx gitnexus analyze` (npm 11 crash → `npm i -g gitnexus`; #1939).
 
@@ -135,10 +135,10 @@ This project is indexed by GitNexus as **rdf-differ** (4056 symbols, 4712 relati
 
 | Resource | Use for |
 |----------|---------|
-| `gitnexus://repo/rdf-differ/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/rdf-differ/clusters` | All functional areas |
-| `gitnexus://repo/rdf-differ/processes` | All execution flows |
-| `gitnexus://repo/rdf-differ/process/{name}` | Step-by-step execution trace |
+| `gitnexus://repo/rdf-differ-ws/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/rdf-differ-ws/clusters` | All functional areas |
+| `gitnexus://repo/rdf-differ-ws/processes` | All execution flows |
+| `gitnexus://repo/rdf-differ-ws/process/{name}` | Step-by-step execution trace |
 
 ## CLI
 

@@ -1,21 +1,17 @@
 #!/usr/bin/python3
 
-# flask_app.py
-# Date:  28/07/2020
-# Author: Eugeniu Costetchi
-# Email: costezki.eugen@gmail.com
-import logging
+"""Uvicorn/Gunicorn entrypoint for the REST API.
 
-from rdf_differ.api.entrypoints.api import app, connexion_app
+Serve the FastAPI ASGI app with an ASGI server, e.g.
+``gunicorn -k uvicorn.workers.UvicornWorker rdf_differ.api.entrypoints.api.run:app``.
+"""
 
-# `connexion_app` is the Connexion 3 ASGI application — serve it with an ASGI server, e.g.
-# `gunicorn -k uvicorn.workers.UvicornWorker rdf_differ.api.entrypoints.api.run:connexion_app`.
-# Serving the bare Flask `app` would bypass Connexion's routing/validation middleware.
-# `app` is kept only to wire Flask's logger to gunicorn's.
+from rdf_differ.api.entrypoints.api.app import app
+
+__all__ = ["app"]
+
 
 if __name__ == "__main__":
-    connexion_app.run()
-else:
-    gunicorn_logger = logging.getLogger("gunicorn.error")
-    app.logger.handlers = gunicorn_logger.handlers
-    app.logger.setLevel(gunicorn_logger.level)
+    import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=8030)

@@ -37,6 +37,13 @@ dependencies = [
     "Flask>=3.1,<4",
     "Flask-WTF>=1.2,<2",
     "connexion[flask,swagger-ui,uvicorn]>=3.2,<4",
+    # FastAPI migration (EPIC api-ui-fastapi-modernization). Flask/Flask-WTF/connexion
+    # are removed in the cutover slices once their last importer is gone (S3, S5).
+    "fastapi>=0.115,<1",
+    "uvicorn[standard]>=0.30,<1",
+    "jinja2>=3.1,<4",
+    "python-multipart>=0.0.9,<1",
+    "httpx>=0.27,<1",
     "eds4jinja2>=0.3.1,<0.4",
     "shortuuid>=1.0,<2",
     "celery>=5.4,<6",
