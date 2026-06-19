@@ -16,6 +16,7 @@ from rdflib.util import guess_format
 from rdf_differ import config
 from rdf_differ.core.adapters.filesystem import dir_exists, dir_is_empty
 from rdf_differ.core.domain.constants import INPUT_MIME_TYPES
+from rdf_differ.diffing.adapters.exceptions import SubprocessFailure
 
 CONFIG_TEMPLATE = """#!/bin/bash
 
@@ -31,12 +32,6 @@ UPDATE_URI={update_uri}
 QUERY_URI={query_uri}
 
 INPUT_MIME_TYPE=\"{input_type}\""""
-
-
-class SubprocessFailure(Exception):
-    """
-    An exception for SKOSHistoryRunner.
-    """
 
 
 class SKOSHistoryRunner:

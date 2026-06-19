@@ -11,7 +11,8 @@ from rdf_differ import config
 from rdf_differ.core.adapters.filesystem import build_dataset_reports_location
 from rdf_differ.core.adapters.sparql import SPARQLRunner
 from rdf_differ.core.domain.time import get_timestamp
-from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.diffing.adapters.exceptions import FusekiException
 from rdf_differ.loader.adapters.graph_store_provider import build_graph_store
 from rdf_differ.loader.adapters.settings import StoreSettings
 from rdf_differ.loader.adapters.skolemizer import strategy_for

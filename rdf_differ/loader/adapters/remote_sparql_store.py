@@ -18,7 +18,7 @@ import requests
 
 from rdf_differ import config
 from rdf_differ.core.adapters.sparql import SPARQLRunner
-from rdf_differ.loader.adapters.graph_store import GraphStoreError
+from rdf_differ.loader.adapters.exceptions import GraphStoreError
 from rdf_differ.loader.adapters.settings import StoreSettings
 
 logger = logging.getLogger(config.RDF_DIFFER_LOGGER)

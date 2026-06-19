@@ -20,7 +20,8 @@ import requests
 from rdf_differ import config
 from rdf_differ.core.adapters.sparql import SPARQLRunner
 from rdf_differ.core.domain.constants import INPUT_MIME_TYPES
-from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.diffing.adapters.exceptions import FusekiException
 from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 DEFAULT_TIMEOUT = 60

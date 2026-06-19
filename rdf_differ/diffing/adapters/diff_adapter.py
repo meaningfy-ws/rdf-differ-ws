@@ -30,6 +30,7 @@ from rdf_differ.diffing.adapters import (
     QUERY_INSERTIONS_COUNT,
     SKOS_HISTORY_PREFIXES,
 )
+from rdf_differ.diffing.adapters.exceptions import FusekiException
 from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
@@ -119,12 +120,6 @@ class AbstractDiffAdapter(ABC):
         identifying the dataset
         :return: inserted triples count
         """
-
-
-class FusekiException(Exception):
-    """
-    An exception when Fuseki server interaction has failed.
-    """
 
 
 class FusekiDiffAdapter(AbstractDiffAdapter):

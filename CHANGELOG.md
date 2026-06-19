@@ -31,6 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Exceptions moved to per-layer `exceptions.py` modules** (no longer buried in logic modules):
+  `loader/domain/exceptions.py` (`LoadingError` family), `loader/adapters/exceptions.py`
+  (`GraphStoreError`), `diffing/domain/exceptions.py` (`Version*`), `diffing/adapters/exceptions.py`
+  (`FusekiException`, `SubprocessFailure`). Importers updated to the new homes.
 - **Settings migrated to the Meaningfy config pattern.** Replaced the `config.py` module-level
   `RDF_DIFFER_*` constants and the loader's pydantic-settings `StoreSettings` with a
   `core/adapters/config_resolver.py` (`ConfigResolverABC` / `EnvConfigResolver` / `env_property`)

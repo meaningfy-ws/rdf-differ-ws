@@ -1,10 +1,10 @@
 import pytest
 
+from rdf_differ.diffing.domain.exceptions import VersionMissing
 from rdf_differ.diffing.domain.model import (
     Dataset,
     DatasetVersion,
     RDFContentReference,
-    VersionMissing,
     VersionsDelta,
 )
 

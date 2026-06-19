@@ -7,17 +7,7 @@ value objects keyed on their identifiers, not their payloads.
 
 from pydantic import BaseModel, ConfigDict, Field
 
-
-class VersionMissing(Exception):
-    pass
-
-
-class VersionExists(Exception):
-    pass
-
-
-class VersionsDeltaExists(Exception):
-    pass
+from rdf_differ.diffing.domain.exceptions import VersionExists, VersionMissing
 
 
 class RDFContentReference:

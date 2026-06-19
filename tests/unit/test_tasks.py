@@ -11,7 +11,8 @@ import pytest
 from rdf_differ import config
 from rdf_differ.api.services.celery import async_create_diff, async_generate_report
 from rdf_differ.core.adapters.filesystem import dir_exists
-from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.diffing.adapters.exceptions import FusekiException
 
 
 @patch.object(FusekiDiffAdapter, "create_diff")

@@ -1,8 +1,8 @@
 import pytest
 
+from rdf_differ.loader.domain.exceptions import ConfigError
 from rdf_differ.loader.domain.model import (
     BlankNodePolicy,
-    ConfigError,
     Engine,
     ResolvedVersionMeta,
     VersionSpec,

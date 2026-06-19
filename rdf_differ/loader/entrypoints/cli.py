@@ -14,18 +14,17 @@ import click
 import yaml
 
 from rdf_differ import config
-from rdf_differ.loader.adapters.graph_store import GraphStoreError
+from rdf_differ.loader.adapters.exceptions import GraphStoreError
 from rdf_differ.loader.adapters.graph_store_provider import build_graph_store
 from rdf_differ.loader.adapters.settings import StoreSettings
 from rdf_differ.loader.adapters.skolemizer import strategy_for
-from rdf_differ.loader.domain.model import (
+from rdf_differ.loader.domain.exceptions import (
     ConfigError,
-    Engine,
     GraphLoadError,
     UnsupportedFormatError,
     ValidationError,
-    build_version_store_config,
 )
+from rdf_differ.loader.domain.model import Engine, build_version_store_config
 from rdf_differ.loader.services.diff_service import write_artifacts
 from rdf_differ.loader.services.loader import VersionStoreLoader, validate_store
 

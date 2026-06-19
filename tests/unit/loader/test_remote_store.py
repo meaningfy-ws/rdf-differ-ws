@@ -3,7 +3,8 @@
 import pytest
 import requests
 
-from rdf_differ.loader.adapters.graph_store import GraphStoreError, GraphStorePort
+from rdf_differ.loader.adapters.exceptions import GraphStoreError
+from rdf_differ.loader.adapters.graph_store import GraphStorePort
 from rdf_differ.loader.adapters.remote_sparql_store import RemoteSparqlStore
 from rdf_differ.loader.adapters.settings import StoreSettings
 

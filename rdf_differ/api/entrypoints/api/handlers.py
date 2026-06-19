@@ -33,7 +33,8 @@ from rdf_differ.core.adapters.redis import push_task_to_queue, redis_client
 from rdf_differ.core.adapters.sparql import SPARQLRunner
 from rdf_differ.core.domain import strtobool
 from rdf_differ.core.domain.naming import build_unique_name, check_dataset_name_validity
-from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.diffing.adapters.exceptions import FusekiException
 from rdf_differ.reporting.services.ap_manager import ApplicationProfileManager
 from rdf_differ.reporting.services.report_handling import (
     find_dataset_name_by_id,

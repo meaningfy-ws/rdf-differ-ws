@@ -19,7 +19,8 @@ from rdf_differ.api.entrypoints.api.handlers import (
     get_diffs,
     get_report,
 )
-from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
+from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.diffing.adapters.exceptions import FusekiException
 from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
 from rdf_differ.reporting.services.ap_manager import ApplicationProfileManager
 from tests.conftest import helper_create_diff

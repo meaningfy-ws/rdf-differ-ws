@@ -14,7 +14,7 @@ from typing import cast
 import pyoxigraph as ox
 from rdflib import Dataset, URIRef
 
-from rdf_differ.loader.adapters.graph_store import GraphStoreError
+from rdf_differ.loader.adapters.exceptions import GraphStoreError
 
 _OX_FORMATS = {
     "text/turtle": ox.RdfFormat.TURTLE,
