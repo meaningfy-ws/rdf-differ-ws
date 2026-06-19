@@ -50,7 +50,7 @@ dependencies = [
 ]
 
 [project.scripts]
-rdf-diff = "rdf_differ.entrypoints.cli.load:cli"
+rdf-diff = "rdf_differ.loader.entrypoints.cli:cli"
 
 [dependency-groups]
 # PEP 735 dependency groups.

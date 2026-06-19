@@ -19,10 +19,10 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter
-from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
-from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_FUSEKI_SERVICE
+from rdf_differ.core.adapters.sparql import SPARQLRunner
+from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
 @pytest.fixture()

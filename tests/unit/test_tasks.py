@@ -8,10 +8,10 @@ from unittest.mock import patch
 
 import pytest
 
-from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
-from rdf_differ.adapters.filesystem import dir_exists
+from rdf_differ.api.services.celery import async_create_diff, async_generate_report
 from rdf_differ.config import RDF_DIFFER_REPORTS_DB
-from rdf_differ.services.celery import async_create_diff, async_generate_report
+from rdf_differ.core.adapters.filesystem import dir_exists
+from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter, FusekiException
 
 
 @patch.object(FusekiDiffAdapter, "create_diff")
@@ -54,8 +54,8 @@ def test_async_create_diff_failure(mock_inject_metadata, mock_create_diff, tmpdi
     assert not dir_exists(cleanup_location)
 
 
-@patch("rdf_differ.services.celery.save_report")
-@patch("rdf_differ.services.celery.build_report")
+@patch("rdf_differ.api.services.celery.save_report")
+@patch("rdf_differ.api.services.celery.build_report")
 def test_async_create_report_success(mock_build_report, mock_save_report, tmpdir):
     db = tmpdir.mkdir("db")
     template_location = tmpdir.mkdir("template_location")

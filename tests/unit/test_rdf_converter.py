@@ -1,9 +1,9 @@
 from unittest.mock import patch
 
-from rdf_differ.adapters.filesystem import convert_test_data
+from rdf_differ.core.adapters.filesystem import convert_test_data
 
 
-@patch("rdf_differ.adapters.filesystem.parse_and_serialize")
+@patch("rdf_differ.core.adapters.filesystem.parse_and_serialize")
 def test_convert_test_data_pipes_to_turtle(mock_pipe):
     convert_test_data("in.rdf", "out.ttl")
 
@@ -15,7 +15,7 @@ def test_convert_test_data_pipes_to_turtle(mock_pipe):
     assert kwargs["guess"] is True
 
 
-@patch("rdf_differ.adapters.filesystem.parse_and_serialize")
+@patch("rdf_differ.core.adapters.filesystem.parse_and_serialize")
 def test_convert_test_data_merges_additional_bindings(mock_pipe):
     convert_test_data(
         "in.rdf", "out.ttl", input_format="xml", additional_bindings={"ex": "http://ex#"}

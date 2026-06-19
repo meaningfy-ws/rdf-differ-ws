@@ -7,7 +7,7 @@
 
 import pytest
 
-from rdf_differ.adapters.diff_adapter import FusekiException
+from rdf_differ.diffing.adapters.diff_adapter import FusekiException
 from tests import DUMMY_DATASET_DIFF_DESCRIPTION
 from tests.conftest import helper_fuseki_service
 

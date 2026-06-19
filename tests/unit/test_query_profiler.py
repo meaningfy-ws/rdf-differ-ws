@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from rdf_differ.entrypoints.query_profiler import (
+from rdf_differ.diffing.entrypoints.query_profiler import (
     QueryRunResult,
     discover_query_files,
     export_results_to_csv,
@@ -21,7 +21,7 @@ def test_discover_query_files(tmp_path, monkeypatch):
     file_b.write_text("ASK { ?s ?p ?o }")
 
     monkeypatch.setattr(
-        "rdf_differ.entrypoints.query_profiler.config.APPLICATION_PROFILES_ROOT_FOLDER",
+        "rdf_differ.diffing.entrypoints.query_profiler.config.APPLICATION_PROFILES_ROOT_FOLDER",
         tmp_path,
     )
 

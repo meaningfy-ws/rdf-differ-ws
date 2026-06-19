@@ -3,11 +3,9 @@
 import pytest
 from pytest_bdd import given, parsers, scenarios, then, when
 
-from rdf_differ.adapters.loading.in_memory_oxigraph_store import PyoxigraphStore
-from rdf_differ.adapters.loading.in_memory_rdflib_store import RdflibStore
-from rdf_differ.domain.loading.config import build_version_store_config
-from rdf_differ.services.loading.loader import VersionStoreLoader
-from rdf_differ.services.loading.validation import validate_store
+from rdf_differ.loader.adapters.in_memory_stores import PyoxigraphStore, RdflibStore
+from rdf_differ.loader.domain.model import build_version_store_config
+from rdf_differ.loader.services.loader import VersionStoreLoader, validate_store
 
 scenarios("rdf_loading_module.feature")
 

@@ -2,7 +2,7 @@ import pathlib
 
 import pytest
 
-from rdf_differ.services.ap_manager import ApplicationProfileManager
+from rdf_differ.reporting.services.ap_manager import ApplicationProfileManager
 
 
 def test_ap_manager_creation(sample_ap_root_folder):

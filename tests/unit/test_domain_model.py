@@ -1,6 +1,6 @@
 import pytest
 
-from rdf_differ.domain.model import (
+from rdf_differ.diffing.domain.model import (
     Dataset,
     DatasetVersion,
     RDFContentReference,

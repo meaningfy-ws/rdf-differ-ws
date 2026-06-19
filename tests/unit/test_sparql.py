@@ -1,9 +1,9 @@
 from unittest.mock import patch
 
-from rdf_differ.adapters.sparql import SPARQLRunner
+from rdf_differ.core.adapters.sparql import SPARQLRunner
 
 
-@patch("rdf_differ.adapters.sparql.SPARQLWrapper")
+@patch("rdf_differ.core.adapters.sparql.SPARQLWrapper")
 def test_execute_runs_query_and_converts(mock_wrapper):
     runner = mock_wrapper.return_value
     runner.query.return_value.convert.return_value = {"results": {}}
@@ -14,7 +14,7 @@ def test_execute_runs_query_and_converts(mock_wrapper):
     runner.setQuery.assert_called_once_with("SELECT * WHERE {}")
 
 
-@patch("rdf_differ.adapters.sparql.SPARQLWrapper")
+@patch("rdf_differ.core.adapters.sparql.SPARQLWrapper")
 def test_execute_update_sets_credentials_and_returns_response(mock_wrapper):
     runner = mock_wrapper.return_value
     runner.query.return_value.response.read.return_value = b"OK"

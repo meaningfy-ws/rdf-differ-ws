@@ -17,6 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   objects, a `UriBuilder`, parametrised SPARQL templates (no free strings), deterministic W3C blank-node
   skolemisation (rdflib `to_canonical_graph` → `.well-known/genid/`), post-load validation, in-memory
   diff-artifact output, and a `rdf-diff` Click CLI (`--engine remote|oxigraph|rdflib [--report]`).
+  Organised **component-first** (DEC-11): the whole package is decomposed into **five components** —
+  `core` (commons), `diffing`, `reporting`, `loader`, `api` — each owning its
+  `entrypoints → services → adapters → domain` layers, with no layer-first dirs left at the root.
+  Loader consolidated to ~13 cohesive modules with non-generic names (`graph_store.py`,
+  `sparql_queries.py`, `remote_sparql_store.py`, `in_memory_stores.py`, `graph_store_provider.py`).
+  Enforced by an **ers-style import-linter** (10 contracts: tier hierarchy + per-component layers +
+  commons isolation/exhaustive + foundation peer-isolation + domain purity + store-seam DIP +
+  store independence). Behaviour-neutral; OpenAPI/Celery/gunicorn/compose paths updated.
 - **Cutover flag** `RDF_DIFFER_USE_PYTHON_LOADER` (default off): when on, the Celery `create_diff` task
   uses the Python loader (`RemoteSparqlStore` + `VersionStoreLoader`) instead of the `load_versions.sh`
   subprocess. Physical retirement of the script is gated on a Fuseki parity smoke test.
@@ -24,10 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **`rdf_differ/domain/model.py` migrated to pydantic v2** (`Dataset`/`DatasetVersion`/`VersionsDelta`).
-- **`rdf_differ/utils/` dissolved** into the proper layers: filesystem/RDF-IO → `adapters/filesystem.py`,
-  name helpers → `domain/naming.py`, `INPUT_MIME_TYPES` → `domain/constants.py`, `strtobool` → `config`.
-- **Stricter import-linter**: layers (utils-free) + `services.loading` store-seam DIP + domain purity +
-  store-adapter independence (4 contracts).
+- **`rdf_differ/utils/` dissolved** into the proper layers, then relocated to the shared `core/`
+  component (DEC-11): filesystem/RDF-IO → `core/adapters/filesystem.py`, name helpers →
+  `core/domain/naming.py`, `INPUT_MIME_TYPES`/`DeltaOp` → `core/domain/constants.py`,
+  `SPARQLRunner` → `core/adapters/sparql.py`, `strtobool` → `config`.
+- **ers-style import-linter** (10 contracts): tier hierarchy (`api > diffing|reporting|loader > core`)
+  + per-component layers (`containers=`) + `core` isolation + `core` exhaustive + foundation
+  peer-isolation (×3) + domain purity + `loader.services` store-seam DIP + store-adapter independence.
 
 - **Root decluttered.** `bash/` → `infra/scripts/` (all run/setup/CLI helper scripts; Makefile,
   README and test references updated; `source bash/.env` → `infra/scripts/.env`; fixed a stale

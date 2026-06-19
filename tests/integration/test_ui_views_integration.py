@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from werkzeug.datastructures import FileStorage
 
 
-@patch("rdf_differ.entrypoints.ui.views.get_dataset")
+@patch("rdf_differ.api.entrypoints.ui.views.get_dataset")
 def test_get_dataset(mock_get_dataset, ui_client):
     dataset_id = "uid"
     dataset_name = "dataset_one123456"
@@ -53,8 +53,8 @@ def test_get_dataset(mock_get_dataset, ui_client):
     assert "one_new.ttl" in rows[7].get_text()
 
 
-@patch("rdf_differ.entrypoints.ui.views.get_dataset")
-@patch("rdf_differ.entrypoints.ui.views.api_create_diff")
+@patch("rdf_differ.api.entrypoints.ui.views.get_dataset")
+@patch("rdf_differ.api.entrypoints.ui.views.api_create_diff")
 def test_create_diff_success(mock_create_diff, mock_get_dataset, ui_client):
     mock_create_diff.return_value = {}, 200
     # required data for the redirect after successful submission

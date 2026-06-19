@@ -1,0 +1,333 @@
+openapi: 3.0.1
+
+info:
+  title: RDF Diffing Service
+  description: |
+    This API provides the possibility to calculate the difference between two versions of the same dataset.
+
+    Current implementation is based on the [skos-history tool](https://github.com/eu-vocabularies/skos-history).
+
+    See the [Wiki page of the original repository](https://github.com/jneubert/skos-history/wiki/Tutorial) for more details.
+  license:
+    name: GNU General Public License Version 3 (GPLv3)
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html
+  version: 1.0.1
+
+servers:
+  - url: "http://localhost:3030/"
+    description: Default development server
+
+paths:
+  /diffs:
+    get:
+      operationId: rdf_differ.api.entrypoints.api.handlers.get_diffs
+      description: List the existent datasets.
+      responses:
+        200:
+          description: List of datasets succesfully retreived.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CalculatedDiffDescription"
+        5XX:
+          description: Unexpected Error.
+    post:
+      operationId: rdf_differ.api.entrypoints.api.handlers.create_diff
+      description: Calculate the diff of two dataset versions.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              # using this explicit type definition until $ref method is fixed by connexion
+              type: object
+              properties:
+                dataset_name:
+                  type: string
+                  description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
+                dataset_description:
+                  type: string
+                  description: The dataset description. This is a free text description fo the dataset.
+                dataset_uri:
+                  type: string
+                  description: The dataset URI. For SKOS datasets this is usually the ConceptSchema URI.
+                old_version_id:
+                  type: string
+                  description: Identifier for the older version of the dataset.
+                new_version_id:
+                  type: string
+                  description: The identifier for the newer version of the dataset.
+                new_version_file_content:
+                  type: string
+                  format: binary
+                  description: The content of the new version file.
+                old_version_file_content:
+                  type: string
+                  format: binary
+                  description: The content of the old version file.
+              required:
+                - dataset_name
+                - dataset_uri
+                - new_version_id
+                - old_version_id
+                - old_version_file_content
+                - new_version_file_content
+      responses:
+        200:
+          description: Request to create a new dataset diff successfully accepted for processing.
+        5XX:
+          description: Unexpected Error.
+
+  /diffs/{dataset_id}:
+    get:
+      operationId: rdf_differ.api.entrypoints.api.handlers.get_diff
+      description: Get diffs for a dataset versions.
+      parameters:
+        - name: dataset_id
+          in: path
+          required: true
+          description: Dataset id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Dataset diff description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CalculatedDiffDescription"
+        404:
+          description: A dataset with the specified ID was not found.
+        5XX:
+          description: Unexpected Error.
+    delete:
+      operationId: rdf_differ.api.entrypoints.api.handlers.delete_diff
+      description: Delete the dataset and all its diffs.
+      parameters:
+        - name: dataset_id
+          in: path
+          required: true
+          description: Dataset id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Dataset succesfully deteled.
+        404:
+          description: A dataset with the specified ID was not found.
+        5XX:
+          description: Unexpected Error.
+
+  /diffs/report:
+    post:
+      operationId: rdf_differ.api.entrypoints.api.handlers.build_report
+      description: Create report for a dataset.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportRequest"
+      responses:
+        200:
+          description: Report generation succesfully started.
+        406:
+          description: Report already exists
+        422:
+          description: AP error
+    get:
+      operationId: rdf_differ.api.entrypoints.api.handlers.get_report
+      description: Get report for a dataset.
+      parameters:
+        - in: query
+          name: dataset_id
+          required: true
+          allowEmptyValue: False
+          description: Dataset id
+          schema:
+            type: string
+        - in: query
+          name: application_profile
+          required: true
+          allowEmptyValue: False
+          description: Application profile
+          schema:
+            type: string
+        - in: query
+          name: template_type
+          required: true
+          allowEmptyValue: False
+          description: Template type
+          schema:
+            type: string
+        - in: query
+          name: rebuild
+          required: false
+          allowEmptyValue: False
+          description: Flag to signal rebuilding the report even if already exists.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Dataset diff report succesfully retreived.
+          content:
+            text/html:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: dataset_id query param not present.
+        5XX:
+          description: Unexpected Error.
+  /aps:
+    get:
+      operationId: rdf_differ.api.entrypoints.api.handlers.get_application_profiles_details
+      description: Get application profiles names and their template variations.
+      responses:
+        200:
+          description: Application profiles details succesfully retreived.
+          content:
+            application/json:
+              schema:
+                type: array
+        5XX:
+          description: Unexpected Error.
+
+  /tasks/active:
+    get:
+      operationId: rdf_differ.api.entrypoints.api.handlers.get_active_tasks
+      description: Get status of a task
+      responses:
+        200:
+          description: Task status description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskStatus"
+
+  /tasks/{task_id}:
+    get:
+      operationId: rdf_differ.api.entrypoints.api.handlers.get_task_status
+      description: Get status of a task
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: task id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Task status description succesfully retreived.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskStatus"
+    delete:
+      operationId: rdf_differ.api.entrypoints.api.handlers.stop_running_task
+      description: cancel execution  status of a task
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: task id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Task accepted for revoking.
+        406:
+          description: Task already marked for revoking.
+
+components:
+  schemas:
+    BasicDiffDescription:
+      type: object
+      description: A minimal dataset description.
+      properties:
+        dataset_name:
+          type: string
+          description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
+        dataset_description:
+          type: string
+          description: The dataset description. This is a free text description fo the dataset.
+        dataset_uri:
+          type: string
+          description: The dataset URI. For SKOS datasets this is usually the ConceptSchema URI.
+        new_version_id:
+          type: string
+          description: The identifier for the newer version of the dataset.
+        old_version_id:
+          type: string
+          description: Identifier for the older version of the dataset.
+      required:
+        - dataset_name
+        - dataset_uri
+        - new_version_id
+        - old_version_id
+
+    DiffSubmission:
+      description: A request to diff two versions of a dataset.
+      oneOf:
+        - $ref: "#/components/schemas/BasicDiffDescription"
+        - type: object
+          properties:
+            new_version_file_content:
+              type: string
+              format: binary
+              description: The content of the new version file.
+            old_version_file_content:
+              type: string
+              format: binary
+              description: The content of the old version file.
+          required:
+            - new_version_file_content
+            - old_version_file_content
+
+    CalculatedDiffDescription:
+      description: A description of diff in the triplestore.
+      allOf:
+        - $ref: "#/components/schemas/BasicDiffDescription"
+        - type: object
+          properties:
+            query_url:
+              type: string
+              description: The SPARQL endpoint URL to query the diff.
+            diff_date:
+              type: string
+              format: date
+              description: The date of the calculated diff.
+
+    ReportRequest:
+      type: object
+      description: Report request body.
+      properties:
+        dataset_id:
+          type: string
+          description: The dataset identifier. This should be short alphanumeric string uniquely identifying the dataset.
+        application_profile:
+          type: string
+          description: The application profile identifier
+        template_type:
+          type: string
+          description: The template type identifier
+        rebuild:
+          type: string
+          description: Flag to signal rebuilding the report even if already exists
+      required:
+        - dataset_id
+        - application_profile
+        - template_type
+
+    TaskStatus:
+      type: object
+      description: A description of a task status response.
+      properties:
+        task_id:
+          type: string
+          description: The task identifier.
+        task_status:
+          type: string
+          description: The task status.

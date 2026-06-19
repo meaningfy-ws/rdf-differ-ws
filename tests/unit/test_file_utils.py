@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from rdf_differ.adapters.filesystem import (
+from rdf_differ.core.adapters.filesystem import (
     check_files_exist,
     dir_exists,
     dir_is_empty,
@@ -19,7 +19,7 @@ from rdf_differ.adapters.filesystem import (
     save_files,
     temporarily_save_files,
 )
-from rdf_differ.domain.naming import build_unique_name
+from rdf_differ.core.domain.naming import build_unique_name
 
 
 def test_dir_exists(tmpdir):

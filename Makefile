@@ -230,8 +230,8 @@ test-feature:
 generate-models:
 	@ echo "$(BUILD_PRINT)Generating Pydantic models from model/schema.yaml (LinkML seam — DEC-6, not yet authoritative)"
 	@ poetry run python -c "import linkml" 2>/dev/null || { echo "$(WARN_PRINT)linkml not installed. Run: poetry add --group model 'linkml>=1.7'  (see model/README.md)"; exit 1; }
-	@ poetry run gen-pydantic model/schema.yaml > rdf_differ/domain/_generated_model.py
-	@ echo "$(MSG_PRINT)Wrote rdf_differ/domain/_generated_model.py (preview — not wired in; see model/README.md)"
+	@ poetry run gen-pydantic model/schema.yaml > rdf_differ/diffing/domain/_generated_model.py
+	@ echo "$(MSG_PRINT)Wrote rdf_differ/diffing/domain/_generated_model.py (preview — not wired in; see model/README.md)"
 
 lint:
 	@ echo "$(BUILD_PRINT)Linting the code (Ruff)"
@@ -281,4 +281,4 @@ set-report-template:
 #-----------------------------------------------------------------------------
 
 run-dev-ui:
-	@ FLASK_APP=rdf_differ.entrypoints.ui.run FLASK_DEBUG=1 poetry run flask run
+	@ FLASK_APP=rdf_differ.api.entrypoints.ui.run FLASK_DEBUG=1 poetry run flask run

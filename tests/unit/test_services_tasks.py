@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-from rdf_differ.services.tasks import (
+from rdf_differ.api.services.tasks import (
     flatten_active_tasks,
     retrieve_active_tasks,
     retrieve_task,
@@ -27,7 +27,7 @@ def test_revoke_task_calls_control_revoke():
     worker.control.revoke.assert_called_once_with("t1", terminate=True)
 
 
-@patch("rdf_differ.services.tasks.AsyncResult")
+@patch("rdf_differ.api.services.tasks.AsyncResult")
 def test_retrieve_task_builds_async_result(mock_async_result):
     worker = MagicMock()
     retrieve_task("t1", worker=worker)

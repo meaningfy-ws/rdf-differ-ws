@@ -1,7 +1,7 @@
 import time
 from pathlib import Path
 
-from rdf_differ.entrypoints.query_profiler import (
+from rdf_differ.diffing.entrypoints.query_profiler import (
     QueryRunResult,
     _guess_content_type,
     export_results_to_csv,

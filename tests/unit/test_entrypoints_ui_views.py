@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from werkzeug.datastructures import FileStorage
 
 
-@patch("rdf_differ.entrypoints.ui.views.get_datasets")
+@patch("rdf_differ.api.entrypoints.ui.views.get_datasets")
 def test_index(mock_get_datasets, ui_client):
     mock_get_datasets.return_value = (
         [
@@ -41,7 +41,7 @@ def test_index(mock_get_datasets, ui_client):
     assert "dataset_two" in rows[1].get_text()
 
 
-@patch("rdf_differ.entrypoints.ui.views.api_create_diff")
+@patch("rdf_differ.api.entrypoints.ui.views.api_create_diff")
 def test_create_diff_failure_dataset_is_not_empty(mock_create_diff, ui_client):
     mock_create_diff.return_value = (
         dumps(
@@ -75,7 +75,7 @@ def test_create_diff_failure_dataset_is_not_empty(mock_create_diff, ui_client):
     assert "Status: 409. Title: Conflict Detail: Dataset is not empty." in body
 
 
-@patch("rdf_differ.entrypoints.ui.views.api_create_diff")
+@patch("rdf_differ.api.entrypoints.ui.views.api_create_diff")
 def test_create_diff_incorrect_dataset_name(mock_create_diff, ui_client):
     mock_create_diff.return_value = {}, 200
 
@@ -112,7 +112,7 @@ def test_create_diff_incorrect_dataset_name(mock_create_diff, ui_client):
     assert "Dataset name can contain only letters, numbers, _, :, and -" in body
 
 
-@patch("rdf_differ.entrypoints.ui.views.get_report")
+@patch("rdf_differ.api.entrypoints.ui.views.get_report")
 def test_download_report_success(mock_get_report, ui_client):
     dataset_id = "dataset"
     application_profile = "ap"
@@ -123,8 +123,8 @@ def test_download_report_success(mock_get_report, ui_client):
     assert "important report" in response.data.decode()
 
 
-@patch("rdf_differ.entrypoints.ui.views.get_datasets")
-@patch("rdf_differ.entrypoints.ui.views.get_report")
+@patch("rdf_differ.api.entrypoints.ui.views.get_datasets")
+@patch("rdf_differ.api.entrypoints.ui.views.get_report")
 def test_download_report_failure(mock_get_report, mock_get_datasets, ui_client):
     dataset_id = "dataset"
     application_profile = "ap"

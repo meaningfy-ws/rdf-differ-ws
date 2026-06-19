@@ -14,10 +14,10 @@ import pytest
 import requests
 from pytest_bdd import given, parsers, scenario, then, when
 
-from rdf_differ.adapters.filesystem import dir_exists
-from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
-from rdf_differ.adapters.sparql import SPARQLRunner
 from rdf_differ.config import RDF_DIFFER_FUSEKI_SERVICE
+from rdf_differ.core.adapters.filesystem import dir_exists
+from rdf_differ.core.adapters.sparql import SPARQLRunner
+from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
 from tests.conftest import helper_fuseki_service
 
 

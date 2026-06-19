@@ -18,7 +18,7 @@ from pytest_bdd import (
     when,
 )
 
-from rdf_differ.adapters.filesystem import dir_exists, dir_is_empty, file_exists
+from rdf_differ.core.adapters.filesystem import dir_exists, dir_is_empty, file_exists
 from tests.conftest import helper_create_skos_runner
 
 

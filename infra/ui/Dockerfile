@@ -32,4 +32,4 @@ CMD gunicorn \
     --bind 0.0.0.0:${RDF_DIFFER_UI_PORT} \
     --reload \
     --log-level ${RDF_DIFFER_LOG_LEVEL} \
-    rdf_differ.entrypoints.ui.run:app
+    rdf_differ.api.entrypoints.ui.run:app

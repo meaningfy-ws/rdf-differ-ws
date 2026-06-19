@@ -11,9 +11,9 @@ from io import BytesIO
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter
-from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
-from rdf_differ.entrypoints.ui import app as ui_app
+from rdf_differ.api.entrypoints.ui import app as ui_app
+from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
 class FakeSPARQLRunner:

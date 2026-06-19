@@ -33,4 +33,4 @@ CMD gunicorn -k uvicorn.workers.UvicornWorker \
     --bind 0.0.0.0:${RDF_DIFFER_API_PORT} \
     --reload \
     --log-level ${RDF_DIFFER_LOG_LEVEL} \
-    rdf_differ.entrypoints.api.run:connexion_app
+    rdf_differ.api.entrypoints.api.run:connexion_app

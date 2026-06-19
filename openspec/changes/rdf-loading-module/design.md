@@ -177,7 +177,7 @@ queries and the report builder keep working unchanged.
 **Implemented cutover (safe, flag-gated).** The Celery `create_diff` task selects the diff engine on
 the `RDF_DIFFER_USE_PYTHON_LOADER` flag: when **on**, it builds a per-dataset `RemoteSparqlStore`
 (GSP `…/{ds}/data`, update `…/{ds}`, query `…/{ds}/query`) and runs `VersionStoreLoader` via the pure
-`services.loading.diff_service`; when **off (default)** it keeps the legacy subprocess. This makes the
+`loader.services.diff_service`; when **off (default)** it keeps the legacy subprocess. This makes the
 Python loader the production path *selectable and verifiable* without a big-bang deletion. **Physical
 retirement** of `load_versions.sh` + `skos_history_wrapper` is the final step, gated on a Fuseki
 parity smoke test (`make start-services-test` + flip the flag) — deferred because it can only be
@@ -236,9 +236,11 @@ of `rdf_differ.utils`).
 
 Beyond keeping the layers contract (now **without** `utils`), add:
 
-- **Layers contract (updated):** `entrypoints > services > adapters > domain` (utils removed).
-- **Forbidden — services store/report seam (DIP):** `rdf_differ.services.loading` MUST NOT import
-  `pyoxigraph`, `rdflib`, `requests`, `SPARQLWrapper`, `eds4jinja2`. (Scoped to the **new** loading
+- **Layers contracts (component-first, DEC-11):** legacy `entrypoints > services > adapters > domain`
+  **and** loader `loader.entrypoints > loader.services > loader.adapters > loader.domain`; plus a
+  `core` inwards-looking contract (core imports no component/outward layer).
+- **Forbidden — services store/report seam (DIP):** `rdf_differ.loader.services` MUST NOT import
+  `pyoxigraph`, `rdflib`, `requests`, `SPARQLWrapper`, `eds4jinja2`. (Scoped to the **new** loader
   service module: it is the code that must obey DIP. The legacy services — `report_handling` uses
   `eds4jinja2`, `queue` injects `requests` — predate this and are addressed in a follow-up; widening
   the contract package-wide is deferred so it does not block this epic.)
@@ -297,6 +299,42 @@ root**, never in `domain`.
 
 ---
 
+### DEC-11 — Full component-first decomposition (revised during delivery)
+
+The first cut placed `loading/` subpackages *inside* the legacy layer folders — layer-first, and
+over-fragmented. It was then reorganised to the **Meaningfy component-first standard**: the whole
+package is decomposed into **five components**, each owning its `entrypoints → services → adapters →
+domain` layers, with no layer-first directories left at the root:
+
+| Component | Tier | Holds |
+|-----------|------|-------|
+| `core` | 0 (commons) | shared `SPARQLRunner`, filesystem I/O, `redis`, naming, constants, time — importable by all, imports none |
+| `diffing` | 1 (foundation) | `FusekiDiffAdapter`, `skos_history_wrapper`, the diff `domain/model`, `query_profiler` |
+| `reporting` | 1 (foundation) | `report_handling` (eds4jinja2), `ap_manager` |
+| `loader` | 1 (foundation) | the RDF Loading Module (config-selected `GraphStorePort` backends) |
+| `api` | 3 (top) | Connexion REST + Flask UI entrypoints; Celery `celery`/`tasks`/`queue` orchestration |
+
+- **Consolidation (loader):** 21 → ~13 modules — one `loader/domain/model.py`, one
+  `loader/adapters/in_memory_stores.py` (both engines), `validation` folded into `services/loader.py`,
+  `artifacts` into `services/diff_service.py`. **Non-generic names:** `port.py`→`graph_store.py`,
+  `queries.py`→`sparql_queries.py`, `remote_store.py`→`remote_sparql_store.py`, the `build_graph_store`
+  composition helper lives in `graph_store_provider.py` (kept apart from the port so the two stores
+  stay independent). Dead `GraphRole` deleted.
+- **Enforcement (ers-style import-linter, 10 contracts):** a `tier-hierarchy` `layers` contract
+  (`api > diffing|reporting|loader > core`), one per-component `layers` contract via `containers=`,
+  `core` isolation + `exhaustive` (no entrypoints), one foundation peer-isolation `forbidden` per
+  peer, domain purity, the loader store-seam DIP, and store-adapter independence. **Living artifact:**
+  groomed on every refactor/new component.
+- **Why:** matches the company standard, isolates components, shrinks WTFs-per-minute. Behaviour-neutral
+  (233 unit tests green; only pre-existing live-Fuseki/subprocess tests fail); OpenAPI operationIds,
+  Celery `-A`, gunicorn/Flask app paths and compose updated to the new module paths.
+
+> Remaining alignment slices (sequenced): settings → `core/adapters/config_resolver` + `env_property`
+> (replacing pydantic `StoreSettings`/`config.py`); `exceptions.py` per layer; return typed models not
+> dicts; central NS-prefix bindings (`resources/prefixes.json`).
+
+---
+
 ## `GraphStorePort` interface
 
 The single secondary-adapter port. Engine-agnostic; all three adapters implement it identically.
@@ -330,33 +368,40 @@ upstream work is shaped separately under `openspec/changes/eds4jinja2-upstream-f
 
 ## File Structure
 
-New module rooted at `rdf_differ/` following the existing layers. **No `models/` package exists today**
-(domain lives in `rdf_differ/domain/`); new pydantic value objects go under `rdf_differ/domain/loading/`.
+**Component-first layout (DEC-11, revised during delivery).** Rather than scattering `loading/`
+subpackages inside the legacy layer folders, the loader is a **self-contained component** —
+`rdf_differ/loader/` with its own `domain → adapters → services → entrypoints` layers — and the
+genuinely shared infrastructure lives in an inwards-looking **`rdf_differ/core/`** component
+(importable by any component, importing none). This matches the Meaningfy sub-module standard and
+let the implementation consolidate 21 fragmented modules into ~12 cohesive ones (errors + results +
+config + delta-pairs + blank-node policy → one `domain/model.py`; the two in-memory stores → one
+`adapters/in_memory.py`; validation folded into `services/loader.py`; artifacts into
+`services/diff_service.py`; settings + factory kept separate only to avoid an import cycle).
 
 | Path | Responsibility |
 |------|----------------|
-| `rdf_differ/domain/loading/config.py` | `VersionSpec`, `VersionStoreConfig`, `LoadMode`/`Engine`, `BlankNodePolicy`; **pydantic v2** validators (≥2 versions, absolute IRIs, files exist) |
-| `rdf_differ/domain/loading/uris.py` | `UriBuilder` — all IRI construction (mirrors script `:317-342`) |
-| `rdf_differ/domain/loading/delta_pairs.py` | `consecutive_pairs`, `direct_to_current_pairs`, `all_delta_pairs` |
-| `rdf_differ/domain/constants.py` | `INPUT_MIME_TYPES`, graph-role/MIME constants (from `utils`, DEC-7) |
+| `rdf_differ/core/domain/constants.py` | `INPUT_MIME_TYPES`, `mime_type_for`, `DeltaOp` (shared; from `utils`, DEC-7) |
+| `rdf_differ/core/domain/naming.py` | pure name/identifier helpers (shared; from `utils`, DEC-7) |
+| `rdf_differ/core/adapters/sparql.py` | `SPARQLRunner` (shared SPARQL client) |
+| `rdf_differ/core/adapters/filesystem.py` | filesystem ops + `rdf_converter` RDF I/O (shared; from `utils`, DEC-7) |
+| `rdf_differ/loader/domain/model.py` | `VersionSpec`/`VersionStoreConfig` (pydantic v2), `Engine`, `BlankNodePolicy` + `BlankNodeStrategy` seam, `LoadResult`/`DeltaCounts`, delta-pair functions, error hierarchy |
+| `rdf_differ/loader/domain/uris.py` | `UriBuilder` — all IRI construction (mirrors script `:317-342`) |
+| `rdf_differ/loader/adapters/port.py` | `GraphStorePort` Protocol (`put_graph`/`clear_graph`/`update`/`query`/`serialize`); `GraphStoreError` |
+| `rdf_differ/loader/adapters/queries.py` | SPARQL template builders + prefixes (no free strings); `EXCLUDE`/`DOCUMENT_ONLY` bnode filters (DEC-9) |
+| `rdf_differ/loader/adapters/skolemizer.py` | rdflib `SKOLEMISE` transform — `to_canonical_graph` + `skolemize(.well-known/genid)` (DEC-9) |
+| `rdf_differ/loader/adapters/in_memory.py` | `PyoxigraphStore` + `RdflibStore` (both `GraphStorePort`) |
+| `rdf_differ/loader/adapters/remote_store.py` | `RemoteSparqlStore(GraphStorePort)` (GSP `PUT` + Update/Query; any SPARQL 1.1 endpoint; injected `StoreSettings`) |
+| `rdf_differ/loader/adapters/settings.py` | `StoreSettings` (pydantic-settings, env `RDF_DIFFER_FUSEKI_*`) — remote connection (DEC-10) |
+| `rdf_differ/loader/adapters/factory.py` | `build_graph_store(engine, settings)` → `GraphStorePort` (composition-root helper; DEC-10) |
+| `rdf_differ/loader/services/loader.py` | `VersionStoreLoader` orchestration + `validate_store` (spec §10) |
+| `rdf_differ/loader/services/diff_service.py` | `build_diff_config`/`create_version_diff` use case + `write_artifacts` (in-memory output, DEC-5) |
+| `rdf_differ/loader/entrypoints/cli.py` | `rdf-diff` `click` CLI (`--engine remote\|oxigraph\|rdflib [--report]`) |
 | `rdf_differ/domain/model.py` | existing `Dataset`/`DatasetVersion`/`VersionsDelta` **migrated to pydantic** (DEC-3) |
-| `rdf_differ/adapters/loading/graph_store_port.py` | `GraphStorePort` Protocol/ABC (`put_graph`, `clear_graph`, `update`, `query`, `serialize`); `GraphStoreError` |
-| `rdf_differ/adapters/loading/queries.py` | SPARQL template constants + `GraphRole`/prefixes (no free strings); `EXCLUDE`/`DOCUMENT_ONLY` bnode filters (DEC-9) |
-| `rdf_differ/domain/loading/blank_nodes.py` | `BlankNodeStrategy` interface + `BlankNodePolicy` (pure; DEC-9) |
-| `rdf_differ/adapters/loading/skolemizer.py` | rdflib `SKOLEMISE` transform — `to_canonical_graph` + `skolemize(.well-known/genid)` (DEC-9) |
-| `rdf_differ/adapters/loading/in_memory_oxigraph_store.py` | `PyoxigraphStore(GraphStorePort)` |
-| `rdf_differ/adapters/loading/in_memory_rdflib_store.py` | `RdflibStore(GraphStorePort)` |
-| `rdf_differ/adapters/loading/remote_store.py` | `RemoteSparqlStore(GraphStorePort)` (GSP `PUT` + Update/Query; any SPARQL 1.1 endpoint; takes injected `StoreSettings`) |
-| `rdf_differ/adapters/loading/settings.py` | `StoreSettings` (pydantic-settings, env `RDF_DIFFER_*`) — remote connection (DEC-10) |
-| `rdf_differ/adapters/loading/store_factory.py` | `build_graph_store(engine, settings)` → `GraphStorePort` (composition-root helper; DEC-10) |
-| `rdf_differ/adapters/filesystem.py` | filesystem ops from `utils/file_utils` + `rdf_converter` RDF I/O (DEC-7) |
-| `rdf_differ/services/loading/loader.py` | `VersionStoreLoader` — orchestration |
-| `rdf_differ/services/loading/validation.py` | structural + content validation (spec §10) |
-| `rdf_differ/services/loading/artifacts.py` | in-memory diff-artifact output (serialise four graphs + counts) |
-| `rdf_differ/services/loading/report.py` | **[gated]** in-memory full report via eds4jinja2 enhancement + remote-only fallback (DEC-5) |
-| `rdf_differ/entrypoints/cli/load.py` | `click` CLI (`--engine remote|oxigraph|rdflib [--report]`) |
-| `rdf_differ/entrypoints/.../create_diff` | existing API endpoint gains `engine`/`mode` param; async via Celery+Redis (DEC-6) |
-| `tests/unit/loading/…` | unit tests per layer |
+| `rdf_differ/services/celery.py` | `create_diff` task branches on `RDF_DIFFER_USE_PYTHON_LOADER` (DEC-6) |
+| `tests/unit/loader/…` | unit tests mirroring the component |
+
+> The in-memory **full report** (`report.py`) remains gated on the separate eds4jinja2 enhancement
+> (DEC-5) and is not yet implemented; the always-ships artifact output covers the in-memory path.
 | `tests/features/rdf_loading_module.feature` | BDD (shipped by this Epic) |
 | `tests/steps/test_rdf_loading_module.py` | step defs |
 | `.importlinter` | layers + store-seam + domain-purity + adapter-independence contracts (DEC-8); utils contracts removed |

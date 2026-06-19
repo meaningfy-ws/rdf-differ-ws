@@ -1,53 +1,100 @@
 ; =============================================================================
-; Import Linter — Architecture Guardrails for RDF Differ
+; Import Linter — Architecture Guardrails for RDF Differ (component-first)
 ; =============================================================================
-; Enforces the cosmic-python layer direction so the architecture cannot erode
-; silently. `make check-architecture` (wraps `poetry run lint-imports`) gates it.
+; Tier model: 0=core (commons), 1=foundation (diffing|reporting|loader), 3=api.
+; Lower tiers must not import higher tiers; foundation peers must not import peers.
+; Each component is internally layered: entrypoints > services > adapters > domain.
 ;
-; Direction:  entrypoints -> services -> adapters -> domain
-;   * entrypoints  : API/UI/CLI glue (Connexion, Flask, Click)
-;   * services     : use-case orchestration (incl. the Celery tasks)
-;   * adapters     : Fuseki/SPARQL/Redis/oxigraph/rdflib/filesystem infrastructure
-;   * domain       : pure domain model (imports nothing inward; pydantic allowed)
-;
-; `rdf_differ.utils` was dissolved into the proper layers (modernization /
-; rdf-loading-module DEC-7); the legacy utils contracts are gone.
+; LIVING ARTIFACT: groom this on every refactor / new component / rename. `(x)` =
+; optional layer (skipped if absent); `a | b` = independent siblings at one tier.
+; `make check-architecture` (poetry run lint-imports) gates it.
 
 [importlinter]
 root_package = rdf_differ
 ; required because the store-seam / domain-purity contracts forbid external libs
 include_external_packages = True
 
-[importlinter:contract:layers]
-name = Cosmic-python layers: entrypoints > services > adapters > domain
+; --- Tier hierarchy: api > (diffing | reporting | loader) > core ---------------
+[importlinter:contract:tier-hierarchy]
+name = Tier hierarchy: api > foundation(diffing|reporting|loader) > core
 type = layers
 layers =
-    rdf_differ.entrypoints
-    rdf_differ.services
-    rdf_differ.adapters
-    rdf_differ.domain
+    rdf_differ.api
+    rdf_differ.diffing | rdf_differ.reporting | rdf_differ.loader
+    rdf_differ.core
 
-; DIP at the store seam (DEC-8). Scoped to the new loading service module, which
-; MUST reach the triple store only through `GraphStorePort` — never a store/report
-; library directly. (Legacy services predate this and are addressed separately.)
-[importlinter:contract:loading-services-store-seam]
-name = services.loading must not import store/report libraries (DIP)
+; --- Intra-component layers: entrypoints > services > adapters > domain --------
+[importlinter:contract:component-layers]
+name = Component layers: entrypoints > services > adapters > domain
+type = layers
+layers =
+    (entrypoints)
+    (services)
+    (adapters)
+    (domain)
+containers =
+    rdf_differ.api
+    rdf_differ.diffing
+    rdf_differ.reporting
+    rdf_differ.loader
+
+; --- core (commons) is inwards-looking: imports no business component ----------
+[importlinter:contract:core-isolation]
+name = core (commons) must not import business components
 type = forbidden
 source_modules =
-    rdf_differ.services.loading
+    rdf_differ.core
 forbidden_modules =
-    pyoxigraph
-    rdflib
-    requests
-    SPARQLWrapper
-    eds4jinja2
+    rdf_differ.api
+    rdf_differ.diffing
+    rdf_differ.reporting
+    rdf_differ.loader
 
-; Domain purity (DEC-8): the domain layer must not depend on I/O frameworks.
+; --- core layers are exhaustive (commons has no entrypoints) -------------------
+[importlinter:contract:core-exhaustive]
+name = core layers are exhaustive (no entrypoints)
+type = layers
+layers =
+    (services)
+    (adapters)
+    (domain)
+containers =
+    rdf_differ.core
+exhaustive = true
+
+; --- Foundation peers must not import each other (tier 1 same-level) -----------
+[importlinter:contract:foundation-peer-isolation-diffing]
+name = Foundation peer isolation: diffing must not import peers
+type = forbidden
+source_modules = rdf_differ.diffing
+forbidden_modules =
+    rdf_differ.reporting
+    rdf_differ.loader
+
+[importlinter:contract:foundation-peer-isolation-reporting]
+name = Foundation peer isolation: reporting must not import peers
+type = forbidden
+source_modules = rdf_differ.reporting
+forbidden_modules =
+    rdf_differ.diffing
+    rdf_differ.loader
+
+[importlinter:contract:foundation-peer-isolation-loader]
+name = Foundation peer isolation: loader must not import peers
+type = forbidden
+source_modules = rdf_differ.loader
+forbidden_modules =
+    rdf_differ.diffing
+    rdf_differ.reporting
+
+; --- Domain purity: no domain layer may import an I/O framework ----------------
 [importlinter:contract:domain-purity]
-name = domain must not import I/O frameworks
+name = domain layers must not import I/O frameworks
 type = forbidden
 source_modules =
-    rdf_differ.domain
+    rdf_differ.core.domain
+    rdf_differ.diffing.domain
+    rdf_differ.loader.domain
 forbidden_modules =
     flask
     connexion
@@ -58,11 +105,23 @@ forbidden_modules =
     eds4jinja2
     SPARQLWrapper
 
-; The three GraphStorePort implementations must not import each other (DEC-8).
+; --- DIP at the loader store seam (DEC-8) -------------------------------------
+[importlinter:contract:loader-services-store-seam]
+name = loader.services must not import store/report libraries (DIP)
+type = forbidden
+source_modules =
+    rdf_differ.loader.services
+forbidden_modules =
+    pyoxigraph
+    rdflib
+    requests
+    SPARQLWrapper
+    eds4jinja2
+
+; --- The GraphStorePort implementations must not import each other (DEC-8) -----
 [importlinter:contract:store-adapter-independence]
 name = store adapters are independent of each other
 type = independence
 modules =
-    rdf_differ.adapters.loading.remote_store
-    rdf_differ.adapters.loading.in_memory_oxigraph_store
-    rdf_differ.adapters.loading.in_memory_rdflib_store
+    rdf_differ.loader.adapters.remote_sparql_store
+    rdf_differ.loader.adapters.in_memory_stores

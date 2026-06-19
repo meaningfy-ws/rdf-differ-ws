@@ -1,7 +1,12 @@
 > EPIC: rdf-loading-module — Rewrite the SKOS-History version-loading & delta-computation script in Python (this change's `proposal.md`)
 
+> **Layout note (DEC-11):** the paths below describe the original layer-first plan. The delivered
+> code is **component-first** — `rdf_differ/loader/{domain,adapters,services,entrypoints}` + a shared
+> `rdf_differ/core/` — and consolidated (21 → ~12 modules). See `design.md` → File Structure / DEC-11
+> for the path mapping.
+
 The TDD task checklist for the RDF Loading Module in its **final agreed shape** (see `design.md`
-DEC-1…DEC-10). Each task is test-first (write failing test → run/verify fail → minimal implementation →
+DEC-1…DEC-11). Each task is test-first (write failing test → run/verify fail → minimal implementation →
 verify pass → commit) and stays within its cosmic-python layer. Order: domain models+config → URIs +
 delta-pair math → port + query templates → the three store adapters → loader → validation → in-memory
 diff artifacts → CLI → API/Celery → remote-mode cutover → utils dissolution → stricter import-linter →
