@@ -168,3 +168,6 @@ temp/
 
 # LinkML generation preview (seam, not wired in — DEC-6)
 rdf_differ/domain/_generated_model.py
+
+# Traefik ACME cert storage moved to infra/ (runtime data, never commit)
+infra/traefik/letsencrypt/

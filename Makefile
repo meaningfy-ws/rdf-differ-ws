@@ -18,7 +18,7 @@ TRAEFIK      = docker compose -p common --file ./infra/traefik/docker-compose.ym
 .PHONY: help install install-dev \
         format lint typecheck check-architecture check-quality check check-all ci \
         test test-unit test-feature \
-        start stop start-services-test teardown-services \
+        start stop status start-services-test teardown-services \
         local-deps local-fuseki-setup local-fuseki local-api local-ui local-redis local-stop \
         generate-models set-report-template run-dev-ui \
         _test-data-fuseki
@@ -36,6 +36,7 @@ help:
 	@ echo "            test                 full suite + coverage (needs the stack)"
 	@ echo "            ci                   check + full test suite"
 	@ echo "  Docker    start / stop         full stack (traefik + services) up/down"
+	@ echo "            status               pretty live panel: what's up and where"
 	@ echo "            start-services-test  bring up + seed the test stack (run before 'test')"
 	@ echo "            teardown-services    stop + remove the stack and volumes"
 	@ echo "  Local     local-deps           apt/yum install Java + Redis (sudo; only for no-Docker)"
@@ -123,7 +124,11 @@ start:
 	@ docker volume create rdf-differ-template
 	@ $(TRAEFIK) up -d
 	@ $(COMPOSE) up -d
-	@ echo "$(MSG_PRINT)Up. Stop with: make stop"
+	@ sleep 2
+	@ ./infra/scripts/show_stack.sh infra/.env
+
+status:
+	@ ./infra/scripts/show_stack.sh infra/.env
 
 stop:
 	@ echo "$(BUILD_PRINT)Stopping Traefik + RDF Differ services"
