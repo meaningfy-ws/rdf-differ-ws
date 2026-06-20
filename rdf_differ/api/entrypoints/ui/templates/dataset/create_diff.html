@@ -25,6 +25,7 @@
 
     <div class="card form-card">
         <form method="POST" action="" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             {{ text_field('dataset_name', 'Dataset name', errors, form, 'Letters, numbers, _, : and - only.') }}
             {{ text_field('dataset_description', 'Description', errors, form, 'Optional.') }}
             {{ text_field('dataset_uri', 'Dataset URI', errors, form, 'For SKOS datasets, the concept-scheme URI.') }}

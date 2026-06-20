@@ -11,6 +11,8 @@ from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
+from rdf_differ.api.entrypoints.ui.security import ensure_csrf_token
+
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 
 _FLASH_KEY = "_flashes"
@@ -30,5 +32,11 @@ def pop_flashes(request: Request) -> list[dict]:
 def render(request: Request, name: str, **context) -> HTMLResponse:
     """Render a template with the queued flashes injected."""
     return templates.TemplateResponse(
-        request=request, name=name, context={"flashes": pop_flashes(request), **context}
+        request=request,
+        name=name,
+        context={
+            "flashes": pop_flashes(request),
+            "csrf_token": ensure_csrf_token(request),
+            **context,
+        },
     )

@@ -49,6 +49,7 @@
         <h2>Build a report</h2>
         <div class="card form-card">
             <form method="POST" action="">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <div class="form-grid">
                     <div class="form-row">
                         <label for="application_profile">Application profile</label>

@@ -23,6 +23,13 @@ def ui():
     return TestClient(app)
 
 
+@pytest.fixture
+def csrf(ui):
+    """A valid CSRF token bound to this client's session (seeded via the form page)."""
+    page = ui.get("/create-diff")
+    return BeautifulSoup(page.text, "html.parser").find("input", {"name": "csrf_token"})["value"]
+
+
 def _ok(json):
     return api_client.ApiResult(status_code=200, json=json, text="")
 
@@ -71,34 +78,46 @@ def test_index_flashes_on_api_error(ui):
     assert "Detail: boom" in resp.text
 
 
-def test_create_diff_invalid_name_rerenders_with_error(ui):
-    resp = ui.post("/create-diff", data=_form_data(name="bad name"), files=_form_files())
+def test_create_diff_invalid_name_rerenders_with_error(ui, csrf):
+    resp = ui.post(
+        "/create-diff", data=_form_data(name="bad name") | {"csrf_token": csrf}, files=_form_files()
+    )
 
     assert resp.status_code == 200
     assert "Dataset name can contain only letters, numbers, _, :, and -" in resp.text
 
 
-def test_create_diff_missing_file_rerenders_with_error(ui):
-    resp = ui.post("/create-diff", data=_form_data())  # no files
+def test_create_diff_missing_file_rerenders_with_error(ui, csrf):
+    resp = ui.post("/create-diff", data=_form_data() | {"csrf_token": csrf})  # no files
 
     assert resp.status_code == 200
     assert "A file is required" in resp.text
 
 
-def test_create_diff_api_conflict_shows_flash(ui):
+def test_create_diff_missing_csrf_is_rejected(ui):
+    resp = ui.post("/create-diff", data=_form_data(), files=_form_files())  # no csrf
+
+    assert resp.status_code == 403
+
+
+def test_create_diff_api_conflict_shows_flash(ui, csrf):
     with patch(f"{CLIENT}.create_diff", return_value=_err(409, "Dataset is not empty.")):
-        resp = ui.post("/create-diff", data=_form_data(), files=_form_files())
+        resp = ui.post(
+            "/create-diff", data=_form_data() | {"csrf_token": csrf}, files=_form_files()
+        )
 
     assert resp.status_code == 200
     assert "Status: 409. Title: Conflict Detail: Dataset is not empty." in resp.text
 
 
-def test_create_diff_success_redirects_to_tasks(ui):
+def test_create_diff_success_redirects_to_tasks(ui, csrf):
     with (
         patch(f"{CLIENT}.create_diff", return_value=_ok({"uid": "t1", "dataset_name": "x"})),
         patch(f"{CLIENT}.get_active_tasks", return_value=_ok([])),
     ):
-        resp = ui.post("/create-diff", data=_form_data(), files=_form_files())
+        resp = ui.post(
+            "/create-diff", data=_form_data() | {"csrf_token": csrf}, files=_form_files()
+        )
 
     assert resp.status_code == 200
     assert "Active tasks" in resp.text
@@ -173,7 +192,7 @@ def test_download_report_failure_redirects_with_flash(ui):
     assert "Could not download the report" in resp.text
 
 
-def test_active_tasks_lists_and_revoke_redirects(ui):
+def test_active_tasks_lists_and_revoke_redirects(ui, csrf):
     with patch(
         f"{CLIENT}.get_active_tasks", return_value=_ok([{"id": "t1", "type": "diff", "args": "x"}])
     ):
@@ -185,6 +204,6 @@ def test_active_tasks_lists_and_revoke_redirects(ui):
         patch(f"{CLIENT}.revoke_task", return_value=_ok({"message": "task t1 set for revoking."})),
         patch(f"{CLIENT}.get_active_tasks", return_value=_ok([])),
     ):
-        resp = ui.get("/revoke-task/t1")
+        resp = ui.post("/revoke-task/t1", data={"csrf_token": csrf})
     assert resp.status_code == 200
     assert "set for revoking" in resp.text

@@ -16,6 +16,7 @@ from rdf_differ import config
 from rdf_differ.api.entrypoints.ui import api_client
 from rdf_differ.api.entrypoints.ui.forms import CreateDiffInput
 from rdf_differ.api.entrypoints.ui.rendering import flash, render
+from rdf_differ.api.entrypoints.ui.security import validate_csrf
 
 logger = logging.getLogger(config.RDF_DIFFER_LOGGER)
 router = APIRouter()
@@ -48,9 +49,11 @@ async def create_diff_submit(
     old_version_id: str = Form("old"),
     new_version_id: str = Form("new"),
     dataset_description: str = Form(""),
+    csrf_token: str = Form(""),
     old_version_file_content: UploadFile | None = File(None),
     new_version_file_content: UploadFile | None = File(None),
 ) -> Response:
+    validate_csrf(request, csrf_token)
     submitted = {
         "dataset_name": dataset_name,
         "dataset_uri": dataset_uri,
@@ -130,7 +133,9 @@ def build_report(
     dataset_id: str,
     application_profile: str = Form(...),
     template_type: str = Form(...),
+    csrf_token: str = Form(""),
 ) -> Response:
+    validate_csrf(request, csrf_token)
     result = api_client.build_report(dataset_id, application_profile, template_type)
     if result.ok:
         flash(request, "Report building started.", "success")
@@ -174,8 +179,9 @@ def get_active_tasks(request: Request) -> Response:
     )
 
 
-@router.get("/revoke-task/{task_id}", name="revoke_task")
-def revoke_task(request: Request, task_id: str) -> Response:
+@router.post("/revoke-task/{task_id}", name="revoke_task")
+def revoke_task(request: Request, task_id: str, csrf_token: str = Form("")) -> Response:
+    validate_csrf(request, csrf_token)
     result = api_client.revoke_task(task_id)
     category = "success" if result.ok else "error"
     message = (
