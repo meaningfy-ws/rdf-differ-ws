@@ -36,6 +36,6 @@
 
 ## Risk / notes
 
-- If a scenario surfaces a real bug, mark `xfail(reason=..., strict=False)` with a link to the owning
-  epic and move on (DEC-5) — do not fix production here.
+- If a scenario surfaces a real bug or limitation, **fix it** (minimal change + the regression test)
+  per DEC-5 — do not `xfail` or defer. Only genuinely correct existing behaviour is left untouched.
 - Keep features fast: use the smallest test-data files (`owl/ePO_sample-4.0.0.*.ttl`).

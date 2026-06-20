@@ -75,19 +75,26 @@ gaps are visible.
   `tests/feature/`; reuse `tests/feature/conftest.py` fixtures; marker-by-path stays.
 - **DEC-4 — Happy + edge + negative for each capability.** A feature without a negative scenario is
   incomplete.
-- **DEC-5 — Test code only.** If a scenario reveals a production bug, fix it in the owning epic, not
-  here; this epic only adds tests (and may `xfail` a known bug with a link).
+- **DEC-5 — No gratuitous production changes, but discovered bugs MUST be fixed.** This epic does not
+  refactor or alter production behaviour for its own sake. However, when a scenario uncovers a real
+  **bug or limitation**, it SHALL be **fixed** (minimal, targeted change + the regression test that
+  proves it) — never `xfail`-ed, silenced, or merely deferred to another epic. The fix is committed
+  alongside its failing-then-passing test; only a genuinely large fix is split into its own commit,
+  but the bug is never left unaddressed. Existing **correct** behaviour stays byte-for-byte unchanged.
 
 ## Rabbit-holes (avoided)
 
-- No new production code or refactors (bugs found are referred to the owning epic).
+- No refactors or feature changes "while we're in there" — production code changes are limited to
+  fixing the specific bug/limitation a test uncovered (DEC-5), with its regression test.
 - No browser/e2e (Playwright) — out of scope; `tests/e2e/` stays opt-in.
-- No attempt to make the legacy `load_versions.sh` remote pipeline pass here — that is the
-  `rdf-loading-module` epic; the remote scenario is `@integration` and may `xfail` until then.
+- The legacy `load_versions.sh` remote pipeline is the `rdf-loading-module` epic's responsibility; the
+  remote scenario here is `@integration`. (If a defect is in *this* repo's code rather than that
+  pipeline, DEC-5 still applies — fix it.)
 
 ## No-gos
 
-- **No production behaviour changes.**
+- **No gratuitous production behaviour changes** — but a discovered bug or limitation is fixed, not
+  worked around (DEC-5). Existing *correct* behaviour is preserved exactly.
 - **No new heavyweight fixtures or test data** committed to the repo.
 - **No coupling of the default test run to infrastructure.**
 - **No duplication** of scenarios already covered by existing features — extend, don't copy.
