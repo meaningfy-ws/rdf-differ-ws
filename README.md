@@ -85,9 +85,13 @@ To reiterate, this information is only _retrieved_, i.e. there is no support for
 
 > The specified installation instructions are for personal deployment purposes only on a *NIX operating system. _(Slight modifications are required for production use, including having production-level Fuseki and Redis servers available.)_
 
-RDF Differ uses Fuseki (as the triplestore/database), Celery (for multithreading programming), Gunicorn (for serving), and Redis (for queue-based pesistent storage). For the corresponding Docker micro-services, it uses Traefik for the networking, _except when running tests_.
+Both the ReST API and the web UI are **FastAPI** (ASGI) apps, served by Gunicorn's
+`uvicorn.workers.UvicornWorker`. The API generates its own OpenAPI document (`/openapi.json`)
+and Swagger UI (`/docs`). RDF Differ also uses Fuseki (as the triplestore/database), Celery (for
+background processing), and Redis (broker + result backend). For the Docker micro-services it uses
+Traefik for the networking, _except when running tests_.
 
-The applications are made available (by default) on ports [8030](http:localhost:8030) (ui), [4030](http:localhost:4030) (API; [4030/ui](http:localhost:4030/ui) for Swagger), [3030](http:localhost:3030) (triplestore), [6379](http:localhost:6379) (Redis), and [5555](http:localhost:5555) (Celery). This is configurable via `infra/scripts/.env` and `infra/.env`.
+The applications are made available (by default) on ports [8030](http:localhost:8030) (ui), [4030](http:localhost:4030) (API; [4030/docs](http:localhost:4030/docs) for Swagger, `/openapi.json` for the spec), [3030](http:localhost:3030) (triplestore), [6379](http:localhost:6379) (Redis), and [5555](http:localhost:5555) (Celery). This is configurable via `infra/scripts/.env` and `infra/.env`.
 
 > For the docker services with Traefik, you have to access these differently, through their local domains instead, for e.g. <https://rdf.localhost/> (ui). See <https://monitor.localhost> > Routers > Explore (`Host(...)`).
 >
