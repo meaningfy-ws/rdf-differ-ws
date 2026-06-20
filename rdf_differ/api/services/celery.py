@@ -160,7 +160,7 @@ def async_generate_report(
     :param dataset: The dataset data
     :param db_location: location of the local db storage
     """
-    timestamp = get_timestamp()
+    timestamp = get_timestamp(config.RDF_DIFFER_TIMEZONE, config.RDF_DIFFER_TIME_FORMAT)
     with tempfile.TemporaryDirectory() as temp_dir:
         path_to_report = build_report(
             str(temp_dir),

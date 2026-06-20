@@ -279,7 +279,10 @@ def generate_meta_file(
     :param timestamp: time of diff creation
     :return: meta file
     """
-    meta = ReportMeta(uid=uid, dataset_name=dataset_name, created_at=timestamp or get_timestamp())
+    created_at = timestamp or get_timestamp(
+        config.RDF_DIFFER_TIMEZONE, config.RDF_DIFFER_TIME_FORMAT
+    )
+    meta = ReportMeta(uid=uid, dataset_name=dataset_name, created_at=created_at)
     meta_data = meta.model_dump()
     meta_file = Path(reports_location) / config.RDF_DIFFER_META_NAME
     meta_file.write_text(dumps(meta_data))
