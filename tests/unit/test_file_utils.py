@@ -104,6 +104,18 @@ def test_save_files_success(tmpdir):
     assert dir_exists(location)
 
 
+def test_save_files_creates_missing_base_dir(tmpdir):
+    # Regression: a fresh deployment has no db/ base dir; save_files must create it
+    # (its absence caused the create-diff 500), not raise FileNotFoundError.
+    location = str(tmpdir.join("db"))  # does NOT exist yet
+    with save_files(
+        FileStorage((BytesIO(b"1")), filename="old_file"),
+        FileStorage((BytesIO(b"2")), filename="new_file"),
+        location,
+    ) as (storage_location, _old, _new):
+        assert dir_exists(storage_location)
+
+
 @pytest.mark.parametrize(
     "file_1, file_2",
     [

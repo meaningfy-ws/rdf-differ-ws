@@ -8,7 +8,10 @@ services:
       context: ..
       dockerfile: ./infra/api/Dockerfile
     volumes:
-      - rdf-differ-data:/usr/src/app
+      # Share only the data dirs (uploads + reports) between api and celery — NOT the whole
+      # app tree, which would shadow the image's code and block deployments.
+      - rdf-differ-data:/usr/src/app/db
+      - rdf-differ-reports:/usr/src/app/reports
       - rdf-differ-template:${RDF_DIFFER_TEMPLATE_LOCATION}
 #    ports:
 #      - ${RDF_DIFFER_API_PORT}:${RDF_DIFFER_API_PORT}
@@ -34,8 +37,7 @@ services:
     build:
       context: ..
       dockerfile: ./infra/ui/Dockerfile
-    volumes:
-      - rdf-differ-data:/usr/src/app
+    # The UI calls the API over HTTP; it needs no shared data volume.
 #    ports:
 #      - ${RDF_DIFFER_UI_PORT}:${RDF_DIFFER_UI_PORT}
     env_file: .env
@@ -82,7 +84,8 @@ services:
     # Log to stdout (docker-native) — a --logfile under a non-existent logs/ dir crashes boot.
     command: celery -A rdf_differ.api.services.celery.celery_worker worker --loglevel info
     volumes:
-      - rdf-differ-data:/usr/src/app
+      - rdf-differ-data:/usr/src/app/db
+      - rdf-differ-reports:/usr/src/app/reports
     env_file: .env
     networks:
       - rdf-differ-net
@@ -134,6 +137,8 @@ volumes:
     name: rdf-differ-template-${ENVIRONMENT}
   rdf-differ-data:
     name: rdf-differ-data-${ENVIRONMENT}
+  rdf-differ-reports:
+    name: rdf-differ-reports-${ENVIRONMENT}
   fuseki-rdf-differ-data:
     name: fuseki-rdf-differ-data-${ENVIRONMENT}
 

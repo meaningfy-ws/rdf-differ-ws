@@ -20,8 +20,12 @@ RUN poetry install --only main --no-root
 # Application code (overridden by a bind-mount in the dev compose for --reload).
 COPY . .
 
-# Run as a non-root user.
-RUN useradd --create-home --uid 1000 appuser && chown -R appuser /usr/src/app
+# Run as a non-root user. Pre-create the data dirs so the named volumes mounted there
+# initialise with appuser ownership (Docker copies the image dir's perms into a fresh
+# volume) — otherwise the root-owned mount point causes PermissionError on first write.
+RUN mkdir -p /usr/src/app/db /usr/src/app/reports \
+    && useradd --create-home --uid 1000 appuser \
+    && chown -R appuser /usr/src/app
 USER appuser
 
 EXPOSE ${RDF_DIFFER_API_PORT}

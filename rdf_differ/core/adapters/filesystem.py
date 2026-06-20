@@ -104,7 +104,9 @@ def save_files(old_file: FileStorage, new_file: FileStorage, location: str = "")
     check_files_exist(old_file, new_file)
 
     location_to_save = Path(location) / str(uuid4())
-    location_to_save.mkdir()
+    # parents=True creates the base db/ dir on a fresh deployment (its absence was the
+    # create-diff 500); the uuid leaf is unique so exist_ok is just defensive.
+    location_to_save.mkdir(parents=True, exist_ok=True)
     try:
         saved_old_file = build_secure_filename(str(location_to_save), old_file.filename or "")
         saved_new_file = build_secure_filename(str(location_to_save), new_file.filename or "")
