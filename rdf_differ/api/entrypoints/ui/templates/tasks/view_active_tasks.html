@@ -1,31 +1,39 @@
 {% extends "base.html" %}
-{% set active_page = "view_active_tasks" %}
+{% block title %} · Tasks{% endblock %}
 
-{% block app_content %}
-    <h1>List of active tasks</h1>
-    <table class="table highlight ">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">type</th>
-            <th scope="col">args</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for task in tasks %}
-            {% if task %}
+{% block content %}
+    <div class="page-head"><h1>Active tasks</h1></div>
+
+    {% if tasks %}
+        <div class="card">
+            <table class="data-table">
+                <thead>
                 <tr>
-                    <th scope="row">{{ task.id }}</th>
-                    <td>{{ task.type }}</td>
-                    <td>{{ task.args|truncate(3, True, '...') }}</td>
-                    <td><a href="{{ url_for('revoke_task', task_id=task.id) }}"
-                           id="stop-task-{{ task.id }}"
-                           class="btn btn-file red darken-2">Stop task<i class="material-icons right">do_disturb_on</i></a>
-                    </td>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Args</th>
+                    <th>Actions</th>
                 </tr>
-            {% endif %}
-        {% endfor %}
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                {% for task in tasks %}
+                    {% if task %}
+                        <tr>
+                            <td class="mono">{{ task.id }}</td>
+                            <td>{{ task.type }}</td>
+                            <td class="muted">{{ task.args | truncate(40, True, '…') }}</td>
+                            <td>
+                                <a class="btn btn-danger btn-sm"
+                                   id="stop-task-{{ task.id }}"
+                                   href="{{ url_for('revoke_task', task_id=task.id) }}">Stop</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state"><p>No active tasks.</p></div>
+    {% endif %}
 {% endblock %}

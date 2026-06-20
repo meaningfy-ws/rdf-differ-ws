@@ -1,101 +1,43 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Meaningfy - RDF Differ</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="Meaningfy" content="RDF-Differ">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <title>RDF Differ{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='main.css') }}">
 </head>
 <body>
-<header>
-    {% set navigation_bar = [
-    ('/', 'index', 'List diffs'),
-    ('/tasks', 'get_active_tasks', 'List active tasks'),
-    ('/diffs', 'create_diff', 'Create diff'),
-] -%}
-
-    {% set active_page = active_page|default('index') -%}
-    {% block navbar %}
-        <nav class="navbar navbar-expand-lg navbar-light bg-light amber accent-2">
-            <div class="container">
-                <a href="{{ url_for('index') }}" style="color: #1e1e1e">RDF Differ</a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    {% for href, id, caption in navigation_bar %}
-                        <li class="nav-item{% if id == active_page %} active{% endif %}">
-                            <a class="nav-link" style="color: #1e1e1e" href="{{ url_for(id)|e }}">{{ caption|e }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="{{ url_for('index') }}">
+            <span class="brand-mark">RDF</span> Differ
+        </a>
+        <nav class="nav">
+            <a class="nav-link {% if active_page == 'index' %}is-active{% endif %}"
+               href="{{ url_for('index') }}">Diffs</a>
+            <a class="nav-link {% if active_page == 'view_active_tasks' %}is-active{% endif %}"
+               href="{{ url_for('get_active_tasks') }}">Tasks</a>
+            <a class="nav-link nav-cta {% if active_page == 'create_diff' %}is-active{% endif %}"
+               href="{{ url_for('create_diff') }}">Create diff</a>
         </nav>
-    {% endblock %}
+    </div>
 </header>
-<main>
-    {% block content %}
-        <div class="container">
-            {% with errors = get_flashed_messages(category_filter=["error"]) %}
-                {% if errors %}
-                    {% for message in errors %}
-                        <div class="row">
-                            <div class="col s12">
-                                <div class="card red lighten-3">
-                                    <div class="row">
-                                        <div class="col s12 m10">
-                                            <div class="card-content black-text">
-                                                <i class="material-icons left">info_outline</i>
-                                                <p>{{ message }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            {% with messages = get_flashed_messages(category_filter=["success"]) %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="row">
-                            <div class="col s12">
-                                <div class="card blue lighten-3">
-                                    <div class="row">
-                                        <div class="col s12 m10">
-                                            <div class="card-content black-text">
-                                                <i class="material-icons left">info_outline</i>
-                                                <p>{{ message }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
 
-            {% block app_content %}
-            {% endblock %}
+<main class="container main">
+    {% if flashes %}
+        <div class="flashes">
+            {% for flash in flashes %}
+                <div class="flash flash-{{ flash.category }}">{{ flash.message }}</div>
+            {% endfor %}
         </div>
-    {% endblock %}
+    {% endif %}
+    {% block content %}{% endblock %}
 </main>
 
-<footer class="page-footer blue-grey lighten-2">
-
-    <div class="container center black-text footer-container">
-        Powered by
-        <a class="white-text" href="https://github.com/meaningfy-ws">Meaningfy</a>
+<footer class="site-footer">
+    <div class="container">
+        Powered by <a href="https://github.com/meaningfy-ws">Meaningfy</a>
     </div>
-
 </footer>
 </body>
 </html>
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-

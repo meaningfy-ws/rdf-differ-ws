@@ -1,5 +1,5 @@
 # RDF Differ UI — Python 3.12, Poetry, non-root.
-# The UI is a plain Flask (WSGI) app → served by gunicorn directly.
+# The UI is a FastAPI (ASGI) app → served by gunicorn's UvicornWorker.
 FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -26,7 +26,7 @@ USER appuser
 
 EXPOSE ${RDF_DIFFER_UI_PORT}
 
-CMD gunicorn \
+CMD gunicorn -k uvicorn.workers.UvicornWorker \
     --timeout ${RDF_DIFFER_GUNICORN_TIMEOUT} \
     --workers ${RDF_DIFFER_GUNICORN_UI_WORKERS} \
     --bind 0.0.0.0:${RDF_DIFFER_UI_PORT} \

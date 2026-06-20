@@ -1,20 +1,8 @@
-#!/usr/bin/python3
+"""Web UI entrypoint package (FastAPI + Jinja2).
 
-# __init__.py
-# Date:  17/09/2020
-# Author: Mihai Coșleț
-# Email: coslet.mihai@gmail.com
-
-
-"""
-Module for configuring the Flask server for UI
+The application is built in ``app.py`` and served via ``run.py``.
 """
 
-from flask import Flask
+from rdf_differ.api.entrypoints.ui.app import app
 
-from rdf_differ import config
-
-app = Flask(__name__)
-app.config["SECRET_KEY"] = config.RDF_DIFFER_SECRET_KEY_UI
-
-from . import views  # noqa: E402, F401  (Flask pattern: import views after app to register routes)
+__all__ = ["app"]

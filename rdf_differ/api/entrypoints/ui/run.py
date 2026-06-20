@@ -1,18 +1,17 @@
 #!/usr/bin/python3
 
-# ui.py
-# Date:  17/09/2020
-# Author: Mihai Coșleț
-# Email: coslet.mihai@gmail.com
+"""Uvicorn/Gunicorn entrypoint for the web UI.
 
-import logging
+Serve the FastAPI ASGI app with an ASGI server, e.g.
+``gunicorn -k uvicorn.workers.UvicornWorker rdf_differ.api.entrypoints.ui.run:app``.
+"""
 
-from rdf_differ.api.entrypoints.ui import app
+from rdf_differ.api.entrypoints.ui.app import app
+
+__all__ = ["app"]
+
 
 if __name__ == "__main__":
-    app.run()
+    import uvicorn
 
-if __name__ != "__main__":
-    gunicorn_logger = logging.getLogger("gunicorn.error")
-    app.logger.handlers = gunicorn_logger.handlers
-    app.logger.setLevel(gunicorn_logger.level)
+    uvicorn.run(app, host="0.0.0.0", port=8030)

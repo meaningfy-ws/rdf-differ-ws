@@ -109,13 +109,11 @@ def helper_fuseki_service(
     )
 
 
-# TODO: update configuration handling https://flask.palletsprojects.com/en/1.1.x/config/#development-production
 @pytest.fixture
 def ui_client():
-    ui_app.config["TESTING"] = True
-    ui_app.config["WTF_CSRF_ENABLED"] = False
+    from fastapi.testclient import TestClient
 
-    return ui_app.test_client()
+    return TestClient(ui_app)
 
 
 def helper_create_diff(file_1=None, file_2=None, body=None):
