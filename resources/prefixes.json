@@ -1,0 +1,21 @@
+{
+  "prefix_definitions": {
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "skosxl": "http://www.w3.org/2008/05/skos-xl#",
+    "dct": "http://purl.org/dc/terms/",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "euvoc": "http://publications.europa.eu/ontology/euvoc#",
+    "lemon": "http://lemon-model.net/lemon#",
+    "lexinfo": "http://www.lexinfo.net/ontology/2.0/lexinfo#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "rdf": "http://www.w3.org/2002/07/owl#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "domain": "http://eurovoc.europa.eu/domain",
+    "notation": "http://publications.europa.eu/resource/authority/notation-type",
+    "label": "http://publications.europa.eu/resource/authority/label-type",
+    "context": "http://publications.europa.eu/resource/authority/use-context",
+    "status": "http://publications.europa.eu/resource/authority/concept-status/",
+    "p1": "http://inexistent/domain/"
+  }
+}

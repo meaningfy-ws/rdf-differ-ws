@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %} · Diffs{% endblock %}
+
+{% block content %}
+    <div class="page-head">
+        <h1>Calculated diffs</h1>
+        <a class="btn btn-primary" href="{{ url_for('create_diff') }}">New diff</a>
+    </div>
+
+    {% if datasets %}
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Old version</th>
+                    <th>New version</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for dataset in datasets %}
+                    {% if dataset.uid %}
+                        <tr>
+                            <td>
+                                <a class="link" href="{{ url_for('view_dataset', dataset_id=dataset.uid) }}">
+                                    {{ dataset.uid }}
+                                </a>
+                            </td>
+                            <td>{{ dataset.original_name }}</td>
+                            <td class="muted">{{ dataset.dataset_description }}</td>
+                            <td>{{ dataset.old_version_file }}</td>
+                            <td>{{ dataset.new_version_file }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>No diffs yet.</p>
+            <a class="btn btn-primary" href="{{ url_for('create_diff') }}">Create the first one</a>
+        </div>
+    {% endif %}
+{% endblock %}

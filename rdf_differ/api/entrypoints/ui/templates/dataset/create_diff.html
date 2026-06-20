@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %} · Create diff{% endblock %}
+
+{% macro text_field(name, label, errors, form, help='') %}
+    <div class="form-row">
+        <label for="{{ name }}">{{ label }}</label>
+        <input type="text" id="{{ name }}" name="{{ name }}" value="{{ form.get(name, '') }}"
+               class="{% if errors.get(name) %}has-error{% endif %}">
+        {% if help %}<small class="help">{{ help }}</small>{% endif %}
+        {% if errors.get(name) %}<small class="field-error">{{ errors.get(name) }}</small>{% endif %}
+    </div>
+{% endmacro %}
+
+{% macro file_field(name, label, errors) %}
+    <div class="form-row">
+        <label for="{{ name }}">{{ label }}</label>
+        <input type="file" id="{{ name }}" name="{{ name }}"
+               class="{% if errors.get(name) %}has-error{% endif %}">
+        {% if errors.get(name) %}<small class="field-error">{{ errors.get(name) }}</small>{% endif %}
+    </div>
+{% endmacro %}
+
+{% block content %}
+    <div class="page-head"><h1>Create a diff</h1></div>
+
+    <div class="card form-card">
+        <form method="POST" action="" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            {{ text_field('dataset_name', 'Dataset name', errors, form, 'Letters, numbers, _, : and - only.') }}
+            {{ text_field('dataset_description', 'Description', errors, form, 'Optional.') }}
+            {{ text_field('dataset_uri', 'Dataset URI', errors, form, 'For SKOS datasets, the concept-scheme URI.') }}
+
+            <div class="form-grid">
+                {{ file_field('old_version_file_content', 'Old dataset file', errors) }}
+                {{ text_field('old_version_id', 'Old version name', errors, form) }}
+                {{ file_field('new_version_file_content', 'New dataset file', errors) }}
+                {{ text_field('new_version_id', 'New version name', errors, form) }}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Create diff</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

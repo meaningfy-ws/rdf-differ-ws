@@ -11,9 +11,9 @@ from io import BytesIO
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from rdf_differ.adapters.diff_adapter import FusekiDiffAdapter
-from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
-from rdf_differ.entrypoints.ui import app as ui_app
+from rdf_differ.api.entrypoints.ui import app as ui_app
+from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
 class FakeSPARQLRunner:
@@ -109,13 +109,11 @@ def helper_fuseki_service(
     )
 
 
-# TODO: update configuration handling https://flask.palletsprojects.com/en/1.1.x/config/#development-production
 @pytest.fixture
 def ui_client():
-    ui_app.config["TESTING"] = True
-    ui_app.config["WTF_CSRF_ENABLED"] = False
+    from fastapi.testclient import TestClient
 
-    return ui_app.test_client()
+    return TestClient(ui_app)
 
 
 def helper_create_diff(file_1=None, file_2=None, body=None):
@@ -142,6 +140,10 @@ _MARKER_BY_DIR = ("unit", "feature", "e2e", "integration")
 def pytest_collection_modifyitems(config, items):
     root = str(config.rootpath).replace("\\", "/")
     for item in items:
+        # An explicit layer marker on a test wins over the directory default — lets a
+        # service-dependent test under tests/unit/ opt into `integration` instead.
+        if any(item.get_closest_marker(layer) for layer in _MARKER_BY_DIR):
+            continue
         rel = str(item.path).replace("\\", "/").replace(root, "")
         for layer in _MARKER_BY_DIR:
             if f"/tests/{layer}/" in rel:

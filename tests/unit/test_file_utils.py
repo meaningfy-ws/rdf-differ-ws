@@ -11,8 +11,7 @@ from pathlib import Path
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from rdf_differ.utils.file_utils import (
-    build_unique_name,
+from rdf_differ.core.adapters.filesystem import (
     check_files_exist,
     dir_exists,
     dir_is_empty,
@@ -20,6 +19,7 @@ from rdf_differ.utils.file_utils import (
     save_files,
     temporarily_save_files,
 )
+from rdf_differ.core.domain.naming import build_unique_name
 
 
 def test_dir_exists(tmpdir):
@@ -102,6 +102,18 @@ def test_save_files_success(tmpdir):
             assert file.read() == "2"
 
     assert dir_exists(location)
+
+
+def test_save_files_creates_missing_base_dir(tmpdir):
+    # Regression: a fresh deployment has no db/ base dir; save_files must create it
+    # (its absence caused the create-diff 500), not raise FileNotFoundError.
+    location = str(tmpdir.join("db"))  # does NOT exist yet
+    with save_files(
+        FileStorage((BytesIO(b"1")), filename="old_file"),
+        FileStorage((BytesIO(b"2")), filename="new_file"),
+        location,
+    ) as (storage_location, _old, _new):
+        assert dir_exists(storage_location)
 
 
 @pytest.mark.parametrize(

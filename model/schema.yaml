@@ -3,7 +3,7 @@ name: rdf-differ-model
 title: RDF Differ domain model
 description: >-
   LinkML seed for the RDF Differ domain. This mirrors the hand-written domain in
-  `rdf_differ/domain/model.py`, which remains the SOURCE OF TRUTH for now (modernization
+  `rdf_differ/diffing/domain/model.py`, which remains the SOURCE OF TRUTH for now (modernization
   DEC-6 — the model/ + `make generate-models` seam is scaffolded, generation is a follow-up).
   When generation is adopted, generated Pydantic models replace the hand-written ones and this
   schema becomes authoritative.

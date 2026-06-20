@@ -84,10 +84,17 @@ artifacts above; do not reintroduce parallel epic files under `.claude/`.
 
 - **Archetype:** product (deployable) — a Flask/Connexion REST API + Flask UI + Celery worker + Click CLI.
 - **Top-level package:** `rdf_differ/` (no `/src`).
-- **Layers / modules:** single component — `rdf_differ/{domain,adapters,services,entrypoints}` plus a
-  legacy `rdf_differ/utils/` (TODO: redistribute into the right layers — see the modernization change).
-- **Domain model:** hand-written in `rdf_differ/domain/model.py`. A LinkML `model/` + `make generate-models`
-  seam is planned (modernization DEC-6); no code generation yet.
+- **Components (component-first, rdf-loading-module DEC-11):** `rdf_differ/<component>/{domain,adapters,
+  services,entrypoints}` — `core` (commons, tier 0: SPARQLRunner, filesystem, redis, naming,
+  constants, time), `diffing`, `reporting`, `loader` (tier 1, independent peers), `api` (tier 3:
+  Connexion REST + Flask UI + Celery orchestration). Enforced by the ers-style `.importlinter`
+  (tier hierarchy + per-component layers + commons isolation/exhaustive + peer-isolation). Exceptions
+  live in per-layer `exceptions.py`; the legacy `utils/` is gone.
+- **Settings:** the Meaningfy config pattern — `config = RdfDifferConfigResolver()` in the root
+  `rdf_differ/__init__.py` (config mixins + `env_property` from `core/adapters/config_resolver.py`);
+  use `from rdf_differ import config` → `config.RDF_DIFFER_*`. Not pydantic-settings.
+- **Domain model:** hand-written (`rdf_differ/diffing/domain/model.py`, `rdf_differ/loader/domain/model.py`).
+  A LinkML `model/` + `make generate-models` seam is planned (modernization DEC-6); no code generation yet.
 - **Datastores / external systems:** an RDF triplestore over SPARQL (Jena Fuseki; `SPARQLWrapper`/`rdflib`),
   Redis (Celery broker + result backend), Celery worker + Flower; `eds4jinja2` for report rendering.
 - **Deployable?** yes — Docker (image/compose under `docker/`, moving to `infra/`). CD pipeline is a
@@ -105,7 +112,7 @@ See `docs/` for project documentation.
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **rdf-differ** (4056 symbols, 4712 relationships, 42 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **rdf-differ-ws** (5132 symbols, 6783 relationships, 102 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > Index stale? Run `node .gitnexus/run.cjs analyze` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? `npx gitnexus analyze` (npm 11 crash → `npm i -g gitnexus`; #1939).
 
@@ -128,10 +135,10 @@ This project is indexed by GitNexus as **rdf-differ** (4056 symbols, 4712 relati
 
 | Resource | Use for |
 |----------|---------|
-| `gitnexus://repo/rdf-differ/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/rdf-differ/clusters` | All functional areas |
-| `gitnexus://repo/rdf-differ/processes` | All execution flows |
-| `gitnexus://repo/rdf-differ/process/{name}` | Step-by-step execution trace |
+| `gitnexus://repo/rdf-differ-ws/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/rdf-differ-ws/clusters` | All functional areas |
+| `gitnexus://repo/rdf-differ-ws/processes` | All execution flows |
+| `gitnexus://repo/rdf-differ-ws/process/{name}` | Step-by-step execution trace |
 
 ## CLI
 

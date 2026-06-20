@@ -14,10 +14,10 @@ import pytest
 import requests
 from pytest_bdd import given, parsers, scenario, then, when
 
-from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
-from rdf_differ.adapters.sparql import SPARQLRunner
-from rdf_differ.config import RDF_DIFFER_FUSEKI_SERVICE
-from rdf_differ.utils.file_utils import dir_exists
+from rdf_differ import config
+from rdf_differ.core.adapters.filesystem import dir_exists
+from rdf_differ.core.adapters.sparql import SPARQLRunner
+from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
 from tests.conftest import helper_fuseki_service
 
 
@@ -43,7 +43,7 @@ def metadata(tmpdir, files):
     metadata = {
         "basedir": tmpdir.mkdir("basedir"),
         "filename": "subdivisions-skos",
-        "endpoint": RDF_DIFFER_FUSEKI_SERVICE,
+        "endpoint": config.RDF_DIFFER_FUSEKI_SERVICE,
         "dataset": "subdiv",
         "scheme_uri": "http://publications.europa.eu/resource/authority/subdivision",
         "old_version_file": files[0],

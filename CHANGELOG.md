@@ -7,7 +7,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **RDF Loading Module** (`openspec/changes/rdf-loading-module`) — a layered, tested Python rewrite of
+  `resources/load_versions.sh`. One `GraphStorePort` with three config-selected backends:
+  `RemoteSparqlStore` (any SPARQL 1.1 + GSP endpoint), `PyoxigraphStore` and `RdflibStore` (in-memory).
+  The same skos-history delta logic (`insertions = new − old`, `deletions = old − new`, `CLEAR`+`INSERT`
+  idempotency, two-pass N-version delta-pair set) runs against any engine. Pydantic v2 config/value
+  objects, a `UriBuilder`, parametrised SPARQL templates (no free strings), deterministic W3C blank-node
+  skolemisation (rdflib `to_canonical_graph` → `.well-known/genid/`), post-load validation, in-memory
+  diff-artifact output, and a `rdf-diff` Click CLI (`--engine remote|oxigraph|rdflib [--report]`).
+  Organised **component-first** (DEC-11): the whole package is decomposed into **five components** —
+  `core` (commons), `diffing`, `reporting`, `loader`, `api` — each owning its
+  `entrypoints → services → adapters → domain` layers, with no layer-first dirs left at the root.
+  Loader consolidated to ~13 cohesive modules with non-generic names (`graph_store.py`,
+  `sparql_queries.py`, `remote_sparql_store.py`, `in_memory_stores.py`, `graph_store_provider.py`).
+  Enforced by an **ers-style import-linter** (10 contracts: tier hierarchy + per-component layers +
+  commons isolation/exhaustive + foundation peer-isolation + domain purity + store-seam DIP +
+  store independence). Behaviour-neutral; OpenAPI/Celery/gunicorn/compose paths updated.
+- **Cutover flag** `RDF_DIFFER_USE_PYTHON_LOADER` (default off): when on, the Celery `create_diff` task
+  uses the Python loader (`RemoteSparqlStore` + `VersionStoreLoader`) instead of the `load_versions.sh`
+  subprocess. Physical retirement of the script is gated on a Fuseki parity smoke test.
+
 ### Changed
+
+- **Makefile groomed.** `make install`/`install-dev` are Python-only (no `sudo`, no JDK); the Java/Redis
+  OS packages moved to an opt-in `local-deps` (only for the no-Docker path). `make start` now creates
+  the `proxy-net` network before bringing services up (fixes "network proxy-net … could not be found").
+  The per-service docker-test targets collapsed into `start-services-test` (one `compose up` + test-data
+  seeding); `test` no longer fails when Fuseki is down. Compose calls DRY'd into variables; a clear
+  grouped `make help`.
+- **Fixed `skos_history_wrapper` script path** — it resolved `load_versions.sh` via
+  `__file__.parents[2]`, which broke when the module moved one level deeper (component-first); now
+  anchored on `REPO_ROOT`.
+- **Service-dependent tests recategorised.** Six tests under `tests/unit/` that need live
+  Fuseki/Redis/`db/`/the real script are tagged `@pytest.mark.integration` (conftest lets an explicit
+  marker override the path default), so `make test-unit` is green offline (236 passed, ~1s).
+- **Endpoints return typed response models, not ad-hoc dicts.** Added
+  `api/domain/model.py` (`CreateDiffResponse`, `ReportTaskResponse`, `MessageResponse`) and
+  `reporting/domain/model.py` (`ReportMeta`); handlers and `generate_meta_file` build these and
+  serialise via `.model_dump()` at the JSON boundary.
+- **Namespace prefix bindings centralised.** The inline `ns_binding` dict in `convert_test_data`
+  moved to `resources/prefixes.json`, exposed via a `config.SPARQL_PREFIXES` property (ted_sws
+  pattern) — reusable and maintainable, no longer embedded in code.
+- **Exceptions moved to per-layer `exceptions.py` modules** (no longer buried in logic modules):
+  `loader/domain/exceptions.py` (`LoadingError` family), `loader/adapters/exceptions.py`
+  (`GraphStoreError`), `diffing/domain/exceptions.py` (`Version*`), `diffing/adapters/exceptions.py`
+  (`FusekiException`, `SubprocessFailure`). Importers updated to the new homes.
+- **Settings migrated to the Meaningfy config pattern.** Replaced the `config.py` module-level
+  `RDF_DIFFER_*` constants and the loader's pydantic-settings `StoreSettings` with a
+  `core/adapters/config_resolver.py` (`ConfigResolverABC` / `EnvConfigResolver` / `env_property`)
+  plus config mixin classes aggregated into a single `config = RdfDifferConfigResolver()` in the root
+  `rdf_differ/__init__.py`. Consumers use `from rdf_differ import config` → `config.RDF_DIFFER_*`.
+  `StoreSettings` is now an injected value object built from `config` by the composition root (DEC-10);
+  `pydantic-settings` dropped. `strtobool` moved to `core/domain`. Core modules use module-level
+  (`__name__`) loggers so commons no longer depends on app config.
+- **`rdf_differ/domain/model.py` migrated to pydantic v2** (`Dataset`/`DatasetVersion`/`VersionsDelta`).
+- **`rdf_differ/utils/` dissolved** into the proper layers, then relocated to the shared `core/`
+  component (DEC-11): filesystem/RDF-IO → `core/adapters/filesystem.py`, name helpers →
+  `core/domain/naming.py`, `INPUT_MIME_TYPES`/`DeltaOp` → `core/domain/constants.py`,
+  `SPARQLRunner` → `core/adapters/sparql.py`, `strtobool` → `config`.
+- **ers-style import-linter** (10 contracts): tier hierarchy (`api > diffing|reporting|loader > core`)
+  + per-component layers (`containers=`) + `core` isolation + `core` exhaustive + foundation
+  peer-isolation (×3) + domain purity + `loader.services` store-seam DIP + store-adapter independence.
 
 - **Root decluttered.** `bash/` → `infra/scripts/` (all run/setup/CLI helper scripts; Makefile,
   README and test references updated; `source bash/.env` → `infra/scripts/.env`; fixed a stale

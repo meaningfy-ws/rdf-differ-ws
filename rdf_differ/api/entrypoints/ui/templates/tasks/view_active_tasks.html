@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %} · Tasks{% endblock %}
+
+{% block content %}
+    <div class="page-head"><h1>Active tasks</h1></div>
+
+    {% if tasks %}
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Args</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for task in tasks %}
+                    {% if task %}
+                        <tr>
+                            <td class="mono">{{ task.id }}</td>
+                            <td>{{ task.type }}</td>
+                            <td class="muted">{{ task.args | truncate(40, True, '…') }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('revoke_task', task_id=task.id) }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            id="stop-task-{{ task.id }}">Stop</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state"><p>No active tasks.</p></div>
+    {% endif %}
+{% endblock %}

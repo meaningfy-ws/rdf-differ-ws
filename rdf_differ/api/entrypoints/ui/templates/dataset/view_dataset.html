@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %} · {{ dataset.original_name }}{% endblock %}
+
+{% block content %}
+    <div class="page-head">
+        <div>
+            <h1>{{ dataset.original_name }}</h1>
+            <p class="muted">ID: {{ dataset.uid }}</p>
+        </div>
+        <a class="link" href="{{ url_for('index') }}">← Back to diffs</a>
+    </div>
+
+    <div class="card">
+        <table class="detail-table">
+            <tbody>
+            <tr><th>Dataset ID</th><td>{{ dataset.dataset_name }}</td></tr>
+            <tr><th>Description</th><td>{{ dataset.dataset_description }}</td></tr>
+            <tr><th>Dataset URI</th><td>{{ dataset.dataset_uri }}</td></tr>
+            <tr><th>Versions</th><td>{{ dataset.dataset_versions|reverse|join(" & ") }}</td></tr>
+            <tr><th>Diff date</th><td>{{ dataset.diff_date }}</td></tr>
+            <tr><th>Version named graphs</th><td>{{ dataset.version_named_graphs|reverse|join(" & ") }}</td></tr>
+            <tr><th>Old version file</th><td>{{ dataset.old_version_file }}</td></tr>
+            <tr><th>New version file</th><td>{{ dataset.new_version_file }}</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    {% if dataset.available_reports %}
+        <h2>Available reports</h2>
+        <div class="card">
+            {% for report in dataset.available_reports %}
+                <h3 class="report-ap">{{ report.application_profile }}</h3>
+                <ul class="report-list">
+                    {% for variant in report.template_variations %}
+                        <li>
+                            <a class="link"
+                               id="report-{{ dataset.uid }}-{{ report.application_profile }}-{{ variant }}"
+                               href="{{ url_for('download_report', dataset_id=dataset.uid, application_profile=report.application_profile, template_type=variant) }}">
+                                Download {{ report.application_profile }} · {{ variant }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if application_profiles %}
+        <h2>Build a report</h2>
+        <div class="card form-card">
+            <form method="POST" action="">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label for="application_profile">Application profile</label>
+                        <select id="application_profile" name="application_profile">
+                            {% for profile in application_profiles %}
+                                <option value="{{ profile.application_profile }}">{{ profile.application_profile }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label for="template_type">Template type</label>
+                        <select id="template_type" name="template_type"></select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Build report</button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            const profiles = {{ application_profiles | tojson }};
+            const apSelect = document.getElementById('application_profile');
+            const ttSelect = document.getElementById('template_type');
+
+            function refreshTemplateTypes() {
+                const selected = profiles.find(p => p.application_profile === apSelect.value);
+                ttSelect.innerHTML = '';
+                (selected ? selected.template_variations : []).forEach(variant => {
+                    const option = document.createElement('option');
+                    option.value = variant;
+                    option.textContent = variant;
+                    ttSelect.appendChild(option);
+                });
+            }
+
+            apSelect.addEventListener('change', refreshTemplateTypes);
+            refreshTemplateTypes();
+        </script>
+    {% endif %}
+{% endblock %}

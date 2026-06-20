@@ -1,0 +1,139 @@
+/* RDF Differ — modern, dependency-free design system (EPIC api-ui-fastapi-modernization, DEC-2). */
+
+:root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --border: #e3e6ea;
+    --text: #1d2733;
+    --muted: #69737d;
+    --primary: #2f6df6;
+    --primary-dark: #1f56d3;
+    --danger: #d6453d;
+    --success: #2e7d4f;
+    --success-bg: #e7f5ec;
+    --error-bg: #fdecea;
+    --info-bg: #eaf1fe;
+    --radius: 10px;
+    --shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 1px 3px rgba(16, 24, 40, .1);
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    line-height: 1.5;
+}
+
+.container { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 1.25rem; }
+
+/* Header / nav */
+.site-header { background: var(--surface); border-bottom: 1px solid var(--border); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+.brand { font-size: 1.15rem; font-weight: 600; color: var(--text); text-decoration: none; }
+.brand-mark {
+    background: var(--primary); color: #fff; padding: .1rem .4rem;
+    border-radius: 6px; font-weight: 700; letter-spacing: .02em;
+}
+.nav { display: flex; gap: .25rem; align-items: center; }
+.nav-link {
+    color: var(--muted); text-decoration: none; padding: .45rem .8rem;
+    border-radius: 8px; font-size: .95rem;
+}
+.nav-link:hover { color: var(--text); background: var(--bg); }
+.nav-link.is-active { color: var(--primary); font-weight: 600; }
+.nav-cta { background: var(--primary); color: #fff; }
+.nav-cta:hover { background: var(--primary-dark); color: #fff; }
+.nav-cta.is-active { color: #fff; }
+
+/* Layout */
+.main { flex: 1; padding-top: 1.75rem; padding-bottom: 3rem; }
+.page-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 1rem; }
+h1 { font-size: 1.6rem; margin: 0; }
+h2 { font-size: 1.2rem; margin: 1.75rem 0 .75rem; }
+h3 { font-size: 1rem; margin: 0 0 .5rem; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); font-size: .85rem; }
+.link { color: var(--primary); text-decoration: none; }
+.link:hover { text-decoration: underline; }
+
+/* Cards */
+.card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+}
+.form-card { padding: 1.5rem; }
+
+/* Tables */
+.data-table, .detail-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { text-align: left; padding: .75rem 1rem; border-bottom: 1px solid var(--border); }
+.data-table thead th { background: #fafbfc; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.data-table tbody tr:last-child td { border-bottom: 0; }
+.data-table tbody tr:hover { background: #fafbfc; }
+.detail-table th, .detail-table td { text-align: left; padding: .7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+.detail-table th { width: 220px; color: var(--muted); font-weight: 600; }
+.detail-table tr:last-child th, .detail-table tr:last-child td { border-bottom: 0; }
+
+/* Reports */
+.report-ap { padding: 1rem 1rem 0; }
+.report-list { margin: .25rem 0 1rem; padding-left: 2rem; }
+.report-list li { margin: .25rem 0; }
+
+/* Forms */
+.form-row { display: flex; flex-direction: column; margin-bottom: 1rem; }
+.form-row label { font-weight: 600; font-size: .9rem; margin-bottom: .35rem; }
+.form-row input, .form-row select {
+    font: inherit; padding: .55rem .65rem; border: 1px solid var(--border);
+    border-radius: 8px; background: #fff; color: var(--text);
+}
+.form-row input:focus, .form-row select:focus {
+    outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--info-bg);
+}
+.form-row input.has-error, .form-row select.has-error { border-color: var(--danger); }
+.help { color: var(--muted); font-size: .8rem; margin-top: .3rem; }
+.field-error { color: var(--danger); font-size: .8rem; margin-top: .3rem; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.25rem; }
+.form-actions { margin-top: .75rem; text-align: right; }
+
+/* Buttons */
+.btn {
+    display: inline-block; font: inherit; font-weight: 600; cursor: pointer;
+    padding: .55rem 1.1rem; border-radius: 8px; border: 1px solid transparent;
+    text-decoration: none; background: var(--bg); color: var(--text);
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { filter: brightness(.94); }
+.btn-sm { padding: .35rem .75rem; font-size: .85rem; }
+
+/* Flash messages */
+.flashes { margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: .6rem; }
+.flash { padding: .8rem 1rem; border-radius: 8px; border: 1px solid transparent; }
+.flash-error { background: var(--error-bg); border-color: #f5c6c2; color: #8a2620; }
+.flash-success { background: var(--success-bg); border-color: #bfe2cd; color: var(--success); }
+.flash-info { background: var(--info-bg); border-color: #c7dafd; color: var(--primary-dark); }
+
+/* Empty state */
+.empty-state {
+    text-align: center; padding: 3rem 1rem; color: var(--muted);
+    background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius);
+}
+.empty-state p { margin: 0 0 1rem; }
+
+/* Footer */
+.site-footer { border-top: 1px solid var(--border); background: var(--surface); padding: 1.25rem 0; color: var(--muted); text-align: center; font-size: .9rem; }
+.site-footer a { color: var(--primary); text-decoration: none; }
+
+@media (max-width: 640px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .page-head { flex-direction: column; align-items: flex-start; }
+    .detail-table th { width: auto; }
+}

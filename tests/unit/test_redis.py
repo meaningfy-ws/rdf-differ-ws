@@ -1,4 +1,4 @@
-from rdf_differ.adapters.redis import (
+from rdf_differ.core.adapters.redis import (
     push_task_to_queue,
     remove_task_from_queue,
     task_exists_in_queue,

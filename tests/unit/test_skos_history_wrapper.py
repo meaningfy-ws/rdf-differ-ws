@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 import pytest
 
-from rdf_differ.adapters.skos_history_wrapper import SKOSHistoryRunner
+from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
 from tests.conftest import helper_create_skos_runner
 
 
@@ -76,6 +76,7 @@ def test_skos_history_folder_setup_basedir_exist_is_not_empty(tmpdir):
     assert "Root path is not empty" in str(exception.value)
 
 
+@pytest.mark.integration  # needs live Fuseki/Redis/db (not a unit test)
 def test_skos_history_execute_subprocess(tmpdir):
     skos_runner = helper_create_skos_runner()
     # get absolute path as script is wonky when relative path is used

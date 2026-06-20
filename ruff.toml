@@ -27,14 +27,25 @@ ignore = [
               #   renaming is a public-name change; deferred to avoid behaviour risk.
 ]
 
+[lint.flake8-bugbear]
+# FastAPI's dependency markers are designed to be called in argument defaults
+# (the framework idiom); they are immutable, so B008 does not apply.
+extend-immutable-calls = [
+    "fastapi.File",
+    "fastapi.Form",
+    "fastapi.Query",
+    "fastapi.Path",
+    "fastapi.Depends",
+]
+
 [lint.mccabe]
 max-complexity = 10
 
 [lint.per-file-ignores]
 # Tests: B008 = pytest fixtures legitimately use callables as argument defaults.
 "tests/**/*.py" = ["B008"]
-# Example: a config module whose method names mirror env-var names.
-# "rdf_differ/__init__.py" = ["N802"]
+# The config module's method names mirror env-var names (Meaningfy settings pattern).
+"rdf_differ/__init__.py" = ["N802"]
 
 [format]
 quote-style = "double"
