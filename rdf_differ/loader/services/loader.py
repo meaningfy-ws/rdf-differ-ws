@@ -156,9 +156,17 @@ class VersionStoreLoader:
             )
 
     def _extract_meta(self, uri: UriBuilder, version_graph: str) -> tuple[str | None, str | None]:
+        """Read the version identifier and date from a loaded version graph.
+
+        Returns ``(identifier, date)``, or ``(None, None)`` when the metadata is absent
+        or the query fails. A failed query is logged so the missing metadata is visible.
+        """
         try:
             result = self._store.query(q.extract_version_meta_query(version_graph, uri.scheme_uri))
-        except Exception:
+        except Exception as exception:
+            logger.warning(
+                "could not extract version metadata from %s: %s", version_graph, exception
+            )
             return None, None
         bindings = result.get("results", {}).get("bindings", [])
         if not bindings:

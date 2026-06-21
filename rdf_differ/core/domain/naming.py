@@ -19,7 +19,9 @@ logger = logging.getLogger(__name__)
 
 
 def check_dataset_name_validity(name: str) -> bool:
-    return bool(re.match(r"^[\w\d_:-]*$", name, flags=re.A))
+    # fullmatch + `+` (not match + `*`): reject the empty string and names with a
+    # trailing newline, which `re.match(r"^...$")` accepted ($ matches before a final \n).
+    return bool(re.fullmatch(r"[\w\d_:-]+", name, flags=re.A))
 
 
 def build_unique_name(base: str, length_added: int = 8) -> str:
