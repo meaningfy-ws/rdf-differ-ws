@@ -1,9 +1,19 @@
 from rdf_differ.core.adapters.redis import (
+    REDIS_SOCKET_TIMEOUT,
     push_task_to_queue,
+    redis_client,
     remove_task_from_queue,
     task_exists_in_queue,
 )
 from tests.conftest import FakeRedisClient
+
+
+def test_redis_client_has_failfast_socket_timeouts():
+    """A down Redis must not hang the client on connect/read (#133 hardening)."""
+    kwargs = redis_client.connection_pool.connection_kwargs
+
+    assert kwargs.get("socket_connect_timeout") == REDIS_SOCKET_TIMEOUT
+    assert kwargs.get("socket_timeout") == REDIS_SOCKET_TIMEOUT
 
 
 def test_push_task_to_revoking_queue():

@@ -11,6 +11,7 @@ from json import dumps
 from pathlib import Path
 from typing import cast
 
+import redis
 import requests
 from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
 from fastapi import Path as PathParam
@@ -296,14 +297,26 @@ def list_active_tasks() -> list:
 def get_task_status(task_id: str = PathParam(...)) -> dict:
     """Get the status of a task."""
     logger.debug(f"get task status: {task_id}")
-    task = retrieve_task(task_id)
-    if not task:
-        raise HTTPException(HTTPStatus.NOT_FOUND, f"Task with {task_id} doesn't exist")
+    # Reading task state hits the Celery result backend (Redis). If it is
+    # unreachable the underlying client raises a connection error; surface a
+    # clear 503 rather than letting it escape as an unhandled 500 or hang
+    # (#133 hardening). The redis socket timeouts bound the wait.
     try:
-        result = dumps(task.result)
-    except TypeError:
-        result = ""
-    return {"task_id": task.id, "status": task.status, "result": result}
+        task = retrieve_task(task_id)
+        if not task:
+            raise HTTPException(HTTPStatus.NOT_FOUND, f"Task with {task_id} doesn't exist")
+        status = task.status
+        try:
+            result = dumps(task.result)
+        except TypeError:
+            result = ""
+        return {"task_id": task.id, "status": status, "result": result}
+    except HTTPException:
+        raise
+    except (redis.exceptions.RedisError, ConnectionError, OSError) as exception:
+        text = "task status backend unavailable"
+        logger.exception(text)
+        raise HTTPException(HTTPStatus.SERVICE_UNAVAILABLE, text) from exception
 
 
 @router.delete("/tasks/{task_id}")

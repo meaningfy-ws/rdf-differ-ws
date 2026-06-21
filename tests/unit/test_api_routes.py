@@ -299,6 +299,19 @@ def test_get_task_status_404(mock_retrieve):
     assert resp.status_code == 404
 
 
+@patch(f"{ROUTES}.retrieve_task")
+def test_get_task_status_503_when_backend_down(mock_retrieve):
+    """A down Redis result backend returns 503, not an unhandled 500/hang (#133)."""
+    import redis
+
+    mock_retrieve.side_effect = redis.exceptions.ConnectionError("backend down")
+
+    resp = client.get("/tasks/t1")
+
+    assert resp.status_code == 503
+    assert "backend unavailable" in resp.json()["detail"]
+
+
 @patch(f"{ROUTES}.kill_task")
 @patch(f"{ROUTES}.flatten_active_tasks", return_value=[{"id": "t1"}])
 @patch(f"{ROUTES}.retrieve_active_tasks", return_value={})
