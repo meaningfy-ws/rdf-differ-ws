@@ -87,15 +87,13 @@ create_diff() {
         [[ "$print_mode" == "print" ]] && echo "${RESPONSE}"
         exit 1
     fi
-    [[ "$print_mode" == "print" ]] && echo "📡 Getting active tasks..."
-    local ACTIVE_TASKS=$(curl -skLX GET "${BASE_URL}/tasks/active" -H 'accept: application/json')
-    local TASK_ID=$(echo "${ACTIVE_TASKS}" | jq -r '.[0].id')
-    if [ -z "${TASK_ID}" ] || [ "${TASK_ID}" == "null" ]; then
-        [[ "$print_mode" == "print" ]] && echo "❌ No active tasks found!"
+    # #132: wait on the task id the create call returned (uid), not the first active task.
+    local TASK_UID=$(echo "${RESPONSE}" | jq -r '.uid')
+    if [ -z "${TASK_UID}" ] || [ "${TASK_UID}" == "null" ]; then
+        echo "❌ Could not determine diff task id from API response"
         exit 1
     fi
-    [[ "$print_mode" == "print" ]] && echo "Found active task ID: ${TASK_ID}"
-    wait_for_task "${TASK_ID}" "diff" "$print_mode"
+    wait_for_task "${TASK_UID}" "diff" "$print_mode"
     echo "${DATASET_ID}"
 }
 
@@ -233,6 +231,20 @@ case ${COMMAND} in
             show_help
             exit 1
         fi
+        ;;
+esac
+
+# #133: fail fast if the API is unreachable before issuing diff/report/full requests.
+ensure_api_reachable() {
+    if ! curl -fsS -m 5 -o /dev/null "${BASE_URL}/diffs"; then
+        echo "❌ RDF Differ API not reachable at ${BASE_URL}"
+        exit 1
+    fi
+}
+
+case ${COMMAND} in
+    diff|report|full)
+        ensure_api_reachable
         ;;
 esac
 
