@@ -2,6 +2,7 @@
 # Author: Eugeniu Costetchi
 # Email: costezki.eugen@gmail.com
 
+@integration
 Feature: List the diffs in the triplestore
 
   As a user,

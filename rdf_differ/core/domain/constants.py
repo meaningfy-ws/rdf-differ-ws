@@ -1,8 +1,6 @@
 """Shared domain-level constants (core component — importable by any component).
 
-Pure data only — no I/O, no framework imports. `INPUT_MIME_TYPES` was relocated
-here from the legacy ``rdf_differ.utils.file_utils`` during the utils dissolution
-(DEC-7); the mapping is preserved verbatim.
+Pure data only — no I/O, no framework imports.
 """
 
 from enum import StrEnum

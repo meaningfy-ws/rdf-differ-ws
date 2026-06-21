@@ -1,4 +1,4 @@
-"""Unit tests for ``build_graph_store`` (composition-root factory, DEC-10)."""
+"""Unit tests for ``build_graph_store`` (composition-root factory)."""
 
 from rdf_differ.loader.adapters.graph_store import GraphStorePort
 from rdf_differ.loader.adapters.graph_store_provider import build_graph_store

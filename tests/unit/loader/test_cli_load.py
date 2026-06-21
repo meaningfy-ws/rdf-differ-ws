@@ -1,4 +1,4 @@
-"""Unit tests for the ``rdf-diff load`` CLI entrypoint (DEC-6)."""
+"""Unit tests for the ``rdf-diff load`` CLI entrypoint."""
 
 import json
 from pathlib import Path

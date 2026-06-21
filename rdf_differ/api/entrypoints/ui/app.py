@@ -1,4 +1,4 @@
-"""FastAPI + Jinja2 web UI application (EPIC api-ui-fastapi-modernization, DEC-2).
+"""FastAPI + Jinja2 web UI application.
 
 Replaces the Flask UI. Server-rendered pages, signed-session flash messages, a static
 mount for the design-system CSS, and status-class request logging.

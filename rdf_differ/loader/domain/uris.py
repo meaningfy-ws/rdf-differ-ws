@@ -1,10 +1,9 @@
 """IRI construction for the skos-history named-graph contract.
 
-Mirrors the legacy ``load_versions.sh`` URI scheme (``:317-342`` and the
-``load_version``/``load_delta`` functions), with one deliberate change recorded
-in design ADR-3: version-history records use ``{base}/record/{id}`` (with a
-slash) instead of the script's slash-less ``{base}record/{id}``. This is safe
-because consumers discover records by type/property, never by record-IRI shape.
+Mirrors the legacy ``load_versions.sh`` URI scheme, with one deliberate change:
+version-history records use ``{base}/record/{id}`` (with a slash) instead of the
+script's slash-less ``{base}record/{id}``. This is safe because consumers
+discover records by type/property, never by record-IRI shape.
 
 Pure domain — no I/O, no framework imports.
 """

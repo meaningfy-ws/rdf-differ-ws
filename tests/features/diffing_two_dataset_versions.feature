@@ -2,6 +2,7 @@
 # Author: Eugeniu Costetchi
 # Email: costezki.eugen@gmail.com
 
+@integration
 Feature: Diffing two dataset versions
 
   As a user,

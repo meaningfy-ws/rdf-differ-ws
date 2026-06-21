@@ -27,7 +27,7 @@ prefix xhv: <http://www.w3.org/1999/xhtml/vocab#>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 """
 
-# Blank-node policy → the SPARQL filter applied during delta computation (DEC-9).
+# Blank-node policy → the SPARQL filter applied during delta computation.
 # SKOLEMISE has no filter here — it is handled by rewriting RDF before load.
 BLANK_NODE_FILTERS: dict[BlankNodePolicy, str] = {
     BlankNodePolicy.EXCLUDE: "  filter isIRI(?s)\n  filter (isIRI(?o) || isLiteral(?o) || isNumeric(?o))",

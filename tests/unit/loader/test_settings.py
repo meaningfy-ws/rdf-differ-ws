@@ -1,4 +1,4 @@
-"""Unit tests for ``StoreSettings`` (adapters layer, DEC-10)."""
+"""Unit tests for ``StoreSettings`` (adapters layer)."""
 
 from rdf_differ.loader.adapters.settings import StoreSettings
 
@@ -23,7 +23,7 @@ def test_derived_endpoints_from_base():
 
 
 def test_accepts_explicit_values():
-    # StoreSettings is an injected value object (DEC-10): the composition root
+    # StoreSettings is an injected value object: the composition root
     # builds it from `config`; it never reads the environment itself.
     settings = StoreSettings(
         location="http://fuseki.example",

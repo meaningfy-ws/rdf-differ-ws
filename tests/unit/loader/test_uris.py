@@ -19,7 +19,7 @@ def test_version_and_record_and_named_graph_iris():
     b = UriBuilder("http://zbw.eu/stw")
     assert b.version_graph("9.0") == "http://zbw.eu/stw/version/9.0"
     assert b.version_named_graph_node("9.0") == "http://zbw.eu/stw/version/9.0/ng"
-    # design ADR-3: record uses {base}/record/{id} (with slash)
+    # record uses {base}/record/{id} (with slash)
     assert b.record("9.0") == "http://zbw.eu/stw/version/record/9.0"
     assert b.history_graph() == "http://zbw.eu/stw/version"
     assert b.history_named_graph_node() == "http://zbw.eu/stw/version/ng"

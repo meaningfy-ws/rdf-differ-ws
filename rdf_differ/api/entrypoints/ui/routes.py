@@ -1,8 +1,8 @@
-"""Web UI page routes (EPIC api-ui-fastapi-modernization, DEC-2).
+"""Web UI page routes.
 
 Server-rendered pages on FastAPI + Jinja2. Each route calls the REST API through the
 httpx ``api_client`` and renders a template or redirects; API failures become flash
-messages, never a UI crash (DEC-3).
+messages, never a UI crash.
 """
 
 import logging

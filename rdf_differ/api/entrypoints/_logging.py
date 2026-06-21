@@ -1,5 +1,4 @@
-"""Status-class request logging shared by the API and UI entrypoints (EPIC
-api-ui-fastapi-modernization, DEC-8).
+"""Status-class request logging shared by the API and UI entrypoints.
 
 Every handled request is logged at a level chosen by its response status class —
 2xx/3xx at INFO, 4xx at WARNING, 5xx at ERROR — with method, path, status and

@@ -1,11 +1,12 @@
 """Version-store loading, delta computation, and post-load validation (services).
 
 Depends only on the ``GraphStorePort``, the query templates, and pure domain
-helpers — never on a store library (DEC-2/DEC-8). The same orchestration runs
-against any engine. Mirrors ``load_versions.sh``: a first pass loads every version
-+ its record, a second pass computes deltas (consecutive + direct-to-current),
-each delta graph CLEARed before INSERT for idempotency (L5). ``validate_store``
-fails fast on the silent-corruption gap (L8) the legacy script had.
+helpers — never on a store library, so the same orchestration runs against any
+engine. The load runs in two passes: a first pass loads every version and its
+version-history record, a second pass computes deltas (consecutive pairs plus
+direct-to-current). Each delta graph is CLEARed before INSERT so a re-run is
+idempotent. ``validate_store`` then fails fast if any version graph is empty,
+catching silent corruption before it propagates downstream.
 """
 
 import logging
@@ -156,9 +157,17 @@ class VersionStoreLoader:
             )
 
     def _extract_meta(self, uri: UriBuilder, version_graph: str) -> tuple[str | None, str | None]:
+        """Read the version identifier and date from a loaded version graph.
+
+        Returns ``(identifier, date)``, or ``(None, None)`` when the metadata is absent
+        or the query fails. A failed query is logged so the missing metadata is visible.
+        """
         try:
             result = self._store.query(q.extract_version_meta_query(version_graph, uri.scheme_uri))
-        except Exception:
+        except Exception as exception:
+            logger.warning(
+                "could not extract version metadata from %s: %s", version_graph, exception
+            )
             return None, None
         bindings = result.get("results", {}).get("bindings", [])
         if not bindings:

@@ -1,4 +1,4 @@
-"""Form input validation for the UI (EPIC api-ui-fastapi-modernization, DEC-2).
+"""Form input validation for the UI.
 
 Pydantic models replace Flask-WTF. Routes parse the submitted form into these models;
 a ``ValidationError`` is rendered back onto the form as field messages.

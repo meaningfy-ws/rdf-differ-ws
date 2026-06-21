@@ -4,8 +4,8 @@ The Python replacement for ``load_versions.sh``. Pure service (DIP): it receives
 an already-built ``GraphStorePort`` (the composition root — the Celery task / CLI —
 constructs the concrete store and the blank-node strategy), so it never imports a
 store library. ``create_version_diff`` runs the loader + validation;
-``write_artifacts`` serialises the four named graphs + ``result.json`` (DEC-5 —
-the always-ships in-memory deliverable, needing no triple store and no eds4jinja2).
+``write_artifacts`` serialises the four named graphs + ``result.json`` — the
+always-available in-memory deliverable, needing no triple store and no eds4jinja2.
 """
 
 from pathlib import Path

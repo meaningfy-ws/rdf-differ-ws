@@ -45,7 +45,7 @@ class BlankNodePolicy(StrEnum):
     SKOLEMISE = "skolemise"
 
 
-# --- blank-node strategy seam (DEC-9) -----------------------------------------
+# --- blank-node strategy seam ------------------------------------------------
 @runtime_checkable
 class BlankNodeStrategy(Protocol):
     """Transforms parsed RDF *before* it is loaded into a graph store.
@@ -83,7 +83,7 @@ class IdentityBlankNodeStrategy:
         return data
 
 
-# --- configuration (DEC-3, pydantic v2) ---------------------------------------
+# --- configuration (pydantic v2) ---------------------------------------------
 def _is_absolute_iri(value: str) -> bool:
     parsed = urlparse(value)
     return bool(parsed.scheme) and bool(parsed.netloc)
@@ -106,7 +106,7 @@ class VersionStoreConfig(BaseModel):
 
     Describes the dataset/diff shape only — versions, IRIs, engine, blank-node
     policy. Environment-independent: it carries no endpoint or credentials; the
-    store connection is a separate ``StoreSettings`` concern (DEC-10).
+    store connection is a separate ``StoreSettings`` concern.
     """
 
     model_config = ConfigDict(frozen=True)

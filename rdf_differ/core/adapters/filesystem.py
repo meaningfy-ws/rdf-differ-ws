@@ -1,7 +1,6 @@
 """Filesystem and RDF-file I/O operations (adapters layer).
 
-Relocated here from the legacy ``rdf_differ.utils`` during the utils dissolution
-(DEC-7). This module holds all filesystem-touching helpers (directory/file checks,
+This module holds all filesystem-touching helpers (directory/file checks,
 copying, listing, saving uploaded files) plus the ``rdflib``-backed RDF conversion
 helper. Path-building and meta-file reading used by both the report service and the
 diff adapter also live here, since reading a meta file is filesystem I/O and an
@@ -104,8 +103,8 @@ def save_files(old_file: FileStorage, new_file: FileStorage, location: str = "")
     check_files_exist(old_file, new_file)
 
     location_to_save = Path(location) / str(uuid4())
-    # parents=True creates the base db/ dir on a fresh deployment (its absence was the
-    # create-diff 500); the uuid leaf is unique so exist_ok is just defensive.
+    # parents=True creates the base directory on a fresh deployment if it does not
+    # exist yet; the uuid leaf is unique so exist_ok is just defensive.
     location_to_save.mkdir(parents=True, exist_ok=True)
     try:
         saved_old_file = build_secure_filename(str(location_to_save), old_file.filename or "")

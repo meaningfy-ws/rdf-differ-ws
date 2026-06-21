@@ -129,16 +129,13 @@ def retrieve_report(
     :param reports_location: which file system location to use to perform the action
     :return:
     """
-    return str(
-        next(
-            Path(
-                build_report_location(
-                    dataset_name, application_profile, template_type, reports_location
-                )
-            ).iterdir(),
-            "",
-        )
+    report_dir = Path(
+        build_report_location(dataset_name, application_profile, template_type, reports_location)
     )
+    if not report_dir.is_dir():
+        # No report built yet — return the empty default rather than raising.
+        return ""
+    return str(next(report_dir.iterdir(), ""))
 
 
 def report_exists(
@@ -299,7 +296,11 @@ def find_dataset_name_by_id(
     :return: location of reports
     """
     for location in list_folder_paths_from_path(Path(reports_location)):
-        content = read_meta_file(Path(reports_location) / location)
+        try:
+            content = read_meta_file(Path(reports_location) / location)
+        except FileNotFoundError:
+            # A stray, non-dataset folder (no meta file) must not abort the whole lookup.
+            continue
         if content.get("uid", None) == dataset_id:
             return str(content.get("dataset_name", ""))
 

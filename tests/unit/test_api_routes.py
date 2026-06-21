@@ -1,4 +1,4 @@
-"""Unit tests for the FastAPI REST API routes (EPIC api-ui-fastapi-modernization).
+"""Unit tests for the FastAPI REST API routes.
 
 Exercised through FastAPI's TestClient with the services/adapters mocked — the routes'
 job is request parsing, calling a service, mapping errors and serialising a response.

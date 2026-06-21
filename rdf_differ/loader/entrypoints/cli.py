@@ -1,10 +1,10 @@
-"""Click CLI entrypoint for the RDF Loading Module (DEC-6).
+"""Click CLI entrypoint for the RDF Loading Module.
 
 This is a thin entrypoint: it only parses arguments, reads the YAML config, wires
 the composition root (settings + store factory + blank-node strategy + loader),
 runs the service flow, and formats output/exit codes. No business logic lives
-here. Known domain errors map to stable exit codes (proposal.md "User-facing
-errors"); unexpected errors surface a traceback and exit 1.
+here. Known domain errors map to stable exit codes; unexpected errors surface a
+traceback and exit 1.
 """
 
 import sys
@@ -128,7 +128,7 @@ def _run_load(
     if report:
         click.echo(
             "in-memory reporting requires the eds4jinja2 enhancement and is not yet "
-            "available; diff artifacts were still produced (DEC-5 fallback)."
+            "available; diff artifacts were still produced."
         )
 
 

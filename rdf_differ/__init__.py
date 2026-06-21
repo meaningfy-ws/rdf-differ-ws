@@ -142,8 +142,8 @@ class SparqlConfig:
 
 
 class LoaderConfig:
-    # Cutover flag (rdf-loading-module): when true, the diff is created by the new
-    # Python RDF Loading Module instead of the legacy load_versions.sh subprocess.
+    # Cutover flag: when true, the diff is created by the Python RDF Loading
+    # Module instead of the legacy load_versions.sh subprocess.
     @env_property(default_value="false")
     def RDF_DIFFER_USE_PYTHON_LOADER(self, config_value: str) -> bool:
         return strtobool(config_value)

@@ -1,3 +1,4 @@
+@integration
 Feature: OWL diffing
 
   Background:

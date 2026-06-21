@@ -1,8 +1,7 @@
 """Pure naming and identifier helpers (domain layer).
 
-Relocated here from the legacy ``rdf_differ.utils.file_utils`` during the utils
-dissolution (DEC-7). These are pure functions: dataset-name validation, unique-name
-generation, and secure-filename construction. They perform no filesystem I/O —
+These are pure functions: dataset-name validation, unique-name generation, and
+secure-filename construction. They perform no filesystem I/O —
 ``build_secure_filename`` only sanitises and composes a path string via
 ``werkzeug.utils.secure_filename`` and a UUID, so it remains domain-pure.
 """
@@ -19,7 +18,9 @@ logger = logging.getLogger(__name__)
 
 
 def check_dataset_name_validity(name: str) -> bool:
-    return bool(re.match(r"^[\w\d_:-]*$", name, flags=re.A))
+    # fullmatch + `+` (not match + `*`): reject the empty string and names with a
+    # trailing newline, which `re.match(r"^...$")` accepted ($ matches before a final \n).
+    return bool(re.fullmatch(r"[\w\d_:-]+", name, flags=re.A))
 
 
 def build_unique_name(base: str, length_added: int = 8) -> str:
