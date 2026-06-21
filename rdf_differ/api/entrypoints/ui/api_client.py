@@ -1,4 +1,4 @@
-"""httpx client for the REST API (EPIC api-ui-fastapi-modernization, DEC-3/DEC-8).
+"""httpx client the UI uses to call the REST API.
 
 Replaces ``api_wrapper.py``'s bare ``requests`` calls. Every call has an explicit
 timeout, returns a typed :class:`ApiResult`, guards JSON parsing, and is logged at a
@@ -117,7 +117,7 @@ def get_report(dataset_id: str, application_profile: str, template_type: str) ->
     """Fetch a built report as a raw response (the caller streams bytes + filename).
 
     A connection error returns a synthetic 503 response rather than raising, so a
-    failing API degrades to a flash in the caller — never a UI crash (DEC-3).
+    failing API degrades to a flash in the caller — never a UI crash.
     """
     url = _url("/diffs/report")
     try:

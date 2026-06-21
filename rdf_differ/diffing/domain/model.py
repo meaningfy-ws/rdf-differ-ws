@@ -1,4 +1,4 @@
-"""Core domain model (pydantic v2 — DEC-3, migrated from dataclasses).
+"""Core domain model (pydantic v2).
 
 Pure domain: pydantic is allowed here; no I/O frameworks. `DatasetVersion` and
 `VersionsDelta` keep identity-based equality (by id / id-pair) so they behave as

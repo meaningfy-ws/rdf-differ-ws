@@ -1,4 +1,4 @@
-"""Remote ``GraphStorePort`` against any SPARQL 1.1 endpoint (DEC-2, DEC-10).
+"""Remote ``GraphStorePort`` against any SPARQL 1.1 endpoint.
 
 Talks the Graph Store Protocol (``PUT``/``GET`` on ``/data``) for bulk graph
 load/serialise, and SPARQL 1.1 Update/Query for delta writes and reads. Its

@@ -1,4 +1,4 @@
-"""Engine-selecting composition helper for the triple-store port (DEC-2, DEC-10).
+"""Engine-selecting composition helper for the triple-store port.
 
 ``build_graph_store`` picks the concrete ``GraphStorePort`` for an ``Engine`` and is
 used identically by the CLI and the API/Celery path. It lives apart from the port

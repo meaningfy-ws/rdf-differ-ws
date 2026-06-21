@@ -1,9 +1,8 @@
-"""REST API path operations (EPIC api-ui-fastapi-modernization, DEC-1).
+"""REST API path operations.
 
-Ported from the former Connexion ``handlers.py``: same paths, verbs and status
-codes, now as FastAPI routes raising ``HTTPException`` and returning pydantic
-models / responses. Orchestration calls the existing services and adapters
-unchanged (DEC-7); no diff/report computation lives here.
+FastAPI routes raising ``HTTPException`` and returning pydantic models /
+responses. Orchestration calls the existing services and adapters; no
+diff/report computation lives here.
 """
 
 import logging

@@ -1,4 +1,4 @@
-"""Steps for cli_load.feature — the rdf-diff CLI (EPIC behaviour-test-coverage).
+"""Steps for cli_load.feature — the rdf-diff CLI.
 
 Infra-free: click CliRunner driving the in-memory rdflib engine over sample OWL data.
 """

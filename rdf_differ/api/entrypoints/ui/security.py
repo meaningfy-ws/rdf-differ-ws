@@ -1,4 +1,4 @@
-"""CSRF protection for the UI's state-changing forms (EPIC api-ui-fastapi-modernization).
+"""CSRF protection for the UI's state-changing forms.
 
 A per-session token is stored in the signed session (Starlette ``SessionMiddleware``),
 rendered as a hidden field in every form, and verified on every POST with a constant-time

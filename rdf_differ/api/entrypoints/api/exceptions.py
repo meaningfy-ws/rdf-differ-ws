@@ -1,5 +1,4 @@
-"""HTTP error mapping for the REST API entrypoint (EPIC api-ui-fastapi-modernization,
-DEC-1/DEC-8).
+"""HTTP error mapping for the REST API entrypoint.
 
 Emits a problem-style ``{status, title, detail}`` JSON body (the shape the UI parses)
 for every error, and logs unhandled exceptions at ERROR with a traceback.

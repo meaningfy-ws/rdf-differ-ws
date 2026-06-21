@@ -1,4 +1,4 @@
-"""Unit tests for the FastAPI + Jinja2 web UI routes (EPIC api-ui-fastapi-modernization).
+"""Unit tests for the FastAPI + Jinja2 web UI routes.
 
 The httpx api_client is mocked (returning ApiResult / httpx.Response); these tests cover
 rendering, form validation, flash-on-error and redirects. Replaces the Flask view tests.

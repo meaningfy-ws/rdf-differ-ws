@@ -1,7 +1,7 @@
-"""In-memory ``GraphStorePort`` backends (DEC-2): pyoxigraph and rdflib.
+"""In-memory ``GraphStorePort`` backends: pyoxigraph and rdflib.
 
 Two config-selected, dependency-light engines sharing one module. Neither imports
-the other (DEC-8 independence holds within the module). ``PyoxigraphStore`` is
+the other. ``PyoxigraphStore`` is
 fast native SPARQL over an in-process ``Store``; ``RdflibStore`` is pure-Python
 SPARQL over an ``rdflib.Dataset``. Both translate engine failures to
 ``GraphStoreError`` and return SPARQL-JSON from ``query``.

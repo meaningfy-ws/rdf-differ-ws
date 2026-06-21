@@ -1,4 +1,4 @@
-"""Unit tests for the status-class request-logging middleware (DEC-8)."""
+"""Unit tests for the status-class request-logging middleware."""
 
 import logging
 

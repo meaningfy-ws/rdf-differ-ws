@@ -1,4 +1,4 @@
-"""The triple-store port (ADR-1, DEC-2).
+"""The triple-store port: the single interface the loader uses for all store access.
 
 Engine-agnostic: ``RemoteSparqlStore``, ``PyoxigraphStore`` and ``RdflibStore``
 implement ``GraphStorePort`` identically, so the loading service runs the same delta

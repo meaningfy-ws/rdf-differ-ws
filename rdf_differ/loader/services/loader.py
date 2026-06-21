@@ -1,11 +1,12 @@
 """Version-store loading, delta computation, and post-load validation (services).
 
 Depends only on the ``GraphStorePort``, the query templates, and pure domain
-helpers — never on a store library (DEC-2/DEC-8). The same orchestration runs
-against any engine. Mirrors ``load_versions.sh``: a first pass loads every version
-+ its record, a second pass computes deltas (consecutive + direct-to-current),
-each delta graph CLEARed before INSERT for idempotency (L5). ``validate_store``
-fails fast on the silent-corruption gap (L8) the legacy script had.
+helpers — never on a store library, so the same orchestration runs against any
+engine. The load runs in two passes: a first pass loads every version and its
+version-history record, a second pass computes deltas (consecutive pairs plus
+direct-to-current). Each delta graph is CLEARed before INSERT so a re-run is
+idempotent. ``validate_store`` then fails fast if any version graph is empty,
+catching silent corruption before it propagates downstream.
 """
 
 import logging

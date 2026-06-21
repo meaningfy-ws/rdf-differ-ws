@@ -1,4 +1,4 @@
-"""Steps for rest_api.feature — FastAPI REST API journeys (EPIC behaviour-test-coverage).
+"""Steps for rest_api.feature — FastAPI REST API journeys.
 
 Infra-free: FastAPI TestClient with services/adapters mocked.
 """

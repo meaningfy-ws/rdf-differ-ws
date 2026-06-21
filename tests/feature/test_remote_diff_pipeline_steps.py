@@ -1,4 +1,4 @@
-"""Steps for remote_diff_pipeline.feature (EPIC behaviour-test-coverage).
+"""Steps for remote_diff_pipeline.feature.
 
 @integration — needs a live API (e.g. `make start-services-test`). Skipped if unreachable.
 """

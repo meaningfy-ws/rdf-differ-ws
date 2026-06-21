@@ -1,4 +1,4 @@
-"""Unit tests for the UI's httpx API client (EPIC api-ui-fastapi-modernization, DEC-3)."""
+"""Unit tests for the UI's httpx API client."""
 
 from unittest.mock import patch
 

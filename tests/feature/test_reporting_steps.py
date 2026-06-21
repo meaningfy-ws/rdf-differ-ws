@@ -1,4 +1,4 @@
-"""Steps for reporting.feature — application-profile discovery (EPIC behaviour-test-coverage).
+"""Steps for reporting.feature — application-profile discovery.
 
 Infra-free: exercises ApplicationProfileManager over tests/test_data/sample_ap_config.
 """

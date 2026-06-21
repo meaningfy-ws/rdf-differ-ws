@@ -1,4 +1,4 @@
-"""Steps for web_ui.feature — FastAPI UI journeys (EPIC behaviour-test-coverage).
+"""Steps for web_ui.feature — FastAPI UI journeys.
 
 Infra-free: FastAPI TestClient with the httpx api_client mocked.
 """

@@ -1,7 +1,7 @@
-"""Deterministic, W3C-compliant blank-node skolemisation (DEC-9).
+"""Deterministic, W3C-compliant blank-node skolemisation.
 
-Lives in the adapters layer because it imports ``rdflib`` (forbidden in ``domain``
-by DEC-8). The initial KISS implementation is deterministic end-to-end:
+Lives in the adapters layer because it imports ``rdflib`` (which the ``domain``
+layer must not depend on). The implementation is deterministic end-to-end:
 
 1. ``rdflib.compare.to_canonical_graph`` assigns canonical blank-node labels that
    are stable across runs and parse order;

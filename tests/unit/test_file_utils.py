@@ -106,7 +106,7 @@ def test_save_files_success(tmpdir):
 
 def test_save_files_creates_missing_base_dir(tmpdir):
     # Regression: a fresh deployment has no db/ base dir; save_files must create it
-    # (its absence caused the create-diff 500), not raise FileNotFoundError.
+    # rather than raise FileNotFoundError.
     location = str(tmpdir.join("db"))  # does NOT exist yet
     with save_files(
         FileStorage((BytesIO(b"1")), filename="old_file"),
