@@ -373,6 +373,67 @@ If so, you will need to override the base URL inclusive of the port:
 
 In the development/production environment where services are running behind Traefik, no such override is required, as the default base URL for the script is `api.localhost`, the Traefik route for the API+port.
 
+### The Query Profiler
+
+The query profiler measures how long the SPARQL queries of an application profile take to run, so you can find slow or failing queries. It loads every `.rq` file in the profile's `queries` directory, runs each one against a Fuseki dataset, and reports per-query timings and aggregate statistics.
+
+Optionally, it can preload old and/or new RDF versions into the target dataset before profiling, and (with `--create-delta-graphs`) generate the skos-history delta graphs first. The delta graphs are usually what makes profiling meaningful: most queries operate on them, so without populated delta graphs the queries return almost immediately and the timings are not representative.
+
+Invoke it as a module:
+
+```sh
+poetry run python -m rdf_differ.diffing.entrypoints.query_profiler <profile> [old_file] [new_file] [options]
+```
+
+`<profile>` is required and must match a folder under the application profiles root (e.g. `owl-core-en-only`, `skos-core-en-only` — include any suffix like `-en-only`). The optional `old_file` and `new_file` are RDF versions to preload; with `--create-delta-graphs` both are required.
+
+#### Options
+
+| Flag | Purpose |
+| ---- | ------- |
+| `--endpoint URL` | Fuseki service endpoint (defaults to the configured Fuseki service) |
+| `--dataset NAME` | Dataset to target (defaults to the profile name with spaces replaced by underscores) |
+| `--timeout SECONDS` | Per-query timeout (default: 60) |
+| `--csv-output PATH` | Export a CSV report (query file, status, runtime, query text) |
+| `--create-delta-graphs` | Generate skos-history delta graphs before profiling (requires both RDF files) |
+| `--dataset-uri URI` | Dataset/scheme URI used when generating delta graphs |
+| `--old-version-id ID` | Old version identifier used when generating delta graphs |
+| `--new-version-id ID` | New version identifier used when generating delta graphs |
+
+#### Examples
+
+Profile a profile's queries against an already-populated dataset:
+
+```sh
+poetry run python -m rdf_differ.diffing.entrypoints.query_profiler skos-core-en-only
+```
+
+Generate delta graphs from two Turtle files, profile the queries, and save a CSV report:
+
+```sh
+poetry run python -m rdf_differ.diffing.entrypoints.query_profiler owl-core-en-only \
+  evaluation/vocabularies/ePO_core-4.1.0.ttl \
+  evaluation/vocabularies/ePO_core-4.2.0.ttl \
+  --dataset epo_4_1_vs_4_2_owl-core \
+  --create-delta-graphs \
+  --csv-output reports/epo_4_1_vs_4_2_owl-core.csv
+```
+
+#### Output and exit codes
+
+For each query the profiler prints progress and a result (`SUCCESS` with a duration, `TIMEOUT`, or `FAILED`), then a summary with the query count, total time, average time, and the longest and shortest queries. If `--csv-output` is given, a CSV report is also written.
+
+Exit codes:
+
+- `0` — all queries executed successfully.
+- `2` — completed, but some queries were not successful (timed out or failed).
+- `1` — a setup error prevented profiling (profile/queries not found, dataset could not be ensured, endpoint unreachable, or an upload/delta-graph step failed).
+
+Notes:
+
+- `--timeout` returns control immediately when a query stalls, so a single slow query cannot block the whole run; the query is marked `TIMEOUT` and profiling continues.
+- If the Fuseki endpoint is unreachable, the profiler aborts early with a clear message rather than hanging.
+
 ### The Differ UI
 
 To create a new diff, click on **Create diff** and fill in all of the metadata fields along with uploading the old and new RDF files to diff.
