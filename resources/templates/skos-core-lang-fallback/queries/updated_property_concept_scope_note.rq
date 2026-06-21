@@ -130,7 +130,7 @@ WHERE {
    }
   # the language tag shall be the same
 
-  FILTER( lang(?oldValue) = lang(?newValue) && ?oldValue != ?newValue )
+  FILTER( ?oldValue != ?newValue && ( lang(?oldValue) = lang(?newValue) || str(?oldValue) = str(?newValue) || ( isLiteral(?oldValue) != isLiteral(?newValue) ) ) )
 
 }
 ORDER BY ?instance
