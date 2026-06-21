@@ -7,8 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-06-21
+
+### Fixed
+
+- **Diff now captures language-tag and datatype↔object property changes** (#142, #143) — the
+  `updated_property` SPARQL queries paired old/new values only when their language tags matched,
+  silently dropping language-tag changes/removals (`"x"@en` → `"x"@fr` / `"x"`) and
+  datatype→object changes (literal → IRI). The pairing FILTER is relaxed across all 149
+  `updated_property` templates (both the simple and the rich filter shapes) to also pair
+  same-text-different-tag and literal↔IRI values for the same instance+property. Verified by an
+  rdflib test that runs the real query. (The upstream `dqgen` generator must mirror this to avoid
+  drift on regeneration.)
+- **Query profiler `--timeout` returns control immediately on a hung query** (#134) — `run_queries`
+  used a `ThreadPoolExecutor` context manager whose exit `shutdown(wait=True)` blocked on the
+  un-killable hung thread even after recording `TIMEOUT`. It now manages the executor manually and
+  `shutdown(wait=False, cancel_futures=True)` on timeout.
+- **Diff CLI waits on the created diff task** (#132) — `infra/scripts/rdf-differ.sh` posted `/diffs`
+  then ignored the returned task `uid` and waited on `/tasks/active[0]`, racing the wrong task. It
+  now polls `/tasks/{uid}` from the create response and errors out if the id is absent.
+
 ### Added
 
+- **Query profiler fails fast on an unreachable triplestore, and a pre-flight API health check in the
+  diff CLI** (#133) — the profiler probes the Fuseki endpoint before any query work and the diff CLI
+  probes the API before issuing `diff`/`report`/`full` requests, each exiting with a clear message.
+- **Documented the query profiling script in the README** (#135) — purpose, invocation, flags,
+  examples and exit codes (previously hidden behind closed PR #129).
 - **RDF Loading Module** (`openspec/changes/rdf-loading-module`) — a layered, tested Python rewrite of
   `resources/load_versions.sh`. One `GraphStorePort` with three config-selected backends:
   `RemoteSparqlStore` (any SPARQL 1.1 + GSP endpoint), `PyoxigraphStore` and `RdflibStore` (in-memory).
