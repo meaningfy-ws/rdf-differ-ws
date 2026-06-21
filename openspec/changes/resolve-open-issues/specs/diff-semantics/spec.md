@@ -1,35 +1,40 @@
-# Capability: diff-semantics
+# diff-semantics
 
 Cites EPIC: resolve-open-issues. Issues: #142, #143.
 
-## Requirement: Language-tag changes are captured as updates
+## ADDED Requirements
 
-When a property value keeps its lexical text but changes or loses its language tag between
-versions, the `updated_property` queries SHALL report it as an update.
+### Requirement: Language-tag changes are captured as updates
 
-### Scenario: language tag changed
-- **Given** an instance has `prop "text"@en` in the old version and `prop "text"@fr` in the new
-- **When** the `updated_property` query runs
-- **Then** the change SHALL appear as an `updated` action with old value `"text"@en` and new
-  value `"text"@fr`
+The `updated_property` queries SHALL report a value as an update when it keeps its lexical
+text but changes or loses its language tag between versions.
 
-### Scenario: language tag removed
-- **Given** an instance has `prop "text"@en` in the old version and `prop "text"` in the new
-- **When** the `updated_property` query runs
-- **Then** the change SHALL appear as an `updated` action
+#### Scenario: Language tag changed
 
-## Requirement: Datatype↔object property changes are captured
+- **GIVEN** an instance has `prop "text"@en` in the old version and `prop "text"@fr` in the new
+- **WHEN** the `updated_property` query runs
+- **THEN** the change SHALL appear as an `updated` action with old value `"text"@en` and new value `"text"@fr`
 
-When a property's value changes between a literal (datatype property) and an IRI (object
-property) for the same instance and property, the change SHALL surface (at minimum as an
-update), not vanish from the report.
+#### Scenario: Language tag removed
 
-### Scenario: literal becomes IRI
-- **Given** an instance has `prop "text"` (literal) in the old version and `prop <iri>` in the new
-- **When** the diff queries run
-- **Then** the change SHALL appear as an `updated` action with old value `"text"` and new value `<iri>`
+- **GIVEN** an instance has `prop "text"@en` in the old version and `prop "text"` in the new
+- **WHEN** the `updated_property` query runs
+- **THEN** the change SHALL appear as an `updated` action
 
-### Scenario: unchanged value is not a false positive
-- **Given** an instance has `prop "text"@en` in both versions
-- **When** the `updated_property` query runs
-- **Then** no update SHALL be reported for that value
+### Requirement: Datatype-to-object property changes are captured
+
+The diff SHALL surface a value that changes between a literal (datatype property) and an IRI
+(object property) for the same instance and property — at minimum as an update — rather than
+letting it vanish from the report.
+
+#### Scenario: Literal becomes IRI
+
+- **GIVEN** an instance has `prop "text"` (literal) in the old version and `prop <iri>` in the new
+- **WHEN** the diff queries run
+- **THEN** the change SHALL appear as an `updated` action with old value `"text"` and new value `<iri>`
+
+#### Scenario: Unchanged value is not a false positive
+
+- **GIVEN** an instance has `prop "text"@en` in both versions
+- **WHEN** the `updated_property` query runs
+- **THEN** no update SHALL be reported for that value
