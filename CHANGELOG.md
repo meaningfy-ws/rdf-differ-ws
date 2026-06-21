@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-06-21
+
+### Added
+
+- **Report delivery UX — serve, view live, and signal completion** (regression after 2.2.0). After
+  building a diff report the dataset view now shows a "building" banner and polls the task status,
+  revealing the report when ready instead of requiring a manual refresh. Each built report variant
+  can be **viewed live** (a new `view_report` route serves it inline — HTML renders as a page,
+  JSON/ASCII as text) or **downloaded**. UI-layer only; the REST API, Celery and report storage are
+  unchanged. (`openspec/changes/report-delivery-ux`)
+- **Stronger diff-semantics verification** (#142, #143) — the rdflib execution test now runs both
+  the simple (lang-fallback) and rich (en-only) `updated_property` filter shapes, and a new
+  `@integration` test runs the real query against a live Fuseki (skips cleanly when unreachable).
+
+### Fixed
+
+- **Fail fast instead of hanging when Redis/Celery is down mid-run** (#133) — the Redis client gets
+  fail-fast socket timeouts (was unbounded), `GET /tasks/{id}` returns 503 (not an unhandled
+  500/hang) when the result backend is down, and the bash `wait_for_task` loop is now bounded and
+  aborts on lost contact with the API instead of looping forever.
+
 ## [2.3.0] - 2026-06-21
 
 ### Fixed
