@@ -211,3 +211,26 @@ def test_every_template_has_the_relaxation():
         if "isLiteral(?oldValue) != isLiteral(?newValue)" not in txt:
             missing.append(str(f))
     assert not missing, f"templates missing relaxation: {missing}"
+
+
+# Jena's tokenizer mis-parses "(" followed by a comment that contains ")" as a malformed
+# NIL token (rdflib tolerates it, Fuseki/Jena rejects it with "Encountered <NIL>"). The
+# updated_property pairing FILTER must therefore stay a single line with NO inner comments.
+CANONICAL_PAIRING_FILTER = (
+    "FILTER( ?oldValue != ?newValue && ( lang(?oldValue) = lang(?newValue) "
+    "|| str(?oldValue) = str(?newValue) || ( isLiteral(?oldValue) != isLiteral(?newValue) ) ) )"
+)
+
+
+def test_pairing_filter_is_comment_free_single_line_for_jena():
+    """Guard the regression: the pairing FILTER must be the canonical comment-free form.
+
+    A multi-line FILTER whose comments contain parentheses parses in rdflib but breaks
+    Fuseki/Jena (QueryBadFormed: Encountered <NIL>). Pin the Jena-safe one-liner.
+    """
+    offenders = [
+        str(f)
+        for f in _all_updated_property_files()
+        if CANONICAL_PAIRING_FILTER not in f.read_text()
+    ]
+    assert not offenders, f"non-canonical pairing FILTER (Jena-unsafe) in: {offenders}"
