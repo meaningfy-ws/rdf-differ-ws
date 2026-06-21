@@ -1,0 +1,14 @@
+
+{% import "macros.adoc" as mc %}
+
+    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["moved_property_label_number.rq"]).fetch_tabular() %}
+    
+{% if not content.empty %}
+    {% call mc.render_fetch_results(content, error) %}
+    {% set compress_uris = simplify_uri_columns_in_tabular(data_frame=content,namespace_inventory=namespaces,error_fail=False) %}
+    
+==== Moved number
+    {{ mc.pandas_table(content, "Moved number") }}
+    
+    {% endcall %}
+{% endif %}

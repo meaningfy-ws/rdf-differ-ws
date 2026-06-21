@@ -58,7 +58,7 @@ def run_diff(ctx):
     outdir = str(ctx["tmpdir"])
     old = ctx["old"]
     new = ctx["new"]
-    profile = "owl-core-en-only"
+    profile = "owl-core"
 
     # we keep a record of already run diffs to speed up tests (we set the cache at the end of this function)
     key = (old, new)

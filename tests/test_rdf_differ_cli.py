@@ -9,7 +9,7 @@ TESTDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/owl
 OUTDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../diff-output"))
 OLD = os.path.join(TESTDIR, "ePO_sample-4.0.0.orig.ttl")
 NEW = os.path.join(TESTDIR, "ePO_sample-4.0.0.upd.ttl")
-PROFILE = "owl-core-en-only"
+PROFILE = "owl-core"
 BASE_URL = os.environ.get("RDF_DIFFER_BASE_URL", "http://localhost:4030")
 
 
