@@ -6,7 +6,7 @@ The sibling ``test_diff_semantics_queries.py`` executes the committed
 ``updated_property_*.rq`` templates against an in-memory ``rdflib.Dataset``. rdflib is a
 fine SPARQL engine, but the templates run in production against *Fuseki* (Apache Jena).
 This test closes that gap: it loads the SAME minimal skos-history fixture into a real
-Fuseki dataset over SPARQL Update, runs the real lang-fallback ``updated_property``
+Fuseki dataset over SPARQL Update, runs the real canonical ``updated_property``
 query through ``FusekiDiffAdapter.execute_query``, and asserts the #142/#143 rows surface
 on the real engine.
 
@@ -30,11 +30,11 @@ from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
 # two executions verify identical data. (We may only touch these two files, and
 # importing the unit-test module is the clean way to share the fixture.)
 from tests.unit.test_diff_semantics_queries import (
+    CANONICAL_QUERY,
     CONCEPT,
     CONCEPT_CLASS,
     DEL_GRAPH,
     INS_GRAPH,
-    LANG_FALLBACK_QUERY,
     NEW_GRAPH,
     OLD_GRAPH,
     PREF_LABEL,
@@ -101,9 +101,9 @@ def _load_fixture(adapter: FusekiDiffAdapter, old_value, new_value) -> None:
 
 
 def _run_query(adapter: FusekiDiffAdapter) -> list[dict]:
-    """Run the real lang-fallback query and return SPARQL JSON bindings."""
+    """Run the real canonical query and return SPARQL JSON bindings."""
     result = adapter.execute_query(
-        dataset_name=DATASET_NAME, sparql_query=LANG_FALLBACK_QUERY.read_text()
+        dataset_name=DATASET_NAME, sparql_query=CANONICAL_QUERY.read_text()
     )
     return result["results"]["bindings"]
 

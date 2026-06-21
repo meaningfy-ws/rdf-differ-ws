@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0] - 2026-06-22
+
+### Changed
+
+- **Regenerated the full application-profile template set from dqgen.** This completes the
+  Jena/Fuseki `QueryBadFormed` fix begun in 2.4.1: every `updated_property_*.rq` across all
+  profiles now uses the single canonical, comment-free, Jena-safe pairing FILTER (the 2.4.1
+  hand-patch only covered the *detail* queries and left the `count_*` queries — and SHACL/SKOS
+  variants — broken, so reports still failed with `Encountered <NIL>`). The regenerated FILTER
+  also spells out all four #142/#143 cases explicitly, restoring URI→URI object-property updates
+  (e.g. a retargeted `skos:broader`) that the compressed-boolean hand-patch dropped.
+- **`make start` now rebuilds the images (`docker compose up -d --build`)** so the latest
+  `resources/templates/` are baked into the api/worker on every start. Keep the
+  `rdf-differ-template` volume empty; a populated volume shadows the baked-in templates.
+- **The version is now read from the root `VERSION` file** by the build backend (switched to
+  hatchling), removing the duplicated `version` field in `pyproject.toml`.
+
+### Breaking
+
+- **Application-profile names changed.** The former `*-en-only` / `*-lang-fallback` split was
+  unified into one shape per AP, dropping the `-en-only` suffix
+  (`owl-core-en-only` → `owl-core`, `skos-core-en-only` → `skos-core`,
+  `shacl-core-en-only` → `shacl-core`), and two profiles were added (`skos-ap-eu`, `src-ap-eu`).
+  Update any saved configuration or API/CLI calls that reference the old profile names.
+
 ## [2.4.1] - 2026-06-21
 
 ### Fixed

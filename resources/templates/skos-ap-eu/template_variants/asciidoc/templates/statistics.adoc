@@ -1,0 +1,3733 @@
+
+{% import "macros.adoc" as mc %}
+
+== Statistics
+    
+=== Concept Scheme
+        
+
+[cols="1,1,1", options="header"]
+|===
+|Instance
+|Added
+|Deleted
+
+|Concept Scheme
+        
+            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_instance_concept_scheme.rq"]).fetch_tabular() %}
+            
+            {% call mc.render_fetch_results(content, error) %}
+            {{ mc.count_value(content) }}
+            {% endcall %}
+            
+        
+            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_instance_concept_scheme.rq"]).fetch_tabular() %}
+            
+            {% call mc.render_fetch_results(content, error) %}
+            {{ mc.count_value(content) }}
+            {% endcall %}
+            
+        
+|===
+
+[cols="1,1,1,1,1,1,1", options="header"]
+|===
+|Category
+|Property
+|Added
+|Deleted
+|Updated
+|Moved
+|Changed
+        
+            
+            
+
+|Labels
+|skos:prefLabel
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_pref_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_pref_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_pref_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_pref_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_pref_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Labels
+|skosxl:prefLabel/skosxl:literalForm
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_scheme_pref_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_scheme_pref_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_scheme_pref_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_scheme_pref_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_scheme_pref_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Labels
+|dct:title
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_title.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_title.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_title.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_title.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_title.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Evolution Properties
+|owl:versionInfo
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|owl:deprecated
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:created
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:modified
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|euvoc:startDate
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|euvoc:endDate
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Identifiers
+|dct:identifier
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Identifiers
+|euvoc:Domain
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_domain.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_domain.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_domain.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_domain.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_domain.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Semantic Properties
+|skos:hasTopConcept
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_has_top_concept.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_has_top_concept.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_has_top_concept.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_has_top_concept.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_has_top_concept.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Semantic Properties
+|dct:hasPart
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_has_part.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_has_part.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_has_part.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_has_part.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_has_part.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Semantic Properties
+|dct:isPartOf
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_is_part_of.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_is_part_of.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_is_part_of.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_is_part_of.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_is_part_of.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Notes
+|rdfs:comment
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scheme_comment.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scheme_comment.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scheme_comment.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scheme_comment.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scheme_comment.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+|===
+
+=== Concept
+        
+
+[cols="1,1,1", options="header"]
+|===
+|Instance
+|Added
+|Deleted
+
+|Concept
+        
+            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_instance_concept.rq"]).fetch_tabular() %}
+            
+            {% call mc.render_fetch_results(content, error) %}
+            {{ mc.count_value(content) }}
+            {% endcall %}
+            
+        
+            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_instance_concept.rq"]).fetch_tabular() %}
+            
+            {% call mc.render_fetch_results(content, error) %}
+            {{ mc.count_value(content) }}
+            {% endcall %}
+            
+        
+|===
+
+[cols="1,1,1,1,1,1,1", options="header"]
+|===
+|Category
+|Property
+|Added
+|Deleted
+|Updated
+|Moved
+|Changed
+        
+            
+            
+
+|Semantic Properties
+|skos:inScheme
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_in_scheme.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_in_scheme.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_in_scheme.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_in_scheme.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_in_scheme.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Semantic Properties
+|skos:topConceptOf
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_top_concept_of.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_top_concept_of.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_top_concept_of.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_top_concept_of.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_top_concept_of.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Semantic Properties
+|skos:broader
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_broader.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_broader.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_broader.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_broader.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_broader.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Semantic Properties
+|skos:narrower
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_narrower.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_narrower.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_narrower.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_narrower.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_narrower.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Semantic Properties
+|skos:related
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_related.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_related.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_related.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_related.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_related.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Identifiers
+|skos:notation
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_notation.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_notation.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_notation.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_notation.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_notation.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Identifiers
+|dct:identifier
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Identifiers
+|dc:identifier
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_identifier.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Notes
+|euvoc:xlNotation/rdf:value
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_xl_notation_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_xl_notation_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_xl_notation_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_xl_notation_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_xl_notation_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|skos:changeNote
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_change_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_change_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_change_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_change_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_change_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|euvoc:xlChangeNote/rdf:value
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_xl_change_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_xl_change_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_xl_change_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_xl_change_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_xl_change_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|skos:definition
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_definition.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_definition.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_definition.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_definition.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_definition.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|euvoc:xlDefinition/rdf:value
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_xl_definition_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_xl_definition_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_xl_definition_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_xl_definition_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_xl_definition_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|skos:example
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_example.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_example.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_example.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_example.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_example.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|euvoc:xlExample/rdf:value
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_xl_example_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_xl_example_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_xl_example_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_xl_example_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_xl_example_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|skos:historyNote
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_history_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_history_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_history_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_history_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_history_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|euvoc:xlHistoryNote/rdf:value
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_xl_history_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_xl_history_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_xl_history_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_xl_history_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_xl_history_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|skos:scopeNote
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_scope_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_scope_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_scope_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_scope_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_scope_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|euvoc:xlScopeNote/rdf:value
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_xl_scope_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_xl_scope_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_xl_scope_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_xl_scope_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_xl_scope_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|skos:editorialNote
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_editorial_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_editorial_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_editorial_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_editorial_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_editorial_note.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Notes
+|euvoc:xlEditorialNote/rdf:value
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_xl_editorial_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_xl_editorial_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_xl_editorial_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_xl_editorial_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_xl_editorial_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Labels
+|skos:prefLabel
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_pref_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_pref_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_pref_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_pref_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_pref_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Labels
+|skos:altLabel
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_alt_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_alt_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_alt_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_alt_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_alt_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Labels
+|skos:hiddenLabel
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_hidden_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_hidden_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_hidden_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_hidden_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_hidden_label.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Labels
+|skosxl:prefLabel/skosxl:literalForm
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_pref_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_pref_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_pref_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_pref_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_pref_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Labels
+|skosxl:altLabel/skosxl:literalForm
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_alt_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_alt_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_alt_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_alt_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_alt_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Labels
+|skosxl:hiddenLabel/skosxl:literalForm
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_reified_concept_hidden_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_reified_concept_hidden_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_reified_concept_hidden_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_reified_concept_hidden_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_reified_concept_hidden_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Evolution Properties
+|euvoc:status
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|owl:versionInfo
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:created
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:dateSubmitted
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_date_submitted.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_date_submitted.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_date_submitted.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_date_submitted.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_date_submitted.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:dateAccepted
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_date_accepted.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_date_accepted.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_date_accepted.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_date_accepted.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_date_accepted.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|euvoc:startDate
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|euvoc:endDate
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:isReplacedBy
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_is_replaced_by.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_is_replaced_by.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_is_replaced_by.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_is_replaced_by.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_is_replaced_by.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:replaces
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_replaces.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_replaces.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_replaces.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_replaces.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_replaces.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|owl:deprecated
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:modified
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Mapping Properties
+|skos:broadMatch
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_broad_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_broad_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_broad_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_broad_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_broad_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Mapping Properties
+|skos:narrowMatch
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_narrow_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_narrow_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_narrow_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_narrow_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_narrow_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Mapping Properties
+|skos:closeMatch
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_close_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_close_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_close_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_close_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_close_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Mapping Properties
+|skos:exactMatch
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_exact_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_exact_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_exact_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_exact_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_exact_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Mapping Properties
+|skos:relatedMatch
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_related_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_related_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_related_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_related_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_related_match.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Miscellaneous
+|euvoc:context
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_concept_context.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_concept_context.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_concept_context.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_concept_context.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_concept_context.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+|===
+
+=== Label
+        
+
+[cols="1,1,1", options="header"]
+|===
+|Instance
+|Added
+|Deleted
+
+|Label
+        
+            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_instance_label.rq"]).fetch_tabular() %}
+            
+            {% call mc.render_fetch_results(content, error) %}
+            {{ mc.count_value(content) }}
+            {% endcall %}
+            
+        
+            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_instance_label.rq"]).fetch_tabular() %}
+            
+            {% call mc.render_fetch_results(content, error) %}
+            {{ mc.count_value(content) }}
+            {% endcall %}
+            
+        
+|===
+
+[cols="1,1,1,1,1,1,1", options="header"]
+|===
+|Category
+|Property
+|Added
+|Deleted
+|Updated
+|Moved
+|Changed
+        
+            
+            
+
+|Miscellaneous
+|skosxl:literalForm
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_literal_form.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Miscellaneous
+|dct:type
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_type.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_type.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_type.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_type.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_type.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Miscellaneous
+|dct:source
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_source.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_source.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_source.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_source.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_source.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Miscellaneous
+|lexinfo:gender
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_gender.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_gender.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_gender.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_gender.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_gender.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Miscellaneous
+|lexinfo:number
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_number.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_number.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_number.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_number.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_number.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Miscellaneous
+|lexinfo:animacy
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_animacy.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_animacy.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_animacy.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_animacy.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_animacy.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Miscellaneous
+|lexinfo:formNumberVariant
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_form_number_variant.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_form_number_variant.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_form_number_variant.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_form_number_variant.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_form_number_variant.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Evolution Properties
+|euvoc:status
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|owl:versionInfo
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_version_info.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|euvoc:startDate
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|euvoc:endDate
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:created
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|owl:deprecated
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:modified
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_label_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_label_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_label_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_label_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_label_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+|===
+
+=== Xl Notation
+        
+
+[cols="1,1,1", options="header"]
+|===
+|Instance
+|Added
+|Deleted
+
+|Xl Notation
+        
+            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_instance_xl_notation.rq"]).fetch_tabular() %}
+            
+            {% call mc.render_fetch_results(content, error) %}
+            {{ mc.count_value(content) }}
+            {% endcall %}
+            
+        
+            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_instance_xl_notation.rq"]).fetch_tabular() %}
+            
+            {% call mc.render_fetch_results(content, error) %}
+            {{ mc.count_value(content) }}
+            {% endcall %}
+            
+        
+|===
+
+[cols="1,1,1,1,1,1,1", options="header"]
+|===
+|Category
+|Property
+|Added
+|Deleted
+|Updated
+|Moved
+|Changed
+        
+            
+            
+
+|Miscellaneous
+|euvoc:xlCodification
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_notation_xl_codification.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_notation_xl_codification.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_notation_xl_codification.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_notation_xl_codification.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_notation_xl_codification.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Miscellaneous
+|rdf:value
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_notation_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_notation_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_notation_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_notation_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_notation_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Miscellaneous
+|dct:type
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_notation_type.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_notation_type.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_notation_type.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_notation_type.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_notation_type.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Evolution Properties
+|euvoc:status
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_notation_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_notation_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_notation_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_notation_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_notation_status.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|euvoc:startDate
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_notation_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_notation_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_notation_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_notation_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_notation_start_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|euvoc:endDate
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_notation_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_notation_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_notation_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_notation_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_notation_end_date.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:created
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_notation_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_notation_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_notation_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_notation_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_notation_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|owl:deprecated
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_notation_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_notation_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_notation_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_notation_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_notation_deprecated.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:modified
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_notation_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_notation_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_notation_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_notation_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_notation_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+|===
+
+=== Xl Note
+        
+
+[cols="1,1,1", options="header"]
+|===
+|Instance
+|Added
+|Deleted
+
+|Xl Note
+        
+            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_instance_xl_note.rq"]).fetch_tabular() %}
+            
+            {% call mc.render_fetch_results(content, error) %}
+            {{ mc.count_value(content) }}
+            {% endcall %}
+            
+        
+            {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_instance_xl_note.rq"]).fetch_tabular() %}
+            
+            {% call mc.render_fetch_results(content, error) %}
+            {{ mc.count_value(content) }}
+            {% endcall %}
+            
+        
+|===
+
+[cols="1,1,1,1,1,1,1", options="header"]
+|===
+|Category
+|Property
+|Added
+|Deleted
+|Updated
+|Moved
+|Changed
+        
+            
+            
+
+|Miscellaneous
+|rdf:value
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_note_value.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Miscellaneous
+|dct:source
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_note_source.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_note_source.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_note_source.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_note_source.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_note_source.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+            
+            
+
+|Evolution Properties
+|dct:creator
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_note_creator.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_note_creator.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_note_creator.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_note_creator.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_note_creator.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:modified
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_note_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_note_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_note_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_note_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_note_modified.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+
+|Evolution Properties
+|dct:created
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_added_property_xl_note_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_deleted_property_xl_note_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_updated_property_xl_note_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_moved_property_xl_note_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+                    {% set content, error = from_endpoint(conf.default_endpoint).with_query_from_file(conf.query_files["count_changed_property_xl_note_created.rq"]).fetch_tabular() %}
+                    
+                    {% call mc.render_fetch_results(content, error) %}
+                    {{ mc.count_value(content) }}
+                    {% endcall %}
+                    
+                
+            
+        
+|===

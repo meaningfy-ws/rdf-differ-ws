@@ -27,16 +27,10 @@ import rdflib
 REPO_ROOT = Path(__file__).resolve().parents[2]
 TEMPLATES_DIR = REPO_ROOT / "resources" / "templates"
 
-LANG_FALLBACK_QUERY = (
-    TEMPLATES_DIR / "skos-core-lang-fallback" / "queries" / "updated_property_concept_pref_label.rq"
-)
-
-# The "rich" multi-case filter shape (Cases 1-4 spelled out explicitly), used by the
-# en-only / owl-core / shacl-core profiles. Same class+property as the lang-fallback
-# query, so the shared fixture drives both. Picking en-only as the representative.
-EN_ONLY_QUERY = (
-    TEMPLATES_DIR / "skos-core-en-only" / "queries" / "updated_property_concept_pref_label.rq"
-)
+# Regenerated AP templates (2.5.0) unified the former en-only / lang-fallback split into
+# a single canonical pairing FILTER (Cases 1-4 spelled out) shared by every profile.
+# Pick skos-core's prefLabel query as the representative shape.
+CANONICAL_QUERY = TEMPLATES_DIR / "skos-core" / "queries" / "updated_property_concept_pref_label.rq"
 
 # --- namespaces used by the skos-history layout ------------------------------
 
@@ -136,12 +130,9 @@ def _run(query_text: str, ds: rdflib.Dataset):
     return list(ds.query(query_text))
 
 
-# Both committed filter shapes execute through the SAME assertions: the "simple"
-# lang-fallback filter and the "rich" en-only filter (Cases 1-4 spelled out).
-# Parametrising here proves the relaxation works for both shapes, not just one.
+# Since 2.5.0 there is a single canonical pairing FILTER shape across all profiles.
 QUERY_SHAPES = {
-    "simple-lang-fallback": LANG_FALLBACK_QUERY,
-    "rich-en-only": EN_ONLY_QUERY,
+    "canonical": CANONICAL_QUERY,
 }
 
 
@@ -217,8 +208,11 @@ def test_every_template_has_the_relaxation():
 # NIL token (rdflib tolerates it, Fuseki/Jena rejects it with "Encountered <NIL>"). The
 # updated_property pairing FILTER must therefore stay a single line with NO inner comments.
 CANONICAL_PAIRING_FILTER = (
-    "FILTER( ?oldValue != ?newValue && ( lang(?oldValue) = lang(?newValue) "
-    "|| str(?oldValue) = str(?newValue) || ( isLiteral(?oldValue) != isLiteral(?newValue) ) ) )"
+    'FILTER ( ( (isLiteral(?oldValue) && isLiteral(?newValue) && lang(?oldValue) != "" '
+    '&& lang(?newValue) != "" && lang(?oldValue) = lang(?newValue)) '
+    '|| ((!isLiteral(?oldValue) || lang(?oldValue) = "") && (!isLiteral(?newValue) || lang(?newValue) = "")) '
+    "|| (str(?oldValue) = str(?newValue)) || (isLiteral(?oldValue) != isLiteral(?newValue)) ) "
+    "&& ?oldValue != ?newValue )"
 )
 
 

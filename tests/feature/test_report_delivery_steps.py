@@ -85,7 +85,7 @@ def _no_report(ctx):
     response = httpx.Response(404, request=httpx.Request("GET", "http://api/diffs/report"))
     _patch(ctx, "get_report", return_value=response)
     _patch(ctx, "get_datasets", return_value=_ok([]))
-    return {"dataset_id": "ds", "profile": "skos-core-en-only", "template_type": "html"}
+    return {"dataset_id": "ds", "profile": "skos-core", "template_type": "html"}
 
 
 # --- When --------------------------------------------------------------------
