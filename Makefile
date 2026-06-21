@@ -122,7 +122,8 @@ start:
 	@ docker volume create rdf-differ-template-$(ENVIRONMENT)
 	@ docker volume create rdf-differ-template
 	@ $(TRAEFIK) up -d
-	@ $(COMPOSE) up -d
+	@ # --build rebuilds the api/worker images so the latest resources/templates/ are baked in.
+	@ $(COMPOSE) up -d --build
 	@ sleep 2
 	@ ./infra/scripts/show_stack.sh infra/.env
 

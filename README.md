@@ -53,9 +53,16 @@ RDF Differ uses application profiles (APs) to define how to detect and report ch
 
 The currently suppported APs are:
 
-- [owl-core](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/owl-core.csv)-en-only: For OWL ontologies with English labels
-- [shacl-core](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/shacl-core.csv)-en-only: For SHACL shapes with English labels
-- [skos-core](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/skos-core.csv)-en-only: For SKOS vocabularies with English labels
+- [owl-core](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/owl-core.csv): For OWL ontologies
+- [shacl-core](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/shacl-core.csv): For SHACL shapes
+- [skos-core](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/skos-core.csv): For SKOS vocabularies
+- [skos-ap-eu](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/skos-ap-eu.csv): For SKOS vocabularies following the EU SKOS-AP
+- [src-ap-eu](https://github.com/meaningfy-ws/diff-query-generator/blob/main/dqgen/resources/aps/src-ap-eu.csv): For EU Standard Reference Configuration vocabularies
+
+> **Note (2.5.0):** the AP set was regenerated from dqgen. The former `*-en-only` /
+> `*-lang-fallback` profile split was unified into a single shape per AP, so the profile
+> names dropped their `-en-only` suffix (e.g. `owl-core-en-only` → `owl-core`). Update any
+> saved configuration or API/CLI calls that pass the old profile names.
 
 The language for labels matter for display purposes only. If you have another language, you will just miss the human-readable labels in the report, but the diffing will still work.
 
@@ -613,6 +620,23 @@ One can customize the existing application profiles (APs) and report templates, 
 While it is possible to customize the APs by modifying the queries, this is going to become very unwieldy once you realize there are as many queries to write or update, as there are change types and the number of resource types in your vocabulary. For this reason, while more straightfoward, customizing the report templates also becomes unmanageable once you go beyond a few lines.
 
 It is therefore recommended to customize the source meta-templates or define new ones through [dqgen](https://github.com/meaningfy-ws/diff-query-generator/), after which you can generate and copy over the templates with simple `make` commands.
+
+### Getting regenerated templates into the running stack
+
+The templates that the services use are the ones **baked into the Docker image** at build time
+(`resources/templates/`, copied in by the `Dockerfile`). At runtime the API consults the
+`rdf-differ-template` volume (`RDF_DIFFER_TEMPLATE_LOCATION`) **only if it is non-empty**, and the
+Celery worker (which renders reports) always uses the baked-in copy. So once you have regenerated
+the templates into `resources/templates/`, the minimal procedure is simply to rebuild and restart:
+
+```bash
+make start   # rebuilds the api/worker images (docker compose up -d --build) and restarts the stack
+```
+
+`make start` always builds with `--build`, so every start picks up the current `resources/templates/`.
+Keep the `rdf-differ-template` volume **empty** (do not run `make set-report-template`) — a populated
+volume *shadows* the freshly-baked templates for the API. After restarting, regenerate any report:
+old reports are cached and were computed against the previous templates.
 
 ## Contributing
 

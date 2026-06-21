@@ -3,12 +3,12 @@
 # Every TOOL is configured in its own dedicated root file:
 #   ruff.toml · mypy.ini · pytest.ini · .coveragerc · .importlinter
 #   .pre-commit-config.yaml · sonar-project.properties
-# The single source of truth for the version is the root VERSION file; keep the
-# `version` field below in sync.
+# The single source of truth for the version is the root VERSION file; the build
+# backend (hatchling) reads it directly, so there is no version to keep in sync here.
 
 [project]
 name = "rdf-differ"
-version = "2.4.1"
+dynamic = ["version"]
 description = "Diff calculator for RDF datasets (SKOS/OWL aware) — REST API, UI, worker and CLI"
 authors = [
     { name = "Meaningfy", email = "hi@meaningfy.ws" }
@@ -87,15 +87,25 @@ e2e = [
     "pytest-playwright~=0.5",
 ]
 
+# Poetry is used here only for dependency management — the package is installed
+# `--no-root` in Docker and never built/published via Poetry. Non-package mode lets
+# Poetry skip its own version requirement; hatchling (the build backend) owns the
+# version, reading it from the root VERSION file.
 [tool.poetry]
-# No-src layout: include the top-level package directly, NO `from = "src"`.
-packages = [
-    { include = "rdf_differ" }
-]
+package-mode = false
+
+# Version is read from the root VERSION file (single source of truth).
+[tool.hatch.version]
+path = "VERSION"
+pattern = "(?P<version>.+)"
+
+# No-src layout: package the top-level package directly.
+[tool.hatch.build.targets.wheel]
+packages = ["rdf_differ"]
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
 
 # NOTE: intentionally no [tool.ruff], [tool.mypy], [tool.pytest], [tool.coverage]
 # sections here — all tool config lives in dedicated root files (see header).
