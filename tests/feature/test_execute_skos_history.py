@@ -70,7 +70,7 @@ INPUT_MIME_TYPE="application/rdf+xml"
 
 
 @scenario("../features/execute_skos_history.feature", "Running the skos-history")
-def test_running_the_skos_history():
+def test_running_the_skos_history(subdiv_dataset):
     """Running the skos-history."""
 
 

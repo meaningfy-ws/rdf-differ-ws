@@ -20,8 +20,7 @@ TRAEFIK      = docker compose -p common --file ./infra/traefik/docker-compose.ym
         test test-unit test-feature \
         start stop status start-services-test teardown-services \
         local-deps local-fuseki-setup local-fuseki local-api local-ui local-redis local-stop \
-        generate-models set-report-template run-dev-ui \
-        _test-data-fuseki
+        generate-models set-report-template run-dev-ui
 
 help:
 	@ echo "RDF Differ — make targets:"
@@ -111,7 +110,7 @@ test-feature:
 
 test:
 	@ echo "$(BUILD_PRINT)Running the full suite with coverage"
-	@ echo "$(MSG_PRINT)Needs the stack — run 'make start-services-test' first if it isn't up."
+	@ echo "$(MSG_PRINT)Needs the stack — 'make start-services-test' (or 'docker compose -f infra/docker-compose-tests.yml up -d --wait') first."
 	@ poetry run pytest --cov=rdf_differ --cov-report=term-missing --cov-report=xml
 
 #-----------------------------------------------------------------------------
@@ -136,26 +135,17 @@ stop:
 	@ $(TRAEFIK) down
 	@ echo "$(MSG_PRINT)Stopped. Restart with: make start"
 
-# CI/e2e test stack — one compose up brings up every test service (build on demand).
+# CI/e2e test stack — a plain `compose up --wait` is enough: the compose file declares
+# its own network + volume and healthchecks, and tests self-provision their datasets
+# (no network/volume pre-create, no sleep, no dataset seeding). Then: `pytest -m integration`.
 start-services-test:
-	@ echo "$(BUILD_PRINT)Bringing up the test stack (fuseki, redis, celery, api)"
-	@ docker network create proxy-net || true
-	@ docker volume create rdf-differ-template-$(ENVIRONMENT)
-	@ $(COMPOSE_TEST) up -d --build \
+	@ echo "$(BUILD_PRINT)Bringing up the test stack (waits for healthchecks)"
+	@ $(COMPOSE_TEST) up -d --build --wait \
 		rdf-differ-fuseki rdf-differ-redis rdf-differ-celery-worker rdf-differ-api
-	@ echo "$(BUILD_PRINT)Waiting 5s for services to stabilise"
-	@ sleep 5
-	@ $(MAKE) _test-data-fuseki
 
 teardown-services:
 	@ echo "$(BUILD_PRINT)Tearing down the stack (containers + volumes)"
 	@ $(COMPOSE_TEST) down --volumes --remove-orphans
-
-_test-data-fuseki:
-	@ echo "$(BUILD_PRINT)Creating dummy 'subdiv' and 'abc' test datasets on Fuseki :$(RDF_DIFFER_FUSEKI_PORT)"
-	@ sleep 5
-	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=subdiv' 'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
-	@ curl --anyauth --user 'admin:admin' -d 'dbType=mem&dbName=abc'    'http://localhost:$(RDF_DIFFER_FUSEKI_PORT)/$$/datasets'
 
 #-----------------------------------------------------------------------------
 # Local services (no Docker) — run each in its own shell

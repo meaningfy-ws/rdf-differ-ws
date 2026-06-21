@@ -5,14 +5,19 @@
 # Author: Mihai Coșleț
 # Email: coslet.mihai@gmail.com
 
+import contextlib
 from collections import namedtuple
 from io import BytesIO
 
 import pytest
+import requests
 from werkzeug.datastructures import FileStorage
 
+from rdf_differ import config
 from rdf_differ.api.entrypoints.ui import app as ui_app
+from rdf_differ.core.adapters.sparql import SPARQLRunner
 from rdf_differ.diffing.adapters.diff_adapter import FusekiDiffAdapter
+from rdf_differ.diffing.adapters.exceptions import FusekiException
 from rdf_differ.diffing.adapters.skos_history_wrapper import SKOSHistoryRunner
 
 
@@ -114,6 +119,42 @@ def ui_client():
     from fastapi.testclient import TestClient
 
     return TestClient(ui_app)
+
+
+@pytest.fixture
+def live_fuseki() -> str:
+    """Skip the test unless a live Fuseki is reachable.
+
+    Lets service-dependent tests run against a plain ``docker compose up`` stack and
+    skip cleanly otherwise — no special bring-up target needed.
+    """
+    base = config.RDF_DIFFER_FUSEKI_SERVICE
+    try:
+        response = requests.get(f"{base}/$/ping", timeout=2)
+    except requests.RequestException:
+        pytest.skip("Fuseki is not reachable")
+    if response.status_code != 200:
+        pytest.skip("Fuseki is not reachable")
+    return base
+
+
+@pytest.fixture
+def subdiv_dataset(live_fuseki: str):
+    """Provision (and tear down) an empty ``subdiv`` dataset on the live Fuseki.
+
+    Replaces the old ``make _test-data-fuseki`` seeding: tests that load versions into
+    ``subdiv`` now create the dataset themselves, so the stack needs no pre-seeding.
+    """
+    adapter = FusekiDiffAdapter(
+        triplestore_service_url=config.RDF_DIFFER_FUSEKI_SERVICE,
+        http_client=requests,
+        sparql_client=SPARQLRunner(),
+    )
+    with contextlib.suppress(FusekiException):
+        adapter.create_dataset("subdiv")  # already exists is fine — the test populates it
+    yield "subdiv"
+    with contextlib.suppress(FusekiException):
+        adapter.delete_dataset("subdiv")
 
 
 def helper_create_diff(file_1=None, file_2=None, body=None):

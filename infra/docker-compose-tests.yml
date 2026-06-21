@@ -14,7 +14,17 @@ services:
     networks:
       - mydefault
     depends_on:
-      - rdf-differ-redis
+      rdf-differ-redis:
+        condition: service_healthy
+      rdf-differ-fuseki:
+        condition: service_healthy
+    # `docker compose up --wait` blocks until this is healthy — replaces the manual `sleep`.
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:${RDF_DIFFER_API_PORT}/diffs"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
 
   rdf-differ-ui:
     container_name: rdf-differ-ui-${ENVIRONMENT}
@@ -42,6 +52,12 @@ services:
       - ${RDF_DIFFER_FUSEKI_PORT}:${RDF_DIFFER_FUSEKI_PORT}
     networks:
       - mydefault
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:${RDF_DIFFER_FUSEKI_PORT}/$$/ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
 
   rdf-differ-celery-worker:
     container_name: rdf-differ-celery-worker-${ENVIRONMENT}
@@ -56,8 +72,10 @@ services:
     networks:
       - mydefault
     depends_on:
-      - rdf-differ-api
-      - rdf-differ-redis
+      rdf-differ-redis:
+        condition: service_healthy
+      rdf-differ-fuseki:
+        condition: service_healthy
 
   rdf-differ-redis:
     image: redis:6-alpine
@@ -66,6 +84,11 @@ services:
       - ${RDF_DIFFER_REDIS_PORT}:${RDF_DIFFER_REDIS_PORT}
     networks:
       - mydefault
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
 
   rdf-differ-flower:
     container_name: rdf-differ-flower-${ENVIRONMENT}
@@ -83,8 +106,8 @@ services:
       - mydefault
 
 volumes:
+  # Auto-created by compose (was external:true, which forced a manual `docker volume create`).
   rdf-differ-template:
-    external: true
 
 
 networks:
