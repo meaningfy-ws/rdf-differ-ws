@@ -9,7 +9,7 @@ import logging
 import re
 
 from fastapi import APIRouter, File, Form, Request, UploadFile
-from fastapi.responses import RedirectResponse, Response
+from fastapi.responses import JSONResponse, RedirectResponse, Response
 from pydantic import ValidationError
 
 from rdf_differ import config
@@ -22,6 +22,7 @@ logger = logging.getLogger(config.RDF_DIFFER_LOGGER)
 router = APIRouter()
 
 _SEE_OTHER = 303
+_UNKNOWN_STATUS = "UNKNOWN"
 
 
 @router.get("/", name="index")
@@ -110,7 +111,13 @@ async def create_diff_submit(
 
 
 @router.get("/diffs/{dataset_id}", name="view_dataset")
-def view_dataset(request: Request, dataset_id: str) -> Response:
+def view_dataset(
+    request: Request,
+    dataset_id: str,
+    building: str | None = None,
+    ap: str | None = None,
+    tt: str | None = None,
+) -> Response:
     dataset_result = api_client.get_dataset(dataset_id)
     if not dataset_result.ok:
         flash(request, dataset_result.error_message(), "error")
@@ -124,6 +131,9 @@ def view_dataset(request: Request, dataset_id: str) -> Response:
         active_page="view_dataset",
         dataset=dataset_result.json,
         application_profiles=profiles,
+        building=building,
+        building_ap=ap,
+        building_tt=tt,
     )
 
 
@@ -137,13 +147,18 @@ def build_report(
 ) -> Response:
     validate_csrf(request, csrf_token)
     result = api_client.build_report(dataset_id, application_profile, template_type)
-    if result.ok:
-        flash(request, "Report building started.", "success")
-    else:
+    if not result.ok:
         flash(request, result.error_message(), "error")
-    return RedirectResponse(
-        request.url_for("view_dataset", dataset_id=dataset_id), status_code=_SEE_OTHER
+        return RedirectResponse(
+            request.url_for("view_dataset", dataset_id=dataset_id), status_code=_SEE_OTHER
+        )
+
+    flash(request, "Report building started.", "success")
+    task_id = (result.json or {}).get("task_id")
+    target = request.url_for("view_dataset", dataset_id=dataset_id).include_query_params(
+        building=task_id, ap=application_profile, tt=template_type
     )
+    return RedirectResponse(target, status_code=_SEE_OTHER)
 
 
 @router.get(
@@ -166,6 +181,37 @@ def download_report(
         media_type=response.headers.get("content-type", "application/octet-stream"),
         headers={"content-disposition": f'attachment; filename="{filename}"'},
     )
+
+
+@router.get(
+    "/diff-report/{dataset_id}/{application_profile}/{template_type}/view", name="view_report"
+)
+def view_report(
+    request: Request, dataset_id: str, application_profile: str, template_type: str
+) -> Response:
+    """Serve a built report inline so the browser renders it (HTML/JSON/ASCII) live."""
+    response = api_client.get_report(dataset_id, application_profile, template_type)
+    if response.status_code != 200:
+        flash(request, "Could not open the report. Build it first.", "error")
+        return RedirectResponse(request.url_for("index"), status_code=_SEE_OTHER)
+
+    return Response(
+        content=response.content,
+        media_type=response.headers.get("content-type", "text/html"),
+        headers={"content-disposition": "inline"},
+    )
+
+
+@router.get("/tasks/{task_id}/status", name="task_status")
+def task_status(request: Request, task_id: str) -> JSONResponse:
+    """Proxy the upstream task status for the dataset-view poller.
+
+    Always returns 200 with a status string so the client poller degrades gracefully
+    (a sentinel ``UNKNOWN``) instead of seeing a 5xx and giving up.
+    """
+    result = api_client.get_task(task_id)
+    status = (result.json or {}).get("status", _UNKNOWN_STATUS) if result.ok else _UNKNOWN_STATUS
+    return JSONResponse({"status": status})
 
 
 @router.get("/tasks", name="get_active_tasks")

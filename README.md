@@ -458,6 +458,20 @@ Once ready (the task has disappeared), navigate back to the diff, and a new sect
 
 ![Download reports page](docs/images/download-reports.png)
 
+#### Viewing and downloading reports
+
+After you click **Build report**, the diff page shows a progress banner for the
+profile and template you requested and polls the build in the background. When the
+build finishes the page refreshes automatically and the new report appears under
+**Available reports**; if the build fails, the banner says so instead of spinning
+forever.
+
+Each report variant offers two actions:
+
+- **View** — opens the report in a new browser tab and renders it live. HTML reports
+  display as a page; JSON and AsciiDoc reports are shown inline as text.
+- **Download** — saves the report to disk as a file (the same behaviour as before).
+
 > **Note:** If you see an error for any of the pages, your setup is not right. Please either check your local services, or rebuild the Docker services if you are using that (including deleting the associated volumes). Check also that Celery is running, which is needed for the asynchronous tasks.
 
 ### The Differ API
