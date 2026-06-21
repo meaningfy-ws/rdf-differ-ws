@@ -63,10 +63,10 @@ dev = [
     "pre-commit==4.6.0",
 ]
 test = [
-    "pytest~=7.4.3",
-    "coverage~=7.3.3",
-    "pytest-cov~=4.1.0",
-    "pytest-bdd~=7.0.1",
+    "pytest>=9,<10",
+    "coverage>=7.5,<8",
+    "pytest-cov>=6,<8",
+    "pytest-bdd>=8,<9",
     "beautifulsoup4~=4.12.2",
 ]
 lint = [
