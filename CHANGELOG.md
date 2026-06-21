@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.1] - 2026-06-21
+
+### Fixed
+
+- **Value-update diff queries broke Fuseki/Jena report generation** (regression from 2.4.0/#142,#143).
+  The relaxed pairing FILTER was written as a multi-line block with comments containing
+  parentheses; rdflib parsed it but Jena/Fuseki mis-read `(` + a comment containing `)` as a
+  malformed NIL token, so every `updated_property` query failed at report time with
+  `QueryBadFormed: Encountered <NIL>`. Collapsed the FILTER to a canonical comment-free single
+  line across all 126 rich-shape templates (semantics unchanged). Verified against a real
+  Jena 4.0.0: 149/149 affected queries now parse. A unit guard pins the Jena-safe form.
+
+### Changed
+
+- **The test stack no longer needs the special `start-services-test` seeding.** The test compose
+  declares its own network + volume and healthchecks (`docker compose up -d --wait`), and tests
+  self-provision their Fuseki datasets, so the flow is just
+  `docker compose -f infra/docker-compose-tests.yml up -d --wait && pytest -m integration`.
+
 ## [2.4.0] - 2026-06-21
 
 ### Added
