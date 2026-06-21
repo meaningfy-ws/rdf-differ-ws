@@ -10,6 +10,56 @@
         <a class="link" href="{{ url_for('index') }}">← Back to diffs</a>
     </div>
 
+    {% if building %}
+        <div class="card" id="building-banner" role="status">
+            <p id="building-banner-text">⏳ Building {{ building_ap }} · {{ building_tt }} report…</p>
+        </div>
+
+        <script>
+            (function () {
+                const statusUrl = "{{ url_for('task_status', task_id=building) }}";
+                const doneUrl = "{{ url_for('view_dataset', dataset_id=dataset.uid) }}";
+                const banner = document.getElementById('building-banner-text');
+                const intervalMs = 3000;
+                const maxAttempts = 100;
+                let attempts = 0;
+                let timer = null;
+
+                function stop() {
+                    if (timer !== null) {
+                        clearInterval(timer);
+                        timer = null;
+                    }
+                }
+
+                function poll() {
+                    attempts += 1;
+                    if (attempts > maxAttempts) {
+                        stop();
+                        banner.textContent = 'Still building — refresh later to see the report.';
+                        return;
+                    }
+                    fetch(statusUrl)
+                        .then(function (response) { return response.json(); })
+                        .then(function (data) {
+                            const status = (data && data.status) || '';
+                            if (status === 'SUCCESS') {
+                                stop();
+                                window.location.replace(doneUrl);
+                            } else if (status === 'FAILURE' || status === 'FAILED' || status === 'ERROR') {
+                                stop();
+                                banner.textContent = '⚠ The report build failed. Please try again.';
+                            }
+                        })
+                        .catch(function () { /* transient error — keep polling */ });
+                }
+
+                timer = setInterval(poll, intervalMs);
+                poll();
+            })();
+        </script>
+    {% endif %}
+
     <div class="card">
         <table class="detail-table">
             <tbody>
@@ -33,6 +83,12 @@
                 <ul class="report-list">
                     {% for variant in report.template_variations %}
                         <li>
+                            <a class="link"
+                               id="report-view-{{ dataset.uid }}-{{ report.application_profile }}-{{ variant }}"
+                               target="_blank"
+                               href="{{ url_for('view_report', dataset_id=dataset.uid, application_profile=report.application_profile, template_type=variant) }}">
+                                View {{ report.application_profile }} · {{ variant }}
+                            </a>
                             <a class="link"
                                id="report-{{ dataset.uid }}-{{ report.application_profile }}-{{ variant }}"
                                href="{{ url_for('download_report', dataset_id=dataset.uid, application_profile=report.application_profile, template_type=variant) }}">

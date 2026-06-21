@@ -95,6 +95,11 @@ def revoke_task(task_id: str) -> ApiResult:
     return _request("DELETE", f"/tasks/{task_id}")
 
 
+def get_task(task_id: str) -> ApiResult:
+    """Fetch a task's state (``{task_id, status, result}``) — used by the status poller."""
+    return _request("GET", f"/tasks/{task_id}")
+
+
 def create_diff(data: dict, files: dict) -> ApiResult:
     """POST a multipart diff-creation request. ``files`` maps field -> (name, bytes, mime)."""
     return _request("POST", "/diffs", data=data, files=files)
