@@ -129,7 +129,9 @@ def test_task_status_degrades_to_sentinel_on_api_error(ui):
 # --- view_report serves inline -----------------------------------------------
 
 
-def test_view_report_serves_inline_with_upstream_media_type(ui):
+def test_view_report_serves_inline_sandboxed_with_pinned_media_type(ui):
+    # The upstream content-type is deliberately hostile; the route must IGNORE it and
+    # pin the media type by template_type, and sandbox the response (stored-XSS guard).
     response = httpx.Response(
         200,
         content=b"<html>report</html>",
@@ -143,6 +145,24 @@ def test_view_report_serves_inline_with_upstream_media_type(ui):
     assert resp.content == b"<html>report</html>"
     assert "inline" in resp.headers["content-disposition"]
     assert resp.headers["content-type"].startswith("text/html")
+    # hardening: sandbox CSP neutralises scripts, nosniff stops content-type sniffing
+    assert "sandbox" in resp.headers["content-security-policy"]
+    assert resp.headers["x-content-type-options"] == "nosniff"
+
+
+def test_view_report_pins_media_type_and_does_not_trust_upstream(ui):
+    # A JSON report whose upstream lies that it is text/html must be served application/json.
+    response = httpx.Response(
+        200,
+        content=b'{"k": 1}',
+        headers={"content-type": "text/html"},
+        request=httpx.Request("GET", "http://api/diffs/report"),
+    )
+    with patch(f"{CLIENT}.get_report", return_value=response):
+        resp = ui.get("/diff-report/ds/ap/json/view")
+
+    assert resp.status_code == 200
+    assert resp.headers["content-type"].startswith("application/json")
 
 
 def test_view_report_missing_flashes_and_redirects(ui):

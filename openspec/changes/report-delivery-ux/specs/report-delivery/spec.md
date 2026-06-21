@@ -53,6 +53,21 @@ type, each offering a download.
 - **THEN** each built application-profile/template-type variant SHALL be listed with a download
   action that streams the report as an attachment
 
+### Requirement: Inline report serving is sandboxed against stored XSS
+
+Report content is derived from user-supplied RDF, so inline same-origin serving SHALL NOT
+allow embedded scripts to execute. The view route SHALL pin the response media type from the
+requested template type (never the upstream content-type) and SHALL sandbox the response.
+
+#### Scenario: A hostile report cannot run scripts in the UI origin
+
+- **GIVEN** a built report whose content contains markup or a misleading upstream content-type
+- **WHEN** the user views it inline
+- **THEN** the response SHALL carry a `Content-Security-Policy: sandbox` header and
+  `X-Content-Type-Options: nosniff`
+- **AND** the media type SHALL be derived from the template type (html→text/html, json→
+  application/json, ascii→text/plain), not from the upstream response
+
 ### Requirement: Completion polling is bounded
 
 The completion indicator SHALL poll a same-origin task-status endpoint at a fixed interval and

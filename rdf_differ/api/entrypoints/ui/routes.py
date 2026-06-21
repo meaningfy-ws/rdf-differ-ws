@@ -24,6 +24,17 @@ router = APIRouter()
 _SEE_OTHER = 303
 _UNKNOWN_STATUS = "UNKNOWN"
 
+# Report content is derived from user-supplied RDF, so serving it inline same-origin is a
+# stored-XSS vector. Pin the media type by the requested template type (never trust the
+# upstream content-type) and sandbox the response so scripts cannot run while the HTML/CSS
+# still render. See report-delivery-ux DEC-2.
+_REPORT_MEDIA_TYPES = {"html": "text/html", "json": "application/json", "ascii": "text/plain"}
+_REPORT_VIEW_HEADERS = {
+    "content-disposition": "inline",
+    "content-security-policy": "sandbox",
+    "x-content-type-options": "nosniff",
+}
+
 
 @router.get("/", name="index")
 def index(request: Request) -> Response:
@@ -197,8 +208,8 @@ def view_report(
 
     return Response(
         content=response.content,
-        media_type=response.headers.get("content-type", "text/html"),
-        headers={"content-disposition": "inline"},
+        media_type=_REPORT_MEDIA_TYPES.get(template_type, "application/octet-stream"),
+        headers=_REPORT_VIEW_HEADERS,
     )
 
 
