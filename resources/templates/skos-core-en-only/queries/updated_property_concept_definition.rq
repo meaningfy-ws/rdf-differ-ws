@@ -102,11 +102,17 @@ WHERE {
   # the language tag shall be the same
   FILTER (
     (
-      # Case 1: Both values are language-tagged literals
+      # Case 1: Both values are language-tagged literals with the same tag (changed text)
       (isLiteral(?oldValue) && isLiteral(?newValue) && lang(?oldValue) != "" && lang(?newValue) != "" && lang(?oldValue) = lang(?newValue))
       ||
       # Case 2: Both values are non-language-tagged literals or URIs
       ((!isLiteral(?oldValue) || lang(?oldValue) = "") && (!isLiteral(?newValue) || lang(?newValue) = ""))
+      ||
+      # Case 3 (#142): same lexical text, changed or removed language tag
+      (str(?oldValue) = str(?newValue))
+      ||
+      # Case 4 (#143): exactly one side is a literal (datatype <-> object property)
+      (isLiteral(?oldValue) != isLiteral(?newValue))
     )
     && ?oldValue != ?newValue
   )

@@ -38,6 +38,25 @@ class QueryRunResult:
     error: str | None = None
 
 
+ENDPOINT_PROBE_TIMEOUT = 5
+
+
+def check_endpoint_reachable(endpoint: str) -> bool:
+    """Return True if a cheap HTTP GET on the Fuseki endpoint root succeeds.
+
+    A reachable triplestore answers (any non-network-error HTTP response counts);
+    a connection/timeout error means it is down. Used by `main()` to fail fast
+    before any per-query work (issue #133).
+    """
+
+    try:
+        response = requests.get(endpoint, timeout=ENDPOINT_PROBE_TIMEOUT)
+    except requests.RequestException:
+        return False
+
+    return bool(response.status_code < 500)
+
+
 def discover_query_files(profile_name: str) -> list[Path]:
     """Return all query files for the given application profile."""
 
@@ -74,29 +93,40 @@ def run_queries(
         start_time = timer()
         result = QueryRunResult(file_path=query_path, query=query_text, status="PENDING")
 
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(execute_query, query_text)
+        # Manage the executor manually instead of `with`: leaving a `with` block
+        # calls shutdown(wait=True), which blocks until a hung query thread
+        # finishes. Python threads cannot be force-killed, so on timeout we must
+        # NOT wait — otherwise --timeout never returns control (issue #134).
+        executor = ThreadPoolExecutor(max_workers=1)
+        future = executor.submit(execute_query, query_text)
 
-            try:
-                future.result(timeout=timeout)
-            except FuturesTimeoutError:
-                future.cancel()
-                result.status = "TIMEOUT"
-                result.duration = None
-                result.error = f"Timed out after {timeout} seconds"
-                printer(f"  -> TIMEOUT after {timeout} seconds")
-            except Exception as exc:  # pragma: no cover - defensive
-                result.status = "FAILED"
-                result.duration = None
-                result.error = str(exc)
-                printer(f"  -> FAILED ({exc})")
-            else:
-                end_time = timer()
-                duration = end_time - start_time
-                result.status = "SUCCESS"
-                result.duration = duration
-                printer(f"  -> {duration:.3f}s")
+        try:
+            future.result(timeout=timeout)
+        except FuturesTimeoutError:
+            future.cancel()
+            # ponytail: do not wait on the hung thread; it is orphaned and dies
+            # with the process. Acceptable for a short-lived profiling CLI.
+            executor.shutdown(wait=False, cancel_futures=True)
+            result.status = "TIMEOUT"
+            result.duration = None
+            result.error = f"Timed out after {timeout} seconds"
+            printer(f"  -> TIMEOUT after {timeout} seconds")
+            results.append(result)
+            continue
+        except Exception as exc:  # pragma: no cover - defensive
+            result.status = "FAILED"
+            result.duration = None
+            result.error = str(exc)
+            printer(f"  -> FAILED ({exc})")
+        else:
+            end_time = timer()
+            duration = end_time - start_time
+            result.status = "SUCCESS"
+            result.duration = duration
+            printer(f"  -> {duration:.3f}s")
 
+        # Success/failure paths: the thread has finished, so shutdown is immediate.
+        executor.shutdown(wait=False)
         results.append(result)
 
     return results
@@ -272,6 +302,13 @@ def main(cli_args: list[str] | None = None) -> int:  # noqa: C901  TODO: decompo
         return 1
 
     adapter = FusekiDiffAdapter(endpoint, requests, SPARQLRunner())
+
+    if not check_endpoint_reachable(endpoint):
+        print(
+            f"Fuseki endpoint '{endpoint}' is not reachable. Aborting before profiling.",
+            file=sys.stderr,
+        )
+        return 1
 
     try:
         ensure_dataset_exists(adapter, dataset_name)
