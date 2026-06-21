@@ -31,6 +31,13 @@ LANG_FALLBACK_QUERY = (
     TEMPLATES_DIR / "skos-core-lang-fallback" / "queries" / "updated_property_concept_pref_label.rq"
 )
 
+# The "rich" multi-case filter shape (Cases 1-4 spelled out explicitly), used by the
+# en-only / owl-core / shacl-core profiles. Same class+property as the lang-fallback
+# query, so the shared fixture drives both. Picking en-only as the representative.
+EN_ONLY_QUERY = (
+    TEMPLATES_DIR / "skos-core-en-only" / "queries" / "updated_property_concept_pref_label.rq"
+)
+
 # --- namespaces used by the skos-history layout ------------------------------
 
 EX = "http://example.org/"
@@ -129,9 +136,18 @@ def _run(query_text: str, ds: rdflib.Dataset):
     return list(ds.query(query_text))
 
 
-@pytest.fixture(scope="module")
-def query_text() -> str:
-    return LANG_FALLBACK_QUERY.read_text()
+# Both committed filter shapes execute through the SAME assertions: the "simple"
+# lang-fallback filter and the "rich" en-only filter (Cases 1-4 spelled out).
+# Parametrising here proves the relaxation works for both shapes, not just one.
+QUERY_SHAPES = {
+    "simple-lang-fallback": LANG_FALLBACK_QUERY,
+    "rich-en-only": EN_ONLY_QUERY,
+}
+
+
+@pytest.fixture(scope="module", params=sorted(QUERY_SHAPES), ids=sorted(QUERY_SHAPES))
+def query_text(request) -> str:
+    return QUERY_SHAPES[request.param].read_text()
 
 
 # --- the three relaxation cases (#142 / #143) --------------------------------

@@ -24,6 +24,14 @@ def _create_diff_body(text: str) -> str:
     return text[start:end]
 
 
+def _wait_for_task_body(text: str) -> str:
+    """Return the body of the wait_for_task() bash function."""
+    start = text.index("wait_for_task()")
+    # The next top-level function definition marks the end of wait_for_task().
+    end = text.index("create_diff()", start)
+    return text[start:end]
+
+
 def test_script_exists():
     assert SCRIPT_PATH.is_file(), f"missing script: {SCRIPT_PATH}"
 
@@ -80,3 +88,41 @@ def test_reachability_probe_against_base_url():
         'expected a cheap reachability probe: curl -fsS -m 5 -o /dev/null "${BASE_URL}/diffs"'
     )
     assert "RDF Differ API not reachable at ${BASE_URL}" in text
+
+
+# --- #133 hardening: bounded, reachability-aware wait_for_task --------------
+
+
+def test_wait_for_task_is_not_an_unbounded_busy_loop():
+    """#133: the poller must not be a bare `while true` without a counter/cap."""
+    body = _wait_for_task_body(_read_script())
+    if re.search(r"while\s+true", body):
+        # An unbounded `while true` is only acceptable with an attempt counter
+        # incremented inside the loop that can break/exit it.
+        assert re.search(r"attempts?\b", body), (
+            "wait_for_task uses `while true` but has no attempt counter to bound it"
+        )
+
+
+def test_wait_for_task_has_a_max_attempts_cap():
+    """#133: an overall attempt cap exists (overridable via env) and aborts on timeout."""
+    body = _wait_for_task_body(_read_script())
+    assert re.search(r"max_attempts=\$\{RDF_DIFFER_TASK_MAX_ATTEMPTS:-\d+\}", body), (
+        "wait_for_task must define max_attempts from RDF_DIFFER_TASK_MAX_ATTEMPTS with a default"
+    )
+    # On exceeding the cap it prints a timeout message and exits non-zero.
+    assert re.search(r"(?i)timed?\s*out|timeout", body), (
+        "wait_for_task must print a clear timeout message when the cap is exceeded"
+    )
+    assert "exit 1" in body
+
+
+def test_wait_for_task_aborts_on_lost_contact():
+    """#133: repeated curl/transport failures abort instead of looping forever."""
+    body = _wait_for_task_body(_read_script())
+    # Uses a curl form that fails on transport/HTTP error so 503/unreachable is detectable.
+    assert "curl -fsS" in body, "wait_for_task must use curl -fsS to detect transport/HTTP errors"
+    assert "Lost contact with the API" in body, (
+        "wait_for_task must report lost contact with the API"
+    )
+    assert "exit 1" in body

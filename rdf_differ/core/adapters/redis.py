@@ -4,9 +4,16 @@ import redis
 
 from rdf_differ import config
 
+# Fail-fast socket timeouts (seconds): a down Redis must not hang the
+# CLI/API on connect or read (#133 hardening). A small constant is enough;
+# we deliberately avoid inventing new config plumbing.
+REDIS_SOCKET_TIMEOUT = 5
+
 redis_client = redis.Redis(
     host=config.RDF_DIFFER_REDIS_LOCATION.split("redis://")[1],
     port=int(config.RDF_DIFFER_REDIS_PORT),
+    socket_connect_timeout=REDIS_SOCKET_TIMEOUT,
+    socket_timeout=REDIS_SOCKET_TIMEOUT,
 )
 
 REVOKING_QUEUE = "revoke"

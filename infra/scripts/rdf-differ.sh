@@ -35,9 +35,37 @@ wait_for_task() {
     local task_id=$1
     local description=$2
     local print_mode=$3
+    # #133: bounded, reachability-aware polling so a down API/Redis no longer
+    # freezes the command forever.
+    local max_attempts=${RDF_DIFFER_TASK_MAX_ATTEMPTS:-120}  # ~10 min at 5s
+    local max_lost_contact=3                                 # consecutive failed polls before aborting
+    local attempts=0
+    local lost_contact=0
     [[ "$print_mode" == "print" ]] && echo "⏳ Waiting for ${description} task (${task_id}) to complete..."
     while true; do
-        local STATUS=$(curl -s -L -k "${BASE_URL}/tasks/${task_id}" -H 'accept: application/json' | jq -r '.status')
+        attempts=$((attempts + 1))
+        if (( attempts > max_attempts )); then
+            echo "❌ Timed out waiting for ${description} task (${task_id}) after ${max_attempts} polls"
+            exit 1
+        fi
+        # -fsS fails (non-zero) on transport errors and HTTP >= 400 (e.g. a 503
+        # from a down result backend), so an unreachable API surfaces here.
+        local RESPONSE
+        if ! RESPONSE=$(curl -fsS -L -k "${BASE_URL}/tasks/${task_id}" -H 'accept: application/json'); then
+            RESPONSE=""
+        fi
+        local STATUS
+        STATUS=$(echo "${RESPONSE}" | jq -r '.status' 2>/dev/null)
+        if [[ -z "${STATUS}" || "${STATUS}" == "null" ]]; then
+            lost_contact=$((lost_contact + 1))
+            if (( lost_contact >= max_lost_contact )); then
+                echo "❌ Lost contact with the API while waiting for ${description} task (${task_id})"
+                exit 1
+            fi
+            sleep 5
+            continue
+        fi
+        lost_contact=0
         [[ "$print_mode" == "print" ]] && echo "   Task status: ${STATUS}"
         if [[ "${STATUS}" == "SUCCESS" ]]; then
             [[ "$print_mode" == "print" ]] && echo "✅ Task completed successfully"
