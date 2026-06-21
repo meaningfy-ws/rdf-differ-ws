@@ -11,6 +11,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /usr/src/app
 
+# curl is required by resources/load_versions.sh (the diff-loading shell pipeline the
+# Celery worker invokes); the slim base image does not ship it.
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y curl \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN pip install "poetry==${POETRY_VERSION}"
 
 # Install runtime deps first so this layer caches until the lockfile changes.
