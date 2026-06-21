@@ -56,7 +56,7 @@ def metadata(tmpdir, files):
 
 
 @scenario("../features/diffing_two_dataset_versions.feature", "Diffing two dataset versions")
-def test_diffing_two_dataset_versions():
+def test_diffing_two_dataset_versions(subdiv_dataset):
     """Diffing two dataset versions."""
 
 
