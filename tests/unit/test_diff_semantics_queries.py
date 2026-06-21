@@ -16,6 +16,7 @@ and must NOT surface an unchanged value (d).
 With the OLD filter, cases (a),(b),(c) are dropped (test RED for the right reason);
 with the relaxed filter they appear (GREEN).
 """
+
 from pathlib import Path
 
 import pytest
@@ -27,10 +28,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 TEMPLATES_DIR = REPO_ROOT / "resources" / "templates"
 
 LANG_FALLBACK_QUERY = (
-    TEMPLATES_DIR
-    / "skos-core-lang-fallback"
-    / "queries"
-    / "updated_property_concept_pref_label.rq"
+    TEMPLATES_DIR / "skos-core-lang-fallback" / "queries" / "updated_property_concept_pref_label.rq"
 )
 
 # --- namespaces used by the skos-history layout ------------------------------
@@ -177,9 +175,7 @@ def test_unchanged_value_is_not_reported(query_text):
 
 # --- text-presence guard across ALL templates --------------------------------
 
-RELAXED_FRAGMENT_SIMPLE = (
-    "str(?oldValue) = str(?newValue)"
-)
+RELAXED_FRAGMENT_SIMPLE = "str(?oldValue) = str(?newValue)"
 
 
 def _all_updated_property_files():

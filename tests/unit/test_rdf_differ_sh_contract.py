@@ -5,6 +5,7 @@ Cites EPIC: resolve-open-issues (capability cli-diff-orchestration, issues #132,
 These are pure text/contract assertions on the script source — no I/O, no subprocess.
 The ``unit`` marker is applied automatically by ``tests/conftest.py`` (by path).
 """
+
 import re
 from pathlib import Path
 
@@ -46,12 +47,9 @@ def test_diff_flow_polls_tasks_endpoint_with_captured_uid():
     )
     assert captured_vars, "expected a variable assigned from jq -r '.uid' on the create response"
     waited = [
-        v for v in captured_vars
-        if re.search(rf"wait_for_task\s+\"\$\{{{v}\}}\"\s+\"diff\"", body)
+        v for v in captured_vars if re.search(rf"wait_for_task\s+\"\$\{{{v}\}}\"\s+\"diff\"", body)
     ]
-    assert waited, (
-        "create_diff must wait_for_task on a uid captured from the create response"
-    )
+    assert waited, "create_diff must wait_for_task on a uid captured from the create response"
     # And wait_for_task must poll /tasks/${task_id}.
     assert re.search(r"\$\{BASE_URL\}/tasks/\$\{task_id\}", text), (
         "wait_for_task must poll /tasks/${task_id}"
@@ -64,9 +62,7 @@ def test_diff_flow_does_not_curl_tasks_active():
     # Ignore comments; assert there is no actual request to /tasks/active.
     code_lines = [ln for ln in body.splitlines() if not ln.lstrip().startswith("#")]
     code = "\n".join(code_lines)
-    assert "tasks/active" not in code, (
-        "create_diff must not query /tasks/active anymore"
-    )
+    assert "tasks/active" not in code, "create_diff must not query /tasks/active anymore"
     assert ".[0].id" not in code, "create_diff must not take the first active task"
 
 
@@ -81,6 +77,6 @@ def test_reachability_probe_against_base_url():
     """#133: a single pre-flight probe of ${BASE_URL} exists with a clear failure."""
     text = _read_script()
     assert re.search(r"curl\s+-fsS\s+-m\s+5\s+-o\s+/dev/null\s+\"\$\{BASE_URL\}/diffs\"", text), (
-        "expected a cheap reachability probe: curl -fsS -m 5 -o /dev/null \"${BASE_URL}/diffs\""
+        'expected a cheap reachability probe: curl -fsS -m 5 -o /dev/null "${BASE_URL}/diffs"'
     )
     assert "RDF Differ API not reachable at ${BASE_URL}" in text

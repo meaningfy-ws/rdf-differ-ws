@@ -85,9 +85,7 @@ def test_main_exits_non_zero_when_endpoint_unreachable(profile_with_query, monke
     """
 
     stub = _StubAdapter()
-    monkeypatch.setattr(
-        query_profiler, "FusekiDiffAdapter", lambda *_a, **_k: stub
-    )
+    monkeypatch.setattr(query_profiler, "FusekiDiffAdapter", lambda *_a, **_k: stub)
     monkeypatch.setattr(query_profiler, "check_endpoint_reachable", lambda _endpoint: False)
 
     exit_code = main(["example", "--endpoint", "http://fuseki.invalid"])
